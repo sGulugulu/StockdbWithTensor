@@ -11,6 +11,7 @@ export default function App() {
   const [detail, setDetail] = useState(null);
   const [tradeDate, setTradeDate] = useState("2026-01-09");
   const [configForm, setConfigForm] = useState({
+    config_profile: "sample_cn_smoke",
     market_id: "cn_a",
     universe_id: "CSI_A500",
     start_date: "2015-01-01",
@@ -40,7 +41,16 @@ export default function App() {
   useEffect(() => {
     fetch(`${API_BASE}/api/markets`)
       .then((response) => response.json())
-      .then(setMarkets)
+      .then((data) => {
+        setMarkets(data);
+        const selectedMarket = data.find((market) => market.market_id === configForm.market_id);
+        if (selectedMarket) {
+          setConfigForm((current) => ({
+            ...current,
+            universe_id: selectedMarket.default_universe_id
+          }));
+        }
+      })
       .catch(() => setMarkets([]));
     refreshRuns().catch(() => setRuns([]));
   }, []);
@@ -52,13 +62,23 @@ export default function App() {
       return;
     }
     fetch(`${API_BASE}/api/runs/${selectedRun}`)
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("run-detail-failed");
+        }
+        return response.json();
+      })
       .then((data) => {
         setDetail(data);
         const queryTopN = data.manifest?.selection_top_n ?? configForm.selection_top_n;
         return fetch(`${API_BASE}/api/runs/${selectedRun}/selection?trade_date=${tradeDate}&top_n=${queryTopN}`);
       })
-      .then((response) => response?.json?.() ?? [])
+      .then((response) => {
+        if (!response.ok) {
+          return [];
+        }
+        return response.json();
+      })
       .then(setSelectionRows)
       .catch(() => {
         setDetail(null);
@@ -72,6 +92,7 @@ export default function App() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         run_sync: false,
+        config_profile: configForm.config_profile,
         market_id: configForm.market_id,
         universe_id: configForm.universe_id,
         start_date: configForm.start_date,
@@ -116,10 +137,41 @@ export default function App() {
         {view === "config" && <div className="panel">
           <h2>实验配置</h2>
           <label>
+            配置模板
+            <select
+              value={configForm.config_profile}
+              onChange={(event) => {
+                const nextProfile = event.target.value;
+                setConfigForm((current) => ({
+                  ...current,
+                  config_profile: nextProfile
+                }));
+              }}
+            >
+              <option value="sample_cn_smoke">A股样例</option>
+              <option value="formal_cn_a">A股正式入口</option>
+              <option value="sample_us_equity">美股样例</option>
+            </select>
+          </label>
+          <label>
             市场
             <select
               value={configForm.market_id}
-              onChange={(event) => setConfigForm((current) => ({ ...current, market_id: event.target.value }))}
+              onChange={(event) => {
+                const nextMarketId = event.target.value;
+                const selectedMarket = markets.find((market) => market.market_id === nextMarketId);
+                setConfigForm((current) => ({
+                  ...current,
+                  config_profile:
+                    nextMarketId === "us_equity"
+                      ? "sample_us_equity"
+                      : current.config_profile === "formal_cn_a"
+                        ? "formal_cn_a"
+                        : "sample_cn_smoke",
+                  market_id: nextMarketId,
+                  universe_id: selectedMarket?.default_universe_id ?? current.universe_id
+                }));
+              }}
             >
               {markets.map((market) => (
                 <option key={market.market_id} value={market.market_id}>
@@ -289,6 +341,34 @@ export default function App() {
               </tbody>
             </table>
           ) : null}
+          {detail?.factor_summaries ? (
+            <div className="detail-sections">
+              {Object.entries(detail.factor_summaries).map(([modelName, rows]) => (
+                <div key={modelName}>
+                  <strong>{modelName} 因子摘要</strong>
+                  <ul>
+                    {rows.slice(0, 3).map((row) => (
+                      <li key={`${modelName}-${row.factor_name}`}>{row.factor_name}: {Number(row.importance).toFixed(4)}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          ) : null}
+          {detail?.time_regimes ? (
+            <div className="detail-sections">
+              {Object.entries(detail.time_regimes).map(([modelName, rows]) => (
+                <div key={modelName}>
+                    <strong>{modelName} 时间阶段</strong>
+                  <ul>
+                    {rows.slice(0, 3).map((row) => (
+                      <li key={`${modelName}-${row.from}-${row.to}`}>{row.from} {"->"} {row.to}: {Number(row.shift_score).toFixed(4)}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          ) : null}
         </div>}
 
         {view === "selection" && <div className="panel wide">
@@ -296,7 +376,7 @@ export default function App() {
             <h2>选股结果</h2>
             <input type="date" value={tradeDate} onChange={(event) => setTradeDate(event.target.value)} />
           </div>
-          <table>
+          {selectionRows.length ? <table>
             <thead>
               <tr>
                 <th>股票</th>
@@ -319,7 +399,7 @@ export default function App() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table> : <p>当前运行尚未生成候选股，或结果仍在处理中。</p>}
         </div>}
       </section>
     </div>
