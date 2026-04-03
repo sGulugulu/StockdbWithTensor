@@ -87,6 +87,10 @@ def get_run_detail(output_root: Path, run_id: str) -> dict[str, Any]:
         path.stem.replace("factor_summary_", ""): _read_json(path)
         for path in run_dir.glob("factor_summary_*.json")
     }
+    factor_associations = {
+        path.stem.replace("factor_association_", ""): _read_json(path)
+        for path in run_dir.glob("factor_association_*.json")
+    }
     time_regimes = {
         path.stem.replace("time_regimes_", ""): _read_json(path)
         for path in run_dir.glob("time_regimes_*.json")
@@ -97,6 +101,7 @@ def get_run_detail(output_root: Path, run_id: str) -> dict[str, Any]:
         "manifest": _read_json(run_dir / "run_manifest.json") if (run_dir / "run_manifest.json").exists() else None,
         "metrics": _read_json(run_dir / "metrics.json") if (run_dir / "metrics.json").exists() else [],
         "factor_summaries": factor_summaries,
+        "factor_associations": factor_associations,
         "time_regimes": time_regimes,
     }
 

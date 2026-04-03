@@ -116,6 +116,14 @@ def write_outputs(
             output_dir / f"factor_association_{model_name}.csv",
             [{"left": pair.left, "right": pair.right, "score": pair.score} for pair in pairs],
         )
+        (output_dir / f"factor_association_{model_name}.json").write_text(
+            json.dumps(
+                [{"left": pair.left, "right": pair.right, "score": pair.score} for pair in pairs],
+                indent=2,
+                ensure_ascii=False,
+            ),
+            encoding="utf-8",
+        )
     for model_name, pairs in time_shifts.items():
         _write_csv(
             output_dir / f"time_regimes_{model_name}.csv",
