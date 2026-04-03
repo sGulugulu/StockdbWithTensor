@@ -25,7 +25,9 @@ def _read_json(path: Path) -> Any:
 
 def _write_json(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+    temp_path = path.with_suffix(path.suffix + ".tmp")
+    temp_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+    temp_path.replace(path)
 
 
 def _utc_now_iso() -> str:
@@ -158,7 +160,7 @@ def submit_run(
     actual_run_id = run_id or uuid.uuid4().hex[:12]
     run_dir = output_root / actual_run_id
     run_dir.mkdir(parents=True, exist_ok=True)
-    _update_status(
+    status_payload = _update_status(
         run_dir,
         "queued",
         {
@@ -175,7 +177,7 @@ def submit_run(
             daemon=True,
         )
         thread.start()
-    return _load_status(run_dir)
+    return status_payload
 
 
 def _build_run_config(

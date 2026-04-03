@@ -34,11 +34,21 @@ class BackendTests(unittest.TestCase):
                 async with httpx.AsyncClient(transport=transport, base_url="http://testserver") as client:
                     response = await client.post(
                         "/api/runs",
-                        json={"run_id": "api_test_run", "run_sync": True, "config_path": str(temp_config)},
+                        json={"run_id": "api_test_run", "run_sync": False, "config_path": str(temp_config)},
                         timeout=60.0,
                     )
                     self.assertEqual(response.status_code, 200)
-                    self.assertEqual(response.json()["status"], "completed")
+                    self.assertIn(response.json()["status"], {"queued", "running", "completed"})
+
+                    detail_payload = None
+                    for _ in range(50):
+                        response = await client.get("/api/runs/api_test_run", timeout=10.0)
+                        detail_payload = response.json()
+                        if detail_payload["status"]["status"] == "completed":
+                            break
+                        await anyio.sleep(0.1)
+                    self.assertIsNotNone(detail_payload)
+                    self.assertEqual(detail_payload["status"]["status"], "completed")
 
                     response = await client.get("/api/runs", timeout=10.0)
                     self.assertEqual(response.status_code, 200)
@@ -47,6 +57,7 @@ class BackendTests(unittest.TestCase):
                     response = await client.get("/api/runs/api_test_run", timeout=10.0)
                     self.assertEqual(response.status_code, 200)
                     self.assertEqual(response.json()["status"]["status"], "completed")
+                    self.assertIn("factor_associations", response.json())
 
                     response = await client.get(
                         "/api/runs/api_test_run/selection",
@@ -70,7 +81,7 @@ class BackendTests(unittest.TestCase):
                         "/api/runs",
                         json={
                             "run_id": "api_test_run_override",
-                            "run_sync": True,
+                            "run_sync": False,
                             "market_id": "us_equity",
                             "selection_top_n": 7,
                             "models_enabled": {"cp": True, "tucker": False, "pca": True},
@@ -79,7 +90,14 @@ class BackendTests(unittest.TestCase):
                         timeout=60.0,
                     )
                     self.assertEqual(response.status_code, 200)
-                    detail = (await client.get("/api/runs/api_test_run_override", timeout=10.0)).json()
+                    detail = None
+                    for _ in range(50):
+                        response = await client.get("/api/runs/api_test_run_override", timeout=10.0)
+                        detail = response.json()
+                        if detail["status"]["status"] == "completed":
+                            break
+                        await anyio.sleep(0.1)
+                    self.assertIsNotNone(detail)
                     self.assertEqual(detail["manifest"]["market_id"], "us_equity")
                     self.assertEqual(detail["manifest"]["selection_top_n"], 7)
 
