@@ -7,6 +7,7 @@ from typing import Callable
 from .config import ExperimentConfig, load_config
 from .dataset import TensorDataset, build_tensor_dataset
 from .evaluation import (
+    build_candidate_pool,
     build_selection_records,
     compute_quality_metrics,
     compute_rolling_stability,
@@ -164,6 +165,8 @@ def run_experiment(
         )
         logs.append(f"Selected {model.name} rank={model.rank} with mse={metrics['mse']:.6f}")
 
+    candidate_rows = build_candidate_pool(selection_rows)
+
     output_dir = config.output.root_dir / config.output.experiment_name
     write_outputs(
         output_dir=output_dir,
@@ -174,6 +177,7 @@ def run_experiment(
         factor_pairs=factor_pairs,
         time_shifts=time_shifts,
         selection_rows=selection_rows,
+        candidate_rows=candidate_rows,
         factor_summaries=factor_summaries,
         run_manifest={
             "market_id": config.market.market_id,
@@ -183,6 +187,7 @@ def run_experiment(
             "actual_start_date": actual_start,
             "actual_end_date": actual_end,
             "models": [row["model"] for row in metrics_rows],
+            "candidate_pool_size": len(candidate_rows),
             "output_dir": output_dir,
             "status": "completed",
         },

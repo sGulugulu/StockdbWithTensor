@@ -8,6 +8,8 @@ from pathlib import Path
 import sys
 from typing import Any
 
+import yaml
+
 ROOT = Path(__file__).resolve().parents[2]
 CODE_ROOT = ROOT / "code"
 if str(CODE_ROOT) not in sys.path:
@@ -94,10 +96,12 @@ def get_run_metrics(output_root: Path, run_id: str) -> list[dict[str, Any]]:
 
 def get_selection_for_date(output_root: Path, run_id: str, trade_date: str, top_n: int) -> list[dict[str, Any]]:
     run_dir = output_root / run_id
-    selection_rows: list[dict[str, Any]] = []
-    for selection_file in sorted(run_dir.glob("selection_*.json")):
-        rows = _read_json(selection_file)
-        selection_rows.extend(row for row in rows if row["trade_date"] == trade_date)
+    selection_file = run_dir / "selection_candidates.json"
+    selection_rows = [
+        row
+        for row in _read_json(selection_file)
+        if row["trade_date"] == trade_date
+    ]
     selection_rows.sort(key=lambda item: float(item["total_score"]), reverse=True)
     return selection_rows[:top_n]
 
@@ -158,6 +162,31 @@ def submit_run(
     return _load_status(run_dir)
 
 
+def _build_run_config(
+    *,
+    base_config_path: Path,
+    run_dir: Path,
+    payload: dict[str, Any],
+) -> Path:
+    config_data = yaml.safe_load(base_config_path.read_text(encoding="utf-8"))
+    market = config_data.setdefault("market", {})
+    output = config_data.setdefault("output", {})
+    evaluation = config_data.setdefault("evaluation", {})
+
+    for key in ["market_id", "universe_id", "start_date", "end_date"]:
+        if key in payload and payload[key] is not None:
+            market[key] = payload[key]
+    if "top_n" in payload and payload["top_n"] is not None:
+        evaluation["top_k_pairs"] = int(payload["top_n"])
+
+    config_override_path = run_dir / "submitted_config.yaml"
+    config_override_path.write_text(
+        yaml.safe_dump(config_data, sort_keys=False, allow_unicode=True),
+        encoding="utf-8",
+    )
+    return config_override_path
+
+
 def create_app(output_root: Path | None = None, default_config_path: Path | None = None):
     try:
         from fastapi import FastAPI, HTTPException
@@ -179,13 +208,21 @@ def create_app(output_root: Path | None = None, default_config_path: Path | None
     @app.post("/api/runs")
     def api_create_run(payload: dict[str, Any] | None = None) -> dict[str, Any]:
         body = payload or {}
-        requested_config = Path(body.get("config_path", config_path)).resolve()
         requested_run_id = body.get("run_id")
         run_sync = bool(body.get("run_sync", False))
+        actual_run_id = requested_run_id or uuid.uuid4().hex[:12]
+        run_dir = resolved_output_root / actual_run_id
+        run_dir.mkdir(parents=True, exist_ok=True)
+        requested_config = Path(body.get("config_path", config_path)).resolve()
+        built_config_path = _build_run_config(
+            base_config_path=requested_config,
+            run_dir=run_dir,
+            payload=body,
+        )
         return submit_run(
-            config_path=requested_config,
+            config_path=built_config_path,
             output_root=resolved_output_root,
-            run_id=requested_run_id,
+            run_id=actual_run_id,
             run_sync=run_sync,
         )
 
@@ -201,6 +238,9 @@ def create_app(output_root: Path | None = None, default_config_path: Path | None
         run_dir = resolved_output_root / run_id
         if not run_dir.exists():
             raise HTTPException(status_code=404, detail="Run not found")
+        status = _load_status(run_dir)
+        if status["status"] != "completed" or not (run_dir / "metrics.json").exists():
+            raise HTTPException(status_code=409, detail="Run metrics are not available yet")
         return get_run_metrics(resolved_output_root, run_id)
 
     @app.get("/api/runs/{run_id}/selection")
@@ -208,6 +248,9 @@ def create_app(output_root: Path | None = None, default_config_path: Path | None
         run_dir = resolved_output_root / run_id
         if not run_dir.exists():
             raise HTTPException(status_code=404, detail="Run not found")
+        status = _load_status(run_dir)
+        if status["status"] != "completed" or not (run_dir / "selection_candidates.json").exists():
+            raise HTTPException(status_code=409, detail="Selection results are not available yet")
         return get_selection_for_date(resolved_output_root, run_id, trade_date, top_n)
 
     return app

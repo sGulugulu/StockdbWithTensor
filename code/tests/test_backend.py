@@ -28,23 +28,49 @@ class BackendTests(unittest.TestCase):
             temp_config.write_text(yaml.safe_dump(config_data, sort_keys=False), encoding="utf-8")
 
             app = create_app(output_root=Path(temp_dir), default_config_path=temp_config)
-            client = TestClient(app)
+            with TestClient(app) as client:
+                response = client.post("/api/runs", json={"run_id": "api_test_run", "run_sync": True})
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.json()["status"], "completed")
 
-            response = client.post("/api/runs", json={"run_id": "api_test_run", "run_sync": True})
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.json()["status"], "completed")
+                response = client.get("/api/runs")
+                self.assertEqual(response.status_code, 200)
+                self.assertTrue(any(run["run_id"] == "api_test_run" for run in response.json()))
 
-            response = client.get("/api/runs")
-            self.assertEqual(response.status_code, 200)
-            self.assertTrue(any(run["run_id"] == "api_test_run" for run in response.json()))
+                response = client.get("/api/runs/api_test_run")
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.json()["status"]["status"], "completed")
 
-            response = client.get("/api/runs/api_test_run")
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.json()["status"]["status"], "completed")
+                response = client.get("/api/runs/api_test_run/selection", params={"trade_date": "2026-01-09", "top_n": 2})
+                self.assertEqual(response.status_code, 200)
+                self.assertLessEqual(len(response.json()), 2)
+                self.assertEqual(response.json()[0]["model_count"], 3)
 
-            response = client.get("/api/runs/api_test_run/selection", params={"trade_date": "2026-01-09", "top_n": 2})
-            self.assertEqual(response.status_code, 200)
-            self.assertLessEqual(len(response.json()), 2)
+                queued_dir = Path(temp_dir) / "queued_run"
+                queued_dir.mkdir(parents=True, exist_ok=True)
+                (queued_dir / "run_status.json").write_text(
+                    '{"run_id":"queued_run","status":"queued","created_at":"x","updated_at":"x"}',
+                    encoding="utf-8",
+                )
+                response = client.get("/api/runs/queued_run/metrics")
+                self.assertEqual(response.status_code, 409)
+
+                response = client.post(
+                    "/api/runs",
+                    json={
+                        "run_id": "api_test_run_override",
+                        "run_sync": True,
+                        "market_id": "cn_a",
+                        "universe_id": "CSI_A500",
+                        "start_date": "2026-01-02",
+                        "end_date": "2026-01-07",
+                    },
+                )
+                self.assertEqual(response.status_code, 200)
+                detail = client.get("/api/runs/api_test_run_override").json()
+                self.assertEqual(detail["manifest"]["market_id"], "cn_a")
+                self.assertEqual(detail["manifest"]["universe_id"], "CSI_A500")
+                self.assertEqual(detail["manifest"]["requested_end_date"], "2026-01-07")
 
 
 if __name__ == "__main__":

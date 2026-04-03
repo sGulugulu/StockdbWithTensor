@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class DatasetTests(unittest.TestCase):
     def setUp(self) -> None:
-        self.config = load_config(ROOT / "configs" / "default.yaml")
+        self.config = load_config(ROOT / "configs" / "sample_cn_smoke.yaml")
 
     def test_loads_wide_factor_records(self) -> None:
         adapter = create_market_adapter(self.config.market)

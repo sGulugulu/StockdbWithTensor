@@ -18,7 +18,7 @@ class MarketTests(unittest.TestCase):
         self.assertEqual(SymbolNormalizer("us_equity").normalize("aapl"), "AAPL")
 
     def test_universe_provider_filters_records(self) -> None:
-        config = load_config(ROOT / "configs" / "default.yaml")
+        config = load_config(ROOT / "configs" / "sample_cn_smoke.yaml")
         adapter = create_market_adapter(config.market)
         self.assertIsNotNone(adapter.universe_provider)
         records = adapter.load_records(config.data)
