@@ -4,13 +4,16 @@ from dataclasses import asdict
 from pathlib import Path
 
 from .config import ExperimentConfig, load_config
-from .dataset import TensorDataset, build_tensor_dataset, load_factor_records
+from .dataset import TensorDataset, build_tensor_dataset, filter_records_for_market, load_factor_records
 from .evaluation import (
+    build_selection_records,
     compute_quality_metrics,
     compute_rolling_stability,
+    factor_importance_summary,
     time_regime_shifts,
     top_similarity_pairs,
 )
+from .market import UniverseProvider
 from .models import ModelResult, fit_cp_model, fit_pca_model, fit_tucker_model
 from .output import write_outputs
 
@@ -71,9 +74,19 @@ def run_experiment(config_path: str | Path) -> Path:
     config = load_config(config_path)
     logs: list[str] = [f"Loaded config: {Path(config_path).resolve()}"]
 
-    records = load_factor_records(config.data)
-    logs.append(f"Loaded normalized records: {len(records)}")
-    dataset = build_tensor_dataset(records, config.preprocess)
+    universe_provider = UniverseProvider.from_config(config.market)
+    records = load_factor_records(config.data, config.market)
+    logs.append(f"Loaded normalized records before market filtering: {len(records)}")
+    filtered_records, actual_start, actual_end = filter_records_for_market(
+        records,
+        config.market,
+        universe_provider,
+    )
+    logs.append(
+        f"Filtered records for {config.market.market_id}/{config.market.universe_id}: "
+        f"{len(filtered_records)} rows from {actual_start} to {actual_end}"
+    )
+    dataset = build_tensor_dataset(filtered_records, config.preprocess)
     logs.append(
         "Tensor shape: "
         f"{dataset.tensor.shape[0]} stocks x {dataset.tensor.shape[1]} factors x {dataset.tensor.shape[2]} dates"
@@ -91,6 +104,8 @@ def run_experiment(config_path: str | Path) -> Path:
     stock_pairs: dict[str, list] = {}
     factor_pairs: dict[str, list] = {}
     time_shifts: dict[str, list] = {}
+    selection_rows: dict[str, list] = {}
+    factor_summaries: dict[str, list] = {}
     for model in selected_models:
         metrics = compute_quality_metrics(dataset.tensor, model, dataset.returns)
         stability = compute_rolling_stability(
@@ -121,6 +136,16 @@ def run_experiment(config_path: str | Path) -> Path:
             model.time_loadings,
             config.evaluation.top_k_pairs,
         )
+        selection_rows[model.name] = build_selection_records(
+            dataset,
+            model,
+            market_id=config.market.market_id,
+            universe_id=config.market.universe_id,
+        )
+        factor_summaries[model.name] = factor_importance_summary(
+            dataset.factor_names,
+            model.factor_loadings,
+        )
         logs.append(f"Selected {model.name} rank={model.rank} with mse={metrics['mse']:.6f}")
 
     output_dir = config.output.root_dir / config.output.experiment_name
@@ -132,5 +157,17 @@ def run_experiment(config_path: str | Path) -> Path:
         stock_pairs=stock_pairs,
         factor_pairs=factor_pairs,
         time_shifts=time_shifts,
+        selection_rows=selection_rows,
+        factor_summaries=factor_summaries,
+        run_manifest={
+            "market_id": config.market.market_id,
+            "universe_id": config.market.universe_id,
+            "requested_start_date": config.market.start_date,
+            "requested_end_date": config.market.end_date,
+            "actual_start_date": actual_start,
+            "actual_end_date": actual_end,
+            "models": [row["model"] for row in metrics_rows],
+            "output_dir": output_dir,
+        },
     )
     return output_dir

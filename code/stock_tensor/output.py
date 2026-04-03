@@ -7,7 +7,7 @@ from typing import Any
 
 import yaml
 
-from .evaluation import PairScore
+from .evaluation import PairScore, SelectionRecord
 
 
 def _write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
@@ -85,6 +85,9 @@ def write_outputs(
     stock_pairs: dict[str, list[PairScore]],
     factor_pairs: dict[str, list[PairScore]],
     time_shifts: dict[str, list[PairScore]],
+    selection_rows: dict[str, list[SelectionRecord]],
+    factor_summaries: dict[str, list[dict[str, Any]]],
+    run_manifest: dict[str, Any],
 ) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     (output_dir / "config_snapshot.yaml").write_text(
@@ -95,6 +98,10 @@ def write_outputs(
     _write_csv(output_dir / "metrics.csv", metrics_rows)
     (output_dir / "metrics.json").write_text(
         json.dumps(metrics_rows, indent=2, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    (output_dir / "run_manifest.json").write_text(
+        json.dumps(_serialize_paths(run_manifest), indent=2, ensure_ascii=False),
         encoding="utf-8",
     )
 
@@ -112,6 +119,53 @@ def write_outputs(
         _write_csv(
             output_dir / f"time_regimes_{model_name}.csv",
             [{"from": pair.left, "to": pair.right, "shift_score": pair.score} for pair in pairs],
+        )
+    for model_name, rows in selection_rows.items():
+        _write_csv(
+            output_dir / f"selection_{model_name}.csv",
+            [
+                {
+                    "trade_date": row.trade_date,
+                    "stock_code": row.stock_code,
+                    "model": row.model,
+                    "rank": row.rank_label,
+                    "market_id": row.market_id,
+                    "universe_id": row.universe_id,
+                    "score": row.score,
+                    "top_factor_1": row.top_factor_1,
+                    "top_factor_2": row.top_factor_2,
+                    "top_factor_3": row.top_factor_3,
+                }
+                for row in rows
+            ],
+        )
+        (output_dir / f"selection_{model_name}.json").write_text(
+            json.dumps(
+                [
+                    {
+                        "trade_date": row.trade_date,
+                        "stock_code": row.stock_code,
+                        "model": row.model,
+                        "rank": row.rank_label,
+                        "market_id": row.market_id,
+                        "universe_id": row.universe_id,
+                        "score": row.score,
+                        "top_factor_1": row.top_factor_1,
+                        "top_factor_2": row.top_factor_2,
+                        "top_factor_3": row.top_factor_3,
+                    }
+                    for row in rows
+                ],
+                indent=2,
+                ensure_ascii=False,
+            ),
+            encoding="utf-8",
+        )
+    for model_name, rows in factor_summaries.items():
+        _write_csv(output_dir / f"factor_summary_{model_name}.csv", rows)
+        (output_dir / f"factor_summary_{model_name}.json").write_text(
+            json.dumps(rows, indent=2, ensure_ascii=False),
+            encoding="utf-8",
         )
 
     _write_simple_bar_svg(
@@ -142,5 +196,8 @@ def write_outputs(
     summary_lines.append("- `stock_similarity_*.csv`: stock linkage candidates")
     summary_lines.append("- `factor_association_*.csv`: factor resonance candidates")
     summary_lines.append("- `time_regimes_*.csv`: largest adjacent time shifts")
+    summary_lines.append("- `selection_*.csv` / `selection_*.json`: per-date stock selection signals")
+    summary_lines.append("- `factor_summary_*.csv` / `factor_summary_*.json`: factor importance summaries")
+    summary_lines.append("- `run_manifest.json`: machine-readable run metadata for web services")
     summary_lines.append("- `model_explained_variance.svg` and `model_rank_ic.svg`: quick visual summaries")
     (output_dir / "summary.md").write_text("\n".join(summary_lines), encoding="utf-8")

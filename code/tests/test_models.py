@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 class ModelTests(unittest.TestCase):
     def setUp(self) -> None:
         config = load_config(ROOT / "configs" / "default.yaml")
-        records = load_factor_records(config.data)
+        records = load_factor_records(config.data, config.market)
         self.dataset = build_tensor_dataset(records, config.preprocess)
         self.config = config
 

@@ -17,6 +17,20 @@ class PairScore:
     score: float
 
 
+@dataclass(slots=True)
+class SelectionRecord:
+    trade_date: str
+    stock_code: str
+    model: str
+    rank_label: str
+    market_id: str
+    universe_id: str
+    score: float
+    top_factor_1: str
+    top_factor_2: str
+    top_factor_3: str
+
+
 def _pearson_corr(left: np.ndarray, right: np.ndarray) -> float:
     if left.size < 2 or right.size < 2:
         return float("nan")
@@ -162,3 +176,46 @@ def time_regime_shifts(dates: list[str], time_loadings: np.ndarray, top_k: int) 
         shifts.append(PairScore(dates[idx - 1], dates[idx], score))
     shifts.sort(key=lambda item: item.score, reverse=True)
     return shifts[:top_k]
+
+
+def factor_importance_summary(factor_names: list[str], factor_loadings: np.ndarray) -> list[dict[str, float | str]]:
+    importance = np.mean(np.abs(factor_loadings), axis=1)
+    rows = [
+        {"factor_name": name, "importance": float(score)}
+        for name, score in zip(factor_names, importance)
+    ]
+    rows.sort(key=lambda item: float(item["importance"]), reverse=True)
+    return rows
+
+
+def build_selection_records(
+    dataset: TensorDataset,
+    result: ModelResult,
+    market_id: str,
+    universe_id: str,
+    top_k_factors: int = 3,
+) -> list[SelectionRecord]:
+    selection_rows: list[SelectionRecord] = []
+    for stock_idx, stock_code in enumerate(dataset.stock_codes):
+        for date_idx, trade_date in enumerate(dataset.dates):
+            factor_scores = result.reconstruction[stock_idx, :, date_idx]
+            top_indices = np.argsort(np.abs(factor_scores))[::-1][:top_k_factors]
+            top_factors = [dataset.factor_names[index] for index in top_indices]
+            while len(top_factors) < 3:
+                top_factors.append("")
+            selection_rows.append(
+                SelectionRecord(
+                    trade_date=trade_date,
+                    stock_code=stock_code,
+                    model=result.name,
+                    rank_label=str(result.rank),
+                    market_id=market_id,
+                    universe_id=universe_id,
+                    score=float(result.signal_matrix[stock_idx, date_idx]),
+                    top_factor_1=top_factors[0],
+                    top_factor_2=top_factors[1],
+                    top_factor_3=top_factors[2],
+                )
+            )
+    selection_rows.sort(key=lambda item: (item.trade_date, -item.score, item.stock_code))
+    return selection_rows

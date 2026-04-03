@@ -13,6 +13,8 @@ ROOT = Path(__file__).resolve().parents[1]
 class ConfigTests(unittest.TestCase):
     def test_load_default_config(self) -> None:
         config = load_config(ROOT / "configs" / "default.yaml")
+        self.assertEqual(config.market.market_id, "cn_a")
+        self.assertEqual(config.market.universe_id, "CSI_A500")
         self.assertEqual(config.data.format, "wide")
         self.assertEqual(config.models.cp.ranks, [2, 3])
         self.assertEqual(config.output.experiment_name, "sample_run")

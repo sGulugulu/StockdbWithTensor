@@ -8,7 +8,8 @@ from pathlib import Path
 
 import numpy as np
 
-from .config import DataConfig, PreprocessConfig
+from .config import DataConfig, MarketConfig, PreprocessConfig
+from .market import UniverseProvider, normalize_symbol
 
 
 @dataclass(slots=True)
@@ -45,7 +46,7 @@ def _normalize_date(raw_value: str) -> str:
     return date.fromisoformat(raw_value.strip()).isoformat()
 
 
-def load_factor_records(config: DataConfig) -> list[NormalizedRecord]:
+def load_factor_records(config: DataConfig, market: MarketConfig) -> list[NormalizedRecord]:
     path = Path(config.path)
     if not path.exists():
         raise FileNotFoundError(f"Data file not found: {path}")
@@ -71,7 +72,7 @@ def load_factor_records(config: DataConfig) -> list[NormalizedRecord]:
 
         records: list[NormalizedRecord] = []
         for row in reader:
-            stock_code = row[config.stock_column].strip()
+            stock_code = normalize_symbol(row[config.stock_column], market.market_id)
             trade_date = _normalize_date(row[config.date_column])
             industry = row[config.industry_column].strip() if config.industry_column and row[config.industry_column] else None
             future_return = _parse_float(row[config.return_column]) if config.return_column else None
@@ -106,6 +107,30 @@ def load_factor_records(config: DataConfig) -> list[NormalizedRecord]:
     if not records:
         raise ValueError("No usable records were loaded from the CSV.")
     return records
+
+
+def filter_records_for_market(
+    records: list[NormalizedRecord],
+    market: MarketConfig,
+    universe_provider: UniverseProvider | None,
+) -> tuple[list[NormalizedRecord], str, str]:
+    date_filtered = [
+        record
+        for record in records
+        if market.start_date <= record.trade_date <= market.end_date
+    ]
+    if universe_provider is not None:
+        date_filtered = [
+            record
+            for record in date_filtered
+            if universe_provider.is_member(record.stock_code, record.trade_date)
+        ]
+    if not date_filtered:
+        raise ValueError(
+            "No records remain after applying market date range and universe membership filters."
+        )
+    available_dates = sorted({record.trade_date for record in date_filtered})
+    return date_filtered, available_dates[0], available_dates[-1]
 
 
 def _forward_backward_fill(values: np.ndarray) -> np.ndarray:
