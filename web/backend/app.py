@@ -19,13 +19,27 @@ if str(CODE_ROOT) not in sys.path:
 from stock_tensor.pipeline import run_experiment
 
 
+_RUN_STATUS_LOCKS: dict[str, threading.Lock] = {}
+_RUN_STATUS_LOCKS_GUARD = threading.Lock()
+
+
+def _get_status_lock(run_dir: Path) -> threading.Lock:
+    key = str(run_dir.resolve())
+    with _RUN_STATUS_LOCKS_GUARD:
+        lock = _RUN_STATUS_LOCKS.get(key)
+        if lock is None:
+            lock = threading.Lock()
+            _RUN_STATUS_LOCKS[key] = lock
+        return lock
+
+
 def _read_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
 def _write_json(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    temp_path = path.with_suffix(path.suffix + ".tmp")
+    temp_path = path.with_name(f"{path.name}.{uuid.uuid4().hex}.tmp")
     temp_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
     temp_path.replace(path)
 
@@ -51,15 +65,16 @@ def _load_status(run_dir: Path) -> dict[str, Any]:
 
 
 def _update_status(run_dir: Path, status: str, extra: dict[str, Any] | None = None) -> dict[str, Any]:
-    payload = _load_status(run_dir)
-    payload["status"] = status
-    payload["updated_at"] = _utc_now_iso()
-    if payload.get("created_at") is None:
-        payload["created_at"] = payload["updated_at"]
-    if extra:
-        payload.update(extra)
-    _write_json(_status_path(run_dir), payload)
-    return payload
+    with _get_status_lock(run_dir):
+        payload = _load_status(run_dir)
+        payload["status"] = status
+        payload["updated_at"] = _utc_now_iso()
+        if payload.get("created_at") is None:
+            payload["created_at"] = payload["updated_at"]
+        if extra:
+            payload.update(extra)
+        _write_json(_status_path(run_dir), payload)
+        return payload
 
 
 def list_runs(output_root: Path) -> list[dict[str, Any]]:
@@ -241,15 +256,15 @@ def create_app(output_root: Path | None = None, default_config_path: Path | None
     }
 
     @app.get("/api/markets")
-    def api_markets() -> list[dict[str, str]]:
+    async def api_markets() -> list[dict[str, str]]:
         return get_markets()
 
     @app.get("/api/runs")
-    def api_runs() -> list[dict[str, Any]]:
+    async def api_runs() -> list[dict[str, Any]]:
         return list_runs(resolved_output_root)
 
     @app.post("/api/runs")
-    def api_create_run(payload: dict[str, Any] | None = None) -> dict[str, Any]:
+    async def api_create_run(payload: dict[str, Any] | None = None) -> dict[str, Any]:
         body = payload or {}
         requested_run_id = body.get("run_id")
         run_sync = bool(body.get("run_sync", False))
@@ -279,14 +294,14 @@ def create_app(output_root: Path | None = None, default_config_path: Path | None
         )
 
     @app.get("/api/runs/{run_id}")
-    def api_run_detail(run_id: str) -> dict[str, Any]:
+    async def api_run_detail(run_id: str) -> dict[str, Any]:
         run_dir = resolved_output_root / run_id
         if not run_dir.exists():
             raise HTTPException(status_code=404, detail="Run not found")
         return get_run_detail(resolved_output_root, run_id)
 
     @app.get("/api/runs/{run_id}/metrics")
-    def api_run_metrics(run_id: str) -> list[dict[str, Any]]:
+    async def api_run_metrics(run_id: str) -> list[dict[str, Any]]:
         run_dir = resolved_output_root / run_id
         if not run_dir.exists():
             raise HTTPException(status_code=404, detail="Run not found")
@@ -296,7 +311,7 @@ def create_app(output_root: Path | None = None, default_config_path: Path | None
         return get_run_metrics(resolved_output_root, run_id)
 
     @app.get("/api/runs/{run_id}/selection")
-    def api_run_selection(run_id: str, trade_date: str, top_n: int = 50) -> list[dict[str, Any]]:
+    async def api_run_selection(run_id: str, trade_date: str, top_n: int = 50) -> list[dict[str, Any]]:
         run_dir = resolved_output_root / run_id
         if not run_dir.exists():
             raise HTTPException(status_code=404, detail="Run not found")
