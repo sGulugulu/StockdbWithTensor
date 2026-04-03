@@ -355,6 +355,20 @@ export default function App() {
               ))}
             </div>
           ) : null}
+          {detail?.factor_associations ? (
+            <div className="detail-sections">
+              {Object.entries(detail.factor_associations).map(([modelName, rows]) => (
+                <div key={modelName}>
+                  <strong>{modelName} 因子关系</strong>
+                  <ul>
+                    {rows.slice(0, 3).map((row) => (
+                      <li key={`${modelName}-${row.left}-${row.right}`}>{row.left} / {row.right}: {Number(row.score).toFixed(4)}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          ) : null}
           {detail?.time_regimes ? (
             <div className="detail-sections">
               {Object.entries(detail.time_regimes).map(([modelName, rows]) => (
