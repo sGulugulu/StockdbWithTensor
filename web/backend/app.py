@@ -83,11 +83,21 @@ def list_runs(output_root: Path) -> list[dict[str, Any]]:
 
 def get_run_detail(output_root: Path, run_id: str) -> dict[str, Any]:
     run_dir = output_root / run_id
+    factor_summaries = {
+        path.stem.replace("factor_summary_", ""): _read_json(path)
+        for path in run_dir.glob("factor_summary_*.json")
+    }
+    time_regimes = {
+        path.stem.replace("time_regimes_", ""): _read_json(path)
+        for path in run_dir.glob("time_regimes_*.json")
+    }
     return {
         "run_id": run_id,
         "status": _load_status(run_dir),
         "manifest": _read_json(run_dir / "run_manifest.json") if (run_dir / "run_manifest.json").exists() else None,
         "metrics": _read_json(run_dir / "metrics.json") if (run_dir / "metrics.json").exists() else [],
+        "factor_summaries": factor_summaries,
+        "time_regimes": time_regimes,
     }
 
 
@@ -219,7 +229,7 @@ def create_app(output_root: Path | None = None, default_config_path: Path | None
     resolved_output_root = output_root or Path(os.environ.get("OUTPUT_ROOT", ROOT / "code" / "outputs"))
     config_path = default_config_path or Path(os.environ.get("DEFAULT_CONFIG_PATH", ROOT / "code" / "configs" / "default.yaml"))
     config_templates = {
-        "cn_a": ROOT / "code" / "configs" / "sample_cn_smoke.yaml",
+        "cn_a": ROOT / "code" / "configs" / "default.yaml",
         "us_equity": ROOT / "code" / "configs" / "sample_us_equity.yaml",
     }
 
@@ -241,6 +251,10 @@ def create_app(output_root: Path | None = None, default_config_path: Path | None
         run_dir.mkdir(parents=True, exist_ok=True)
         if body.get("config_path"):
             requested_config = Path(body["config_path"]).resolve()
+        elif body.get("config_profile") == "sample_cn_smoke":
+            requested_config = (ROOT / "code" / "configs" / "sample_cn_smoke.yaml").resolve()
+        elif body.get("config_profile") == "sample_us_equity":
+            requested_config = (ROOT / "code" / "configs" / "sample_us_equity.yaml").resolve()
         elif body.get("market_id") in config_templates:
             requested_config = config_templates[body["market_id"]].resolve()
         else:

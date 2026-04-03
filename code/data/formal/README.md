@@ -24,5 +24,8 @@ python3 code/data/build_tdx_index_files.py `
   --hs300-members code/data/formal/hs300_history.csv `
   --csi-a500-members code/data/formal/csi_a500_history.csv `
   --csi-a50-members code/data/formal/csi_a50_history.csv `
+  --date-column trade_date `
+  --member-start-column start_date `
+  --member-end-column end_date `
   --output-dir code/data/formal
 ```

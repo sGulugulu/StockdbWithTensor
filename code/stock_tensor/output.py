@@ -121,6 +121,14 @@ def write_outputs(
             output_dir / f"time_regimes_{model_name}.csv",
             [{"from": pair.left, "to": pair.right, "shift_score": pair.score} for pair in pairs],
         )
+        (output_dir / f"time_regimes_{model_name}.json").write_text(
+            json.dumps(
+                [{"from": pair.left, "to": pair.right, "shift_score": pair.score} for pair in pairs],
+                indent=2,
+                ensure_ascii=False,
+            ),
+            encoding="utf-8",
+        )
     for model_name, rows in selection_rows.items():
         _write_csv(
             output_dir / f"selection_{model_name}.csv",
