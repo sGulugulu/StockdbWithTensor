@@ -5,7 +5,8 @@ import unittest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from stock_tensor.config import load_config
-from stock_tensor.dataset import build_tensor_dataset, load_factor_records
+from stock_tensor.dataset import build_tensor_dataset
+from stock_tensor.market import create_market_adapter
 from stock_tensor.models import fit_cp_model, fit_pca_model, fit_tucker_model
 
 
@@ -15,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 class ModelTests(unittest.TestCase):
     def setUp(self) -> None:
         config = load_config(ROOT / "configs" / "default.yaml")
-        records = load_factor_records(config.data, config.market)
+        records = create_market_adapter(config.market).load_records(config.data)
         self.dataset = build_tensor_dataset(records, config.preprocess)
         self.config = config
 
@@ -29,6 +30,7 @@ class ModelTests(unittest.TestCase):
         )
         self.assertEqual(result.reconstruction.shape, self.dataset.tensor.shape)
         self.assertEqual(result.factor_loadings.shape[0], len(self.dataset.factor_names))
+        self.assertEqual(result.selection_signal.shape, (len(self.dataset.stock_codes), len(self.dataset.dates)))
 
     def test_tucker_model_reconstructs_tensor_shape(self) -> None:
         result = fit_tucker_model(
@@ -39,11 +41,13 @@ class ModelTests(unittest.TestCase):
         )
         self.assertEqual(result.reconstruction.shape, self.dataset.tensor.shape)
         self.assertEqual(result.time_loadings.shape[0], len(self.dataset.dates))
+        self.assertEqual(result.time_regime_score.shape[0], len(self.dataset.dates))
 
     def test_pca_model_reconstructs_tensor_shape(self) -> None:
         result = fit_pca_model(self.dataset.tensor, rank=2)
         self.assertEqual(result.reconstruction.shape, self.dataset.tensor.shape)
         self.assertEqual(result.stock_loadings.shape[0], len(self.dataset.stock_codes))
+        self.assertEqual(result.stock_cluster.shape[0], len(self.dataset.stock_codes))
 
 
 if __name__ == "__main__":

@@ -25,10 +25,17 @@ class SelectionRecord:
     rank_label: str
     market_id: str
     universe_id: str
-    score: float
+    total_score: float
+    stock_score: float
+    selection_signal: float
+    time_regime_score: float
+    cluster_label: int
     top_factor_1: str
+    top_factor_1_score: float
     top_factor_2: str
+    top_factor_2_score: float
     top_factor_3: str
+    top_factor_3_score: float
 
 
 def _pearson_corr(left: np.ndarray, right: np.ndarray) -> float:
@@ -70,7 +77,7 @@ def compute_quality_metrics(tensor: np.ndarray, result: ModelResult, returns: np
         mask = ~np.isnan(returns[:, date_idx])
         if mask.sum() < 2:
             continue
-        signal_slice = result.signal_matrix[:, date_idx][mask]
+        signal_slice = result.selection_signal[:, date_idx][mask]
         return_slice = returns[:, date_idx][mask]
         ic = _pearson_corr(signal_slice, return_slice)
         rank_ic = _spearman_corr(signal_slice, return_slice)
@@ -198,11 +205,14 @@ def build_selection_records(
     selection_rows: list[SelectionRecord] = []
     for stock_idx, stock_code in enumerate(dataset.stock_codes):
         for date_idx, trade_date in enumerate(dataset.dates):
-            factor_scores = result.reconstruction[stock_idx, :, date_idx]
+            factor_scores = result.factor_contribution[stock_idx, :, date_idx]
             top_indices = np.argsort(np.abs(factor_scores))[::-1][:top_k_factors]
             top_factors = [dataset.factor_names[index] for index in top_indices]
+            top_scores = [float(factor_scores[index]) for index in top_indices]
             while len(top_factors) < 3:
                 top_factors.append("")
+            while len(top_scores) < 3:
+                top_scores.append(0.0)
             selection_rows.append(
                 SelectionRecord(
                     trade_date=trade_date,
@@ -211,11 +221,18 @@ def build_selection_records(
                     rank_label=str(result.rank),
                     market_id=market_id,
                     universe_id=universe_id,
-                    score=float(result.signal_matrix[stock_idx, date_idx]),
+                    total_score=float(result.selection_signal[stock_idx, date_idx]),
+                    stock_score=float(result.stock_score[stock_idx, date_idx]),
+                    selection_signal=float(result.selection_signal[stock_idx, date_idx]),
+                    time_regime_score=float(result.time_regime_score[date_idx]),
+                    cluster_label=int(result.stock_cluster[stock_idx]),
                     top_factor_1=top_factors[0],
+                    top_factor_1_score=top_scores[0],
                     top_factor_2=top_factors[1],
+                    top_factor_2_score=top_scores[1],
                     top_factor_3=top_factors[2],
+                    top_factor_3_score=top_scores[2],
                 )
             )
-    selection_rows.sort(key=lambda item: (item.trade_date, -item.score, item.stock_code))
+    selection_rows.sort(key=lambda item: (item.trade_date, -item.total_score, item.stock_code))
     return selection_rows

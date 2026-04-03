@@ -17,7 +17,72 @@ class ModelResult:
     signal_matrix: np.ndarray
     objective: float
     param_count: int
+    stock_score: np.ndarray
+    factor_contribution: np.ndarray
+    time_regime_score: np.ndarray
+    selection_signal: np.ndarray
+    stock_cluster: np.ndarray
     diagnostics: dict[str, Any] = field(default_factory=dict)
+
+
+def _compute_stock_cluster(stock_loadings: np.ndarray) -> np.ndarray:
+    if stock_loadings.ndim != 2 or stock_loadings.shape[1] == 0:
+        return np.zeros(stock_loadings.shape[0], dtype=int)
+    return np.argmax(np.abs(stock_loadings), axis=1)
+
+
+def _compute_time_regime_score(time_loadings: np.ndarray) -> np.ndarray:
+    if time_loadings.shape[0] == 0:
+        return np.zeros(0, dtype=float)
+    shifts = np.zeros(time_loadings.shape[0], dtype=float)
+    for idx in range(1, time_loadings.shape[0]):
+        shifts[idx] = float(np.linalg.norm(time_loadings[idx] - time_loadings[idx - 1]))
+    max_shift = shifts.max() if shifts.size else 0.0
+    if max_shift > 0:
+        shifts = shifts / max_shift
+    return shifts
+
+
+def _compute_factor_contribution(reconstruction: np.ndarray) -> np.ndarray:
+    contribution = np.abs(reconstruction)
+    denominator = contribution.sum(axis=1, keepdims=True)
+    denominator[denominator == 0] = 1.0
+    return contribution / denominator
+
+
+def _enrich_result(
+    *,
+    name: str,
+    rank: int | tuple[int, int, int],
+    reconstruction: np.ndarray,
+    stock_loadings: np.ndarray,
+    factor_loadings: np.ndarray,
+    time_loadings: np.ndarray,
+    objective: float,
+    param_count: int,
+    diagnostics: dict[str, Any],
+) -> ModelResult:
+    stock_score = reconstruction.mean(axis=1)
+    factor_contribution = _compute_factor_contribution(reconstruction)
+    time_regime_score = _compute_time_regime_score(time_loadings)
+    selection_signal = stock_score * (1.0 + time_regime_score[np.newaxis, :])
+    return ModelResult(
+        name=name,
+        rank=rank,
+        reconstruction=reconstruction,
+        stock_loadings=stock_loadings,
+        factor_loadings=factor_loadings,
+        time_loadings=time_loadings,
+        signal_matrix=stock_score,
+        objective=objective,
+        param_count=param_count,
+        stock_score=stock_score,
+        factor_contribution=factor_contribution,
+        time_regime_score=time_regime_score,
+        selection_signal=selection_signal,
+        stock_cluster=_compute_stock_cluster(stock_loadings),
+        diagnostics=diagnostics,
+    )
 
 
 def unfold(tensor: np.ndarray, mode: int) -> np.ndarray:
@@ -96,14 +161,13 @@ def fit_cp_model(
 
     final_reconstruction = _reconstruct_cp(weights, (a_mat, b_mat, c_mat))
     mse = float(np.mean((tensor - final_reconstruction) ** 2))
-    return ModelResult(
+    return _enrich_result(
         name="cp",
         rank=rank,
         reconstruction=final_reconstruction,
         stock_loadings=a_mat,
         factor_loadings=b_mat,
         time_loadings=c_mat,
-        signal_matrix=final_reconstruction.mean(axis=1),
         objective=mse,
         param_count=stock_count * rank + factor_count * rank + time_count * rank + rank,
         diagnostics=diagnostics,
@@ -156,14 +220,13 @@ def fit_tucker_model(
     core = _mode_product(_mode_product(_mode_product(tensor, u_stock.T, 0), u_factor.T, 1), u_time.T, 2)
     reconstruction = _mode_product(_mode_product(_mode_product(core, u_stock, 0), u_factor, 1), u_time, 2)
     mse = float(np.mean((tensor - reconstruction) ** 2))
-    return ModelResult(
+    return _enrich_result(
         name="tucker",
         rank=rank,
         reconstruction=reconstruction,
         stock_loadings=u_stock,
         factor_loadings=u_factor,
         time_loadings=u_time,
-        signal_matrix=reconstruction.mean(axis=1),
         objective=mse,
         param_count=(
             tensor.shape[0] * stock_rank
@@ -190,14 +253,13 @@ def fit_pca_model(tensor: np.ndarray, rank: int) -> ModelResult:
     )
     scores_tensor = scores.reshape(stock_count, time_count, rank)
     mse = float(np.mean((tensor - reconstruction) ** 2))
-    return ModelResult(
+    return _enrich_result(
         name="pca",
         rank=rank,
         reconstruction=reconstruction,
         stock_loadings=scores_tensor.mean(axis=1),
         factor_loadings=components,
         time_loadings=scores_tensor.mean(axis=0),
-        signal_matrix=reconstruction.mean(axis=1),
         objective=mse,
         param_count=stock_count * time_count * rank + factor_count * rank + factor_count,
         diagnostics={"explained_singular_values": singular_values[:rank].tolist()},
