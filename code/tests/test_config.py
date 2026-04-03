@@ -20,6 +20,11 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(config.models.cp.ranks, [2, 3])
         self.assertEqual(config.output.experiment_name, "formal_a_share_run")
 
+    def test_load_smoke_config(self) -> None:
+        config = load_config(ROOT / "configs" / "sample_cn_smoke.yaml")
+        self.assertEqual(config.market.start_date, "2026-01-01")
+        self.assertEqual(config.output.experiment_name, "sample_run")
+
 
 if __name__ == "__main__":
     unittest.main()

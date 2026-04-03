@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from collections import defaultdict
 from itertools import combinations
 from typing import Callable
 
@@ -236,3 +237,40 @@ def build_selection_records(
             )
     selection_rows.sort(key=lambda item: (item.trade_date, -item.total_score, item.stock_code))
     return selection_rows
+
+
+def build_candidate_pool(
+    selection_rows_by_model: dict[str, list[SelectionRecord]],
+) -> list[dict[str, float | int | str]]:
+    grouped: dict[tuple[str, str], list[SelectionRecord]] = defaultdict(list)
+    for rows in selection_rows_by_model.values():
+        for row in rows:
+            grouped[(row.trade_date, row.stock_code)].append(row)
+
+    candidate_rows: list[dict[str, float | int | str]] = []
+    for (trade_date, stock_code), rows in grouped.items():
+        rows.sort(key=lambda item: item.total_score, reverse=True)
+        representative = rows[0]
+        candidate_rows.append(
+            {
+                "trade_date": trade_date,
+                "stock_code": stock_code,
+                "market_id": representative.market_id,
+                "universe_id": representative.universe_id,
+                "model_count": len(rows),
+                "models": ",".join(sorted({row.model for row in rows})),
+                "total_score": float(np.mean([row.total_score for row in rows])),
+                "stock_score": float(np.mean([row.stock_score for row in rows])),
+                "selection_signal": float(np.mean([row.selection_signal for row in rows])),
+                "time_regime_score": float(np.mean([row.time_regime_score for row in rows])),
+                "cluster_label": representative.cluster_label,
+                "top_factor_1": representative.top_factor_1,
+                "top_factor_1_score": representative.top_factor_1_score,
+                "top_factor_2": representative.top_factor_2,
+                "top_factor_2_score": representative.top_factor_2_score,
+                "top_factor_3": representative.top_factor_3,
+                "top_factor_3_score": representative.top_factor_3_score,
+            }
+        )
+    candidate_rows.sort(key=lambda item: (str(item["trade_date"]), -float(item["total_score"]), str(item["stock_code"])))
+    return candidate_rows

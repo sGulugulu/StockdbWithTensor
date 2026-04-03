@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class ModelTests(unittest.TestCase):
     def setUp(self) -> None:
-        config = load_config(ROOT / "configs" / "default.yaml")
+        config = load_config(ROOT / "configs" / "sample_cn_smoke.yaml")
         records = create_market_adapter(config.market).load_records(config.data)
         self.dataset = build_tensor_dataset(records, config.preprocess)
         self.config = config

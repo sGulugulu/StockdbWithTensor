@@ -86,6 +86,7 @@ def write_outputs(
     factor_pairs: dict[str, list[PairScore]],
     time_shifts: dict[str, list[PairScore]],
     selection_rows: dict[str, list[SelectionRecord]],
+    candidate_rows: list[dict[str, Any]],
     factor_summaries: dict[str, list[dict[str, Any]]],
     run_manifest: dict[str, Any],
 ) -> None:
@@ -182,6 +183,12 @@ def write_outputs(
             encoding="utf-8",
         )
 
+    _write_csv(output_dir / "selection_candidates.csv", candidate_rows)
+    (output_dir / "selection_candidates.json").write_text(
+        json.dumps(candidate_rows, indent=2, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
     _write_simple_bar_svg(
         output_dir / "model_explained_variance.svg",
         "Model Explained Variance",
@@ -211,6 +218,7 @@ def write_outputs(
     summary_lines.append("- `factor_association_*.csv`: factor resonance candidates")
     summary_lines.append("- `time_regimes_*.csv`: largest adjacent time shifts")
     summary_lines.append("- `selection_*.csv` / `selection_*.json`: per-date stock selection signals")
+    summary_lines.append("- `selection_candidates.csv` / `selection_candidates.json`: unified per-date candidate pool")
     summary_lines.append("- `factor_summary_*.csv` / `factor_summary_*.json`: factor importance summaries")
     summary_lines.append("- `run_manifest.json`: machine-readable run metadata for web services")
     summary_lines.append("- `model_explained_variance.svg` and `model_rank_ic.svg`: quick visual summaries")

@@ -34,6 +34,7 @@ class PipelineTests(unittest.TestCase):
             self.assertTrue((output_dir / "model_explained_variance.svg").exists())
             self.assertTrue((output_dir / "run_manifest.json").exists())
             self.assertTrue((output_dir / "selection_cp.json").exists())
+            self.assertTrue((output_dir / "selection_candidates.json").exists())
             self.assertTrue((output_dir / "factor_summary_cp.json").exists())
 
             detail = get_run_detail(Path(temp_dir), "pipeline_test")
@@ -43,6 +44,7 @@ class PipelineTests(unittest.TestCase):
             self.assertEqual(len(selections), 3)
             self.assertIn("stock_code", selections[0])
             self.assertIn("cluster_label", selections[0])
+            self.assertEqual(selections[0]["model_count"], 3)
 
 
 if __name__ == "__main__":
