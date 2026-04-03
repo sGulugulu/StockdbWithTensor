@@ -1,0 +1,6 @@
+code/data/formal/factors/long_window/all_a_factor_panel_long_window.csv filter=lfs diff=lfs merge=lfs -text
+*.pdf filter=lfs diff=lfs merge=lfs -text
+*.docx filter=lfs diff=lfs merge=lfs -text
+*.pptx filter=lfs diff=lfs merge=lfs -text
+web/backend-go/*.exe filter=lfs diff=lfs merge=lfs -text
+code/data/formal/factors/long_window/*.csv filter=lfs diff=lfs merge=lfs -text
