@@ -50,6 +50,19 @@ label {
   margin-bottom: 12px;
 }
 
+.checkbox-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.inline-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 0;
+}
+
 input,
 select {
   padding: 10px 12px;
@@ -99,8 +112,12 @@ select {
 
 .detail-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 12px;
+}
+
+.metrics-table {
+  margin-top: 16px;
 }
 
 .eyebrow {

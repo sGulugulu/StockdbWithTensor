@@ -79,6 +79,11 @@ class EvaluationConfig:
 
 
 @dataclass(slots=True)
+class RuntimeConfig:
+    selection_top_n: int
+
+
+@dataclass(slots=True)
 class OutputConfig:
     root_dir: Path
     experiment_name: str
@@ -91,6 +96,7 @@ class ExperimentConfig:
     preprocess: PreprocessConfig
     models: ModelConfig
     evaluation: EvaluationConfig
+    runtime: RuntimeConfig
     output: OutputConfig
 
 
@@ -112,6 +118,7 @@ def load_config(path: str | Path) -> ExperimentConfig:
     preprocess = raw["preprocess"]
     models = raw["models"]
     evaluation = raw["evaluation"]
+    runtime = raw.get("runtime", {})
     output = raw["output"]
 
     _require_keys(
@@ -206,6 +213,9 @@ def load_config(path: str | Path) -> ExperimentConfig:
         evaluation=EvaluationConfig(
             top_k_pairs=int(evaluation["top_k_pairs"]),
             rolling_window=int(evaluation["rolling_window"]),
+        ),
+        runtime=RuntimeConfig(
+            selection_top_n=int(runtime.get("selection_top_n", 20)),
         ),
         output=OutputConfig(
             root_dir=output_root,
