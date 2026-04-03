@@ -1,7 +1,7 @@
 market:
   market_id: cn_a
   universe_id: CSI_A500
-  start_date: 2015-01-01
+  start_date: 2026-01-01
   end_date: 2026-12-31
   timezone: Asia/Shanghai
   currency: CNY
@@ -53,4 +53,4 @@ evaluation:
 
 output:
   root_dir: ../outputs
-  experiment_name: formal_a_share_run
+  experiment_name: sample_run

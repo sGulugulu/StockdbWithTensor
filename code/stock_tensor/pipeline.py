@@ -2,9 +2,10 @@ from __future__ import annotations
 
 from dataclasses import asdict
 from pathlib import Path
+from typing import Callable
 
 from .config import ExperimentConfig, load_config
-from .dataset import TensorDataset, build_tensor_dataset, filter_records_for_market, load_factor_records
+from .dataset import TensorDataset, build_tensor_dataset
 from .evaluation import (
     build_selection_records,
     compute_quality_metrics,
@@ -13,7 +14,7 @@ from .evaluation import (
     time_regime_shifts,
     top_similarity_pairs,
 )
-from .market import UniverseProvider
+from .market import create_market_adapter
 from .models import ModelResult, fit_cp_model, fit_pca_model, fit_tucker_model
 from .output import write_outputs
 
@@ -70,22 +71,37 @@ def _fit_window_callable(config: ExperimentConfig, model: ModelResult):
     return lambda tensor: fit_pca_model(tensor, rank=int(model.rank))
 
 
-def run_experiment(config_path: str | Path) -> Path:
+def run_experiment(
+    config_path: str | Path,
+    *,
+    output_root: str | Path | None = None,
+    experiment_name: str | None = None,
+    status_callback: Callable[[str, dict[str, object]], None] | None = None,
+) -> Path:
     config = load_config(config_path)
+    if output_root is not None:
+        config.output.root_dir = Path(output_root).resolve()
+    if experiment_name is not None:
+        config.output.experiment_name = experiment_name
     logs: list[str] = [f"Loaded config: {Path(config_path).resolve()}"]
+    market_adapter = create_market_adapter(config.market)
 
-    universe_provider = UniverseProvider.from_config(config.market)
-    records = load_factor_records(config.data, config.market)
+    records = market_adapter.load_records(config.data)
     logs.append(f"Loaded normalized records before market filtering: {len(records)}")
-    filtered_records, actual_start, actual_end = filter_records_for_market(
-        records,
-        config.market,
-        universe_provider,
-    )
+    filtered_records, actual_start, actual_end = market_adapter.filter_records(records)
     logs.append(
         f"Filtered records for {config.market.market_id}/{config.market.universe_id}: "
         f"{len(filtered_records)} rows from {actual_start} to {actual_end}"
     )
+    if status_callback is not None:
+        status_callback(
+            "running",
+            {
+                "actual_start_date": actual_start,
+                "actual_end_date": actual_end,
+                "loaded_records": len(filtered_records),
+            },
+        )
     dataset = build_tensor_dataset(filtered_records, config.preprocess)
     logs.append(
         "Tensor shape: "
@@ -168,6 +184,9 @@ def run_experiment(config_path: str | Path) -> Path:
             "actual_end_date": actual_end,
             "models": [row["model"] for row in metrics_rows],
             "output_dir": output_dir,
+            "status": "completed",
         },
     )
+    if status_callback is not None:
+        status_callback("completed", {"output_dir": str(output_dir), "models": [row["model"] for row in metrics_rows]})
     return output_dir

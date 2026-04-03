@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class PipelineTests(unittest.TestCase):
     def test_pipeline_writes_outputs(self) -> None:
-        config_path = ROOT / "configs" / "default.yaml"
+        config_path = ROOT / "configs" / "sample_cn_smoke.yaml"
         config_data = yaml.safe_load(config_path.read_text(encoding="utf-8"))
 
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -34,12 +34,15 @@ class PipelineTests(unittest.TestCase):
             self.assertTrue((output_dir / "model_explained_variance.svg").exists())
             self.assertTrue((output_dir / "run_manifest.json").exists())
             self.assertTrue((output_dir / "selection_cp.json").exists())
+            self.assertTrue((output_dir / "factor_summary_cp.json").exists())
 
             detail = get_run_detail(Path(temp_dir), "pipeline_test")
             self.assertEqual(detail["manifest"]["market_id"], "cn_a")
+            self.assertEqual(detail["status"]["status"], "unknown")
             selections = get_selection_for_date(Path(temp_dir), "pipeline_test", "2026-01-09", 3)
             self.assertEqual(len(selections), 3)
             self.assertIn("stock_code", selections[0])
+            self.assertIn("cluster_label", selections[0])
 
 
 if __name__ == "__main__":

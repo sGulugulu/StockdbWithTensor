@@ -15,9 +15,10 @@ class ConfigTests(unittest.TestCase):
         config = load_config(ROOT / "configs" / "default.yaml")
         self.assertEqual(config.market.market_id, "cn_a")
         self.assertEqual(config.market.universe_id, "CSI_A500")
+        self.assertEqual(config.market.start_date, "2015-01-01")
         self.assertEqual(config.data.format, "wide")
         self.assertEqual(config.models.cp.ranks, [2, 3])
-        self.assertEqual(config.output.experiment_name, "sample_run")
+        self.assertEqual(config.output.experiment_name, "formal_a_share_run")
 
 
 if __name__ == "__main__":

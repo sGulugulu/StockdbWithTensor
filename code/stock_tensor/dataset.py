@@ -1,15 +1,11 @@
 from __future__ import annotations
 
-import csv
 from collections import Counter, defaultdict
 from dataclasses import dataclass
-from datetime import date
-from pathlib import Path
 
 import numpy as np
 
-from .config import DataConfig, MarketConfig, PreprocessConfig
-from .market import UniverseProvider, normalize_symbol
+from .config import PreprocessConfig
 
 
 @dataclass(slots=True)
@@ -31,107 +27,6 @@ class TensorDataset:
     factor_names: list[str]
     dates: list[str]
     industries: dict[str, str | None]
-
-
-def _parse_float(value: str | None) -> float | None:
-    if value is None:
-        return None
-    stripped = value.strip()
-    if not stripped:
-        return None
-    return float(stripped)
-
-
-def _normalize_date(raw_value: str) -> str:
-    return date.fromisoformat(raw_value.strip()).isoformat()
-
-
-def load_factor_records(config: DataConfig, market: MarketConfig) -> list[NormalizedRecord]:
-    path = Path(config.path)
-    if not path.exists():
-        raise FileNotFoundError(f"Data file not found: {path}")
-
-    with path.open("r", encoding="utf-8-sig", newline="") as handle:
-        reader = csv.DictReader(handle)
-        if reader.fieldnames is None:
-            raise ValueError("Input CSV is missing a header row.")
-        fieldnames = set(reader.fieldnames)
-
-        required_columns = {config.stock_column, config.date_column}
-        if config.industry_column:
-            required_columns.add(config.industry_column)
-        if config.return_column:
-            required_columns.add(config.return_column)
-        if config.format == "wide":
-            required_columns.update(config.factor_columns)
-        else:
-            required_columns.update({config.factor_name_column or "", config.factor_value_column or ""})
-        missing = [column for column in required_columns if column and column not in fieldnames]
-        if missing:
-            raise ValueError(f"Missing required columns: {', '.join(sorted(missing))}")
-
-        records: list[NormalizedRecord] = []
-        for row in reader:
-            stock_code = normalize_symbol(row[config.stock_column], market.market_id)
-            trade_date = _normalize_date(row[config.date_column])
-            industry = row[config.industry_column].strip() if config.industry_column and row[config.industry_column] else None
-            future_return = _parse_float(row[config.return_column]) if config.return_column else None
-
-            if config.format == "wide":
-                for factor_column in config.factor_columns:
-                    factor_value = _parse_float(row[factor_column])
-                    records.append(
-                        NormalizedRecord(
-                            stock_code=stock_code,
-                            trade_date=trade_date,
-                            factor_name=factor_column,
-                            factor_value=float("nan") if factor_value is None else float(factor_value),
-                            industry=industry,
-                            future_return=future_return,
-                        )
-                    )
-            else:
-                factor_name = row[config.factor_name_column or ""].strip()
-                factor_value = _parse_float(row[config.factor_value_column or ""])
-                records.append(
-                    NormalizedRecord(
-                        stock_code=stock_code,
-                        trade_date=trade_date,
-                        factor_name=factor_name,
-                        factor_value=float("nan") if factor_value is None else float(factor_value),
-                        industry=industry,
-                        future_return=future_return,
-                    )
-                )
-
-    if not records:
-        raise ValueError("No usable records were loaded from the CSV.")
-    return records
-
-
-def filter_records_for_market(
-    records: list[NormalizedRecord],
-    market: MarketConfig,
-    universe_provider: UniverseProvider | None,
-) -> tuple[list[NormalizedRecord], str, str]:
-    date_filtered = [
-        record
-        for record in records
-        if market.start_date <= record.trade_date <= market.end_date
-    ]
-    if universe_provider is not None:
-        date_filtered = [
-            record
-            for record in date_filtered
-            if universe_provider.is_member(record.stock_code, record.trade_date)
-        ]
-    if not date_filtered:
-        raise ValueError(
-            "No records remain after applying market date range and universe membership filters."
-        )
-    available_dates = sorted({record.trade_date for record in date_filtered})
-    return date_filtered, available_dates[0], available_dates[-1]
-
 
 def _forward_backward_fill(values: np.ndarray) -> np.ndarray:
     filled = values.copy()
