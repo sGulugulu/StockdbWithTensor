@@ -1,0 +1,27 @@
+# Repository Guidelines
+
+## Project Structure & Module Organization
+This repository currently stores thesis deliverables at the root, including proposal, literature review, translation, slides, and working notes such as `毕设.md`. Keep these source documents in place. Put all runnable code under `code/` so research files and implementation stay separate. If you add scripts, organize them by purpose, for example `code/data/`, `code/models/`, `code/notebooks/`, and `code/tests/`.
+
+## Build, Test, and Development Commands
+There is no committed build pipeline yet, so keep workflow simple and reproducible.
+
+- `git status`: check pending changes before editing or submitting work.
+- `Get-ChildItem code`: inspect the current implementation area.
+- `rg --files`: list tracked source files quickly once code is added.
+- `python code/main.py`: run the default tensor-factorization experiment pipeline.
+- `python -m unittest discover -s code/tests`: run the automated test suite.
+
+If you introduce Python or another runtime, add a single documented entry point such as `python code/main.py` or `pytest code/tests`, then update this guide and the project README in the same change.
+
+## Coding Style & Naming Conventions
+Use 4 spaces for indentation in Python and keep line length reasonable, preferably under 100 characters. Name Python files and modules in `snake_case`, classes in `PascalCase`, and functions or variables in `snake_case`. Use descriptive names tied to the finance and tensor-factorization domain, such as `factor_tensor.py` or `train_cp_model.py`. Keep notebooks exploratory; move reusable logic into `.py` files.
+
+## Testing Guidelines
+No test framework is present yet. When adding code, also add automated tests under `code/tests/`. Name test files `test_<module>.py` and keep each test focused on one behavior, such as tensor construction, factor normalization, or metric calculation. Prefer deterministic fixtures over manual spreadsheet checks.
+
+## Commit & Pull Request Guidelines
+This repository has no commit history yet, so there is no established convention to inherit. Start with short, imperative commit messages such as `add tensor preprocessing script` or `document experiment inputs`. For pull requests, include a clear summary, affected paths, validation steps, and screenshots only when notebooks or figures change. Link the related thesis task or milestone when applicable.
+
+## Document Handling
+Do not rename or overwrite the original `.doc`, `.docx`, or `.pptx` files without a clear reason. Add generated datasets, charts, or exported results inside `code/outputs/` or another dedicated subdirectory instead of cluttering the repository root.
