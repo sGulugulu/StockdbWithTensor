@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import threading
 import uuid
 from datetime import datetime, timezone
@@ -170,14 +171,35 @@ def _build_run_config(
 ) -> Path:
     config_data = yaml.safe_load(base_config_path.read_text(encoding="utf-8"))
     market = config_data.setdefault("market", {})
-    output = config_data.setdefault("output", {})
+    data = config_data.setdefault("data", {})
     evaluation = config_data.setdefault("evaluation", {})
+    runtime = config_data.setdefault("runtime", {})
+    models = config_data.setdefault("models", {})
+    output = config_data.setdefault("output", {})
+    base_dir = base_config_path.parent
+
+    if "path" in data:
+        data["path"] = str((base_dir / data["path"]).resolve())
+    if market.get("universe_path"):
+        market["universe_path"] = str((base_dir / market["universe_path"]).resolve())
+    if output.get("root_dir"):
+        output["root_dir"] = str(run_dir.parent.resolve())
 
     for key in ["market_id", "universe_id", "start_date", "end_date"]:
         if key in payload and payload[key] is not None:
             market[key] = payload[key]
-    if "top_n" in payload and payload["top_n"] is not None:
-        evaluation["top_k_pairs"] = int(payload["top_n"])
+    if "top_k_pairs" in payload and payload["top_k_pairs"] is not None:
+        evaluation["top_k_pairs"] = int(payload["top_k_pairs"])
+    if "selection_top_n" in payload and payload["selection_top_n"] is not None:
+        runtime["selection_top_n"] = int(payload["selection_top_n"])
+    if "models_enabled" in payload and isinstance(payload["models_enabled"], dict):
+        for model_name, enabled in payload["models_enabled"].items():
+            if model_name in models and isinstance(models[model_name], dict):
+                models[model_name]["enabled"] = bool(enabled)
+    if "model_ranks" in payload and isinstance(payload["model_ranks"], dict):
+        for model_name, ranks in payload["model_ranks"].items():
+            if model_name in models and isinstance(models[model_name], dict):
+                models[model_name]["ranks"] = ranks
 
     config_override_path = run_dir / "submitted_config.yaml"
     config_override_path.write_text(
@@ -194,8 +216,12 @@ def create_app(output_root: Path | None = None, default_config_path: Path | None
         raise RuntimeError("FastAPI is required to run the web backend.") from exc
 
     app = FastAPI(title="Stock Tensor Experiment API")
-    resolved_output_root = output_root or (ROOT / "code" / "outputs")
-    config_path = default_config_path or (ROOT / "code" / "configs" / "default.yaml")
+    resolved_output_root = output_root or Path(os.environ.get("OUTPUT_ROOT", ROOT / "code" / "outputs"))
+    config_path = default_config_path or Path(os.environ.get("DEFAULT_CONFIG_PATH", ROOT / "code" / "configs" / "default.yaml"))
+    config_templates = {
+        "cn_a": ROOT / "code" / "configs" / "sample_cn_smoke.yaml",
+        "us_equity": ROOT / "code" / "configs" / "sample_us_equity.yaml",
+    }
 
     @app.get("/api/markets")
     def api_markets() -> list[dict[str, str]]:
@@ -213,7 +239,12 @@ def create_app(output_root: Path | None = None, default_config_path: Path | None
         actual_run_id = requested_run_id or uuid.uuid4().hex[:12]
         run_dir = resolved_output_root / actual_run_id
         run_dir.mkdir(parents=True, exist_ok=True)
-        requested_config = Path(body.get("config_path", config_path)).resolve()
+        if body.get("config_path"):
+            requested_config = Path(body["config_path"]).resolve()
+        elif body.get("market_id") in config_templates:
+            requested_config = config_templates[body["market_id"]].resolve()
+        else:
+            requested_config = Path(config_path).resolve()
         built_config_path = _build_run_config(
             base_config_path=requested_config,
             run_dir=run_dir,

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = import.meta.env.VITE_API_BASE ?? "http://127.0.0.1:8000";
 
 export default function App() {
   const [view, setView] = useState("config");
@@ -15,7 +15,17 @@ export default function App() {
     universe_id: "CSI_A500",
     start_date: "2015-01-01",
     end_date: "2026-12-31",
-    top_n: 20
+    selection_top_n: 20,
+    models_enabled: {
+      cp: true,
+      tucker: true,
+      pca: true
+    },
+    model_ranks: {
+      cp: "2,3",
+      tucker: "2x2x2;3x2x2",
+      pca: "2,3"
+    }
   });
 
   async function refreshRuns() {
@@ -43,13 +53,18 @@ export default function App() {
     }
     fetch(`${API_BASE}/api/runs/${selectedRun}`)
       .then((response) => response.json())
-      .then(setDetail)
-      .catch(() => setDetail(null));
-    fetch(`${API_BASE}/api/runs/${selectedRun}/selection?trade_date=${tradeDate}&top_n=20`)
-      .then((response) => response.json())
+      .then((data) => {
+        setDetail(data);
+        const queryTopN = data.manifest?.selection_top_n ?? configForm.selection_top_n;
+        return fetch(`${API_BASE}/api/runs/${selectedRun}/selection?trade_date=${tradeDate}&top_n=${queryTopN}`);
+      })
+      .then((response) => response?.json?.() ?? [])
       .then(setSelectionRows)
-      .catch(() => setSelectionRows([]));
-  }, [selectedRun, tradeDate]);
+      .catch(() => {
+        setDetail(null);
+        setSelectionRows([]);
+      });
+  }, [selectedRun, tradeDate, configForm.selection_top_n]);
 
   async function createRun() {
     await fetch(`${API_BASE}/api/runs`, {
@@ -61,7 +76,16 @@ export default function App() {
         universe_id: configForm.universe_id,
         start_date: configForm.start_date,
         end_date: configForm.end_date,
-        top_n: configForm.top_n
+        selection_top_n: configForm.selection_top_n,
+        models_enabled: configForm.models_enabled,
+        model_ranks: {
+          cp: configForm.model_ranks.cp.split(",").map((item) => Number(item.trim())).filter(Boolean),
+          tucker: configForm.model_ranks.tucker
+            .split(";")
+            .map((item) => item.split("x").map((part) => Number(part.trim())).filter(Boolean))
+            .filter((item) => item.length === 3),
+          pca: configForm.model_ranks.pca.split(",").map((item) => Number(item.trim())).filter(Boolean)
+        }
       })
     });
     setView("runs");
@@ -128,11 +152,70 @@ export default function App() {
             />
           </label>
           <label>
-            Top N
+            候选股 Top N
             <input
               type="number"
-              value={configForm.top_n}
-              onChange={(event) => setConfigForm((current) => ({ ...current, top_n: Number(event.target.value) }))}
+              value={configForm.selection_top_n}
+              onChange={(event) => setConfigForm((current) => ({ ...current, selection_top_n: Number(event.target.value) }))}
+            />
+          </label>
+          <label>
+            模型选择
+            <div className="checkbox-group">
+              {["cp", "tucker", "pca"].map((modelName) => (
+                <label key={modelName} className="inline-check">
+                  <input
+                    type="checkbox"
+                    checked={configForm.models_enabled[modelName]}
+                    onChange={(event) =>
+                      setConfigForm((current) => ({
+                        ...current,
+                        models_enabled: {
+                          ...current.models_enabled,
+                          [modelName]: event.target.checked
+                        }
+                      }))
+                    }
+                  />
+                  {modelName}
+                </label>
+              ))}
+            </div>
+          </label>
+          <label>
+            CP 秩
+            <input
+              value={configForm.model_ranks.cp}
+              onChange={(event) =>
+                setConfigForm((current) => ({
+                  ...current,
+                  model_ranks: { ...current.model_ranks, cp: event.target.value }
+                }))
+              }
+            />
+          </label>
+          <label>
+            Tucker 秩
+            <input
+              value={configForm.model_ranks.tucker}
+              onChange={(event) =>
+                setConfigForm((current) => ({
+                  ...current,
+                  model_ranks: { ...current.model_ranks, tucker: event.target.value }
+                }))
+              }
+            />
+          </label>
+          <label>
+            PCA 秩
+            <input
+              value={configForm.model_ranks.pca}
+              onChange={(event) =>
+                setConfigForm((current) => ({
+                  ...current,
+                  model_ranks: { ...current.model_ranks, pca: event.target.value }
+                }))
+              }
             />
           </label>
         </div>}
@@ -176,10 +259,36 @@ export default function App() {
                 <strong>候选池大小</strong>
                 <p>{detail.manifest?.candidate_pool_size ?? "-"}</p>
               </div>
+              <div>
+                <strong>候选股 Top N</strong>
+                <p>{detail.manifest?.selection_top_n ?? "-"}</p>
+              </div>
             </div>
           ) : (
             <p>请选择一个实验查看详情。</p>
           )}
+          {detail?.metrics?.length ? (
+            <table className="metrics-table">
+              <thead>
+                <tr>
+                  <th>模型</th>
+                  <th>秩</th>
+                  <th>MSE</th>
+                  <th>Explained Variance</th>
+                </tr>
+              </thead>
+              <tbody>
+                {detail.metrics.map((row) => (
+                  <tr key={`${row.model}-${row.rank}`}>
+                    <td>{row.model}</td>
+                    <td>{row.rank}</td>
+                    <td>{Number(row.mse).toFixed(6)}</td>
+                    <td>{Number(row.explained_variance).toFixed(4)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : null}
         </div>}
 
         {view === "selection" && <div className="panel wide">

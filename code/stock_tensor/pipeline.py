@@ -188,6 +188,7 @@ def run_experiment(
             "actual_end_date": actual_end,
             "models": [row["model"] for row in metrics_rows],
             "candidate_pool_size": len(candidate_rows),
+            "selection_top_n": config.runtime.selection_top_n,
             "output_dir": output_dir,
             "status": "completed",
         },
