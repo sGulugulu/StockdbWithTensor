@@ -21,6 +21,22 @@ class DataConfig:
 
 
 @dataclass(slots=True)
+class MarketConfig:
+    market_id: str
+    universe_id: str
+    start_date: str
+    end_date: str
+    timezone: str
+    currency: str
+    universe_path: Path | None
+    universe_symbol_column: str
+    universe_start_column: str
+    universe_end_column: str
+    universe_market_column: str | None
+    universe_id_column: str | None
+
+
+@dataclass(slots=True)
 class PreprocessConfig:
     max_missing_ratio: float
     winsor_limits: tuple[float, float]
@@ -70,6 +86,7 @@ class OutputConfig:
 
 @dataclass(slots=True)
 class ExperimentConfig:
+    market: MarketConfig
     data: DataConfig
     preprocess: PreprocessConfig
     models: ModelConfig
@@ -89,12 +106,19 @@ def load_config(path: str | Path) -> ExperimentConfig:
     if not isinstance(raw, dict):
         raise ValueError("Config file must be a mapping.")
 
-    _require_keys(raw, ["data", "preprocess", "models", "evaluation", "output"], "root")
+    _require_keys(raw, ["market", "data", "preprocess", "models", "evaluation", "output"], "root")
+    market = raw["market"]
     data = raw["data"]
     preprocess = raw["preprocess"]
     models = raw["models"]
     evaluation = raw["evaluation"]
     output = raw["output"]
+
+    _require_keys(
+        market,
+        ["market_id", "universe_id", "start_date", "end_date", "timezone", "currency"],
+        "market",
+    )
 
     _require_keys(data, ["path", "format", "stock_column", "date_column"], "data")
     data_format = data["format"]
@@ -126,10 +150,25 @@ def load_config(path: str | Path) -> ExperimentConfig:
     _require_keys(output, ["root_dir", "experiment_name"], "output")
 
     base_dir = config_path.parent
+    universe_path = market.get("universe_path")
     data_path = (base_dir / data["path"]).resolve()
     output_root = (base_dir / output["root_dir"]).resolve()
 
     return ExperimentConfig(
+        market=MarketConfig(
+            market_id=str(market["market_id"]),
+            universe_id=str(market["universe_id"]),
+            start_date=str(market["start_date"]),
+            end_date=str(market["end_date"]),
+            timezone=str(market["timezone"]),
+            currency=str(market["currency"]),
+            universe_path=((base_dir / universe_path).resolve() if universe_path else None),
+            universe_symbol_column=str(market.get("universe_symbol_column", "stock_code")),
+            universe_start_column=str(market.get("universe_start_column", "start_date")),
+            universe_end_column=str(market.get("universe_end_column", "end_date")),
+            universe_market_column=market.get("universe_market_column"),
+            universe_id_column=market.get("universe_id_column"),
+        ),
         data=DataConfig(
             path=data_path,
             format=data_format,

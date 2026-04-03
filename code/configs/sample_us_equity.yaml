@@ -1,19 +1,14 @@
 market:
-  market_id: cn_a
-  universe_id: CSI_A500
+  market_id: us_equity
+  universe_id: SAMPLE_US
   start_date: 2026-01-01
   end_date: 2026-12-31
-  timezone: Asia/Shanghai
-  currency: CNY
-  universe_path: ../data/sample_csi_a500_history.csv
-  universe_symbol_column: stock_code
-  universe_start_column: start_date
-  universe_end_column: end_date
-  universe_market_column: market_id
-  universe_id_column: universe_id
+  timezone: America/New_York
+  currency: USD
+  universe_path:
 
 data:
-  path: ../data/sample_a_share_factors.csv
+  path: ../data/sample_us_equity_factors.csv
   format: wide
   stock_column: stock_code
   date_column: trade_date
@@ -30,27 +25,26 @@ preprocess:
   winsor_limits: [0.05, 0.95]
 
 models:
-  seed: 7
+  seed: 11
   cp:
     enabled: true
-    ranks: [2, 3]
-    max_iter: 75
+    ranks: [2]
+    max_iter: 50
     tol: 1.0e-6
   tucker:
     enabled: true
     ranks:
       - [2, 2, 2]
-      - [3, 2, 2]
-    max_iter: 20
+    max_iter: 15
     tol: 1.0e-6
   pca:
     enabled: true
-    ranks: [2, 3]
+    ranks: [2]
 
 evaluation:
-  top_k_pairs: 5
+  top_k_pairs: 3
   rolling_window: 3
 
 output:
   root_dir: ../outputs
-  experiment_name: sample_run
+  experiment_name: sample_us_run
