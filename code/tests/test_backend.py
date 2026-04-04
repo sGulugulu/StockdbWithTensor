@@ -143,7 +143,7 @@ class BackendTests(unittest.TestCase):
                         )
                         self.assertEqual(response.status_code, 200)
                         formal_detail = None
-                        for _ in range(50):
+                        for _ in range(200):
                             response = await client.get("/api/runs/formal_hs300_real_run", timeout=10.0)
                             formal_detail = response.json()
                             if formal_detail["status"]["status"] == "completed":

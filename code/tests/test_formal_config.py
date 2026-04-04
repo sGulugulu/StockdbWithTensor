@@ -35,6 +35,16 @@ class FormalConfigTests(unittest.TestCase):
         self.assertTrue((output_dir / "run_manifest.json").exists())
         self.assertTrue((output_dir / "selection_candidates.json").exists())
 
+    def test_formal_zz500_config_runs_with_committed_local_inputs(self) -> None:
+        history_path = ROOT / "data" / "formal" / "zz500_history.csv"
+        panel_path = ROOT / "data" / "formal" / "zz500_factor_panel.csv"
+        if not history_path.exists() or not panel_path.exists():
+            self.skipTest("committed zz500 formal inputs are not available")
+
+        output_dir = run_experiment(ROOT / "configs" / "formal_zz500.yaml")
+        self.assertTrue((output_dir / "run_manifest.json").exists())
+        self.assertTrue((output_dir / "selection_candidates.json").exists())
+
 
 if __name__ == "__main__":
     unittest.main()
