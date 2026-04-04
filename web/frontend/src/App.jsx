@@ -11,9 +11,9 @@ export default function App() {
   const [detail, setDetail] = useState(null);
   const [tradeDate, setTradeDate] = useState("2026-01-09");
   const [configForm, setConfigForm] = useState({
-    config_profile: "sample_cn_smoke",
+    config_profile: "formal_hs300",
     market_id: "cn_a",
-    universe_id: "CSI_A500",
+    universe_id: "HS300",
     start_date: "2015-01-01",
     end_date: "2026-12-31",
     selection_top_n: 20,
@@ -144,12 +144,25 @@ export default function App() {
                 const nextProfile = event.target.value;
                 setConfigForm((current) => ({
                   ...current,
-                  config_profile: nextProfile
+                  config_profile: nextProfile,
+                  universe_id:
+                    nextProfile === "formal_hs300"
+                      ? "HS300"
+                      : nextProfile === "formal_sz50"
+                        ? "SZ50"
+                        : nextProfile === "formal_zz500"
+                          ? "ZZ500"
+                          : nextProfile === "formal_cn_a"
+                            ? "CSI_A500"
+                            : current.universe_id
                 }));
               }}
             >
+              <option value="formal_hs300">A股正式 / 沪深300</option>
+              <option value="formal_sz50">A股正式 / 上证50</option>
+              <option value="formal_zz500">A股正式 / 中证500</option>
+              <option value="formal_cn_a">A股正式 / 中证A500</option>
               <option value="sample_cn_smoke">A股样例</option>
-              <option value="formal_cn_a">A股正式入口</option>
               <option value="sample_us_equity">美股样例</option>
             </select>
           </label>
@@ -165,8 +178,8 @@ export default function App() {
                   config_profile:
                     nextMarketId === "us_equity"
                       ? "sample_us_equity"
-                      : current.config_profile === "formal_cn_a"
-                        ? "formal_cn_a"
+                      : current.config_profile.startsWith("formal_")
+                        ? current.config_profile
                         : "sample_cn_smoke",
                   market_id: nextMarketId,
                   universe_id: selectedMarket?.default_universe_id ?? current.universe_id
