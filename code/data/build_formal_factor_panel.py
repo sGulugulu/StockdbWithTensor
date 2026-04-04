@@ -5,6 +5,8 @@ import csv
 from collections import defaultdict
 from pathlib import Path
 
+from stock_tensor.market import SymbolNormalizer
+
 
 def _to_float(value: str | None) -> float | None:
     if value is None:
@@ -18,11 +20,22 @@ def _to_float(value: str | None) -> float | None:
 def _load_industry_map(path: Path) -> dict[str, str]:
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
+        normalizer = SymbolNormalizer("cn_a")
         return {
-            row["code"]: row.get("industry", "")
+            normalizer.normalize(row["code"]): row.get("industry", "")
             for row in reader
             if row.get("code")
         }
+
+
+def _load_membership_map(path: Path) -> dict[str, list[tuple[str, str]]]:
+    memberships: dict[str, list[tuple[str, str]]] = defaultdict(list)
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        reader = csv.DictReader(handle)
+        normalizer = SymbolNormalizer("cn_a")
+        for row in reader:
+            memberships[normalizer.normalize(row["stock_code"])].append((row["start_date"], row["end_date"]))
+    return memberships
 
 
 def _rolling_return(prices: list[float], window: int) -> list[float]:
@@ -50,16 +63,23 @@ def build_formal_factor_panel(
     *,
     kline_path: Path,
     industry_path: Path,
+    membership_path: Path,
     output_path: Path,
     symbol_column: str = "code",
     date_column: str = "date",
 ) -> None:
     industry_map = _load_industry_map(industry_path)
+    membership_map = _load_membership_map(membership_path)
+    normalizer = SymbolNormalizer("cn_a")
     grouped_rows: dict[str, list[dict[str, str]]] = defaultdict(list)
     with kline_path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
         for row in reader:
-            grouped_rows[row[symbol_column]].append(row)
+            normalized_code = normalizer.normalize(row[symbol_column])
+            trade_date = row[date_column]
+            if not any(start_date <= trade_date <= end_date for start_date, end_date in membership_map.get(normalized_code, [])):
+                continue
+            grouped_rows[normalized_code].append({**row, symbol_column: normalized_code})
 
     output_rows: list[dict[str, object]] = []
     for code, rows in grouped_rows.items():
@@ -107,12 +127,14 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Build a formal factor panel from baostock kline and metadata.")
     parser.add_argument("--kline-path", type=Path, required=True)
     parser.add_argument("--industry-path", type=Path, required=True)
+    parser.add_argument("--membership-path", type=Path, required=True)
     parser.add_argument("--output-path", type=Path, required=True)
     args = parser.parse_args()
 
     build_formal_factor_panel(
         kline_path=args.kline_path,
         industry_path=args.industry_path,
+        membership_path=args.membership_path,
         output_path=args.output_path,
     )
 

@@ -23,6 +23,8 @@ def resolve_device(requested_device: str) -> DeviceContext:
         raise ValueError("runtime.device must be one of: auto, cpu, cuda")
 
     if torch is None:
+        if normalized == "cuda":
+            raise RuntimeError("runtime.device='cuda' was requested, but torch is not installed.")
         return DeviceContext(normalized, "cpu", False)
     if normalized == "cpu":
         return DeviceContext(normalized, "cpu", True)

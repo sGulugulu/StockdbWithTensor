@@ -49,6 +49,18 @@ class FetchStats:
     report_rows: int = 0
 
 
+def _empty_stats() -> dict[str, int]:
+    return {
+        "index_snapshot_rows": 0,
+        "index_change_rows": 0,
+        "unique_codes": 0,
+        "stock_basic_rows": 0,
+        "stock_industry_rows": 0,
+        "financial_rows": 0,
+        "report_rows": 0,
+    }
+
+
 def _today_iso() -> str:
     return date.today().isoformat()
 
@@ -456,32 +468,46 @@ def fetch_baostock_bundle(
                         )
                 _log(f"[baostock] report dataset complete: {query_name}, rows={dataset_rows}")
 
-        (output_root / "manifest.json").write_text(
-            json.dumps(
-                {
-                    "source": "baostock",
-                    "start_date": start_date,
-                    "end_date": end_date,
-                    "indices": indices,
-                    "financial_start_year": financial_start_year,
-                    "financial_end_year": financial_end_year,
-                    "max_codes": max_codes,
-                    "sleep_seconds": sleep_seconds,
-                    "skip_index_memberships": skip_index_memberships,
-                    "skip_metadata": skip_metadata,
-                    "stats": {
-                        "index_snapshot_rows": stats.index_snapshot_rows,
-                        "index_change_rows": stats.index_change_rows,
-                        "unique_codes": stats.unique_codes,
-                        "stock_basic_rows": stats.stock_basic_rows,
-                        "stock_industry_rows": stats.stock_industry_rows,
-                        "financial_rows": stats.financial_rows,
-                        "report_rows": stats.report_rows,
-                    },
-                },
-                indent=2,
-                ensure_ascii=False,
-            ),
+        manifest_path = output_root / "manifest.json"
+        existing_manifest = (
+            json.loads(manifest_path.read_text(encoding="utf-8"))
+            if manifest_path.exists()
+            else {
+                "source": "baostock",
+                "start_date": start_date,
+                "end_date": end_date,
+                "indices": indices,
+                "financial_start_year": financial_start_year,
+                "financial_end_year": financial_end_year,
+                "max_codes": max_codes,
+                "sleep_seconds": sleep_seconds,
+                "stages": {},
+                "stats": _empty_stats(),
+            }
+        )
+        stage_key = "stage_index_and_metadata" if not skip_index_memberships else "stage_financial_and_reports"
+        stage_stats = {
+            "index_snapshot_rows": stats.index_snapshot_rows,
+            "index_change_rows": stats.index_change_rows,
+            "unique_codes": stats.unique_codes,
+            "stock_basic_rows": stats.stock_basic_rows,
+            "stock_industry_rows": stats.stock_industry_rows,
+            "financial_rows": stats.financial_rows,
+            "report_rows": stats.report_rows,
+        }
+        existing_manifest["stages"][stage_key] = {
+            "skip_index_memberships": skip_index_memberships,
+            "skip_metadata": skip_metadata,
+            "skip_financials": skip_financials,
+            "skip_reports": skip_reports,
+            "stats": stage_stats,
+        }
+        merged_stats = existing_manifest.get("stats", _empty_stats())
+        for key, value in stage_stats.items():
+            merged_stats[key] = max(int(merged_stats.get(key, 0)), int(value))
+        existing_manifest["stats"] = merged_stats
+        manifest_path.write_text(
+            json.dumps(existing_manifest, indent=2, ensure_ascii=False),
             encoding="utf-8",
         )
         return stats
