@@ -134,7 +134,7 @@ def main() -> None:
     parser.add_argument("--end-date", required=True)
     parser.add_argument("--fields", default=DEFAULT_FIELDS)
     parser.add_argument("--frequency", default="d")
-    parser.add_argument("--adjustflag", default="3")
+    parser.add_argument("--adjustflag", default="2")
     parser.add_argument("--max-codes", type=int, default=None)
     parser.add_argument("--batch-size", type=int, default=25)
     parser.add_argument("--progress-path", type=Path, default=None)

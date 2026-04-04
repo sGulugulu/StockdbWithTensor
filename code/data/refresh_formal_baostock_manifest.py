@@ -77,6 +77,7 @@ def refresh_manifest(
 
     manifest = {
         "source": "baostock",
+        "kline_adjustflag": "2",
         "stages": {
             "stage_1_stage_2_committed_sources": {},
             "stage_3_formal_outputs": {},

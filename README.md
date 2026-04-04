@@ -31,6 +31,8 @@ Fetch full index constituents, change records, and company fundamentals from bao
   --skip-reports
 ```
 
+For formal daily panels, the repository now defaults to **前复权** (`adjustflag=2`) when pulling baostock kline data.
+
 Formal A-share config profiles now exist for:
 
 - `code/configs/formal_hs300.yaml`
