@@ -5,6 +5,13 @@ from typing import Any
 
 import numpy as np
 
+from .compute_backend import (
+    DeviceContext,
+    compute_abs_contribution,
+    compute_stock_clusters,
+    compute_time_shift_scores,
+)
+
 
 @dataclass(slots=True)
 class ModelResult:
@@ -26,28 +33,15 @@ class ModelResult:
 
 
 def _compute_stock_cluster(stock_loadings: np.ndarray) -> np.ndarray:
-    if stock_loadings.ndim != 2 or stock_loadings.shape[1] == 0:
-        return np.zeros(stock_loadings.shape[0], dtype=int)
-    return np.argmax(np.abs(stock_loadings), axis=1)
+    return compute_stock_clusters(stock_loadings)
 
 
-def _compute_time_regime_score(time_loadings: np.ndarray) -> np.ndarray:
-    if time_loadings.shape[0] == 0:
-        return np.zeros(0, dtype=float)
-    shifts = np.zeros(time_loadings.shape[0], dtype=float)
-    for idx in range(1, time_loadings.shape[0]):
-        shifts[idx] = float(np.linalg.norm(time_loadings[idx] - time_loadings[idx - 1]))
-    max_shift = shifts.max() if shifts.size else 0.0
-    if max_shift > 0:
-        shifts = shifts / max_shift
-    return shifts
+def _compute_time_regime_score(time_loadings: np.ndarray, context: DeviceContext) -> np.ndarray:
+    return compute_time_shift_scores(time_loadings, context)
 
 
-def _compute_factor_contribution(reconstruction: np.ndarray) -> np.ndarray:
-    contribution = np.abs(reconstruction)
-    denominator = contribution.sum(axis=1, keepdims=True)
-    denominator[denominator == 0] = 1.0
-    return contribution / denominator
+def _compute_factor_contribution(reconstruction: np.ndarray, context: DeviceContext) -> np.ndarray:
+    return compute_abs_contribution(reconstruction, context)
 
 
 def _enrich_result(
@@ -61,11 +55,13 @@ def _enrich_result(
     objective: float,
     param_count: int,
     diagnostics: dict[str, Any],
+    context: DeviceContext,
 ) -> ModelResult:
     stock_score = reconstruction.mean(axis=1)
-    factor_contribution = _compute_factor_contribution(reconstruction)
-    time_regime_score = _compute_time_regime_score(time_loadings)
+    factor_contribution = _compute_factor_contribution(reconstruction, context)
+    time_regime_score = _compute_time_regime_score(time_loadings, context)
     selection_signal = stock_score * (1.0 + time_regime_score[np.newaxis, :])
+    diagnostics = {**diagnostics, "resolved_device": context.resolved_device}
     return ModelResult(
         name=name,
         rank=rank,
@@ -123,6 +119,7 @@ def fit_cp_model(
     max_iter: int,
     tol: float,
     seed: int,
+    device_context: DeviceContext,
 ) -> ModelResult:
     stock_count, factor_count, time_count = tensor.shape
     rng = np.random.default_rng(seed)
@@ -171,6 +168,7 @@ def fit_cp_model(
         objective=mse,
         param_count=stock_count * rank + factor_count * rank + time_count * rank + rank,
         diagnostics=diagnostics,
+        context=device_context,
     )
 
 
@@ -190,6 +188,7 @@ def fit_tucker_model(
     rank: tuple[int, int, int],
     max_iter: int,
     tol: float,
+    device_context: DeviceContext,
 ) -> ModelResult:
     stock_rank, factor_rank, time_rank = rank
     u_stock = _top_singular_vectors(unfold(tensor, 0), stock_rank)
@@ -235,10 +234,11 @@ def fit_tucker_model(
             + stock_rank * factor_rank * time_rank
         ),
         diagnostics=diagnostics,
+        context=device_context,
     )
 
 
-def fit_pca_model(tensor: np.ndarray, rank: int) -> ModelResult:
+def fit_pca_model(tensor: np.ndarray, rank: int, device_context: DeviceContext) -> ModelResult:
     stock_count, factor_count, time_count = tensor.shape
     observation_matrix = np.transpose(tensor, (0, 2, 1)).reshape(stock_count * time_count, factor_count)
     mean_vector = observation_matrix.mean(axis=0, keepdims=True)
@@ -263,4 +263,5 @@ def fit_pca_model(tensor: np.ndarray, rank: int) -> ModelResult:
         objective=mse,
         param_count=stock_count * time_count * rank + factor_count * rank + factor_count,
         diagnostics={"explained_singular_values": singular_values[:rank].tolist()},
+        context=device_context,
     )
