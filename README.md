@@ -11,7 +11,7 @@ python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
 ```
 
-Fetch index constituents, change records, and company fundamentals from baostock:
+Fetch full index constituents, change records, and company fundamentals from baostock:
 
 ```powershell
 .venv/bin/python code/data/fetch_baostock_data.py `
@@ -42,10 +42,16 @@ After stage 1 finishes, fetch the financial/report tables with resume support:
   --skip-metadata
 ```
 
-Use the smoke-test configuration:
+Use the smoke-test configuration only for lightweight validation:
 
 ```powershell
 .venv/bin/python code/main.py --config code/configs/sample_cn_smoke.yaml
+```
+
+For formal runs, prefer the full-data profiles instead of the smoke profile:
+
+```powershell
+.venv/bin/python code/main.py --config code/configs/formal_hs300.yaml
 ```
 
 Run the test suite:
