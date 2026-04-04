@@ -29,3 +29,47 @@ python3 code/data/build_tdx_index_files.py `
   --member-end-column end_date `
   --output-dir code/data/formal
 ```
+
+Baostock workflow:
+
+1. Create a dedicated output directory, for example `code/data/formal/baostock/`.
+2. Download index constituents and derived change records for:
+   - 沪深300 (`hs300`)
+   - 上证50 (`sz50`)
+   - 中证500 (`zz500`)
+3. Download company metadata and financial/report tables for the union of all selected constituent stocks.
+4. Example command:
+
+```powershell
+.venv/bin/python code/data/fetch_baostock_data.py `
+  --output-root code/data/formal/baostock `
+  --start-date 2015-01-01 `
+  --end-date 2026-04-04 `
+  --indices hs300,sz50,zz500
+```
+
+Output layout:
+
+- `index_memberships/<index>_snapshots.csv`
+- `index_memberships/<index>_changes.csv`
+- `metadata/stock_basic.csv`
+- `metadata/stock_industry.csv`
+- `financial/*.csv`
+- `reports/*.csv`
+- `manifest.json`
+
+After the constituent snapshots are ready, you can build member-history files and kline panels:
+
+```powershell
+.venv/bin/python code/data/build_baostock_member_history.py `
+  --snapshot code/data/formal/baostock/index_memberships/hs300_snapshots.csv `
+  --output code/data/formal/hs300_history.csv
+```
+
+```powershell
+.venv/bin/python code/data/fetch_baostock_kline.py `
+  --codes-file code/data/formal/baostock/metadata/selected_codes.csv `
+  --output-path code/data/formal/baostock/kline_panel.csv `
+  --start-date 2015-01-01 `
+  --end-date 2026-04-04
+```

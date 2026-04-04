@@ -1,5 +1,6 @@
 numpy>=2.0
 PyYAML>=6.0
+baostock>=0.8.9
 fastapi>=0.115
 uvicorn>=0.34
 httpx>=0.28

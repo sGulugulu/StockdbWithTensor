@@ -11,6 +11,30 @@ python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
 ```
 
+Fetch index constituents, change records, and company fundamentals from baostock:
+
+```powershell
+.venv/bin/python code/data/fetch_baostock_data.py `
+  --output-root code/data/formal/baostock `
+  --start-date 2015-01-01 `
+  --end-date 2026-04-04 `
+  --indices hs300,sz50,zz500 `
+  --skip-financials `
+  --skip-reports
+```
+
+After stage 1 finishes, fetch the financial/report tables with resume support:
+
+```powershell
+.venv/bin/python code/data/fetch_baostock_data.py `
+  --output-root code/data/formal/baostock `
+  --start-date 2015-01-01 `
+  --end-date 2026-04-04 `
+  --indices hs300,sz50,zz500 `
+  --skip-index-memberships `
+  --skip-metadata
+```
+
 Use the smoke-test configuration:
 
 ```powershell
@@ -31,6 +55,7 @@ Run the test suite:
 - `code/configs/sample_us_equity.yaml`: sample US-equity configuration showing the future market interface
 - `code/data/sample_a_share_factors.csv`: synthetic A-share style factor sample
 - `code/data/sample_csi_a500_history.csv`: sample CSI A500 membership history input
+- `code/data/fetch_baostock_data.py`: downloader for hs300/sz50/zz500 constituents, change records, and financial data
 - `code/stock_tensor/`: preprocessing, tensor construction, models, evaluation, and output logic
 - `code/tests/`: automated tests for config loading, dataset building, model fitting, and pipeline execution
 - `web/backend/`: minimal FastAPI backend for exposing run and stock-selection results
