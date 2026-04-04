@@ -135,9 +135,13 @@
       },
       "shared_kline_panel": {
         "kline_panel_path": "code/data/formal/baostock/kline_panel.csv",
-        "kline_panel_rows": 135096,
-        "kline_panel_start_date": "2015-01-05",
+        "kline_panel_rows": 14300,
+        "kline_panel_start_date": "2026-03-02",
         "kline_panel_end_date": "2026-04-03"
+      },
+      "shared_selected_codes": {
+        "selected_codes_path": "code/data/formal/baostock/metadata/selected_codes.csv",
+        "selected_codes_rows": 500
       }
     },
     "stage_2_formal_outputs": {

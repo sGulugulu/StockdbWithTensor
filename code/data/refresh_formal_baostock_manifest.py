@@ -115,6 +115,11 @@ def refresh_manifest(
         "kline_panel_start_date": kline_start,
         "kline_panel_end_date": kline_end,
     }
+    selected_codes_path = canonical_root / "metadata" / "selected_codes.csv"
+    manifest["stages"]["stage_3_formal_outputs"]["shared_selected_codes"] = {
+        "selected_codes_path": str(selected_codes_path),
+        "selected_codes_rows": _csv_row_count(selected_codes_path),
+    }
 
     financial_dir = canonical_root / "financial"
     reports_dir = canonical_root / "reports"
