@@ -129,6 +129,29 @@ class BackendTests(unittest.TestCase):
                     self.assertTrue(str(submitted_config["market"]["universe_path"]).endswith("hs300_history.csv"))
                     self.assertTrue(str(submitted_config["data"]["path"]).endswith("hs300_factor_panel.csv"))
 
+                    formal_history = ROOT / "data" / "formal" / "hs300_history.csv"
+                    formal_panel = ROOT / "data" / "formal" / "hs300_factor_panel.csv"
+                    if formal_history.exists() and formal_panel.exists():
+                        response = await client.post(
+                            "/api/runs",
+                            json={
+                                "run_id": "formal_hs300_real_run",
+                                "run_sync": False,
+                                "config_profile": "formal_hs300",
+                            },
+                            timeout=60.0,
+                        )
+                        self.assertEqual(response.status_code, 200)
+                        formal_detail = None
+                        for _ in range(50):
+                            response = await client.get("/api/runs/formal_hs300_real_run", timeout=10.0)
+                            formal_detail = response.json()
+                            if formal_detail["status"]["status"] == "completed":
+                                break
+                            await anyio.sleep(0.1)
+                        self.assertIsNotNone(formal_detail)
+                        self.assertEqual(formal_detail["status"]["status"], "completed")
+
             anyio.run(run_case)
 
 
