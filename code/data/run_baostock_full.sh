@@ -33,7 +33,8 @@ END_DATE="${1:-$(date +%F)}"
   --codes-file code/data/formal/baostock/metadata/selected_codes.csv \
   --output-path code/data/formal/baostock/kline_panel.csv \
   --start-date 2015-01-01 \
-  --end-date "$END_DATE"
+  --end-date "$END_DATE" \
+  --adjustflag 2
 
 .venv/bin/python code/data/build_formal_factor_panel.py \
   --kline-path code/data/formal/baostock/kline_panel.csv \
