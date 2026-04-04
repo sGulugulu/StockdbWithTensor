@@ -11,6 +11,7 @@ export default function App() {
   const [detail, setDetail] = useState(null);
   const [tradeDate, setTradeDate] = useState("2026-01-09");
   const [configForm, setConfigForm] = useState({
+    option_id: "formal_hs300",
     config_profile: "formal_hs300",
     market_id: "cn_a",
     universe_id: "HS300",
@@ -43,11 +44,13 @@ export default function App() {
       .then((response) => response.json())
       .then((data) => {
         setMarkets(data);
-        const selectedMarket = data.find((market) => market.market_id === configForm.market_id);
+        const selectedMarket = data.find((market) => market.option_id === configForm.option_id);
         if (selectedMarket) {
           setConfigForm((current) => ({
             ...current,
-            universe_id: selectedMarket.default_universe_id
+            config_profile: selectedMarket.config_profile,
+            market_id: selectedMarket.market_id,
+            universe_id: selectedMarket.universe_id
           }));
         }
       })
@@ -137,57 +140,25 @@ export default function App() {
         {view === "config" && <div className="panel">
           <h2>实验配置</h2>
           <label>
-            配置模板
+            股票池模板
             <select
-              value={configForm.config_profile}
+              value={configForm.option_id}
               onChange={(event) => {
-                const nextProfile = event.target.value;
+                const selectedMarket = markets.find((market) => market.option_id === event.target.value);
+                if (!selectedMarket) {
+                  return;
+                }
                 setConfigForm((current) => ({
                   ...current,
-                  config_profile: nextProfile,
-                  universe_id:
-                    nextProfile === "formal_hs300"
-                      ? "HS300"
-                      : nextProfile === "formal_sz50"
-                        ? "SZ50"
-                        : nextProfile === "formal_zz500"
-                          ? "ZZ500"
-                          : nextProfile === "formal_cn_a"
-                            ? "CSI_A500"
-                            : current.universe_id
-                }));
-              }}
-            >
-              <option value="formal_hs300">A股正式 / 沪深300</option>
-              <option value="formal_sz50">A股正式 / 上证50</option>
-              <option value="formal_zz500">A股正式 / 中证500</option>
-              <option value="formal_cn_a">A股正式 / 中证A500</option>
-              <option value="sample_cn_smoke">A股样例</option>
-              <option value="sample_us_equity">美股样例</option>
-            </select>
-          </label>
-          <label>
-            市场
-            <select
-              value={configForm.market_id}
-              onChange={(event) => {
-                const nextMarketId = event.target.value;
-                const selectedMarket = markets.find((market) => market.market_id === nextMarketId);
-                setConfigForm((current) => ({
-                  ...current,
-                  config_profile:
-                    nextMarketId === "us_equity"
-                      ? "sample_us_equity"
-                      : current.config_profile.startsWith("formal_")
-                        ? current.config_profile
-                        : "sample_cn_smoke",
-                  market_id: nextMarketId,
-                  universe_id: selectedMarket?.default_universe_id ?? current.universe_id
+                  option_id: selectedMarket.option_id,
+                  config_profile: selectedMarket.config_profile,
+                  market_id: selectedMarket.market_id,
+                  universe_id: selectedMarket.universe_id
                 }));
               }}
             >
               {markets.map((market) => (
-                <option key={market.market_id} value={market.market_id}>
+                <option key={market.option_id} value={market.option_id}>
                   {market.market_name}
                 </option>
               ))}
@@ -198,6 +169,7 @@ export default function App() {
             <input
               value={configForm.universe_id}
               onChange={(event) => setConfigForm((current) => ({ ...current, universe_id: event.target.value }))}
+              disabled={configForm.config_profile.startsWith("formal_")}
             />
           </label>
           <label>

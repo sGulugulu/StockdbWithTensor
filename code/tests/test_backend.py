@@ -59,6 +59,13 @@ class BackendTests(unittest.TestCase):
                     self.assertEqual(response.json()["status"]["status"], "completed")
                     self.assertIn("factor_associations", response.json())
 
+                    response = await client.get("/api/markets", timeout=10.0)
+                    self.assertEqual(response.status_code, 200)
+                    market_payload = response.json()
+                    option_ids = [item["option_id"] for item in market_payload]
+                    self.assertEqual(len(option_ids), len(set(option_ids)))
+                    self.assertTrue(any(item["config_profile"] == "formal_hs300" for item in market_payload))
+
                     response = await client.get(
                         "/api/runs/api_test_run/selection",
                         params={"trade_date": "2026-01-09", "top_n": 2},
@@ -100,6 +107,27 @@ class BackendTests(unittest.TestCase):
                     self.assertIsNotNone(detail)
                     self.assertEqual(detail["manifest"]["market_id"], "us_equity")
                     self.assertEqual(detail["manifest"]["selection_top_n"], 7)
+
+                    response = await client.post(
+                        "/api/runs",
+                        json={
+                            "run_id": "formal_hs300_config_check",
+                            "run_sync": False,
+                            "config_profile": "formal_hs300",
+                            "market_id": "cn_a",
+                            "universe_id": "CSI_A500",
+                            "start_date": "2015-01-01",
+                            "end_date": "2026-12-31",
+                        },
+                        timeout=60.0,
+                    )
+                    self.assertEqual(response.status_code, 200)
+                    submitted_config = yaml.safe_load(
+                        (Path(temp_dir) / "formal_hs300_config_check" / "submitted_config.yaml").read_text(encoding="utf-8")
+                    )
+                    self.assertEqual(submitted_config["market"]["universe_id"], "HS300")
+                    self.assertTrue(str(submitted_config["market"]["universe_path"]).endswith("hs300_history.csv"))
+                    self.assertTrue(str(submitted_config["data"]["path"]).endswith("hs300_factor_panel.csv"))
 
             anyio.run(run_case)
 

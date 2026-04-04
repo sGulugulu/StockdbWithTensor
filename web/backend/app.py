@@ -21,6 +21,64 @@ from stock_tensor.pipeline import run_experiment
 
 _RUN_STATUS_LOCKS: dict[str, threading.Lock] = {}
 _RUN_STATUS_LOCKS_GUARD = threading.Lock()
+_PROFILE_CONFIGS: dict[str, Path] = {
+    "formal_cn_a": ROOT / "code" / "configs" / "default.yaml",
+    "formal_hs300": ROOT / "code" / "configs" / "formal_hs300.yaml",
+    "formal_sz50": ROOT / "code" / "configs" / "formal_sz50.yaml",
+    "formal_zz500": ROOT / "code" / "configs" / "formal_zz500.yaml",
+    "sample_cn_smoke": ROOT / "code" / "configs" / "sample_cn_smoke.yaml",
+    "sample_us_equity": ROOT / "code" / "configs" / "sample_us_equity.yaml",
+}
+_MARKET_OPTIONS: list[dict[str, str | bool]] = [
+    {
+        "option_id": "formal_hs300",
+        "config_profile": "formal_hs300",
+        "market_id": "cn_a",
+        "market_name": "A股 / 沪深300",
+        "universe_id": "HS300",
+        "is_formal": True,
+    },
+    {
+        "option_id": "formal_sz50",
+        "config_profile": "formal_sz50",
+        "market_id": "cn_a",
+        "market_name": "A股 / 上证50",
+        "universe_id": "SZ50",
+        "is_formal": True,
+    },
+    {
+        "option_id": "formal_zz500",
+        "config_profile": "formal_zz500",
+        "market_id": "cn_a",
+        "market_name": "A股 / 中证500",
+        "universe_id": "ZZ500",
+        "is_formal": True,
+    },
+    {
+        "option_id": "formal_cn_a",
+        "config_profile": "formal_cn_a",
+        "market_id": "cn_a",
+        "market_name": "A股 / 中证A500",
+        "universe_id": "CSI_A500",
+        "is_formal": True,
+    },
+    {
+        "option_id": "sample_cn_smoke",
+        "config_profile": "sample_cn_smoke",
+        "market_id": "cn_a",
+        "market_name": "A股样例",
+        "universe_id": "CSI_A500",
+        "is_formal": False,
+    },
+    {
+        "option_id": "sample_us_equity",
+        "config_profile": "sample_us_equity",
+        "market_id": "us_equity",
+        "market_name": "美股样例",
+        "universe_id": "EXTERNAL_LIST",
+        "is_formal": False,
+    },
+]
 
 
 def _get_status_lock(run_dir: Path) -> threading.Lock:
@@ -139,14 +197,8 @@ def get_selection_for_date(output_root: Path, run_id: str, trade_date: str, top_
     return selection_rows[:top_n]
 
 
-def get_markets() -> list[dict[str, str]]:
-    return [
-        {"market_id": "cn_a", "market_name": "A股 / 沪深300", "default_universe_id": "HS300"},
-        {"market_id": "cn_a", "market_name": "A股 / 上证50", "default_universe_id": "SZ50"},
-        {"market_id": "cn_a", "market_name": "A股 / 中证500", "default_universe_id": "ZZ500"},
-        {"market_id": "cn_a", "market_name": "A股 / 中证A500", "default_universe_id": "CSI_A500"},
-        {"market_id": "us_equity", "market_name": "美股", "default_universe_id": "EXTERNAL_LIST"},
-    ]
+def get_markets() -> list[dict[str, Any]]:
+    return list(_MARKET_OPTIONS)
 
 
 def _run_job(
@@ -203,6 +255,7 @@ def _build_run_config(
     base_config_path: Path,
     run_dir: Path,
     payload: dict[str, Any],
+    config_profile: str,
 ) -> Path:
     config_data = yaml.safe_load(base_config_path.read_text(encoding="utf-8"))
     market = config_data.setdefault("market", {})
@@ -220,9 +273,14 @@ def _build_run_config(
     if output.get("root_dir"):
         output["root_dir"] = str(run_dir.parent.resolve())
 
-    for key in ["market_id", "universe_id", "start_date", "end_date"]:
-        if key in payload and payload[key] is not None:
-            market[key] = payload[key]
+    if config_profile.startswith("formal_"):
+        for key in ["start_date", "end_date"]:
+            if key in payload and payload[key] is not None:
+                market[key] = payload[key]
+    else:
+        for key in ["market_id", "universe_id", "start_date", "end_date"]:
+            if key in payload and payload[key] is not None:
+                market[key] = payload[key]
     if "top_k_pairs" in payload and payload["top_k_pairs"] is not None:
         evaluation["top_k_pairs"] = int(payload["top_k_pairs"])
     if "selection_top_n" in payload and payload["selection_top_n"] is not None:
@@ -259,7 +317,7 @@ def create_app(output_root: Path | None = None, default_config_path: Path | None
     }
 
     @app.get("/api/markets")
-    async def api_markets() -> list[dict[str, str]]:
+    async def api_markets() -> list[dict[str, Any]]:
         return get_markets()
 
     @app.get("/api/runs")
@@ -274,20 +332,11 @@ def create_app(output_root: Path | None = None, default_config_path: Path | None
         actual_run_id = requested_run_id or uuid.uuid4().hex[:12]
         run_dir = resolved_output_root / actual_run_id
         run_dir.mkdir(parents=True, exist_ok=True)
+        config_profile = str(body.get("config_profile", ""))
         if body.get("config_path"):
             requested_config = Path(body["config_path"]).resolve()
-        elif body.get("config_profile") == "sample_cn_smoke":
-            requested_config = (ROOT / "code" / "configs" / "sample_cn_smoke.yaml").resolve()
-        elif body.get("config_profile") == "formal_hs300":
-            requested_config = (ROOT / "code" / "configs" / "formal_hs300.yaml").resolve()
-        elif body.get("config_profile") == "formal_sz50":
-            requested_config = (ROOT / "code" / "configs" / "formal_sz50.yaml").resolve()
-        elif body.get("config_profile") == "formal_zz500":
-            requested_config = (ROOT / "code" / "configs" / "formal_zz500.yaml").resolve()
-        elif body.get("config_profile") == "formal_cn_a":
-            requested_config = (ROOT / "code" / "configs" / "default.yaml").resolve()
-        elif body.get("config_profile") == "sample_us_equity":
-            requested_config = (ROOT / "code" / "configs" / "sample_us_equity.yaml").resolve()
+        elif config_profile in _PROFILE_CONFIGS:
+            requested_config = _PROFILE_CONFIGS[config_profile].resolve()
         elif body.get("market_id") == "cn_a" and body.get("universe_id") == "HS300":
             requested_config = (ROOT / "code" / "configs" / "formal_hs300.yaml").resolve()
         elif body.get("market_id") == "cn_a" and body.get("universe_id") == "SZ50":
@@ -302,6 +351,7 @@ def create_app(output_root: Path | None = None, default_config_path: Path | None
             base_config_path=requested_config,
             run_dir=run_dir,
             payload=body,
+            config_profile=config_profile,
         )
         return submit_run(
             config_path=built_config_path,
