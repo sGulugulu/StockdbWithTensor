@@ -14,6 +14,19 @@ def normalize_trade_date(value: str) -> str:
     return date.fromisoformat(value.strip()).isoformat()
 
 
+def _normalize_cn_a_symbol(cleaned: str) -> str:
+    if "." in cleaned:
+        left, right = cleaned.split(".", 1)
+        if left in {"SH", "SZ", "BJ"} and right.isdigit():
+            return f"{right}.{left}"
+        if right in {"SH", "SZ", "BJ"} and left.isdigit():
+            return f"{left}.{right}"
+        return cleaned
+    if cleaned.startswith(("6", "9")):
+        return f"{cleaned}.SH"
+    return f"{cleaned}.SZ"
+
+
 class SymbolNormalizer:
     def __init__(self, market_id: str) -> None:
         self.market_id = market_id
@@ -23,11 +36,7 @@ class SymbolNormalizer:
         if self.market_id == "us_equity":
             return cleaned
         if self.market_id == "cn_a":
-            if "." in cleaned:
-                return cleaned
-            if cleaned.startswith(("6", "9")):
-                return f"{cleaned}.SH"
-            return f"{cleaned}.SZ"
+            return _normalize_cn_a_symbol(cleaned)
         return cleaned
 
 

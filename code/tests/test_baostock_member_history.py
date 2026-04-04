@@ -27,13 +27,13 @@ class BaostockMemberHistoryTests(unittest.TestCase):
                 encoding="utf-8",
             )
             output_path = temp_root / "hs300_history.csv"
-            build_member_history(snapshot_path, output_path)
+            build_member_history(snapshot_path, output_path, horizon_date="2024-01-10")
             lines = output_path.read_text(encoding="utf-8").strip().splitlines()
             self.assertEqual(len(lines), 5)
             content = "\n".join(lines)
             self.assertGreaterEqual(content.count("600000"), 2)
             self.assertIn("2024-01-02,2024-01-02", content)
-            self.assertIn("2024-01-05,2024-01-05", content)
+            self.assertIn("2024-01-05,2024-01-10", content)
 
     def test_build_member_history_keeps_single_interval_for_continuous_membership(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -50,9 +50,10 @@ class BaostockMemberHistoryTests(unittest.TestCase):
                 encoding="utf-8",
             )
             output_path = temp_root / "zz500_history.csv"
-            build_member_history(snapshot_path, output_path)
+            build_member_history(snapshot_path, output_path, horizon_date="2024-01-31")
             lines = output_path.read_text(encoding="utf-8").strip().splitlines()
             self.assertEqual(len(lines), 2)
+            self.assertIn("2024-01-31", lines[1])
 
 
 if __name__ == "__main__":

@@ -14,7 +14,7 @@ def _to_iso(value: date) -> str:
     return value.isoformat()
 
 
-def build_member_history(snapshot_path: Path, output_path: Path) -> None:
+def build_member_history(snapshot_path: Path, output_path: Path, horizon_date: str | None = None) -> None:
     with snapshot_path.open("r", encoding="utf-8-sig", newline="") as handle:
         rows = list(csv.DictReader(handle))
 
@@ -26,6 +26,8 @@ def build_member_history(snapshot_path: Path, output_path: Path) -> None:
     history_rows: list[dict[str, str]] = []
     open_intervals: dict[str, str] = {}
     universe_id = snapshot_path.stem.replace("_snapshots", "").upper()
+
+    final_horizon = horizon_date or ordered_dates[-1]
 
     for index, snapshot_date in enumerate(ordered_dates):
         current_codes = snapshots_by_date[snapshot_date]
@@ -53,7 +55,7 @@ def build_member_history(snapshot_path: Path, output_path: Path) -> None:
                         "universe_id": universe_id,
                         "stock_code": code.replace("sh.", "").replace("sz.", "").replace("bj.", ""),
                         "start_date": start_date,
-                        "end_date": snapshot_date,
+                        "end_date": final_horizon,
                     }
                 )
 
@@ -72,8 +74,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Build membership history files from baostock index snapshots.")
     parser.add_argument("--snapshot", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--horizon-date", default=None)
     args = parser.parse_args()
-    build_member_history(args.snapshot, args.output)
+    build_member_history(args.snapshot, args.output, horizon_date=args.horizon_date)
 
 
 if __name__ == "__main__":

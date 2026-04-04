@@ -14,6 +14,7 @@ class FormalFactorPanelTests(unittest.TestCase):
             root = Path(temp_dir)
             kline_path = root / "kline.csv"
             industry_path = root / "industry.csv"
+            membership_path = root / "members.csv"
             output_path = root / "factor_panel.csv"
 
             kline_path.write_text(
@@ -39,16 +40,28 @@ class FormalFactorPanelTests(unittest.TestCase):
                 ),
                 encoding="utf-8",
             )
+            membership_path.write_text(
+                "\n".join(
+                    [
+                        "market_id,universe_id,stock_code,start_date,end_date",
+                        "cn_a,HS300,600000,2024-01-03,2024-01-08",
+                    ]
+                ),
+                encoding="utf-8",
+            )
 
             build_formal_factor_panel(
                 kline_path=kline_path,
                 industry_path=industry_path,
+                membership_path=membership_path,
                 output_path=output_path,
             )
             content = output_path.read_text(encoding="utf-8")
             self.assertIn("stock_code", content)
             self.assertIn("value_factor", content)
             self.assertIn("future_return", content)
+            self.assertIn("600000.SH", content)
+            self.assertNotIn("2024-01-02", content)
 
 
 if __name__ == "__main__":
