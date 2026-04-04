@@ -43,6 +43,10 @@ def _to_numpy(value) -> np.ndarray:
     return np.asarray(value)
 
 
+def as_numpy(value) -> np.ndarray:
+    return _to_numpy(value)
+
+
 def compute_abs_contribution(array: np.ndarray, context: DeviceContext) -> np.ndarray:
     if torch is not None and context.torch_available:
         tensor = torch.as_tensor(array, dtype=torch.float32, device=context.resolved_device)
