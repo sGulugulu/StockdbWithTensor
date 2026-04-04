@@ -107,6 +107,22 @@ def refresh_manifest(
             "factor_panel_end_date": factor_end,
         }
 
+    kline_path = canonical_root / "kline_panel.csv"
+    kline_start, kline_end = _csv_date_range(kline_path, "date")
+    manifest["stages"]["stage_3_formal_outputs"]["shared_kline_panel"] = {
+        "kline_panel_path": str(kline_path),
+        "kline_panel_rows": _csv_row_count(kline_path),
+        "kline_panel_start_date": kline_start,
+        "kline_panel_end_date": kline_end,
+    }
+
+    financial_dir = canonical_root / "financial"
+    reports_dir = canonical_root / "reports"
+    manifest["stages"]["stage_2_formal_outputs"] = {
+        "financial_files": sorted(str(path) for path in financial_dir.glob("*.csv")),
+        "report_files": sorted(str(path) for path in reports_dir.glob("*.csv")),
+    }
+
     manifest_path = canonical_root / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8")
     return manifest_path

@@ -152,6 +152,37 @@ class BackendTests(unittest.TestCase):
                         self.assertIsNotNone(formal_detail)
                         self.assertEqual(formal_detail["status"]["status"], "completed")
 
+                    formal_profiles = [
+                        ("formal_sz50", "SZ50"),
+                        ("formal_zz500", "ZZ500"),
+                    ]
+                    for profile_name, universe_id in formal_profiles:
+                        formal_history = ROOT / "data" / "formal" / f"{universe_id.lower()}_history.csv"
+                        formal_panel = ROOT / "data" / "formal" / f"{universe_id.lower()}_factor_panel.csv"
+                        if not formal_history.exists() or not formal_panel.exists():
+                            continue
+                        run_id = f"{profile_name}_real_run"
+                        response = await client.post(
+                            "/api/runs",
+                            json={
+                                "run_id": run_id,
+                                "run_sync": False,
+                                "config_profile": profile_name,
+                            },
+                            timeout=60.0,
+                        )
+                        self.assertEqual(response.status_code, 200)
+                        detail_payload = None
+                        for _ in range(200):
+                            response = await client.get(f"/api/runs/{run_id}", timeout=10.0)
+                            detail_payload = response.json()
+                            if detail_payload["status"]["status"] == "completed":
+                                break
+                            await anyio.sleep(0.1)
+                        self.assertIsNotNone(detail_payload)
+                        self.assertEqual(detail_payload["status"]["status"], "completed")
+                        self.assertEqual(detail_payload["manifest"]["universe_id"], universe_id)
+
             anyio.run(run_case)
 
 
