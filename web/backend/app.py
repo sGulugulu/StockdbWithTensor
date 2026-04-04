@@ -141,7 +141,10 @@ def get_selection_for_date(output_root: Path, run_id: str, trade_date: str, top_
 
 def get_markets() -> list[dict[str, str]]:
     return [
-        {"market_id": "cn_a", "market_name": "A股", "default_universe_id": "CSI_A500"},
+        {"market_id": "cn_a", "market_name": "A股 / 沪深300", "default_universe_id": "HS300"},
+        {"market_id": "cn_a", "market_name": "A股 / 上证50", "default_universe_id": "SZ50"},
+        {"market_id": "cn_a", "market_name": "A股 / 中证500", "default_universe_id": "ZZ500"},
+        {"market_id": "cn_a", "market_name": "A股 / 中证A500", "default_universe_id": "CSI_A500"},
         {"market_id": "us_equity", "market_name": "美股", "default_universe_id": "EXTERNAL_LIST"},
     ]
 
@@ -275,8 +278,22 @@ def create_app(output_root: Path | None = None, default_config_path: Path | None
             requested_config = Path(body["config_path"]).resolve()
         elif body.get("config_profile") == "sample_cn_smoke":
             requested_config = (ROOT / "code" / "configs" / "sample_cn_smoke.yaml").resolve()
+        elif body.get("config_profile") == "formal_hs300":
+            requested_config = (ROOT / "code" / "configs" / "formal_hs300.yaml").resolve()
+        elif body.get("config_profile") == "formal_sz50":
+            requested_config = (ROOT / "code" / "configs" / "formal_sz50.yaml").resolve()
+        elif body.get("config_profile") == "formal_zz500":
+            requested_config = (ROOT / "code" / "configs" / "formal_zz500.yaml").resolve()
+        elif body.get("config_profile") == "formal_cn_a":
+            requested_config = (ROOT / "code" / "configs" / "default.yaml").resolve()
         elif body.get("config_profile") == "sample_us_equity":
             requested_config = (ROOT / "code" / "configs" / "sample_us_equity.yaml").resolve()
+        elif body.get("market_id") == "cn_a" and body.get("universe_id") == "HS300":
+            requested_config = (ROOT / "code" / "configs" / "formal_hs300.yaml").resolve()
+        elif body.get("market_id") == "cn_a" and body.get("universe_id") == "SZ50":
+            requested_config = (ROOT / "code" / "configs" / "formal_sz50.yaml").resolve()
+        elif body.get("market_id") == "cn_a" and body.get("universe_id") == "ZZ500":
+            requested_config = (ROOT / "code" / "configs" / "formal_zz500.yaml").resolve()
         elif body.get("market_id") in config_templates:
             requested_config = config_templates[body["market_id"]].resolve()
         else:

@@ -1,0 +1,59 @@
+market:
+  market_id: cn_a
+  universe_id: ZZ500
+  start_date: 2015-01-01
+  end_date: 2026-12-31
+  timezone: Asia/Shanghai
+  currency: CNY
+  universe_path: ../data/formal/zz500_history.csv
+  universe_symbol_column: stock_code
+  universe_start_column: start_date
+  universe_end_column: end_date
+  universe_market_column: market_id
+  universe_id_column: universe_id
+
+data:
+  path: ../data/formal/zz500_factor_panel.csv
+  format: wide
+  stock_column: stock_code
+  date_column: trade_date
+  industry_column: industry
+  return_column: future_return
+  factor_columns:
+    - value_factor
+    - momentum_factor
+    - quality_factor
+    - volatility_factor
+
+preprocess:
+  max_missing_ratio: 0.45
+  winsor_limits: [0.05, 0.95]
+
+models:
+  seed: 7
+  cp:
+    enabled: true
+    ranks: [2, 3]
+    max_iter: 75
+    tol: 1.0e-6
+  tucker:
+    enabled: true
+    ranks:
+      - [2, 2, 2]
+      - [3, 2, 2]
+    max_iter: 20
+    tol: 1.0e-6
+  pca:
+    enabled: true
+    ranks: [2, 3]
+
+evaluation:
+  top_k_pairs: 5
+  rolling_window: 3
+
+runtime:
+  selection_top_n: 20
+
+output:
+  root_dir: ../outputs
+  experiment_name: formal_zz500_run

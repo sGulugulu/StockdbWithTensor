@@ -23,6 +23,13 @@ Fetch index constituents, change records, and company fundamentals from baostock
   --skip-reports
 ```
 
+Formal A-share config profiles now exist for:
+
+- `code/configs/formal_hs300.yaml`
+- `code/configs/formal_sz50.yaml`
+- `code/configs/formal_zz500.yaml`
+- `code/configs/default.yaml` for `CSI_A500`
+
 After stage 1 finishes, fetch the financial/report tables with resume support:
 
 ```powershell
