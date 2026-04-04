@@ -11,6 +11,14 @@ python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
 ```
 
+The runtime now expects a PyTorch-capable environment so the project can use:
+
+- `device=cpu`
+- `device=cuda`
+- `device=auto`
+
+When CUDA is available, the numerical post-processing path prefers GPU execution; otherwise it safely falls back to CPU.
+
 Fetch full index constituents, change records, and company fundamentals from baostock:
 
 ```powershell

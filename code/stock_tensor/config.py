@@ -81,6 +81,7 @@ class EvaluationConfig:
 @dataclass(slots=True)
 class RuntimeConfig:
     selection_top_n: int
+    device: str
 
 
 @dataclass(slots=True)
@@ -216,6 +217,7 @@ def load_config(path: str | Path) -> ExperimentConfig:
         ),
         runtime=RuntimeConfig(
             selection_top_n=int(runtime.get("selection_top_n", 20)),
+            device=str(runtime.get("device", "auto")),
         ),
         output=OutputConfig(
             root_dir=output_root,

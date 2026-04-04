@@ -4,6 +4,7 @@ from dataclasses import asdict
 from pathlib import Path
 from typing import Callable
 
+from .compute_backend import resolve_device
 from .config import ExperimentConfig, load_config
 from .dataset import TensorDataset, build_tensor_dataset
 from .evaluation import (
@@ -22,6 +23,7 @@ from .output import write_outputs
 
 def _select_best_model(config: ExperimentConfig, dataset: TensorDataset, logs: list[str], model_name: str) -> ModelResult:
     candidates: list[ModelResult] = []
+    device_context = resolve_device(config.runtime.device)
     if model_name == "cp":
         for rank in config.models.cp.ranks:
             candidate = fit_cp_model(
@@ -30,6 +32,7 @@ def _select_best_model(config: ExperimentConfig, dataset: TensorDataset, logs: l
                 max_iter=config.models.cp.max_iter,
                 tol=config.models.cp.tol,
                 seed=config.models.seed,
+                device_context=device_context,
             )
             logs.append(f"cp rank={rank} mse={candidate.objective:.6f}")
             candidates.append(candidate)
@@ -40,12 +43,13 @@ def _select_best_model(config: ExperimentConfig, dataset: TensorDataset, logs: l
                 rank=rank,
                 max_iter=config.models.tucker.max_iter,
                 tol=config.models.tucker.tol,
+                device_context=device_context,
             )
             logs.append(f"tucker rank={rank} mse={candidate.objective:.6f}")
             candidates.append(candidate)
     elif model_name == "pca":
         for rank in config.models.pca.ranks:
-            candidate = fit_pca_model(dataset.tensor, rank=rank)
+            candidate = fit_pca_model(dataset.tensor, rank=rank, device_context=device_context)
             logs.append(f"pca rank={rank} mse={candidate.objective:.6f}")
             candidates.append(candidate)
     else:
@@ -54,6 +58,7 @@ def _select_best_model(config: ExperimentConfig, dataset: TensorDataset, logs: l
 
 
 def _fit_window_callable(config: ExperimentConfig, model: ModelResult):
+    device_context = resolve_device(config.runtime.device)
     if model.name == "cp":
         return lambda tensor: fit_cp_model(
             tensor,
@@ -61,6 +66,7 @@ def _fit_window_callable(config: ExperimentConfig, model: ModelResult):
             max_iter=config.models.cp.max_iter,
             tol=config.models.cp.tol,
             seed=config.models.seed,
+            device_context=device_context,
         )
     if model.name == "tucker":
         return lambda tensor: fit_tucker_model(
@@ -68,8 +74,9 @@ def _fit_window_callable(config: ExperimentConfig, model: ModelResult):
             rank=tuple(int(part) for part in model.rank),
             max_iter=config.models.tucker.max_iter,
             tol=config.models.tucker.tol,
+            device_context=device_context,
         )
-    return lambda tensor: fit_pca_model(tensor, rank=int(model.rank))
+    return lambda tensor: fit_pca_model(tensor, rank=int(model.rank), device_context=device_context)
 
 
 def run_experiment(
@@ -80,11 +87,15 @@ def run_experiment(
     status_callback: Callable[[str, dict[str, object]], None] | None = None,
 ) -> Path:
     config = load_config(config_path)
+    device_context = resolve_device(config.runtime.device)
     if output_root is not None:
         config.output.root_dir = Path(output_root).resolve()
     if experiment_name is not None:
         config.output.experiment_name = experiment_name
-    logs: list[str] = [f"Loaded config: {Path(config_path).resolve()}"]
+    logs: list[str] = [
+        f"Loaded config: {Path(config_path).resolve()}",
+        f"Resolved device: requested={config.runtime.device}, actual={device_context.resolved_device}",
+    ]
     market_adapter = create_market_adapter(config.market)
 
     records = market_adapter.load_records(config.data)
