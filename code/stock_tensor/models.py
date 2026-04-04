@@ -7,9 +7,11 @@ import numpy as np
 
 from .compute_backend import (
     DeviceContext,
+    as_numpy,
     compute_abs_contribution,
     compute_stock_clusters,
     compute_time_shift_scores,
+    torch,
 )
 
 
@@ -113,6 +115,49 @@ def _reconstruct_cp(weights: np.ndarray, factors: tuple[np.ndarray, np.ndarray, 
     return reconstruction
 
 
+def _unfold_torch(tensor, mode: int):
+    if mode == 0:
+        return tensor.reshape(tensor.shape[0], tensor.shape[1] * tensor.shape[2])
+    if mode == 1:
+        return torch.permute(tensor, (1, 0, 2)).reshape(tensor.shape[1], tensor.shape[0] * tensor.shape[2])
+    if mode == 2:
+        return torch.permute(tensor, (2, 0, 1)).reshape(tensor.shape[2], tensor.shape[0] * tensor.shape[1])
+    raise ValueError(f"Unsupported mode: {mode}")
+
+
+def _khatri_rao_torch(left, right):
+    if left.shape[1] != right.shape[1]:
+        raise ValueError("Khatri-Rao inputs must have the same number of columns.")
+    columns = []
+    for col_idx in range(left.shape[1]):
+        columns.append(torch.kron(left[:, col_idx], right[:, col_idx]))
+    return torch.stack(columns, dim=1)
+
+
+def _reconstruct_cp_torch(weights, factors):
+    a_mat, b_mat, c_mat = factors
+    reconstruction = torch.zeros((a_mat.shape[0], b_mat.shape[0], c_mat.shape[0]), dtype=a_mat.dtype, device=a_mat.device)
+    for col_idx in range(weights.shape[0]):
+        reconstruction = reconstruction + weights[col_idx] * torch.einsum(
+            "i,j,k->ijk",
+            a_mat[:, col_idx],
+            b_mat[:, col_idx],
+            c_mat[:, col_idx],
+        )
+    return reconstruction
+
+
+def _mode_product_torch(tensor, matrix, mode: int):
+    moved = torch.movedim(tensor, mode, 0)
+    product = torch.tensordot(matrix, moved, dims=([1], [0]))
+    return torch.movedim(product, 0, mode)
+
+
+def _top_singular_vectors_torch(matrix, rank: int):
+    left, _, _ = torch.linalg.svd(matrix, full_matrices=False)
+    return left[:, :rank]
+
+
 def fit_cp_model(
     tensor: np.ndarray,
     rank: int,
@@ -122,6 +167,57 @@ def fit_cp_model(
     device_context: DeviceContext,
 ) -> ModelResult:
     stock_count, factor_count, time_count = tensor.shape
+    if torch is not None and device_context.torch_available:
+        tensor_t = torch.as_tensor(tensor, dtype=torch.float32, device=device_context.resolved_device)
+        torch.manual_seed(seed)
+        a_mat = torch.randn((stock_count, rank), dtype=torch.float32, device=device_context.resolved_device) * 0.5
+        b_mat = torch.randn((factor_count, rank), dtype=torch.float32, device=device_context.resolved_device) * 0.5
+        c_mat = torch.randn((time_count, rank), dtype=torch.float32, device=device_context.resolved_device) * 0.5
+        identity = torch.eye(rank, dtype=torch.float32, device=device_context.resolved_device) * 1e-8
+        prev_error = float("inf")
+        diagnostics: dict[str, Any] = {"iterations": 0}
+
+        for iteration in range(1, max_iter + 1):
+            gram = (c_mat.T @ c_mat) * (b_mat.T @ b_mat) + identity
+            a_mat = (_unfold_torch(tensor_t, 0) @ _khatri_rao_torch(c_mat, b_mat)) @ torch.linalg.pinv(gram)
+
+            gram = (c_mat.T @ c_mat) * (a_mat.T @ a_mat) + identity
+            b_mat = (_unfold_torch(tensor_t, 1) @ _khatri_rao_torch(c_mat, a_mat)) @ torch.linalg.pinv(gram)
+
+            gram = (b_mat.T @ b_mat) * (a_mat.T @ a_mat) + identity
+            c_mat = (_unfold_torch(tensor_t, 2) @ _khatri_rao_torch(b_mat, a_mat)) @ torch.linalg.pinv(gram)
+
+            weights = torch.ones(rank, dtype=torch.float32, device=device_context.resolved_device)
+            for factor_matrix in (a_mat, b_mat, c_mat):
+                norms = torch.linalg.norm(factor_matrix, dim=0)
+                norms = torch.where(norms == 0, torch.ones_like(norms), norms)
+                factor_matrix /= norms
+                weights *= norms
+
+            reconstruction_t = _reconstruct_cp_torch(weights, (a_mat, b_mat, c_mat))
+            error = float(torch.linalg.norm(tensor_t - reconstruction_t) / max(float(torch.linalg.norm(tensor_t)), 1e-8))
+            diagnostics["iterations"] = iteration
+            diagnostics["relative_error"] = error
+            if abs(prev_error - error) <= tol:
+                break
+            prev_error = error
+
+        final_reconstruction_t = _reconstruct_cp_torch(weights, (a_mat, b_mat, c_mat))
+        final_reconstruction = as_numpy(final_reconstruction_t)
+        mse = float(torch.mean((tensor_t - final_reconstruction_t) ** 2))
+        return _enrich_result(
+            name="cp",
+            rank=rank,
+            reconstruction=final_reconstruction,
+            stock_loadings=as_numpy(a_mat),
+            factor_loadings=as_numpy(b_mat),
+            time_loadings=as_numpy(c_mat),
+            objective=mse,
+            param_count=stock_count * rank + factor_count * rank + time_count * rank + rank,
+            diagnostics=diagnostics,
+            context=device_context,
+        )
+
     rng = np.random.default_rng(seed)
     a_mat = rng.normal(scale=0.5, size=(stock_count, rank))
     b_mat = rng.normal(scale=0.5, size=(factor_count, rank))
@@ -191,6 +287,54 @@ def fit_tucker_model(
     device_context: DeviceContext,
 ) -> ModelResult:
     stock_rank, factor_rank, time_rank = rank
+    if torch is not None and device_context.torch_available:
+        tensor_t = torch.as_tensor(tensor, dtype=torch.float32, device=device_context.resolved_device)
+        u_stock = _top_singular_vectors_torch(_unfold_torch(tensor_t, 0), stock_rank)
+        u_factor = _top_singular_vectors_torch(_unfold_torch(tensor_t, 1), factor_rank)
+        u_time = _top_singular_vectors_torch(_unfold_torch(tensor_t, 2), time_rank)
+
+        prev_error = float("inf")
+        diagnostics: dict[str, Any] = {"iterations": 0}
+        for iteration in range(1, max_iter + 1):
+            projected = _mode_product_torch(_mode_product_torch(tensor_t, u_factor.T, 1), u_time.T, 2)
+            u_stock = _top_singular_vectors_torch(_unfold_torch(projected, 0), stock_rank)
+
+            projected = _mode_product_torch(_mode_product_torch(tensor_t, u_stock.T, 0), u_time.T, 2)
+            u_factor = _top_singular_vectors_torch(_unfold_torch(projected, 1), factor_rank)
+
+            projected = _mode_product_torch(_mode_product_torch(tensor_t, u_stock.T, 0), u_factor.T, 1)
+            u_time = _top_singular_vectors_torch(_unfold_torch(projected, 2), time_rank)
+
+            core = _mode_product_torch(_mode_product_torch(_mode_product_torch(tensor_t, u_stock.T, 0), u_factor.T, 1), u_time.T, 2)
+            reconstruction_t = _mode_product_torch(_mode_product_torch(_mode_product_torch(core, u_stock, 0), u_factor, 1), u_time, 2)
+            error = float(torch.linalg.norm(tensor_t - reconstruction_t) / max(float(torch.linalg.norm(tensor_t)), 1e-8))
+            diagnostics["iterations"] = iteration
+            diagnostics["relative_error"] = error
+            if abs(prev_error - error) <= tol:
+                break
+            prev_error = error
+
+        core = _mode_product_torch(_mode_product_torch(_mode_product_torch(tensor_t, u_stock.T, 0), u_factor.T, 1), u_time.T, 2)
+        reconstruction_t = _mode_product_torch(_mode_product_torch(_mode_product_torch(core, u_stock, 0), u_factor, 1), u_time, 2)
+        mse = float(torch.mean((tensor_t - reconstruction_t) ** 2))
+        return _enrich_result(
+            name="tucker",
+            rank=rank,
+            reconstruction=as_numpy(reconstruction_t),
+            stock_loadings=as_numpy(u_stock),
+            factor_loadings=as_numpy(u_factor),
+            time_loadings=as_numpy(u_time),
+            objective=mse,
+            param_count=(
+                tensor.shape[0] * stock_rank
+                + tensor.shape[1] * factor_rank
+                + tensor.shape[2] * time_rank
+                + stock_rank * factor_rank * time_rank
+            ),
+            diagnostics=diagnostics,
+            context=device_context,
+        )
+
     u_stock = _top_singular_vectors(unfold(tensor, 0), stock_rank)
     u_factor = _top_singular_vectors(unfold(tensor, 1), factor_rank)
     u_time = _top_singular_vectors(unfold(tensor, 2), time_rank)
@@ -240,6 +384,34 @@ def fit_tucker_model(
 
 def fit_pca_model(tensor: np.ndarray, rank: int, device_context: DeviceContext) -> ModelResult:
     stock_count, factor_count, time_count = tensor.shape
+    if torch is not None and device_context.torch_available:
+        tensor_t = torch.as_tensor(tensor, dtype=torch.float32, device=device_context.resolved_device)
+        observation_matrix = torch.permute(tensor_t, (0, 2, 1)).reshape(stock_count * time_count, factor_count)
+        mean_vector = observation_matrix.mean(dim=0, keepdim=True)
+        centered = observation_matrix - mean_vector
+        left, singular_values, right_t = torch.linalg.svd(centered, full_matrices=False)
+        scores = left[:, :rank] * singular_values[:rank]
+        components = right_t[:rank, :].T
+        reconstruction_matrix = scores @ components.T + mean_vector
+        reconstruction_t = torch.permute(
+            reconstruction_matrix.reshape(stock_count, time_count, factor_count),
+            (0, 2, 1),
+        )
+        scores_tensor = scores.reshape(stock_count, time_count, rank)
+        mse = float(torch.mean((tensor_t - reconstruction_t) ** 2))
+        return _enrich_result(
+            name="pca",
+            rank=rank,
+            reconstruction=as_numpy(reconstruction_t),
+            stock_loadings=as_numpy(scores_tensor.mean(dim=1)),
+            factor_loadings=as_numpy(components),
+            time_loadings=as_numpy(scores_tensor.mean(dim=0)),
+            objective=mse,
+            param_count=stock_count * time_count * rank + factor_count * rank + factor_count,
+            diagnostics={"explained_singular_values": as_numpy(singular_values[:rank]).tolist()},
+            context=device_context,
+        )
+
     observation_matrix = np.transpose(tensor, (0, 2, 1)).reshape(stock_count * time_count, factor_count)
     mean_vector = observation_matrix.mean(axis=0, keepdims=True)
     centered = observation_matrix - mean_vector
