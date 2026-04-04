@@ -1,6 +1,10 @@
 __pycache__/
 *.pyc
 .venv/
+.codex
 node_modules/
 web/frontend/dist/
+code/data/formal/baostock*/
+code/data/formal/index_daily/
+code/data/formal/tdx_daily_raw.csv
 code/outputs/
