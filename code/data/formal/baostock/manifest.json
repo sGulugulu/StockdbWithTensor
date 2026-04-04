@@ -132,7 +132,17 @@
         "factor_panel_rows": 12500,
         "factor_panel_start_date": "2026-03-02",
         "factor_panel_end_date": "2026-04-03"
+      },
+      "shared_kline_panel": {
+        "kline_panel_path": "code/data/formal/baostock/kline_panel.csv",
+        "kline_panel_rows": 135096,
+        "kline_panel_start_date": "2015-01-05",
+        "kline_panel_end_date": "2026-04-03"
       }
+    },
+    "stage_2_formal_outputs": {
+      "financial_files": [],
+      "report_files": []
     }
   }
 }
