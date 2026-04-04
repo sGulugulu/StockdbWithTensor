@@ -4,7 +4,11 @@ __pycache__/
 .codex
 node_modules/
 web/frontend/dist/
-code/data/formal/baostock*/
+code/data/formal/baostock_fg*/
+code/data/formal/baostock_*_fg/
+code/data/formal/baostock_smoke/
+code/data/formal/baostock_probe*/
+code/data/formal/baostock/kline_panel.progress.json
 code/data/formal/index_daily/
 code/data/formal/tdx_daily_raw.csv
 code/data/formal/*_kline_panel_batch.csv

@@ -1,0 +1,138 @@
+{
+  "source": "baostock",
+  "stages": {
+    "stage_1_stage_2_committed_sources": {
+      "hs300": {
+        "source": "baostock",
+        "start_date": "2026-03-01",
+        "end_date": "2026-04-04",
+        "indices": [
+          "hs300"
+        ],
+        "financial_start_year": 2015,
+        "financial_end_year": 2026,
+        "max_codes": null,
+        "sleep_seconds": 0.0,
+        "skip_index_memberships": false,
+        "skip_metadata": false,
+        "stats": {
+          "index_snapshot_rows": 1500,
+          "index_change_rows": 300,
+          "unique_codes": 300,
+          "stock_basic_rows": 300,
+          "stock_industry_rows": 300,
+          "financial_rows": 0,
+          "report_rows": 0
+        }
+      },
+      "sz50": {
+        "source": "baostock",
+        "start_date": "2026-03-01",
+        "end_date": "2026-04-04",
+        "indices": [
+          "sz50"
+        ],
+        "financial_start_year": 2015,
+        "financial_end_year": 2026,
+        "max_codes": null,
+        "sleep_seconds": 0.0,
+        "stages": {
+          "stage_index_and_metadata": {
+            "skip_index_memberships": false,
+            "skip_metadata": false,
+            "skip_financials": true,
+            "skip_reports": true,
+            "stats": {
+              "index_snapshot_rows": 250,
+              "index_change_rows": 50,
+              "unique_codes": 50,
+              "stock_basic_rows": 50,
+              "stock_industry_rows": 50,
+              "financial_rows": 0,
+              "report_rows": 0
+            }
+          }
+        },
+        "stats": {
+          "index_snapshot_rows": 250,
+          "index_change_rows": 50,
+          "unique_codes": 50,
+          "stock_basic_rows": 50,
+          "stock_industry_rows": 50,
+          "financial_rows": 0,
+          "report_rows": 0
+        }
+      },
+      "zz500": {
+        "source": "baostock",
+        "start_date": "2026-03-01",
+        "end_date": "2026-04-04",
+        "indices": [
+          "zz500"
+        ],
+        "financial_start_year": 2015,
+        "financial_end_year": 2026,
+        "max_codes": null,
+        "sleep_seconds": 0.0,
+        "stages": {
+          "stage_index_and_metadata": {
+            "skip_index_memberships": false,
+            "skip_metadata": false,
+            "skip_financials": true,
+            "skip_reports": true,
+            "stats": {
+              "index_snapshot_rows": 2500,
+              "index_change_rows": 500,
+              "unique_codes": 500,
+              "stock_basic_rows": 500,
+              "stock_industry_rows": 500,
+              "financial_rows": 0,
+              "report_rows": 0
+            }
+          }
+        },
+        "stats": {
+          "index_snapshot_rows": 2500,
+          "index_change_rows": 500,
+          "unique_codes": 500,
+          "stock_basic_rows": 500,
+          "stock_industry_rows": 500,
+          "financial_rows": 0,
+          "report_rows": 0
+        }
+      }
+    },
+    "stage_3_formal_outputs": {
+      "hs300": {
+        "history_path": "code/data/formal/hs300_history.csv",
+        "history_rows": 300,
+        "history_start_date": "2026-03-02",
+        "history_end_date": "2026-03-30",
+        "factor_panel_path": "code/data/formal/hs300_factor_panel.csv",
+        "factor_panel_rows": 750,
+        "factor_panel_start_date": "2026-03-02",
+        "factor_panel_end_date": "2026-04-03"
+      },
+      "sz50": {
+        "history_path": "code/data/formal/sz50_history.csv",
+        "history_rows": 50,
+        "history_start_date": "2026-03-02",
+        "history_end_date": "2026-03-30",
+        "factor_panel_path": "code/data/formal/sz50_factor_panel.csv",
+        "factor_panel_rows": 1250,
+        "factor_panel_start_date": "2026-03-02",
+        "factor_panel_end_date": "2026-04-03"
+      },
+      "zz500": {
+        "history_path": "code/data/formal/zz500_history.csv",
+        "history_rows": 500,
+        "history_start_date": "2026-03-02",
+        "history_end_date": "2026-03-30",
+        "factor_panel_path": "code/data/formal/zz500_factor_panel.csv",
+        "factor_panel_rows": 12500,
+        "factor_panel_start_date": "2026-03-02",
+        "factor_panel_end_date": "2026-04-03"
+      }
+    }
+  }
+}

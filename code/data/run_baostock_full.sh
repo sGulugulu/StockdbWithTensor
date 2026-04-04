@@ -58,3 +58,5 @@ cd "$ROOT_DIR"
   --indices hs300,sz50,zz500 \
   --skip-index-memberships \
   --skip-metadata
+
+.venv/bin/python code/data/refresh_formal_baostock_manifest.py
