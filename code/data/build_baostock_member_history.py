@@ -5,6 +5,8 @@ import csv
 from datetime import date, timedelta
 from pathlib import Path
 
+from stock_tensor.market import SymbolNormalizer
+
 
 def _to_date(value: str) -> date:
     return date.fromisoformat(value)
@@ -15,6 +17,7 @@ def _to_iso(value: date) -> str:
 
 
 def build_member_history(snapshot_path: Path, output_path: Path, horizon_date: str | None = None) -> None:
+    normalizer = SymbolNormalizer("cn_a")
     with snapshot_path.open("r", encoding="utf-8-sig", newline="") as handle:
         rows = list(csv.DictReader(handle))
 
@@ -39,13 +42,13 @@ def build_member_history(snapshot_path: Path, output_path: Path, horizon_date: s
         for code in closing_codes:
             history_rows.append(
                 {
-                    "market_id": "cn_a",
-                    "universe_id": universe_id,
-                    "stock_code": code.replace("sh.", "").replace("sz.", "").replace("bj.", ""),
-                    "start_date": open_intervals.pop(code),
-                    "end_date": _to_iso(_to_date(snapshot_date) - timedelta(days=1)),
-                }
-            )
+                        "market_id": "cn_a",
+                        "universe_id": universe_id,
+                        "stock_code": normalizer.normalize(code),
+                        "start_date": open_intervals.pop(code),
+                        "end_date": _to_iso(_to_date(snapshot_date) - timedelta(days=1)),
+                    }
+                )
 
         if index == len(ordered_dates) - 1:
             for code, start_date in open_intervals.items():
@@ -53,7 +56,7 @@ def build_member_history(snapshot_path: Path, output_path: Path, horizon_date: s
                     {
                         "market_id": "cn_a",
                         "universe_id": universe_id,
-                        "stock_code": code.replace("sh.", "").replace("sz.", "").replace("bj.", ""),
+                        "stock_code": normalizer.normalize(code),
                         "start_date": start_date,
                         "end_date": final_horizon,
                     }
