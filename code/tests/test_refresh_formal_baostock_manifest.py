@@ -175,6 +175,14 @@ class RefreshFormalBaostockManifestTests(unittest.TestCase):
             self.assertEqual(manifest["source"], "baostock")
             stock_basic_text = (canonical_root / "metadata" / "stock_basic.csv").read_text(encoding="utf-8")
             self.assertIn("sh.600000", stock_basic_text)
+            self.assertEqual(
+                manifest["stages"]["stage_1_stage_2_committed_sources"]["hs300"]["snapshot_rows"],
+                0,
+            )
+            self.assertEqual(
+                manifest["stages"]["stage_1_stage_2_committed_sources"]["hs300"]["stock_basic_rows"],
+                1,
+            )
 
 
 if __name__ == "__main__":

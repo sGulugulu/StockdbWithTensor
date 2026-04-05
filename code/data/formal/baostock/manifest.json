@@ -5,143 +5,104 @@
     "stage_1_stage_2_committed_sources": {
       "hs300": {
         "source": "baostock",
-        "start_date": "2026-03-01",
-        "end_date": "2026-04-04",
-        "indices": [
-          "hs300"
-        ],
-        "financial_start_year": 2015,
-        "financial_end_year": 2026,
-        "max_codes": null,
-        "sleep_seconds": 0.0,
-        "skip_index_memberships": false,
-        "skip_metadata": false,
-        "stats": {
-          "index_snapshot_rows": 1500,
-          "index_change_rows": 300,
-          "unique_codes": 300,
-          "stock_basic_rows": 300,
-          "stock_industry_rows": 300,
-          "financial_rows": 0,
-          "report_rows": 0
-        }
+        "index_id": "hs300",
+        "snapshot_path": "code/data/formal/baostock/index_memberships/hs300_snapshots.csv",
+        "snapshot_rows": 1500,
+        "snapshot_start_date": "2026-03-02",
+        "snapshot_end_date": "2026-03-30",
+        "changes_path": "code/data/formal/baostock/index_memberships/hs300_changes.csv",
+        "changes_rows": 300,
+        "changes_start_date": "2026-03-02",
+        "changes_end_date": "2026-03-02",
+        "stock_basic_path": "code/data/formal/baostock/metadata/stock_basic.csv",
+        "stock_basic_rows": 8680,
+        "stock_industry_path": "code/data/formal/baostock/metadata/stock_industry.csv",
+        "stock_industry_rows": 5509,
+        "selected_codes_path": "code/data/formal/baostock/metadata/selected_codes.csv",
+        "selected_codes_rows": 572,
+        "all_a_codes_path": "code/data/formal/baostock/metadata/all_a_codes.csv",
+        "all_a_codes_rows": 5059
       },
       "sz50": {
         "source": "baostock",
-        "start_date": "2026-03-01",
-        "end_date": "2026-04-04",
-        "indices": [
-          "sz50"
-        ],
-        "financial_start_year": 2015,
-        "financial_end_year": 2026,
-        "max_codes": null,
-        "sleep_seconds": 0.0,
-        "stages": {
-          "stage_index_and_metadata": {
-            "skip_index_memberships": false,
-            "skip_metadata": false,
-            "skip_financials": true,
-            "skip_reports": true,
-            "stats": {
-              "index_snapshot_rows": 250,
-              "index_change_rows": 50,
-              "unique_codes": 50,
-              "stock_basic_rows": 50,
-              "stock_industry_rows": 50,
-              "financial_rows": 0,
-              "report_rows": 0
-            }
-          }
-        },
-        "stats": {
-          "index_snapshot_rows": 250,
-          "index_change_rows": 50,
-          "unique_codes": 50,
-          "stock_basic_rows": 50,
-          "stock_industry_rows": 50,
-          "financial_rows": 0,
-          "report_rows": 0
-        }
+        "index_id": "sz50",
+        "snapshot_path": "code/data/formal/baostock/index_memberships/sz50_snapshots.csv",
+        "snapshot_rows": 250,
+        "snapshot_start_date": "2026-03-02",
+        "snapshot_end_date": "2026-03-30",
+        "changes_path": "code/data/formal/baostock/index_memberships/sz50_changes.csv",
+        "changes_rows": 50,
+        "changes_start_date": "2026-03-02",
+        "changes_end_date": "2026-03-02",
+        "stock_basic_path": "code/data/formal/baostock/metadata/stock_basic.csv",
+        "stock_basic_rows": 8680,
+        "stock_industry_path": "code/data/formal/baostock/metadata/stock_industry.csv",
+        "stock_industry_rows": 5509,
+        "selected_codes_path": "code/data/formal/baostock/metadata/selected_codes.csv",
+        "selected_codes_rows": 572,
+        "all_a_codes_path": "code/data/formal/baostock/metadata/all_a_codes.csv",
+        "all_a_codes_rows": 5059
       },
       "zz500": {
         "source": "baostock",
-        "start_date": "2026-03-01",
-        "end_date": "2026-04-04",
-        "indices": [
-          "zz500"
-        ],
-        "financial_start_year": 2015,
-        "financial_end_year": 2026,
-        "max_codes": null,
-        "sleep_seconds": 0.0,
-        "stages": {
-          "stage_index_and_metadata": {
-            "skip_index_memberships": false,
-            "skip_metadata": false,
-            "skip_financials": true,
-            "skip_reports": true,
-            "stats": {
-              "index_snapshot_rows": 2500,
-              "index_change_rows": 500,
-              "unique_codes": 500,
-              "stock_basic_rows": 500,
-              "stock_industry_rows": 500,
-              "financial_rows": 0,
-              "report_rows": 0
-            }
-          }
-        },
-        "stats": {
-          "index_snapshot_rows": 2500,
-          "index_change_rows": 500,
-          "unique_codes": 500,
-          "stock_basic_rows": 500,
-          "stock_industry_rows": 500,
-          "financial_rows": 0,
-          "report_rows": 0
-        }
+        "index_id": "zz500",
+        "snapshot_path": "code/data/formal/baostock/index_memberships/zz500_snapshots.csv",
+        "snapshot_rows": 2500,
+        "snapshot_start_date": "2026-03-02",
+        "snapshot_end_date": "2026-03-30",
+        "changes_path": "code/data/formal/baostock/index_memberships/zz500_changes.csv",
+        "changes_rows": 500,
+        "changes_start_date": "2026-03-02",
+        "changes_end_date": "2026-03-02",
+        "stock_basic_path": "code/data/formal/baostock/metadata/stock_basic.csv",
+        "stock_basic_rows": 8680,
+        "stock_industry_path": "code/data/formal/baostock/metadata/stock_industry.csv",
+        "stock_industry_rows": 5509,
+        "selected_codes_path": "code/data/formal/baostock/metadata/selected_codes.csv",
+        "selected_codes_rows": 572,
+        "all_a_codes_path": "code/data/formal/baostock/metadata/all_a_codes.csv",
+        "all_a_codes_rows": 5059
       }
     },
     "stage_3_formal_outputs": {
       "hs300": {
-        "history_path": "code\\data\\formal\\hs300_history.csv",
+        "history_path": "code/data/formal/universes/hs300_history.csv",
         "history_rows": 300,
         "history_start_date": "2026-03-02",
         "history_end_date": "2026-03-30",
-        "factor_panel_path": "code\\data\\formal\\hs300_factor_panel.csv",
+        "factor_panel_path": "code/data/formal/factors/hs300_factor_panel.csv",
         "factor_panel_rows": 750,
         "factor_panel_start_date": "2026-03-02",
         "factor_panel_end_date": "2026-04-03"
       },
       "sz50": {
-        "history_path": "code\\data\\formal\\sz50_history.csv",
+        "history_path": "code/data/formal/universes/sz50_history.csv",
         "history_rows": 50,
         "history_start_date": "2026-03-02",
         "history_end_date": "2026-03-30",
-        "factor_panel_path": "code\\data\\formal\\sz50_factor_panel.csv",
+        "factor_panel_path": "code/data/formal/factors/sz50_factor_panel.csv",
         "factor_panel_rows": 1250,
         "factor_panel_start_date": "2026-03-02",
         "factor_panel_end_date": "2026-04-03"
       },
       "zz500": {
-        "history_path": "code\\data\\formal\\zz500_history.csv",
+        "history_path": "code/data/formal/universes/zz500_history.csv",
         "history_rows": 500,
         "history_start_date": "2026-03-02",
         "history_end_date": "2026-03-30",
-        "factor_panel_path": "code\\data\\formal\\zz500_factor_panel.csv",
+        "factor_panel_path": "code/data/formal/factors/zz500_factor_panel.csv",
         "factor_panel_rows": 12500,
         "factor_panel_start_date": "2026-03-02",
         "factor_panel_end_date": "2026-04-03"
       },
       "shared_kline_panel": {
-        "kline_panel_path": "code\\data\\formal\\baostock\\kline_panel.csv",
+        "kline_panel_path": "code/data/formal/baostock/kline_panel.csv",
         "kline_panel_rows": 14300,
         "kline_panel_start_date": "2026-03-02",
         "kline_panel_end_date": "2026-04-03"
       },
       "shared_selected_codes": {
-        "selected_codes_path": "code\\data\\formal\\baostock\\metadata\\selected_codes.csv",
+        "selected_codes_path": "code/data/formal/baostock/metadata/selected_codes.csv",
         "selected_codes_rows": 572
       }
     },
@@ -149,31 +110,297 @@
       "financial_files": [],
       "report_files": []
     },
-    "stage_financial_and_reports": {
-      "skip_index_memberships": true,
-      "skip_metadata": false,
-      "skip_financials": true,
-      "skip_reports": true,
-      "stats": {
-        "index_snapshot_rows": 0,
-        "index_change_rows": 0,
-        "unique_codes": 572,
-        "stock_basic_rows": 8680,
-        "stock_industry_rows": 5509,
-        "all_a_history_rows": 5059,
-        "financial_rows": 0,
-        "report_rows": 0
-      }
+    "stage_4_parquet_outputs": {
+      "parquet_files": [
+        {
+          "csv_path": "code/data/formal/universes/all_a_tradable_history.csv",
+          "parquet_path": "code/data/formal/parquet/universes/all_a_tradable_history.parquet",
+          "parquet_exists": true,
+          "parquet_engine_available": true,
+          "csv_rows": 5059,
+          "csv_columns": [
+            "market_id",
+            "universe_id",
+            "stock_code",
+            "start_date",
+            "end_date"
+          ],
+          "csv_min_date": "1990-12-10",
+          "csv_max_date": "2026-03-31",
+          "parquet_rows": 5059,
+          "parquet_columns": [
+            "market_id",
+            "universe_id",
+            "stock_code",
+            "start_date",
+            "end_date"
+          ],
+          "row_count_match": true,
+          "column_match": true,
+          "parquet_min_date": "1990-12-10",
+          "parquet_max_date": "2026-03-31",
+          "date_range_match": true
+        },
+        {
+          "csv_path": "code/data/formal/universes/hs300_history.csv",
+          "parquet_path": "code/data/formal/parquet/universes/hs300_history.parquet",
+          "parquet_exists": true,
+          "parquet_engine_available": true,
+          "csv_rows": 300,
+          "csv_columns": [
+            "market_id",
+            "universe_id",
+            "stock_code",
+            "start_date",
+            "end_date"
+          ],
+          "csv_min_date": "2026-03-02",
+          "csv_max_date": "2026-03-02",
+          "parquet_rows": 300,
+          "parquet_columns": [
+            "market_id",
+            "universe_id",
+            "stock_code",
+            "start_date",
+            "end_date"
+          ],
+          "row_count_match": true,
+          "column_match": true,
+          "parquet_min_date": "2026-03-02",
+          "parquet_max_date": "2026-03-02",
+          "date_range_match": true
+        },
+        {
+          "csv_path": "code/data/formal/universes/sz50_history.csv",
+          "parquet_path": "code/data/formal/parquet/universes/sz50_history.parquet",
+          "parquet_exists": true,
+          "parquet_engine_available": true,
+          "csv_rows": 50,
+          "csv_columns": [
+            "market_id",
+            "universe_id",
+            "stock_code",
+            "start_date",
+            "end_date"
+          ],
+          "csv_min_date": "2026-03-02",
+          "csv_max_date": "2026-03-02",
+          "parquet_rows": 50,
+          "parquet_columns": [
+            "market_id",
+            "universe_id",
+            "stock_code",
+            "start_date",
+            "end_date"
+          ],
+          "row_count_match": true,
+          "column_match": true,
+          "parquet_min_date": "2026-03-02",
+          "parquet_max_date": "2026-03-02",
+          "date_range_match": true
+        },
+        {
+          "csv_path": "code/data/formal/universes/zz500_history.csv",
+          "parquet_path": "code/data/formal/parquet/universes/zz500_history.parquet",
+          "parquet_exists": true,
+          "parquet_engine_available": true,
+          "csv_rows": 500,
+          "csv_columns": [
+            "market_id",
+            "universe_id",
+            "stock_code",
+            "start_date",
+            "end_date"
+          ],
+          "csv_min_date": "2026-03-02",
+          "csv_max_date": "2026-03-02",
+          "parquet_rows": 500,
+          "parquet_columns": [
+            "market_id",
+            "universe_id",
+            "stock_code",
+            "start_date",
+            "end_date"
+          ],
+          "row_count_match": true,
+          "column_match": true,
+          "parquet_min_date": "2026-03-02",
+          "parquet_max_date": "2026-03-02",
+          "date_range_match": true
+        },
+        {
+          "csv_path": "code/data/formal/factors/hs300_factor_panel.csv",
+          "parquet_path": "code/data/formal/parquet/factors/hs300_factor_panel.parquet",
+          "parquet_exists": true,
+          "parquet_engine_available": true,
+          "csv_rows": 750,
+          "csv_columns": [
+            "stock_code",
+            "trade_date",
+            "industry",
+            "value_factor",
+            "momentum_factor",
+            "quality_factor",
+            "volatility_factor",
+            "turn_factor",
+            "ps_ttm",
+            "future_return"
+          ],
+          "csv_min_date": "2026-03-02",
+          "csv_max_date": "2026-04-03",
+          "parquet_rows": 750,
+          "parquet_columns": [
+            "stock_code",
+            "trade_date",
+            "industry",
+            "value_factor",
+            "momentum_factor",
+            "quality_factor",
+            "volatility_factor",
+            "turn_factor",
+            "ps_ttm",
+            "future_return"
+          ],
+          "row_count_match": true,
+          "column_match": true,
+          "parquet_min_date": "2026-03-02",
+          "parquet_max_date": "2026-04-03",
+          "date_range_match": true
+        },
+        {
+          "csv_path": "code/data/formal/factors/sz50_factor_panel.csv",
+          "parquet_path": "code/data/formal/parquet/factors/sz50_factor_panel.parquet",
+          "parquet_exists": true,
+          "parquet_engine_available": true,
+          "csv_rows": 1250,
+          "csv_columns": [
+            "stock_code",
+            "trade_date",
+            "industry",
+            "value_factor",
+            "momentum_factor",
+            "quality_factor",
+            "volatility_factor",
+            "turn_factor",
+            "ps_ttm",
+            "future_return"
+          ],
+          "csv_min_date": "2026-03-02",
+          "csv_max_date": "2026-04-03",
+          "parquet_rows": 1250,
+          "parquet_columns": [
+            "stock_code",
+            "trade_date",
+            "industry",
+            "value_factor",
+            "momentum_factor",
+            "quality_factor",
+            "volatility_factor",
+            "turn_factor",
+            "ps_ttm",
+            "future_return"
+          ],
+          "row_count_match": true,
+          "column_match": true,
+          "parquet_min_date": "2026-03-02",
+          "parquet_max_date": "2026-04-03",
+          "date_range_match": true
+        },
+        {
+          "csv_path": "code/data/formal/factors/zz500_factor_panel.csv",
+          "parquet_path": "code/data/formal/parquet/factors/zz500_factor_panel.parquet",
+          "parquet_exists": true,
+          "parquet_engine_available": true,
+          "csv_rows": 12500,
+          "csv_columns": [
+            "stock_code",
+            "trade_date",
+            "industry",
+            "value_factor",
+            "momentum_factor",
+            "quality_factor",
+            "volatility_factor",
+            "turn_factor",
+            "ps_ttm",
+            "future_return"
+          ],
+          "csv_min_date": "2026-03-02",
+          "csv_max_date": "2026-04-03",
+          "parquet_rows": 12500,
+          "parquet_columns": [
+            "stock_code",
+            "trade_date",
+            "industry",
+            "value_factor",
+            "momentum_factor",
+            "quality_factor",
+            "volatility_factor",
+            "turn_factor",
+            "ps_ttm",
+            "future_return"
+          ],
+          "row_count_match": true,
+          "column_match": true,
+          "parquet_min_date": "2026-03-02",
+          "parquet_max_date": "2026-04-03",
+          "date_range_match": true
+        },
+        {
+          "csv_path": "code/data/formal/master/shared_kline_panel.csv",
+          "parquet_path": "code/data/formal/parquet/master/shared_kline_panel.parquet",
+          "parquet_exists": true,
+          "parquet_engine_available": true,
+          "csv_rows": 14300,
+          "csv_columns": [
+            "date",
+            "code",
+            "open",
+            "high",
+            "low",
+            "close",
+            "preclose",
+            "volume",
+            "amount",
+            "adjustflag",
+            "turn",
+            "tradestatus",
+            "pctChg",
+            "peTTM",
+            "pbMRQ",
+            "psTTM",
+            "pcfNcfTTM",
+            "isST"
+          ],
+          "csv_min_date": "2026-03-02",
+          "csv_max_date": "2026-04-03",
+          "parquet_rows": 14300,
+          "parquet_columns": [
+            "date",
+            "code",
+            "open",
+            "high",
+            "low",
+            "close",
+            "preclose",
+            "volume",
+            "amount",
+            "adjustflag",
+            "turn",
+            "tradestatus",
+            "pctChg",
+            "peTTM",
+            "pbMRQ",
+            "psTTM",
+            "pcfNcfTTM",
+            "isST"
+          ],
+          "row_count_match": true,
+          "column_match": true,
+          "parquet_min_date": "2026-03-02",
+          "parquet_max_date": "2026-04-03",
+          "date_range_match": true
+        }
+      ]
     }
-  },
-  "stats": {
-    "index_snapshot_rows": 0,
-    "index_change_rows": 0,
-    "unique_codes": 572,
-    "stock_basic_rows": 8680,
-    "stock_industry_rows": 5509,
-    "all_a_history_rows": 5059,
-    "financial_rows": 0,
-    "report_rows": 0
   }
 }

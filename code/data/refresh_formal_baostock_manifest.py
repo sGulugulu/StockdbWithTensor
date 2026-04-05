@@ -12,6 +12,7 @@ if str(CODE_ROOT) not in sys.path:
     sys.path.insert(0, str(CODE_ROOT))
 
 from data.build_union_kline_panel import build_union_kline_panel
+from data.convert_formal_csv_to_parquet import summarize_parquet_outputs
 from stock_tensor.market import SymbolNormalizer
 
 
@@ -33,6 +34,34 @@ def _csv_date_range(path: Path, date_column: str) -> tuple[str | None, str | Non
     if not dates:
         return None, None
     return min(dates), max(dates)
+
+
+def _index_stage_source_summary(source_root: Path, index_id: str) -> dict[str, object]:
+    snapshots_path = source_root / "index_memberships" / f"{index_id}_snapshots.csv"
+    changes_path = source_root / "index_memberships" / f"{index_id}_changes.csv"
+    snapshots_start, snapshots_end = _csv_date_range(snapshots_path, "snapshot_date")
+    changes_start, changes_end = _csv_date_range(changes_path, "change_date")
+    metadata_root = source_root / "metadata"
+    return {
+        "source": "baostock",
+        "index_id": index_id,
+        "snapshot_path": str(snapshots_path),
+        "snapshot_rows": _csv_row_count(snapshots_path),
+        "snapshot_start_date": snapshots_start,
+        "snapshot_end_date": snapshots_end,
+        "changes_path": str(changes_path),
+        "changes_rows": _csv_row_count(changes_path),
+        "changes_start_date": changes_start,
+        "changes_end_date": changes_end,
+        "stock_basic_path": str(metadata_root / "stock_basic.csv"),
+        "stock_basic_rows": _csv_row_count(metadata_root / "stock_basic.csv"),
+        "stock_industry_path": str(metadata_root / "stock_industry.csv"),
+        "stock_industry_rows": _csv_row_count(metadata_root / "stock_industry.csv"),
+        "selected_codes_path": str(metadata_root / "selected_codes.csv"),
+        "selected_codes_rows": _csv_row_count(metadata_root / "selected_codes.csv"),
+        "all_a_codes_path": str(metadata_root / "all_a_codes.csv"),
+        "all_a_codes_rows": _csv_row_count(metadata_root / "all_a_codes.csv"),
+    }
 
 
 def _history_date_range(path: Path) -> tuple[str | None, str | None]:
@@ -194,12 +223,7 @@ def refresh_manifest(
     }
 
     for key, source in stage_sources.items():
-        source_manifest = source / "manifest.json"
-        manifest["stages"]["stage_1_stage_2_committed_sources"][key] = (
-            json.loads(source_manifest.read_text(encoding="utf-8"))
-            if source_manifest.exists()
-            else None
-        )
+        manifest["stages"]["stage_1_stage_2_committed_sources"][key] = _index_stage_source_summary(source, key)
 
     for universe_id in ("hs300", "sz50", "zz500"):
         history_path = formal_root / "universes" / f"{universe_id}_history.csv"
@@ -238,6 +262,9 @@ def refresh_manifest(
     manifest["stages"]["stage_2_formal_outputs"] = {
         "financial_files": sorted(str(path) for path in financial_dir.glob("*.csv")),
         "report_files": sorted(str(path) for path in reports_dir.glob("*.csv")),
+    }
+    manifest["stages"]["stage_4_parquet_outputs"] = {
+        "parquet_files": summarize_parquet_outputs(formal_root),
     }
 
     manifest_path = canonical_root / "manifest.json"
