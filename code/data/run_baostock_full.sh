@@ -36,7 +36,8 @@ END_DATE="${1:-2026-04-01}"
   --output-path code/data/formal/master/shared_kline_panel.csv \
   --start-date 2015-01-01 \
   --end-date "$END_DATE" \
-  --adjustflag 2
+  --adjustflag 2 \
+  --partition-by-year
 
 .venv/bin/python code/data/build_formal_factor_panel.py \
   --kline-path code/data/formal/master/shared_kline_panel.csv \

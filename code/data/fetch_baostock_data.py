@@ -17,6 +17,7 @@ if str(CODE_ROOT) not in sys.path:
     sys.path.insert(0, str(CODE_ROOT))
 
 from stock_tensor.market import SymbolNormalizer
+from data.year_windows import iter_year_date_ranges
 
 try:
     import baostock as bs
@@ -430,13 +431,16 @@ def _fetch_report_rows(
 ) -> list[dict[str, str]]:
     query = _report_queries()[query_name]
     rows: list[dict[str, str]] = []
+    date_windows = iter_year_date_ranges(start_date, end_date)
     for code in codes:
-        query_rows = _query_to_rows(query(code=code, start_date=start_date, end_date=end_date))
-        for row in query_rows:
-            row["dataset"] = query_name
-        rows.extend(query_rows)
-        if sleep_seconds > 0:
-            time.sleep(sleep_seconds)
+        for window_start, window_end, year_label in date_windows:
+            query_rows = _query_to_rows(query(code=code, start_date=window_start, end_date=window_end))
+            for row in query_rows:
+                row["dataset"] = query_name
+                row["query_year"] = str(year_label)
+            rows.extend(query_rows)
+            if sleep_seconds > 0:
+                time.sleep(sleep_seconds)
     return rows
 
 

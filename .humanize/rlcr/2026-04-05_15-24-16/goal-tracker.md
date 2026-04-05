@@ -54,7 +54,7 @@ RULES:
 ## MUTABLE SECTION
 <!-- Update each round with justification for changes -->
 
-### Plan Version: 3 (Updated: Round 2)
+### Plan Version: 4 (Updated: Round 3)
 
 #### Plan Evolution Log
 <!-- Document any changes to the plan with justification -->
@@ -65,18 +65,19 @@ RULES:
 | 0 | 第一批实现优先落在“正式数据目录骨架 + 全 A 可交易股票池历史生成 + 测试可离线导入” | 这三项可以在不等待长时间联网抓数的前提下直接落地，并为后续全 A 正式抓取链路提供稳定接口 | 直接推进 AC-1、AC-2、AC-3、AC-4、AC-5、AC-6、AC-12 |
 | 1 | 正式 profile 配置路径已切到 `code/data/formal/universes/` 与 `code/data/formal/factors/`，后端市场目录也已移除废弃的 `formal_cn_a` / `CSI_A500` 入口 | 这一部分实现与 Round 0 的正式研究口径一致，避免后端继续暴露已废弃的正式 A500 入口 | 直接推进 AC-1、AC-4、AC-7、AC-10，但不改变 AC-2、AC-3、AC-5 仍未完成的事实 |
 | 2 | all-A Stage 2 代码列表改为输出 baostock 原生代码格式，canonical refresh 默认源不再指向旧 `baostock_fg_test` / `baostock_sz50_fg` / `baostock_zz500_fg`，并新增可执行的 `CSV -> Parquet` 转换脚本 | Round 1 review 指出的两个正确性缺陷已在代码层被修复，同时 `Parquet` 不再只是 README 意图，而是具备了实际入口脚本 | 直接推进 AC-2、AC-3、AC-5、AC-7、AC-12，但不代表正式全量产物和 manifest parity 已完成 |
+| 3 | canonical manifest provenance 改为直接根据当前 canonical file set 重建，且 `.venv` 中已生成当前 structured CSV 基座对应的 parquet 输出并写入 parity 摘要 | Round 2 review 指出的 manifest 自反读取问题已被修复，同时 `Parquet` 不再停留在“脚本存在”阶段，而是已有可验证产物与 manifest 记录 | 直接推进 AC-2、AC-5、AC-12，但不改变 full-range shared master / factor / financial / report 仍未完成的事实 |
 
 #### Active Tasks
 <!-- Map each task to its target Acceptance Criterion and routing tag -->
 | Task | Target AC | Status | Tag | Owner | Notes |
 |------|-----------|--------|-----|-------|-------|
-| 重构正式数据目录，明确区分样例目录、正式全量目录、universe 历史目录以及 `CSV/Parquet` 双形态输出 | AC-1, AC-5, AC-6 | in_progress | coding | claude | structured `universes/`、`factors/`、`master/` 已在使用，且 all-A metadata / history 已有真实落盘；但 `financial/`、`reports/`、`parquet/` 仍未形成正式全量产物，manifest 也还没有 CSV/Parquet 对应关系 |
-| 完成全 A 股基础资料、行业信息和全 A 可交易股票池历史的本地落盘与 manifest 记录 | AC-1, AC-2, AC-4 | in_progress | coding | claude | canonical formal root 下已真实落盘 `stock_basic.csv`、`stock_industry.csv`、`all_a_codes.csv`、`all_a_tradable_history.csv`；但 canonical manifest 仍引用旧窗口阶段信息，尚未成为可信的正式基座记录 |
+| 重构正式数据目录，明确区分样例目录、正式全量目录、universe 历史目录以及 `CSV/Parquet` 双形态输出 | AC-1, AC-5, AC-6 | in_progress | coding | claude | structured `universes/`、`factors/`、`master/` 已在使用，且 `parquet/universes`、`parquet/factors`、`parquet/master` 已有真实输出；但 shared master / factor 仍是短窗口夹具，`financial/` 与 `reports/` 仍为空，Stage 4 也尚未覆盖这些缺失的正式全量 CSV |
+| 完成全 A 股基础资料、行业信息和全 A 可交易股票池历史的本地落盘与 manifest 记录 | AC-1, AC-2, AC-4 | in_progress | coding | claude | canonical formal root 下已真实落盘 `stock_basic.csv`、`stock_industry.csv`、`all_a_codes.csv`、`all_a_tradable_history.csv`；canonical manifest provenance 已改为直接基于当前 canonical files 重建，但它记录的 structured shared master / factor 仍是短窗口状态，不是最终正式基座 |
 | 完成 `HS300` / `SZ50` / `ZZ500` 指数成分股快照、变更记录与成员历史文件构建 | AC-2, AC-4 | pending | coding | claude | 回测必须按历史时点成员过滤，不能退化为静态股票名单 |
 | 完成全 A 股前复权行情抓取与统一主数据落盘，并为正式 profile 提供共享输入 | AC-1, AC-2, AC-4 | pending | coding | claude | batch 脚本已切到 `metadata/all_a_codes.csv` 作为 shared kline 输入，但仓库中已提交的 `shared_kline_panel.csv` 与 factor panels 仍是 `572` 只股票、`2026-03-02` 到 `2026-04-03` 的短窗口夹具，不是计划要求的全 A 正式主数据 |
 | 完成全 A 股财务与报告数据按表类型的正式落盘，并补齐 canonical `financial/` 与 `reports/` 目录 | AC-1, AC-3, AC-12 | pending | coding | claude | 这是当前已知最大数据缺口，必须支持恢复执行 |
 | 生成正式因子面板与张量输入，确保 `formal_hs300` / `formal_sz50` / `formal_zz500` 都引用真实正式数据 | AC-4, AC-7, AC-9, AC-13 | pending | coding | claude | formal profile 不能回退样例数据，也不能出现 `universe_id` 与文件路径失配 |
-| 将正式数据从 `CSV` 转换为 `Parquet`，并保证字段合同、日期区间与 manifest 一致 | AC-5, AC-12 | pending | coding | claude | `convert_formal_csv_to_parquet.py` 已存在，但 batch 流程尚未调用它，`code/data/formal/parquet/` 仍为空，manifest 也没有记录 CSV/Parquet 一一对应与 parity 校验结果 |
+| 将正式数据从 `CSV` 转换为 `Parquet`，并保证字段合同、日期区间与 manifest 一致 | AC-5, AC-12 | pending | coding | claude | `convert_formal_csv_to_parquet.py` 已在 `.venv` 中生成当前 structured CSV 基座对应的 parquet 输出，manifest 也已记录 row-count / column / date-range parity；但 batch 流程仍未调用转换脚本，且当前 parquet 仅镜像短窗口 structured CSV，不是计划要求的 full-range formal 数据 |
 | 保持并补强 Web 后端 / 前端对正式 profile 的支持，保证市场列表、运行配置和结果展示与新正式数据结构一致 | AC-9, AC-10, AC-13 | pending | coding | claude | 前端构建与后端 API 合同都要持续回归 |
 | 继续推进 `PyTorch` 设备层、CUDA 优先路径和 `Triton/CUDA` 热点接口预留，并保留 CPU 回退 | AC-11, AC-12 | pending | coding | claude | CUDA 验证需要真实可用环境；在此之前只能完成接口与 CPU fallback 的可验证部分 |
 | 保持 `sample_cn_smoke` / `sample_us_equity` 样例路径可用，作为 smoke test 和接口联调夹具 | AC-6, AC-8, AC-12 | pending | coding | claude | 样例数据要保留，但必须和正式全量目录严格隔离 |
@@ -97,6 +98,6 @@ RULES:
 |-------|-----------------|-------------|-----------------|
 | 当前 `fetch_baostock_data.py` 直到本轮之前都在模块导入时强依赖 `baostock`，导致 Windows 侧未安装 `baostock` 时连纯辅助测试都无法导入 | 0 | AC-12 | 已改为按需导入 `baostock`；后续保持纯数据整理函数不依赖 live API 环境 |
 | canonical formal root 下已真实落盘 `stock_basic.csv`、`stock_industry.csv`、`all_a_codes.csv` 与 `all_a_tradable_history.csv`，但 `financial/` / `reports/` 仍为空目录 | 0 | AC-1, AC-2, AC-3 | 在同一 canonical root 下完成 all-A Stage 2 正式抓取，并让 manifest 直接记录这些真实输出而不是继续沿用旧窗口元数据 |
-| 新建的 `code/data/formal/universes/`、`code/data/formal/factors/`、`code/data/formal/master/` 目前承载的仍是短窗口迁移夹具，而 `financial/`、`reports/`、`parquet/` 目录仍是占位状态，不是计划要求的 `2015-01-01` 到 `2026-04-01` 正式全量数据 | 1 | AC-1, AC-2, AC-3, AC-5 | 必须在真实全量 baostock 抓取完成后重建 structured 目录产物，并让 manifest、CSV 和 Parquet 一起指向正式全量版本 |
-| `refresh_formal_baostock_manifest.py` 已不再默认复制旧 fixture 树，但在默认参数下仍会把当前 canonical `manifest.json` 自身当作 `hs300` / `sz50` / `zz500` 三个 committed source 反向读入，导致 `stage_1_stage_2_committed_sources` 与窗口信息继续失真 | 2 | AC-1, AC-2, AC-3, AC-4 | refresh 必须改为读取独立的阶段源 manifest，或直接根据当前 canonical Stage 1/2 真实输出重建 source stats，不能再把 canonical manifest 自己当作三份来源元数据 |
-| `CSV -> Parquet` 转换脚本已添加，但 `.venv` 当前仍缺少 parquet engine，且 canonical full-range CSV 数据本身尚未补齐，所以 `code/data/formal/parquet/` 仍为空且没有任何 manifest parity 记录 | 2 | AC-5, AC-12 | 在 `.venv` 安装 `pyarrow` 或 `fastparquet` 后，以真实 full-range CSV 产物运行转换，补充 schema / row-count / date-range parity 校验并把映射写入 manifest |
+| 虽然 all-A metadata / history 已真实落盘，且 manifest provenance 已修复，但 `code/data/formal/master/shared_kline_panel.csv` 与三个 structured factor panels 仍是 `2026-03-02` 到 `2026-04-03` 的短窗口夹具，不是计划要求的 `2015-01-01` 到 `2026-04-01` shared market base | 3 | AC-1, AC-2, AC-4, AC-5 | 必须用真实 all-A shared kline 重建 `master/` 与 `factors/`，再让 formal profiles、manifest 与 parquet 一起切到 full-range 正式版本 |
+| `run_baostock_full.sh` 仍未调用 `convert_formal_csv_to_parquet.py`，因此标准 batch 运行不会自动重建 Stage 4 parquet 镜像，现有 parquet 产物仍可能与未来 CSV 变化脱节 | 3 | AC-5, AC-12 | 在标准 formal batch 末尾加入 CSV -> Parquet 转换，再刷新 manifest，确保 fresh run 可稳定重建 Stage 4 输出与 parity 元数据 |
+| `.venv` 中虽已安装 `pyarrow` 且当前 structured CSV 基座已有 parquet / parity 记录，但 canonical `financial/` 与 `reports/` 仍为空，Stage 4 也因此无法覆盖计划要求的财务/报告正式数据集 | 3 | AC-3, AC-5, AC-12 | 先完成 all-A Stage 2 正式抓取，再将对应 CSV 纳入转换目标并把 parity 记录写入 canonical manifest |
