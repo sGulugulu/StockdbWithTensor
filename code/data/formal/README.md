@@ -2,10 +2,10 @@
 
 This directory now has two responsibilities:
 
-1. Keep the legacy local formal fixtures that current committed profiles still read.
+1. Keep the legacy local formal fixtures as backward-compatible raw inputs.
 2. Host the newer full-data layout for the formal all-A-share pipeline.
 
-Legacy committed files such as `hs300_history.csv` and `hs300_factor_panel.csv` are still kept here so the existing formal profiles and smoke-style validations continue to run.
+Legacy committed files such as `hs300_history.csv` and `hs300_factor_panel.csv` are still kept here as source fixtures and migration fallbacks, while the formal profiles are moving to the structured `universes/` and `factors/` layout.
 
 For the newer formal layout, prefer the following structure:
 
@@ -17,7 +17,7 @@ For the newer formal layout, prefer the following structure:
   - `sz50_history.csv`
   - `zz500_history.csv`
 - `code/data/formal/master/`
-  - shared all-A-share daily / valuation panel
+  - shared CN-A master / shared kline panel used by formal profile builders
 - `code/data/formal/financial/`
   - table-split full-data financial exports
 - `code/data/formal/reports/`
@@ -91,7 +91,7 @@ After the constituent snapshots are ready, you can build member-history files an
 ```powershell
 .venv/bin/python code/data/fetch_baostock_kline.py `
   --codes-file code/data/formal/baostock/metadata/selected_codes.csv `
-  --output-path code/data/formal/master/all_a_kline_panel.csv `
+  --output-path code/data/formal/master/shared_kline_panel.csv `
   --start-date 2015-01-01 `
   --end-date 2026-04-01
 ```

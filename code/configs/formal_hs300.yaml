@@ -2,10 +2,10 @@ market:
   market_id: cn_a
   universe_id: HS300
   start_date: 2015-01-01
-  end_date: 2026-12-31
+  end_date: 2026-04-01
   timezone: Asia/Shanghai
   currency: CNY
-  universe_path: ../data/formal/hs300_history.csv
+  universe_path: ../data/formal/universes/hs300_history.csv
   universe_symbol_column: stock_code
   universe_start_column: start_date
   universe_end_column: end_date
@@ -13,7 +13,7 @@ market:
   universe_id_column: universe_id
 
 data:
-  path: ../data/formal/hs300_factor_panel.csv
+  path: ../data/formal/factors/hs300_factor_panel.csv
   format: wide
   stock_column: stock_code
   date_column: trade_date

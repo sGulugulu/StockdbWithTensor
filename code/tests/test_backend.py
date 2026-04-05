@@ -65,6 +65,7 @@ class BackendTests(unittest.TestCase):
                     option_ids = [item["option_id"] for item in market_payload]
                     self.assertEqual(len(option_ids), len(set(option_ids)))
                     self.assertTrue(any(item["config_profile"] == "formal_hs300" for item in market_payload))
+                    self.assertFalse(any(item["config_profile"] == "formal_cn_a" for item in market_payload))
 
                     response = await client.get(
                         "/api/runs/api_test_run/selection",
@@ -126,12 +127,14 @@ class BackendTests(unittest.TestCase):
                         (Path(temp_dir) / "formal_hs300_config_check" / "submitted_config.yaml").read_text(encoding="utf-8")
                     )
                     self.assertEqual(submitted_config["market"]["universe_id"], "HS300")
+                    self.assertEqual(str(submitted_config["market"]["start_date"]), "2015-01-01")
+                    self.assertEqual(str(submitted_config["market"]["end_date"]), "2026-04-01")
                     self.assertEqual(submitted_config["output"]["root_dir"], "..")
-                    self.assertTrue(str(submitted_config["market"]["universe_path"]).endswith("hs300_history.csv"))
-                    self.assertTrue(str(submitted_config["data"]["path"]).endswith("hs300_factor_panel.csv"))
+                    self.assertTrue(str(submitted_config["market"]["universe_path"]).endswith("universes/hs300_history.csv"))
+                    self.assertTrue(str(submitted_config["data"]["path"]).endswith("factors/hs300_factor_panel.csv"))
 
-                    formal_history = ROOT / "data" / "formal" / "hs300_history.csv"
-                    formal_panel = ROOT / "data" / "formal" / "hs300_factor_panel.csv"
+                    formal_history = ROOT / "data" / "formal" / "universes" / "hs300_history.csv"
+                    formal_panel = ROOT / "data" / "formal" / "factors" / "hs300_factor_panel.csv"
                     if formal_history.exists() and formal_panel.exists():
                         response = await client.post(
                             "/api/runs",
@@ -158,8 +161,8 @@ class BackendTests(unittest.TestCase):
                         ("formal_zz500", "ZZ500"),
                     ]
                     for profile_name, universe_id in formal_profiles:
-                        formal_history = ROOT / "data" / "formal" / f"{universe_id.lower()}_history.csv"
-                        formal_panel = ROOT / "data" / "formal" / f"{universe_id.lower()}_factor_panel.csv"
+                        formal_history = ROOT / "data" / "formal" / "universes" / f"{universe_id.lower()}_history.csv"
+                        formal_panel = ROOT / "data" / "formal" / "factors" / f"{universe_id.lower()}_factor_panel.csv"
                         if not formal_history.exists() or not formal_panel.exists():
                             continue
                         run_id = f"{profile_name}_real_run"
@@ -187,15 +190,17 @@ class BackendTests(unittest.TestCase):
                             (Path(temp_dir) / run_id / "submitted_config.yaml").read_text(encoding="utf-8")
                         )
                         self.assertEqual(submitted_config["market"]["universe_id"], universe_id)
+                        self.assertEqual(str(submitted_config["market"]["start_date"]), "2015-01-01")
+                        self.assertEqual(str(submitted_config["market"]["end_date"]), "2026-04-01")
                         self.assertEqual(submitted_config["output"]["root_dir"], "..")
                         self.assertTrue(
                             str(submitted_config["market"]["universe_path"]).endswith(
-                                f"{universe_id.lower()}_history.csv"
+                                f"universes/{universe_id.lower()}_history.csv"
                             )
                         )
                         self.assertTrue(
                             str(submitted_config["data"]["path"]).endswith(
-                                f"{universe_id.lower()}_factor_panel.csv"
+                                f"factors/{universe_id.lower()}_factor_panel.csv"
                             )
                         )
 

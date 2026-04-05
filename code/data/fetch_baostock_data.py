@@ -243,6 +243,37 @@ def build_all_a_tradable_history_rows(
     return history_rows
 
 
+def _load_stock_basic_rows_from_output(output_root: Path) -> list[dict[str, str]]:
+    path = output_root / "metadata" / "stock_basic.csv"
+    if not path.exists():
+        raise FileNotFoundError(f"stock_basic.csv not found: {path}")
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        return list(csv.DictReader(handle))
+
+
+def _all_a_codes_from_stock_basic_rows(stock_basic_rows: list[dict[str, str]]) -> list[str]:
+    normalizer = SymbolNormalizer("cn_a")
+    codes = {
+        normalizer.normalize(row["code"])
+        for row in stock_basic_rows
+        if row.get("code") and _is_cn_a_equity_row(row)
+    }
+    return sorted(codes)
+
+
+def _resolve_stage2_codes(
+    *,
+    stage2_scope: str,
+    selected_codes: list[str],
+    stock_basic_rows: list[dict[str, str]] | None,
+    output_root: Path,
+) -> list[str]:
+    if stage2_scope == "selected":
+        return selected_codes
+    effective_rows = stock_basic_rows if stock_basic_rows is not None else _load_stock_basic_rows_from_output(output_root)
+    return _all_a_codes_from_stock_basic_rows(effective_rows)
+
+
 def _fetch_trade_dates(start_date: str, end_date: str) -> list[str]:
     client = _require_baostock()
     rows = _query_to_rows(client.query_trade_dates(start_date=start_date, end_date=end_date))
@@ -413,11 +444,14 @@ def fetch_baostock_bundle(
     skip_index_memberships: bool,
     skip_metadata: bool,
     metadata_scope: str,
+    stage2_scope: str,
     all_a_history_output: Path | None,
     selected_codes_file: Path | None,
     resume: bool,
 ) -> FetchStats:
     output_root.mkdir(parents=True, exist_ok=True)
+    if all_a_history_output is not None and metadata_scope != "all_a":
+        raise ValueError("all_a_history_output requires metadata_scope=all_a.")
     _log(
         f"[baostock] start fetch: output_root={output_root}, start_date={start_date}, "
         f"end_date={end_date}, indices={indices}, financial_years={financial_start_year}-{financial_end_year}"
@@ -467,6 +501,7 @@ def fetch_baostock_bundle(
         stats.unique_codes = len(selected_codes)
         _log(f"[baostock] unique selected codes: {stats.unique_codes}")
 
+        stock_basic_rows: list[dict[str, str]] | None = None
         if not skip_metadata:
             metadata_codes = None if metadata_scope == "all_a" else set(selected_codes)
             stock_basic_rows = _fetch_stock_basic(metadata_codes)
@@ -490,6 +525,12 @@ def fetch_baostock_bundle(
                 _write_csv(output_root / "metadata" / "selected_codes.csv", [{"code": code} for code in selected_codes])
 
         if not skip_financials:
+            stage2_codes = _resolve_stage2_codes(
+                stage2_scope=stage2_scope,
+                selected_codes=selected_codes,
+                stock_basic_rows=stock_basic_rows,
+                output_root=output_root,
+            )
             quarter_pairs = _iter_quarters(financial_start_year, financial_end_year)
             progress_path = output_root / "financial" / "_progress.json"
             progress = _load_progress(progress_path) if resume else {}
@@ -497,7 +538,7 @@ def fetch_baostock_bundle(
                 _log(f"[baostock] fetching financial dataset: {query_name}")
                 completed_codes = set(progress.get(query_name, []))
                 dataset_rows = 0
-                for index, code in enumerate(selected_codes, start=1):
+                for index, code in enumerate(stage2_codes, start=1):
                     if code in completed_codes:
                         continue
                     rows = _fetch_financial_rows(
@@ -512,21 +553,27 @@ def fetch_baostock_bundle(
                     completed_codes.add(code)
                     progress[query_name] = sorted(completed_codes)
                     _save_progress(progress_path, progress)
-                    if index == 1 or index % 25 == 0 or index == len(selected_codes):
+                    if index == 1 or index % 25 == 0 or index == len(stage2_codes):
                         _log(
                             f"[baostock] financial progress: dataset={query_name}, "
-                            f"code_index={index}/{len(selected_codes)}, code={code}, rows_written={dataset_rows}"
+                            f"code_index={index}/{len(stage2_codes)}, code={code}, rows_written={dataset_rows}"
                         )
                 _log(f"[baostock] financial dataset complete: {query_name}, rows={dataset_rows}")
 
         if not skip_reports:
+            stage2_codes = _resolve_stage2_codes(
+                stage2_scope=stage2_scope,
+                selected_codes=selected_codes,
+                stock_basic_rows=stock_basic_rows,
+                output_root=output_root,
+            )
             progress_path = output_root / "reports" / "_progress.json"
             progress = _load_progress(progress_path) if resume else {}
             for query_name in _report_queries():
                 _log(f"[baostock] fetching report dataset: {query_name}")
                 completed_codes = set(progress.get(query_name, []))
                 dataset_rows = 0
-                for index, code in enumerate(selected_codes, start=1):
+                for index, code in enumerate(stage2_codes, start=1):
                     if code in completed_codes:
                         continue
                     rows = _fetch_report_rows(
@@ -542,10 +589,10 @@ def fetch_baostock_bundle(
                     completed_codes.add(code)
                     progress[query_name] = sorted(completed_codes)
                     _save_progress(progress_path, progress)
-                    if index == 1 or index % 25 == 0 or index == len(selected_codes):
+                    if index == 1 or index % 25 == 0 or index == len(stage2_codes):
                         _log(
                             f"[baostock] report progress: dataset={query_name}, "
-                            f"code_index={index}/{len(selected_codes)}, code={code}, rows_written={dataset_rows}"
+                            f"code_index={index}/{len(stage2_codes)}, code={code}, rows_written={dataset_rows}"
                         )
                 _log(f"[baostock] report dataset complete: {query_name}, rows={dataset_rows}")
 
@@ -611,10 +658,11 @@ def main() -> None:
     parser.add_argument("--skip-index-memberships", action="store_true")
     parser.add_argument("--skip-metadata", action="store_true")
     parser.add_argument("--metadata-scope", choices=["selected", "all_a"], default="selected")
+    parser.add_argument("--stage2-scope", choices=["selected", "all_a"], default="selected")
     parser.add_argument(
         "--all-a-history-output",
         type=Path,
-        default=Path("code/data/formal/universes/all_a_tradable_history.csv"),
+        default=None,
     )
     parser.add_argument("--skip-financials", action="store_true")
     parser.add_argument("--skip-reports", action="store_true")
@@ -636,6 +684,7 @@ def main() -> None:
         skip_index_memberships=args.skip_index_memberships,
         skip_metadata=args.skip_metadata,
         metadata_scope=args.metadata_scope,
+        stage2_scope=args.stage2_scope,
         all_a_history_output=args.all_a_history_output.resolve() if args.all_a_history_output else None,
         selected_codes_file=args.selected_codes_file.resolve() if args.selected_codes_file else None,
         resume=not args.no_resume,
