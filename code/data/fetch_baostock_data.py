@@ -10,28 +10,55 @@ from datetime import date
 from pathlib import Path
 from typing import Callable
 
-import baostock as bs
+import sys
+
+CODE_ROOT = Path(__file__).resolve().parents[1]
+if str(CODE_ROOT) not in sys.path:
+    sys.path.insert(0, str(CODE_ROOT))
+
+from stock_tensor.market import SymbolNormalizer
+
+try:
+    import baostock as bs
+except ImportError:
+    bs = None
 
 
-INDEX_QUERIES: dict[str, Callable[[str], object]] = {
-    "hs300": bs.query_hs300_stocks,
-    "sz50": bs.query_sz50_stocks,
-    "zz500": bs.query_zz500_stocks,
-}
+def _require_baostock() -> object:
+    if bs is None:
+        raise ModuleNotFoundError(
+            "baostock is required for live data fetching. Install it in the active environment first."
+        )
+    return bs
 
-FINANCIAL_QUERIES: dict[str, Callable[..., object]] = {
-    "profit_data": bs.query_profit_data,
-    "operation_data": bs.query_operation_data,
-    "growth_data": bs.query_growth_data,
-    "balance_data": bs.query_balance_data,
-    "cash_flow_data": bs.query_cash_flow_data,
-    "dupont_data": bs.query_dupont_data,
-}
 
-REPORT_QUERIES: dict[str, Callable[..., object]] = {
-    "performance_express_report": bs.query_performance_express_report,
-    "forecast_report": bs.query_forecast_report,
-}
+def _index_queries() -> dict[str, Callable[[str], object]]:
+    client = _require_baostock()
+    return {
+        "hs300": client.query_hs300_stocks,
+        "sz50": client.query_sz50_stocks,
+        "zz500": client.query_zz500_stocks,
+    }
+
+
+def _financial_queries() -> dict[str, Callable[..., object]]:
+    client = _require_baostock()
+    return {
+        "profit_data": client.query_profit_data,
+        "operation_data": client.query_operation_data,
+        "growth_data": client.query_growth_data,
+        "balance_data": client.query_balance_data,
+        "cash_flow_data": client.query_cash_flow_data,
+        "dupont_data": client.query_dupont_data,
+    }
+
+
+def _report_queries() -> dict[str, Callable[..., object]]:
+    client = _require_baostock()
+    return {
+        "performance_express_report": client.query_performance_express_report,
+        "forecast_report": client.query_forecast_report,
+    }
 
 
 def _log(message: str) -> None:
@@ -45,6 +72,7 @@ class FetchStats:
     unique_codes: int = 0
     stock_basic_rows: int = 0
     stock_industry_rows: int = 0
+    all_a_history_rows: int = 0
     financial_rows: int = 0
     report_rows: int = 0
 
@@ -56,6 +84,7 @@ def _empty_stats() -> dict[str, int]:
         "unique_codes": 0,
         "stock_basic_rows": 0,
         "stock_industry_rows": 0,
+        "all_a_history_rows": 0,
         "financial_rows": 0,
         "report_rows": 0,
     }
@@ -173,8 +202,50 @@ def _iter_quarters(start_year: int, end_year: int) -> list[tuple[int, int]]:
     return pairs
 
 
+def _is_cn_a_equity_row(row: dict[str, str]) -> bool:
+    code = row.get("code", "").strip().lower()
+    stock_type = row.get("type", "").strip()
+    if stock_type and stock_type != "1":
+        return False
+    if code.startswith("sh.60") or code.startswith("sh.68"):
+        return True
+    if code.startswith("sz.000") or code.startswith("sz.001") or code.startswith("sz.002"):
+        return True
+    if code.startswith("sz.003") or code.startswith("sz.300"):
+        return True
+    return False
+
+
+def build_all_a_tradable_history_rows(
+    stock_basic_rows: list[dict[str, str]],
+    *,
+    horizon_date: str,
+) -> list[dict[str, str]]:
+    normalizer = SymbolNormalizer("cn_a")
+    history_rows: list[dict[str, str]] = []
+    for row in stock_basic_rows:
+        if not _is_cn_a_equity_row(row):
+            continue
+        ipo_date = row.get("ipoDate", "").strip()
+        if not ipo_date:
+            continue
+        out_date = row.get("outDate", "").strip() or horizon_date
+        history_rows.append(
+            {
+                "market_id": "cn_a",
+                "universe_id": "ALL_A",
+                "stock_code": normalizer.normalize(row["code"]),
+                "start_date": ipo_date,
+                "end_date": out_date,
+            }
+        )
+    history_rows.sort(key=lambda item: (item["stock_code"], item["start_date"]))
+    return history_rows
+
+
 def _fetch_trade_dates(start_date: str, end_date: str) -> list[str]:
-    rows = _query_to_rows(bs.query_trade_dates(start_date=start_date, end_date=end_date))
+    client = _require_baostock()
+    rows = _query_to_rows(client.query_trade_dates(start_date=start_date, end_date=end_date))
     return [row["calendar_date"] for row in rows if row.get("is_trading_day") == "1"]
 
 
@@ -184,7 +255,7 @@ def _fetch_index_snapshots(
     trade_dates: list[str],
     sleep_seconds: float,
 ) -> list[dict[str, str]]:
-    query = INDEX_QUERIES[index_id]
+    query = _index_queries()[index_id]
     snapshot_cache: dict[str, list[dict[str, str]]] = {}
     effective_date_cache: dict[str, str] = {}
 
@@ -241,16 +312,18 @@ def _fetch_index_snapshots(
     return snapshots
 
 
-def _fetch_stock_basic(codes: set[str]) -> list[dict[str, str]]:
-    rows = _query_to_rows(bs.query_stock_basic())
-    filtered = [row for row in rows if row.get("code") in codes]
+def _fetch_stock_basic(codes: set[str] | None = None) -> list[dict[str, str]]:
+    client = _require_baostock()
+    rows = _query_to_rows(client.query_stock_basic())
+    filtered = rows if codes is None else [row for row in rows if row.get("code") in codes]
     filtered.sort(key=lambda row: row["code"])
     return filtered
 
 
-def _fetch_stock_industry(codes: set[str], as_of_date: str) -> list[dict[str, str]]:
-    rows = _query_to_rows(bs.query_stock_industry(date=as_of_date))
-    filtered = [row for row in rows if row.get("code") in codes]
+def _fetch_stock_industry(codes: set[str] | None, as_of_date: str) -> list[dict[str, str]]:
+    client = _require_baostock()
+    rows = _query_to_rows(client.query_stock_industry(date=as_of_date))
+    filtered = rows if codes is None else [row for row in rows if row.get("code") in codes]
     filtered.sort(key=lambda row: row["code"])
     return filtered
 
@@ -290,7 +363,7 @@ def _fetch_financial_rows(
     quarter_pairs: list[tuple[int, int]],
     sleep_seconds: float,
 ) -> list[dict[str, str]]:
-    query = FINANCIAL_QUERIES[query_name]
+    query = _financial_queries()[query_name]
     rows: list[dict[str, str]] = []
     for code in codes:
         for year, quarter in quarter_pairs:
@@ -313,7 +386,7 @@ def _fetch_report_rows(
     end_date: str,
     sleep_seconds: float,
 ) -> list[dict[str, str]]:
-    query = REPORT_QUERIES[query_name]
+    query = _report_queries()[query_name]
     rows: list[dict[str, str]] = []
     for code in codes:
         query_rows = _query_to_rows(query(code=code, start_date=start_date, end_date=end_date))
@@ -339,6 +412,8 @@ def fetch_baostock_bundle(
     skip_reports: bool,
     skip_index_memberships: bool,
     skip_metadata: bool,
+    metadata_scope: str,
+    all_a_history_output: Path | None,
     selected_codes_file: Path | None,
     resume: bool,
 ) -> FetchStats:
@@ -347,7 +422,8 @@ def fetch_baostock_bundle(
         f"[baostock] start fetch: output_root={output_root}, start_date={start_date}, "
         f"end_date={end_date}, indices={indices}, financial_years={financial_start_year}-{financial_end_year}"
     )
-    login_result = bs.login()
+    client = _require_baostock()
+    login_result = client.login()
     if login_result.error_code != "0":
         raise RuntimeError(f"baostock login failed: {login_result.error_code} {login_result.error_msg}")
     _log("[baostock] login success")
@@ -392,16 +468,21 @@ def fetch_baostock_bundle(
         _log(f"[baostock] unique selected codes: {stats.unique_codes}")
 
         if not skip_metadata:
-            stock_basic_rows = _fetch_stock_basic(set(selected_codes))
-            stock_industry_rows = _fetch_stock_industry(set(selected_codes), end_date)
+            metadata_codes = None if metadata_scope == "all_a" else set(selected_codes)
+            stock_basic_rows = _fetch_stock_basic(metadata_codes)
+            stock_industry_rows = _fetch_stock_industry(metadata_codes, end_date)
             _write_csv(output_root / "metadata" / "stock_basic.csv", stock_basic_rows)
             _write_csv(output_root / "metadata" / "stock_industry.csv", stock_industry_rows)
             _write_csv(output_root / "metadata" / "selected_codes.csv", [{"code": code} for code in selected_codes])
+            if all_a_history_output is not None:
+                all_a_history_rows = build_all_a_tradable_history_rows(stock_basic_rows, horizon_date=end_date)
+                _write_csv(all_a_history_output, all_a_history_rows)
+                stats.all_a_history_rows = len(all_a_history_rows)
             stats.stock_basic_rows = len(stock_basic_rows)
             stats.stock_industry_rows = len(stock_industry_rows)
             _log(
                 f"[baostock] metadata complete: stock_basic={stats.stock_basic_rows}, "
-                f"stock_industry={stats.stock_industry_rows}"
+                f"stock_industry={stats.stock_industry_rows}, all_a_history={stats.all_a_history_rows}"
             )
         else:
             _log("[baostock] skip metadata stage")
@@ -412,7 +493,7 @@ def fetch_baostock_bundle(
             quarter_pairs = _iter_quarters(financial_start_year, financial_end_year)
             progress_path = output_root / "financial" / "_progress.json"
             progress = _load_progress(progress_path) if resume else {}
-            for query_name in FINANCIAL_QUERIES:
+            for query_name in _financial_queries():
                 _log(f"[baostock] fetching financial dataset: {query_name}")
                 completed_codes = set(progress.get(query_name, []))
                 dataset_rows = 0
@@ -441,7 +522,7 @@ def fetch_baostock_bundle(
         if not skip_reports:
             progress_path = output_root / "reports" / "_progress.json"
             progress = _load_progress(progress_path) if resume else {}
-            for query_name in REPORT_QUERIES:
+            for query_name in _report_queries():
                 _log(f"[baostock] fetching report dataset: {query_name}")
                 completed_codes = set(progress.get(query_name, []))
                 dataset_rows = 0
@@ -492,6 +573,7 @@ def fetch_baostock_bundle(
             "unique_codes": stats.unique_codes,
             "stock_basic_rows": stats.stock_basic_rows,
             "stock_industry_rows": stats.stock_industry_rows,
+            "all_a_history_rows": stats.all_a_history_rows,
             "financial_rows": stats.financial_rows,
             "report_rows": stats.report_rows,
         }
@@ -512,7 +594,7 @@ def fetch_baostock_bundle(
         )
         return stats
     finally:
-        bs.logout()
+        client.logout()
         _log("[baostock] logout success")
 
 
@@ -528,6 +610,12 @@ def main() -> None:
     parser.add_argument("--sleep-seconds", type=float, default=0.0)
     parser.add_argument("--skip-index-memberships", action="store_true")
     parser.add_argument("--skip-metadata", action="store_true")
+    parser.add_argument("--metadata-scope", choices=["selected", "all_a"], default="selected")
+    parser.add_argument(
+        "--all-a-history-output",
+        type=Path,
+        default=Path("code/data/formal/universes/all_a_tradable_history.csv"),
+    )
     parser.add_argument("--skip-financials", action="store_true")
     parser.add_argument("--skip-reports", action="store_true")
     parser.add_argument("--selected-codes-file", type=Path, default=None)
@@ -547,6 +635,8 @@ def main() -> None:
         skip_reports=args.skip_reports,
         skip_index_memberships=args.skip_index_memberships,
         skip_metadata=args.skip_metadata,
+        metadata_scope=args.metadata_scope,
+        all_a_history_output=args.all_a_history_output.resolve() if args.all_a_history_output else None,
         selected_codes_file=args.selected_codes_file.resolve() if args.selected_codes_file else None,
         resume=not args.no_resume,
     )
@@ -559,6 +649,7 @@ def main() -> None:
                 "unique_codes": stats.unique_codes,
                 "stock_basic_rows": stats.stock_basic_rows,
                 "stock_industry_rows": stats.stock_industry_rows,
+                "all_a_history_rows": stats.all_a_history_rows,
                 "financial_rows": stats.financial_rows,
                 "report_rows": stats.report_rows,
             },
