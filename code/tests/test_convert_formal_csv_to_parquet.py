@@ -10,6 +10,7 @@ from data.convert_formal_csv_to_parquet import (
     convert_formal_csv_to_parquet,
     parquet_engine_available,
     pd,
+    summarize_parquet_outputs,
 )
 
 
@@ -45,6 +46,10 @@ class ConvertFormalCsvToParquetTests(unittest.TestCase):
             self.assertEqual(len(converted), 1)
             parquet_path = root / "parquet" / "universes" / "hs300_history.parquet"
             self.assertTrue(parquet_path.exists())
+            summary = summarize_parquet_outputs(root)
+            self.assertEqual(len(summary), 1)
+            self.assertTrue(summary[0]["row_count_match"])
+            self.assertTrue(summary[0]["column_match"])
 
 
 if __name__ == "__main__":
