@@ -4,7 +4,12 @@ import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from data.fetch_baostock_data import _derive_change_rows, _iter_quarters
+from data.fetch_baostock_data import (
+    _derive_change_rows,
+    _is_cn_a_equity_row,
+    _iter_quarters,
+    build_all_a_tradable_history_rows,
+)
 
 
 class BaostockFetchTests(unittest.TestCase):
@@ -37,6 +42,42 @@ class BaostockFetchTests(unittest.TestCase):
         self.assertEqual(changes[2]["change_type"], "add")
         self.assertEqual(changes[3]["change_type"], "remove")
         self.assertEqual(changes[3]["code"], "sh.600001")
+
+    def test_is_cn_a_equity_row_filters_supported_a_share_codes(self) -> None:
+        self.assertTrue(_is_cn_a_equity_row({"code": "sh.600000", "type": "1"}))
+        self.assertTrue(_is_cn_a_equity_row({"code": "sh.688001", "type": "1"}))
+        self.assertTrue(_is_cn_a_equity_row({"code": "sz.300001", "type": "1"}))
+        self.assertFalse(_is_cn_a_equity_row({"code": "bj.430001", "type": "1"}))
+        self.assertFalse(_is_cn_a_equity_row({"code": "hk.000001", "type": "1"}))
+        self.assertFalse(_is_cn_a_equity_row({"code": "sh.600000", "type": "2"}))
+
+    def test_build_all_a_tradable_history_rows_uses_ipo_and_out_dates(self) -> None:
+        rows = [
+            {"code": "sh.600000", "ipoDate": "1999-11-10", "outDate": "", "type": "1", "status": "1"},
+            {"code": "sz.300001", "ipoDate": "2010-01-08", "outDate": "2026-03-31", "type": "1", "status": "1"},
+            {"code": "bj.430001", "ipoDate": "2015-01-01", "outDate": "", "type": "1", "status": "1"},
+            {"code": "sh.600010", "ipoDate": "", "outDate": "", "type": "1", "status": "1"},
+        ]
+        history_rows = build_all_a_tradable_history_rows(rows, horizon_date="2026-04-01")
+        self.assertEqual(
+            history_rows,
+            [
+                {
+                    "market_id": "cn_a",
+                    "universe_id": "ALL_A",
+                    "stock_code": "300001.SZ",
+                    "start_date": "2010-01-08",
+                    "end_date": "2026-03-31",
+                },
+                {
+                    "market_id": "cn_a",
+                    "universe_id": "ALL_A",
+                    "stock_code": "600000.SH",
+                    "start_date": "1999-11-10",
+                    "end_date": "2026-04-01",
+                },
+            ],
+        )
 
 
 if __name__ == "__main__":
