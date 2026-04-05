@@ -5,10 +5,12 @@ import unittest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from data.fetch_baostock_data import (
+    _all_a_codes_from_stock_basic_rows,
     _derive_change_rows,
     _is_cn_a_equity_row,
     _iter_quarters,
     _resolve_stage2_codes,
+    _to_baostock_code,
     fetch_baostock_bundle,
     build_all_a_tradable_history_rows,
 )
@@ -93,7 +95,7 @@ class BaostockFetchTests(unittest.TestCase):
             stock_basic_rows=stock_basic_rows,
             output_root=Path("."),
         )
-        self.assertEqual(resolved, ["300001.SZ", "600000.SH"])
+        self.assertEqual(resolved, ["sh.600000", "sz.300001"])
 
     def test_resolve_stage2_codes_keeps_selected_scope(self) -> None:
         resolved = _resolve_stage2_codes(
@@ -103,6 +105,20 @@ class BaostockFetchTests(unittest.TestCase):
             output_root=Path("."),
         )
         self.assertEqual(resolved, ["600000.SH"])
+
+    def test_to_baostock_code_converts_cn_a_symbols(self) -> None:
+        self.assertEqual(_to_baostock_code("600000.SH"), "sh.600000")
+        self.assertEqual(_to_baostock_code("000001.SZ"), "sz.000001")
+        self.assertEqual(_to_baostock_code("SH.600000"), "sh.600000")
+        self.assertEqual(_to_baostock_code("sz.300001"), "sz.300001")
+
+    def test_all_a_codes_from_stock_basic_rows_returns_raw_baostock_codes(self) -> None:
+        rows = [
+            {"code": "sh.600000", "ipoDate": "1999-11-10", "outDate": "", "type": "1", "status": "1"},
+            {"code": "sz.300001", "ipoDate": "2010-01-08", "outDate": "", "type": "1", "status": "1"},
+            {"code": "bj.430001", "ipoDate": "2015-01-01", "outDate": "", "type": "1", "status": "1"},
+        ]
+        self.assertEqual(_all_a_codes_from_stock_basic_rows(rows), ["sh.600000", "sz.300001"])
 
     def test_all_a_history_output_requires_all_a_metadata_scope(self) -> None:
         with self.assertRaises(ValueError):

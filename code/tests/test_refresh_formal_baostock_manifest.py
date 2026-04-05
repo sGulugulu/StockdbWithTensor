@@ -115,6 +115,67 @@ class RefreshFormalBaostockManifestTests(unittest.TestCase):
             self.assertIn("2026-03-02,sh.600000,10", union_lines)
             self.assertIn("2026-03-03,sz.000001,15", union_lines)
 
+    def test_refresh_manifest_does_not_depend_on_legacy_fixture_defaults(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            canonical_root = root / "canonical"
+            formal_root = root / "formal"
+            canonical_root.mkdir(parents=True, exist_ok=True)
+            (canonical_root / "manifest.json").write_text(json.dumps({"source": "canonical"}), encoding="utf-8")
+            _write_csv(
+                canonical_root / "metadata" / "stock_basic.csv",
+                ["code", "ipoDate", "outDate", "type", "status"],
+                [{"code": "sh.600000", "ipoDate": "1999-11-10", "outDate": "", "type": "1", "status": "1"}],
+            )
+            _write_csv(
+                formal_root / "master" / "shared_kline_panel.csv",
+                ["date", "code", "close"],
+                [{"date": "2026-03-02", "code": "sh.600000", "close": "10"}],
+            )
+            _write_csv(
+                formal_root / "universes" / "hs300_history.csv",
+                ["stock_code", "start_date", "end_date"],
+                [{"stock_code": "600000.SH", "start_date": "2026-03-02", "end_date": "2026-03-02"}],
+            )
+            _write_csv(
+                formal_root / "factors" / "hs300_factor_panel.csv",
+                ["stock_code", "trade_date", "value_factor"],
+                [{"stock_code": "600000.SH", "trade_date": "2026-03-02", "value_factor": "1.0"}],
+            )
+            _write_csv(
+                formal_root / "universes" / "sz50_history.csv",
+                ["stock_code", "start_date", "end_date"],
+                [],
+            )
+            _write_csv(
+                formal_root / "factors" / "sz50_factor_panel.csv",
+                ["stock_code", "trade_date", "value_factor"],
+                [],
+            )
+            _write_csv(
+                formal_root / "universes" / "zz500_history.csv",
+                ["stock_code", "start_date", "end_date"],
+                [],
+            )
+            _write_csv(
+                formal_root / "factors" / "zz500_factor_panel.csv",
+                ["stock_code", "trade_date", "value_factor"],
+                [],
+            )
+
+            manifest_path = refresh_manifest(
+                canonical_root=canonical_root,
+                hs300_src=canonical_root,
+                sz50_src=canonical_root,
+                zz500_src=canonical_root,
+                formal_root=formal_root,
+            )
+
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            self.assertEqual(manifest["source"], "baostock")
+            stock_basic_text = (canonical_root / "metadata" / "stock_basic.csv").read_text(encoding="utf-8")
+            self.assertIn("sh.600000", stock_basic_text)
+
 
 if __name__ == "__main__":
     unittest.main()

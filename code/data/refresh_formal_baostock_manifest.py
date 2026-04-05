@@ -54,6 +54,8 @@ def _history_date_range(path: Path) -> tuple[str | None, str | None]:
 def _copy_tree(src: Path, dst: Path, *, excluded_relative_paths: set[str] | None = None) -> None:
     if not src.exists():
         return
+    if src.resolve() == dst.resolve():
+        return
     excluded = excluded_relative_paths or set()
     for path in src.rglob("*"):
         if path.name.endswith("_30.csv"):
@@ -246,9 +248,9 @@ def refresh_manifest(
 def main() -> None:
     parser = argparse.ArgumentParser(description="Refresh canonical formal baostock manifest and root directory.")
     parser.add_argument("--canonical-root", type=Path, default=Path("code/data/formal/baostock"))
-    parser.add_argument("--hs300-src", type=Path, default=Path("code/data/formal/baostock_fg_test"))
-    parser.add_argument("--sz50-src", type=Path, default=Path("code/data/formal/baostock_sz50_fg"))
-    parser.add_argument("--zz500-src", type=Path, default=Path("code/data/formal/baostock_zz500_fg"))
+    parser.add_argument("--hs300-src", type=Path, default=Path("code/data/formal/baostock"))
+    parser.add_argument("--sz50-src", type=Path, default=Path("code/data/formal/baostock"))
+    parser.add_argument("--zz500-src", type=Path, default=Path("code/data/formal/baostock"))
     parser.add_argument("--formal-root", type=Path, default=Path("code/data/formal"))
     args = parser.parse_args()
     manifest_path = refresh_manifest(

@@ -243,6 +243,18 @@ def build_all_a_tradable_history_rows(
     return history_rows
 
 
+def _to_baostock_code(symbol: str) -> str:
+    cleaned = symbol.strip().upper()
+    if "." not in cleaned:
+        return cleaned.lower()
+    left, right = cleaned.split(".", 1)
+    if left in {"SH", "SZ", "BJ"} and right.isdigit():
+        return f"{left.lower()}.{right}"
+    if right in {"SH", "SZ", "BJ"} and left.isdigit():
+        return f"{right.lower()}.{left}"
+    return cleaned.lower()
+
+
 def _load_stock_basic_rows_from_output(output_root: Path) -> list[dict[str, str]]:
     path = output_root / "metadata" / "stock_basic.csv"
     if not path.exists():
@@ -252,9 +264,8 @@ def _load_stock_basic_rows_from_output(output_root: Path) -> list[dict[str, str]
 
 
 def _all_a_codes_from_stock_basic_rows(stock_basic_rows: list[dict[str, str]]) -> list[str]:
-    normalizer = SymbolNormalizer("cn_a")
     codes = {
-        normalizer.normalize(row["code"])
+        _to_baostock_code(row["code"])
         for row in stock_basic_rows
         if row.get("code") and _is_cn_a_equity_row(row)
     }
@@ -509,6 +520,11 @@ def fetch_baostock_bundle(
             _write_csv(output_root / "metadata" / "stock_basic.csv", stock_basic_rows)
             _write_csv(output_root / "metadata" / "stock_industry.csv", stock_industry_rows)
             _write_csv(output_root / "metadata" / "selected_codes.csv", [{"code": code} for code in selected_codes])
+            if metadata_scope == "all_a":
+                _write_csv(
+                    output_root / "metadata" / "all_a_codes.csv",
+                    [{"code": code} for code in _all_a_codes_from_stock_basic_rows(stock_basic_rows)],
+                )
             if all_a_history_output is not None:
                 all_a_history_rows = build_all_a_tradable_history_rows(stock_basic_rows, horizon_date=end_date)
                 _write_csv(all_a_history_output, all_a_history_rows)
