@@ -84,7 +84,10 @@ def _load_normalized_code_set(path: Path, column: str, market_id: str = "cn_a") 
 def _load_factor_panel_code_set(formal_root: Path) -> set[str]:
     codes: set[str] = set()
     for universe_id in ("hs300", "sz50", "zz500"):
-        codes.update(_load_normalized_code_set(formal_root / f"{universe_id}_factor_panel.csv", "stock_code"))
+        factor_path = formal_root / "factors" / f"{universe_id}_factor_panel.csv"
+        if not factor_path.exists():
+            factor_path = formal_root / f"{universe_id}_factor_panel.csv"
+        codes.update(_load_normalized_code_set(factor_path, "stock_code"))
     return codes
 
 
@@ -93,6 +96,19 @@ def _sample_codes(codes: set[str], limit: int = 8) -> list[str]:
 
 
 def _build_shared_stage3_outputs(canonical_root: Path, formal_root: Path) -> tuple[Path, Path]:
+    shared_master_path = formal_root / "master" / "shared_kline_panel.csv"
+    if shared_master_path.exists():
+        output_path = canonical_root / "kline_panel.csv"
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(shared_master_path, output_path)
+        selected_codes_output = canonical_root / "metadata" / "selected_codes.csv"
+        build_union_kline_panel(
+            input_paths=[shared_master_path],
+            output_path=output_path,
+            selected_codes_output=selected_codes_output,
+        )
+        return output_path, selected_codes_output
+
     input_paths = [
         formal_root / "hs300_kline_panel.csv",
         formal_root / "sz50_kline_panel.csv",
@@ -184,8 +200,12 @@ def refresh_manifest(
         )
 
     for universe_id in ("hs300", "sz50", "zz500"):
-        history_path = formal_root / f"{universe_id}_history.csv"
-        factor_path = formal_root / f"{universe_id}_factor_panel.csv"
+        history_path = formal_root / "universes" / f"{universe_id}_history.csv"
+        factor_path = formal_root / "factors" / f"{universe_id}_factor_panel.csv"
+        if not history_path.exists():
+            history_path = formal_root / f"{universe_id}_history.csv"
+        if not factor_path.exists():
+            factor_path = formal_root / f"{universe_id}_factor_panel.csv"
         history_start, history_end = _history_date_range(history_path)
         factor_start, factor_end = _csv_date_range(factor_path, "trade_date")
         manifest["stages"]["stage_3_formal_outputs"][universe_id] = {

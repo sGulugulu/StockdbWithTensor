@@ -8,6 +8,8 @@ from data.fetch_baostock_data import (
     _derive_change_rows,
     _is_cn_a_equity_row,
     _iter_quarters,
+    _resolve_stage2_codes,
+    fetch_baostock_bundle,
     build_all_a_tradable_history_rows,
 )
 
@@ -78,6 +80,51 @@ class BaostockFetchTests(unittest.TestCase):
                 },
             ],
         )
+
+    def test_resolve_stage2_codes_expands_to_all_a_when_requested(self) -> None:
+        stock_basic_rows = [
+            {"code": "sh.600000", "ipoDate": "1999-11-10", "outDate": "", "type": "1", "status": "1"},
+            {"code": "sz.300001", "ipoDate": "2010-01-08", "outDate": "", "type": "1", "status": "1"},
+            {"code": "bj.430001", "ipoDate": "2015-01-01", "outDate": "", "type": "1", "status": "1"},
+        ]
+        resolved = _resolve_stage2_codes(
+            stage2_scope="all_a",
+            selected_codes=["600000.SH"],
+            stock_basic_rows=stock_basic_rows,
+            output_root=Path("."),
+        )
+        self.assertEqual(resolved, ["300001.SZ", "600000.SH"])
+
+    def test_resolve_stage2_codes_keeps_selected_scope(self) -> None:
+        resolved = _resolve_stage2_codes(
+            stage2_scope="selected",
+            selected_codes=["600000.SH"],
+            stock_basic_rows=[],
+            output_root=Path("."),
+        )
+        self.assertEqual(resolved, ["600000.SH"])
+
+    def test_all_a_history_output_requires_all_a_metadata_scope(self) -> None:
+        with self.assertRaises(ValueError):
+            fetch_baostock_bundle(
+                output_root=Path("."),
+                start_date="2015-01-01",
+                end_date="2026-04-01",
+                indices=["hs300"],
+                financial_start_year=2015,
+                financial_end_year=2026,
+                max_codes=None,
+                sleep_seconds=0.0,
+                skip_financials=True,
+                skip_reports=True,
+                skip_index_memberships=True,
+                skip_metadata=True,
+                metadata_scope="selected",
+                stage2_scope="selected",
+                all_a_history_output=Path("code/data/formal/universes/all_a_tradable_history.csv"),
+                selected_codes_file=Path("code/data/formal/baostock/metadata/selected_codes.csv"),
+                resume=False,
+            )
 
 
 if __name__ == "__main__":

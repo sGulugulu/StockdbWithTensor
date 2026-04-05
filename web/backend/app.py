@@ -23,7 +23,6 @@ from stock_tensor.path_utils import path_relative_to, repo_relative_path
 _RUN_STATUS_LOCKS: dict[str, threading.Lock] = {}
 _RUN_STATUS_LOCKS_GUARD = threading.Lock()
 _PROFILE_CONFIGS: dict[str, Path] = {
-    "formal_cn_a": ROOT / "code" / "configs" / "default.yaml",
     "formal_hs300": ROOT / "code" / "configs" / "formal_hs300.yaml",
     "formal_sz50": ROOT / "code" / "configs" / "formal_sz50.yaml",
     "formal_zz500": ROOT / "code" / "configs" / "formal_zz500.yaml",
@@ -53,14 +52,6 @@ _MARKET_OPTIONS: list[dict[str, str | bool]] = [
         "market_id": "cn_a",
         "market_name": "A股 / 中证500",
         "universe_id": "ZZ500",
-        "is_formal": True,
-    },
-    {
-        "option_id": "formal_cn_a",
-        "config_profile": "formal_cn_a",
-        "market_id": "cn_a",
-        "market_name": "A股 / 中证A500",
-        "universe_id": "CSI_A500",
         "is_formal": True,
     },
     {
@@ -274,11 +265,7 @@ def _build_run_config(
     if output.get("root_dir"):
         output["root_dir"] = path_relative_to(run_dir, run_dir.parent)
 
-    if config_profile.startswith("formal_"):
-        for key in ["start_date", "end_date"]:
-            if key in payload and payload[key] is not None:
-                market[key] = payload[key]
-    else:
+    if not config_profile.startswith("formal_"):
         for key in ["market_id", "universe_id", "start_date", "end_date"]:
             if key in payload and payload[key] is not None:
                 market[key] = payload[key]

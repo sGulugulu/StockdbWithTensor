@@ -29,8 +29,8 @@ class FormalConfigTests(unittest.TestCase):
             run_experiment(ROOT / "configs" / "default.yaml")
 
     def test_formal_hs300_config_runs_with_committed_local_inputs(self) -> None:
-        history_path = ROOT / "data" / "formal" / "hs300_history.csv"
-        panel_path = ROOT / "data" / "formal" / "hs300_factor_panel.csv"
+        history_path = ROOT / "data" / "formal" / "universes" / "hs300_history.csv"
+        panel_path = ROOT / "data" / "formal" / "factors" / "hs300_factor_panel.csv"
         if not history_path.exists() or not panel_path.exists():
             self.skipTest("committed hs300 formal inputs are not available")
 
@@ -40,8 +40,8 @@ class FormalConfigTests(unittest.TestCase):
         self._assert_project_paths_are_relative(output_dir)
 
     def test_formal_sz50_config_runs_with_committed_local_inputs(self) -> None:
-        history_path = ROOT / "data" / "formal" / "sz50_history.csv"
-        panel_path = ROOT / "data" / "formal" / "sz50_factor_panel.csv"
+        history_path = ROOT / "data" / "formal" / "universes" / "sz50_history.csv"
+        panel_path = ROOT / "data" / "formal" / "factors" / "sz50_factor_panel.csv"
         if not history_path.exists() or not panel_path.exists():
             self.skipTest("committed sz50 formal inputs are not available")
 
@@ -51,8 +51,8 @@ class FormalConfigTests(unittest.TestCase):
         self._assert_project_paths_are_relative(output_dir)
 
     def test_formal_zz500_config_runs_with_committed_local_inputs(self) -> None:
-        history_path = ROOT / "data" / "formal" / "zz500_history.csv"
-        panel_path = ROOT / "data" / "formal" / "zz500_factor_panel.csv"
+        history_path = ROOT / "data" / "formal" / "universes" / "zz500_history.csv"
+        panel_path = ROOT / "data" / "formal" / "factors" / "zz500_factor_panel.csv"
         if not history_path.exists() or not panel_path.exists():
             self.skipTest("committed zz500 formal inputs are not available")
 
