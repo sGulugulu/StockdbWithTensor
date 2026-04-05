@@ -17,6 +17,7 @@ if str(CODE_ROOT) not in sys.path:
     sys.path.insert(0, str(CODE_ROOT))
 
 from stock_tensor.pipeline import run_experiment
+from stock_tensor.path_utils import path_relative_to, repo_relative_path
 
 
 _RUN_STATUS_LOCKS: dict[str, threading.Lock] = {}
@@ -235,7 +236,7 @@ def submit_run(
         "queued",
         {
             "run_id": actual_run_id,
-            "config_path": str(config_path),
+            "config_path": repo_relative_path(config_path),
         },
     )
     if run_sync:
@@ -267,11 +268,11 @@ def _build_run_config(
     base_dir = base_config_path.parent
 
     if "path" in data:
-        data["path"] = str((base_dir / data["path"]).resolve())
+        data["path"] = path_relative_to(run_dir, base_dir / data["path"])
     if market.get("universe_path"):
-        market["universe_path"] = str((base_dir / market["universe_path"]).resolve())
+        market["universe_path"] = path_relative_to(run_dir, base_dir / market["universe_path"])
     if output.get("root_dir"):
-        output["root_dir"] = str(run_dir.parent.resolve())
+        output["root_dir"] = path_relative_to(run_dir, run_dir.parent)
 
     if config_profile.startswith("formal_"):
         for key in ["start_date", "end_date"]:
