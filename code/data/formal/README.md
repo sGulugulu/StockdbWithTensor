@@ -54,6 +54,7 @@ Baostock workflow:
    - 上证50 (`sz50`)
    - 中证500 (`zz500`)
 3. Download company metadata with `--metadata-scope all_a` so `stock_basic.csv` and `stock_industry.csv` can support the formal all-A-share universe history.
+   This also writes `metadata/all_a_codes.csv`, which is the raw baostock code list for the shared all-A master kline fetch.
 4. Build `all_a_tradable_history.csv` from `stock_basic.csv`.
 5. Download financial/report tables into the canonical root.
 4. Example command:
@@ -74,6 +75,7 @@ Output layout:
 - `index_memberships/<index>_changes.csv`
 - `metadata/stock_basic.csv`
 - `metadata/stock_industry.csv`
+- `metadata/all_a_codes.csv`
 - `code/data/formal/universes/all_a_tradable_history.csv`
 - `financial/*.csv`
 - `reports/*.csv`
@@ -90,7 +92,7 @@ After the constituent snapshots are ready, you can build member-history files an
 
 ```powershell
 .venv/bin/python code/data/fetch_baostock_kline.py `
-  --codes-file code/data/formal/baostock/metadata/selected_codes.csv `
+  --codes-file code/data/formal/baostock/metadata/all_a_codes.csv `
   --output-path code/data/formal/master/shared_kline_panel.csv `
   --start-date 2015-01-01 `
   --end-date 2026-04-01
@@ -103,4 +105,12 @@ If `stock_basic.csv` already exists, you can build the tradable all-A-share univ
   --stock-basic-path code/data/formal/baostock/metadata/stock_basic.csv `
   --output-path code/data/formal/universes/all_a_tradable_history.csv `
   --horizon-date 2026-04-01
+```
+
+Once the structured CSV outputs are validated, you can create parquet mirrors:
+
+```powershell
+.venv/bin/python code/data/convert_formal_csv_to_parquet.py `
+  --formal-root code/data/formal `
+  --overwrite
 ```

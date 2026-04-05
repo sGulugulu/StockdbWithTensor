@@ -54,7 +54,7 @@ RULES:
 ## MUTABLE SECTION
 <!-- Update each round with justification for changes -->
 
-### Plan Version: 1 (Updated: Round 0)
+### Plan Version: 2 (Updated: Round 1)
 
 #### Plan Evolution Log
 <!-- Document any changes to the plan with justification -->
@@ -63,15 +63,16 @@ RULES:
 | 0 | Initial plan | - | - |
 | 0 | 将正式研究口径固定为“全 A 主数据 + `HS300` / `SZ50` / `ZZ500` / 全 A universe 历史”，并把正式时间窗固定为 `2015-01-01` 到 `2026-04-01` | 用户已明确要求放弃 `CSI_A500` 作为正式目标，并要求正式全量数据与样例数据分离 | 直接收敛 AC-1、AC-2、AC-3、AC-4、AC-5、AC-6 的范围定义，避免后续实现继续围绕旧计划漂移 |
 | 0 | 第一批实现优先落在“正式数据目录骨架 + 全 A 可交易股票池历史生成 + 测试可离线导入” | 这三项可以在不等待长时间联网抓数的前提下直接落地，并为后续全 A 正式抓取链路提供稳定接口 | 直接推进 AC-1、AC-2、AC-3、AC-4、AC-5、AC-6、AC-12 |
+| 1 | 正式 profile 配置路径已切到 `code/data/formal/universes/` 与 `code/data/formal/factors/`，后端市场目录也已移除废弃的 `formal_cn_a` / `CSI_A500` 入口 | 这一部分实现与 Round 0 的正式研究口径一致，避免后端继续暴露已废弃的正式 A500 入口 | 直接推进 AC-1、AC-4、AC-7、AC-10，但不改变 AC-2、AC-3、AC-5 仍未完成的事实 |
 
 #### Active Tasks
 <!-- Map each task to its target Acceptance Criterion and routing tag -->
 | Task | Target AC | Status | Tag | Owner | Notes |
 |------|-----------|--------|-----|-------|-------|
-| 重构正式数据目录，明确区分样例目录、正式全量目录、universe 历史目录以及 `CSV/Parquet` 双形态输出 | AC-1, AC-5, AC-6 | in_progress | coding | claude | 本轮已先把 `code/data/formal/README.md` 改成新目录结构说明，但实际正式目录与迁移脚本仍需继续补齐 |
-| 完成全 A 股基础资料、行业信息和全 A 可交易股票池历史的本地落盘与 manifest 记录 | AC-1, AC-2, AC-4 | in_progress | coding | claude | 本轮已加入 `metadata_scope=all_a`、`all_a_history_output` 和离线 `build_all_a_tradable_history.py`，但还未完成真实全量抓取与正式落盘 |
+| 重构正式数据目录，明确区分样例目录、正式全量目录、universe 历史目录以及 `CSV/Parquet` 双形态输出 | AC-1, AC-5, AC-6 | in_progress | coding | claude | formal profile 已切到 `universes/` 和 `factors/` 路径，但 `financial/`、`reports/`、`parquet/` 仍只有占位内容，canonical `baostock/` 目录也还会被旧 fixture 刷新逻辑污染 |
+| 完成全 A 股基础资料、行业信息和全 A 可交易股票池历史的本地落盘与 manifest 记录 | AC-1, AC-2, AC-4 | in_progress | coding | claude | Stage 2 scope 语义现已显式化，`all_a_history_output` 也已被限制为 `metadata_scope=all_a`；但真实全量抓取仍未完成，`all_a_tradable_history.csv` 仍未落盘，且 canonical metadata 目前会被旧 fixture 刷新逻辑覆盖 |
 | 完成 `HS300` / `SZ50` / `ZZ500` 指数成分股快照、变更记录与成员历史文件构建 | AC-2, AC-4 | pending | coding | claude | 回测必须按历史时点成员过滤，不能退化为静态股票名单 |
-| 完成全 A 股前复权行情抓取与统一主数据落盘，并为正式 profile 提供共享输入 | AC-1, AC-2, AC-4 | pending | coding | claude | 所有正式指数回测都应从共享全 A 行情中裁切，不重复保存三套完整行情 |
+| 完成全 A 股前复权行情抓取与统一主数据落盘，并为正式 profile 提供共享输入 | AC-1, AC-2, AC-4 | pending | coding | claude | 所有正式指数回测都应从共享全 A 行情中裁切，不重复保存三套完整行情；当前 `run_baostock_full.sh` 仍从三指数并集 `selected_codes.csv` 构建 shared kline，尚未切到真实全 A 代码集 |
 | 完成全 A 股财务与报告数据按表类型的正式落盘，并补齐 canonical `financial/` 与 `reports/` 目录 | AC-1, AC-3, AC-12 | pending | coding | claude | 这是当前已知最大数据缺口，必须支持恢复执行 |
 | 生成正式因子面板与张量输入，确保 `formal_hs300` / `formal_sz50` / `formal_zz500` 都引用真实正式数据 | AC-4, AC-7, AC-9, AC-13 | pending | coding | claude | formal profile 不能回退样例数据，也不能出现 `universe_id` 与文件路径失配 |
 | 将正式数据从 `CSV` 转换为 `Parquet`，并保证字段合同、日期区间与 manifest 一致 | AC-5, AC-12 | pending | coding | claude | `Parquet` 是正式高性能读取形态，但必须在 `CSV` 合同稳定后生成 |
@@ -95,3 +96,5 @@ RULES:
 |-------|-----------------|-------------|-----------------|
 | 当前 `fetch_baostock_data.py` 直到本轮之前都在模块导入时强依赖 `baostock`，导致 Windows 侧未安装 `baostock` 时连纯辅助测试都无法导入 | 0 | AC-12 | 已改为按需导入 `baostock`；后续保持纯数据整理函数不依赖 live API 环境 |
 | 目前仓库里还没有真实落盘到新正式目录结构下的 `all_a_tradable_history.csv`、全 A `stock_basic.csv` / `stock_industry.csv` 和正式 `financial/` / `reports/` 数据 | 0 | AC-1, AC-2, AC-3 | 下一轮需要在 WSL `.venv` 环境中按新参数执行 baostock 正式抓取，并将结果落盘到新目录结构 |
+| 新建的 `code/data/formal/universes/`、`code/data/formal/factors/`、`code/data/formal/master/` 目前承载的仍是短窗口迁移夹具，而 `financial/`、`reports/`、`parquet/` 目录仍是占位状态，不是计划要求的 `2015-01-01` 到 `2026-04-01` 正式全量数据 | 1 | AC-1, AC-2, AC-3, AC-5 | 必须在真实全量 baostock 抓取完成后重建 structured 目录产物，并让 manifest、CSV 和 Parquet 一起指向正式全量版本 |
+| `refresh_formal_baostock_manifest.py` 默认会把 `baostock_fg_test` / `baostock_sz50_fg` / `baostock_zz500_fg` 里的旧 per-index fixture 树复制回 canonical `code/data/formal/baostock/`，覆盖刚抓取的 metadata 文件并重新引入旧窗口语义 | 1 | AC-1, AC-2, AC-3, AC-4 | 必须先修正 canonical manifest 刷新逻辑，只聚合真实当前 formal 输出，禁止用旧 fixture 覆盖 canonical metadata / manifest 输入 |

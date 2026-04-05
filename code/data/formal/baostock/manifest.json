@@ -148,6 +148,32 @@
     "stage_2_formal_outputs": {
       "financial_files": [],
       "report_files": []
+    },
+    "stage_financial_and_reports": {
+      "skip_index_memberships": true,
+      "skip_metadata": false,
+      "skip_financials": true,
+      "skip_reports": true,
+      "stats": {
+        "index_snapshot_rows": 0,
+        "index_change_rows": 0,
+        "unique_codes": 572,
+        "stock_basic_rows": 8680,
+        "stock_industry_rows": 5509,
+        "all_a_history_rows": 5059,
+        "financial_rows": 0,
+        "report_rows": 0
+      }
     }
+  },
+  "stats": {
+    "index_snapshot_rows": 0,
+    "index_change_rows": 0,
+    "unique_codes": 572,
+    "stock_basic_rows": 8680,
+    "stock_industry_rows": 5509,
+    "all_a_history_rows": 5059,
+    "financial_rows": 0,
+    "report_rows": 0
   }
 }

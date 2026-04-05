@@ -32,7 +32,7 @@ END_DATE="${1:-2026-04-01}"
   --horizon-date "$END_DATE"
 
 .venv/bin/python code/data/fetch_baostock_kline.py \
-  --codes-file code/data/formal/baostock/metadata/selected_codes.csv \
+  --codes-file code/data/formal/baostock/metadata/all_a_codes.csv \
   --output-path code/data/formal/master/shared_kline_panel.csv \
   --start-date 2015-01-01 \
   --end-date "$END_DATE" \
