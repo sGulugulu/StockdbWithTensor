@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import threading
+import time
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
@@ -84,6 +85,15 @@ def _get_status_lock(run_dir: Path) -> threading.Lock:
 
 
 def _read_json(path: Path) -> Any:
+    last_error: json.JSONDecodeError | None = None
+    for _ in range(3):
+        try:
+            return json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            last_error = exc
+            time.sleep(0.05)
+    if last_error is not None:
+        raise last_error
     return json.loads(path.read_text(encoding="utf-8"))
 
 
