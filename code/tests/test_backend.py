@@ -126,6 +126,7 @@ class BackendTests(unittest.TestCase):
                         (Path(temp_dir) / "formal_hs300_config_check" / "submitted_config.yaml").read_text(encoding="utf-8")
                     )
                     self.assertEqual(submitted_config["market"]["universe_id"], "HS300")
+                    self.assertEqual(submitted_config["output"]["root_dir"], "..")
                     self.assertTrue(str(submitted_config["market"]["universe_path"]).endswith("hs300_history.csv"))
                     self.assertTrue(str(submitted_config["data"]["path"]).endswith("hs300_factor_panel.csv"))
 
@@ -182,6 +183,21 @@ class BackendTests(unittest.TestCase):
                         self.assertIsNotNone(detail_payload)
                         self.assertEqual(detail_payload["status"]["status"], "completed")
                         self.assertEqual(detail_payload["manifest"]["universe_id"], universe_id)
+                        submitted_config = yaml.safe_load(
+                            (Path(temp_dir) / run_id / "submitted_config.yaml").read_text(encoding="utf-8")
+                        )
+                        self.assertEqual(submitted_config["market"]["universe_id"], universe_id)
+                        self.assertEqual(submitted_config["output"]["root_dir"], "..")
+                        self.assertTrue(
+                            str(submitted_config["market"]["universe_path"]).endswith(
+                                f"{universe_id.lower()}_history.csv"
+                            )
+                        )
+                        self.assertTrue(
+                            str(submitted_config["data"]["path"]).endswith(
+                                f"{universe_id.lower()}_factor_panel.csv"
+                            )
+                        )
 
             anyio.run(run_case)
 

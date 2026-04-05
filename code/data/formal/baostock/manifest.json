@@ -1,5 +1,6 @@
 {
   "source": "baostock",
+  "kline_adjustflag": "2",
   "stages": {
     "stage_1_stage_2_committed_sources": {
       "hs300": {
@@ -104,44 +105,44 @@
     },
     "stage_3_formal_outputs": {
       "hs300": {
-        "history_path": "code/data/formal/hs300_history.csv",
+        "history_path": "code\\data\\formal\\hs300_history.csv",
         "history_rows": 300,
         "history_start_date": "2026-03-02",
         "history_end_date": "2026-03-30",
-        "factor_panel_path": "code/data/formal/hs300_factor_panel.csv",
+        "factor_panel_path": "code\\data\\formal\\hs300_factor_panel.csv",
         "factor_panel_rows": 750,
         "factor_panel_start_date": "2026-03-02",
         "factor_panel_end_date": "2026-04-03"
       },
       "sz50": {
-        "history_path": "code/data/formal/sz50_history.csv",
+        "history_path": "code\\data\\formal\\sz50_history.csv",
         "history_rows": 50,
         "history_start_date": "2026-03-02",
         "history_end_date": "2026-03-30",
-        "factor_panel_path": "code/data/formal/sz50_factor_panel.csv",
+        "factor_panel_path": "code\\data\\formal\\sz50_factor_panel.csv",
         "factor_panel_rows": 1250,
         "factor_panel_start_date": "2026-03-02",
         "factor_panel_end_date": "2026-04-03"
       },
       "zz500": {
-        "history_path": "code/data/formal/zz500_history.csv",
+        "history_path": "code\\data\\formal\\zz500_history.csv",
         "history_rows": 500,
         "history_start_date": "2026-03-02",
         "history_end_date": "2026-03-30",
-        "factor_panel_path": "code/data/formal/zz500_factor_panel.csv",
+        "factor_panel_path": "code\\data\\formal\\zz500_factor_panel.csv",
         "factor_panel_rows": 12500,
         "factor_panel_start_date": "2026-03-02",
         "factor_panel_end_date": "2026-04-03"
       },
       "shared_kline_panel": {
-        "kline_panel_path": "code/data/formal/baostock/kline_panel.csv",
+        "kline_panel_path": "code\\data\\formal\\baostock\\kline_panel.csv",
         "kline_panel_rows": 14300,
         "kline_panel_start_date": "2026-03-02",
         "kline_panel_end_date": "2026-04-03"
       },
       "shared_selected_codes": {
-        "selected_codes_path": "code/data/formal/baostock/metadata/selected_codes.csv",
-        "selected_codes_rows": 500
+        "selected_codes_path": "code\\data\\formal\\baostock\\metadata\\selected_codes.csv",
+        "selected_codes_rows": 572
       }
     },
     "stage_2_formal_outputs": {

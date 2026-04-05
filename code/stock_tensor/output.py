@@ -8,6 +8,7 @@ from typing import Any
 import yaml
 
 from .evaluation import PairScore, SelectionRecord
+from .path_utils import repo_relative_path
 
 
 def _write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
@@ -27,7 +28,7 @@ def _safe_value(value: float) -> float:
 
 def _serialize_paths(value: Any) -> Any:
     if isinstance(value, Path):
-        return str(value)
+        return repo_relative_path(value)
     if isinstance(value, dict):
         return {key: _serialize_paths(item) for key, item in value.items()}
     if isinstance(value, list):

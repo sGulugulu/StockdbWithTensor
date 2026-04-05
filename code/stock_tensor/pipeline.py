@@ -19,6 +19,7 @@ from .evaluation import (
 from .market import create_market_adapter
 from .models import ModelResult, fit_cp_model, fit_pca_model, fit_tucker_model
 from .output import write_outputs
+from .path_utils import repo_relative_path
 
 
 def _select_best_model(config: ExperimentConfig, dataset: TensorDataset, logs: list[str], model_name: str) -> ModelResult:
@@ -93,7 +94,7 @@ def run_experiment(
     if experiment_name is not None:
         config.output.experiment_name = experiment_name
     logs: list[str] = [
-        f"Loaded config: {Path(config_path).resolve()}",
+        f"Loaded config: {repo_relative_path(Path(config_path).resolve())}",
         f"Resolved device: requested={config.runtime.device}, actual={device_context.resolved_device}",
     ]
     market_adapter = create_market_adapter(config.market)
@@ -205,5 +206,11 @@ def run_experiment(
         },
     )
     if status_callback is not None:
-        status_callback("completed", {"output_dir": str(output_dir), "models": [row["model"] for row in metrics_rows]})
+        status_callback(
+            "completed",
+            {
+                "output_dir": repo_relative_path(output_dir),
+                "models": [row["model"] for row in metrics_rows],
+            },
+        )
     return output_dir

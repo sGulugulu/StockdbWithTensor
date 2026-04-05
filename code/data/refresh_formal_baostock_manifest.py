@@ -5,6 +5,14 @@ import csv
 import json
 import shutil
 from pathlib import Path
+import sys
+
+CODE_ROOT = Path(__file__).resolve().parents[1]
+if str(CODE_ROOT) not in sys.path:
+    sys.path.insert(0, str(CODE_ROOT))
+
+from data.build_union_kline_panel import build_union_kline_panel
+from stock_tensor.market import SymbolNormalizer
 
 
 def _csv_row_count(path: Path) -> int:
@@ -43,19 +51,91 @@ def _history_date_range(path: Path) -> tuple[str | None, str | None]:
     return start_value, end_value
 
 
-def _copy_tree(src: Path, dst: Path) -> None:
+def _copy_tree(src: Path, dst: Path, *, excluded_relative_paths: set[str] | None = None) -> None:
     if not src.exists():
         return
+    excluded = excluded_relative_paths or set()
     for path in src.rglob("*"):
         if path.name.endswith("_30.csv"):
             continue
         relative = path.relative_to(src)
+        if relative.as_posix() in excluded:
+            continue
         target = dst / relative
         if path.is_dir():
             target.mkdir(parents=True, exist_ok=True)
         else:
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(path, target)
+
+
+def _load_normalized_code_set(path: Path, column: str, market_id: str = "cn_a") -> set[str]:
+    if not path.exists():
+        return set()
+    normalizer = SymbolNormalizer(market_id)
+    codes: set[str] = set()
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        for row in csv.DictReader(handle):
+            if row.get(column):
+                codes.add(normalizer.normalize(row[column]))
+    return codes
+
+
+def _load_factor_panel_code_set(formal_root: Path) -> set[str]:
+    codes: set[str] = set()
+    for universe_id in ("hs300", "sz50", "zz500"):
+        codes.update(_load_normalized_code_set(formal_root / f"{universe_id}_factor_panel.csv", "stock_code"))
+    return codes
+
+
+def _sample_codes(codes: set[str], limit: int = 8) -> list[str]:
+    return sorted(codes)[:limit]
+
+
+def _build_shared_stage3_outputs(canonical_root: Path, formal_root: Path) -> tuple[Path, Path]:
+    input_paths = [
+        formal_root / "hs300_kline_panel.csv",
+        formal_root / "sz50_kline_panel.csv",
+        formal_root / "zz500_kline_panel.csv",
+    ]
+    existing_inputs = [path for path in input_paths if path.exists()]
+    if not existing_inputs:
+        raise FileNotFoundError("No formal per-universe kline panels exist for canonical Stage 3 generation.")
+
+    output_path = canonical_root / "kline_panel.csv"
+    selected_codes_output = canonical_root / "metadata" / "selected_codes.csv"
+    build_union_kline_panel(
+        input_paths=existing_inputs,
+        output_path=output_path,
+        selected_codes_output=selected_codes_output,
+    )
+    return output_path, selected_codes_output
+
+
+def _assert_shared_stage3_consistency(
+    *,
+    kline_path: Path,
+    selected_codes_path: Path,
+    formal_root: Path,
+) -> None:
+    kline_codes = _load_normalized_code_set(kline_path, "code")
+    selected_codes = _load_normalized_code_set(selected_codes_path, "code")
+    if kline_codes != selected_codes:
+        missing_from_selected = kline_codes - selected_codes
+        missing_from_kline = selected_codes - kline_codes
+        raise ValueError(
+            "Canonical shared selected codes must exactly match the canonical kline code set. "
+            f"missing_from_selected={len(missing_from_selected)} sample={_sample_codes(missing_from_selected)}; "
+            f"missing_from_kline={len(missing_from_kline)} sample={_sample_codes(missing_from_kline)}"
+        )
+
+    factor_codes = _load_factor_panel_code_set(formal_root)
+    if not factor_codes.issubset(kline_codes):
+        missing_factor_codes = factor_codes - kline_codes
+        raise ValueError(
+            "Canonical shared kline code set must cover every code used by formal factor panels. "
+            f"missing_factor_codes={len(missing_factor_codes)} sample={_sample_codes(missing_factor_codes)}"
+        )
 
 
 def refresh_manifest(
@@ -73,7 +153,18 @@ def refresh_manifest(
         "zz500": zz500_src,
     }
     for source in stage_sources.values():
-        _copy_tree(source, canonical_root)
+        _copy_tree(
+            source,
+            canonical_root,
+            excluded_relative_paths={"metadata/selected_codes.csv"},
+        )
+
+    kline_path, selected_codes_path = _build_shared_stage3_outputs(canonical_root, formal_root)
+    _assert_shared_stage3_consistency(
+        kline_path=kline_path,
+        selected_codes_path=selected_codes_path,
+        formal_root=formal_root,
+    )
 
     manifest = {
         "source": "baostock",
@@ -108,7 +199,6 @@ def refresh_manifest(
             "factor_panel_end_date": factor_end,
         }
 
-    kline_path = canonical_root / "kline_panel.csv"
     kline_start, kline_end = _csv_date_range(kline_path, "date")
     manifest["stages"]["stage_3_formal_outputs"]["shared_kline_panel"] = {
         "kline_panel_path": str(kline_path),
@@ -116,7 +206,6 @@ def refresh_manifest(
         "kline_panel_start_date": kline_start,
         "kline_panel_end_date": kline_end,
     }
-    selected_codes_path = canonical_root / "metadata" / "selected_codes.csv"
     manifest["stages"]["stage_3_formal_outputs"]["shared_selected_codes"] = {
         "selected_codes_path": str(selected_codes_path),
         "selected_codes_rows": _csv_row_count(selected_codes_path),
