@@ -184,6 +184,57 @@ class RefreshFormalBaostockManifestTests(unittest.TestCase):
                 1,
             )
 
+    def test_refresh_manifest_reports_existing_stage2_financial_and_report_files(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            canonical_root = root / "canonical"
+            formal_root = root / "formal"
+
+            _write_csv(
+                canonical_root / "financial" / "profit_data" / "2015.csv",
+                ["code", "dataset", "query_year", "query_quarter"],
+                [{"code": "sh.600000", "dataset": "profit_data", "query_year": "2015", "query_quarter": "1"}],
+            )
+            _write_csv(
+                canonical_root / "reports" / "forecast_report" / "2015.csv",
+                ["code", "dataset", "query_year"],
+                [{"code": "sh.600000", "dataset": "forecast_report", "query_year": "2015"}],
+            )
+            _write_csv(
+                formal_root / "master" / "shared_kline_panel.csv",
+                ["date", "code", "close"],
+                [{"date": "2026-03-02", "code": "sh.600000", "close": "10"}],
+            )
+            for universe_id in ("hs300", "sz50", "zz500"):
+                _write_csv(
+                    formal_root / "universes" / f"{universe_id}_history.csv",
+                    ["stock_code", "start_date", "end_date"],
+                    [],
+                )
+                _write_csv(
+                    formal_root / "factors" / f"{universe_id}_factor_panel.csv",
+                    ["stock_code", "trade_date", "value_factor"],
+                    [],
+                )
+
+            manifest_path = refresh_manifest(
+                canonical_root=canonical_root,
+                hs300_src=canonical_root,
+                sz50_src=canonical_root,
+                zz500_src=canonical_root,
+                formal_root=formal_root,
+            )
+
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            self.assertEqual(
+                manifest["stages"]["stage_2_formal_outputs"]["financial_files"],
+                [str(canonical_root / "financial" / "profit_data" / "2015.csv")],
+            )
+            self.assertEqual(
+                manifest["stages"]["stage_2_formal_outputs"]["report_files"],
+                [str(canonical_root / "reports" / "forecast_report" / "2015.csv")],
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

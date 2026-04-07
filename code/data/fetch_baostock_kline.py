@@ -37,10 +37,37 @@ def _save_progress(path: Path, payload: dict[str, object]) -> None:
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
-def _query_to_rows(resultset: object) -> list[dict[str, str]]:
+def _is_not_logged_in_error(error_code: str | None) -> bool:
+    return str(error_code or "").strip() == "10001001"
+
+
+def _safe_login() -> None:
+    login_result = bs.login()
+    if login_result.error_code != "0":
+        raise RuntimeError(f"baostock login failed: {login_result.error_code} {login_result.error_msg}")
+    print("[baostock-kline] login success", flush=True)
+
+
+def _safe_logout() -> None:
+    try:
+        logout_result = bs.logout()
+        if getattr(logout_result, "error_code", "0") not in {"0", None, ""}:
+            print(
+                f"[baostock-kline] logout failed: {getattr(logout_result, 'error_code', '?')} "
+                f"{getattr(logout_result, 'error_msg', '')}",
+                flush=True,
+            )
+            return
+    except Exception as exc:
+        print(f"[baostock-kline] logout failed: {exc}", flush=True)
+        return
+    print("[baostock-kline] logout success", flush=True)
+
+
+def _query_to_rows(resultset: object, *, context: str = "") -> list[dict[str, str]]:
     if getattr(resultset, "error_code", None) != "0":
         raise RuntimeError(
-            f"baostock query failed: {getattr(resultset, 'error_code', '?')} "
+            f"baostock query failed: {context} error_code={getattr(resultset, 'error_code', '?')} "
             f"{getattr(resultset, 'error_msg', '')}"
         )
     rows: list[dict[str, str]] = []
@@ -48,6 +75,46 @@ def _query_to_rows(resultset: object) -> list[dict[str, str]]:
     while resultset.next():
         rows.append(dict(zip(fields, resultset.get_row_data(), strict=False)))
     return rows
+
+
+def _query_with_relogin(
+    *,
+    code: str,
+    fields: str,
+    start_date: str,
+    end_date: str,
+    frequency: str,
+    adjustflag: str,
+) -> list[dict[str, str]]:
+    max_attempts = 2
+    last_error: RuntimeError | None = None
+    for attempt in range(1, max_attempts + 1):
+        resultset = bs.query_history_k_data_plus(
+            code,
+            fields,
+            start_date=start_date,
+            end_date=end_date,
+            frequency=frequency,
+            adjustflag=adjustflag,
+        )
+        error_code = getattr(resultset, "error_code", None)
+        if error_code == "0":
+            return _query_to_rows(
+                resultset,
+                context=f"kline code={code} start_date={start_date} end_date={end_date}",
+            )
+        if _is_not_logged_in_error(str(error_code)) and attempt < max_attempts:
+            print(f"[baostock-kline] session expired, relogin and retry: code={code}", flush=True)
+            _safe_login()
+            continue
+        last_error = RuntimeError(
+            f"baostock query failed: kline code={code} start_date={start_date} end_date={end_date} "
+            f"error_code={error_code} {getattr(resultset, 'error_msg', '')}"
+        )
+        break
+    if last_error is not None:
+        raise last_error
+    raise RuntimeError(f"baostock query failed without result: code={code}")
 
 
 def _append_rows(path: Path, rows: list[dict[str, str]], fields: list[str]) -> None:
@@ -87,9 +154,7 @@ def fetch_kline_panel(
     pending_codes = [code for code in codes if code not in completed_codes]
     date_windows = iter_year_date_ranges(start_date, end_date) if partition_by_year else [(start_date, end_date, 0)]
 
-    login_result = bs.login()
-    if login_result.error_code != "0":
-        raise RuntimeError(f"baostock login failed: {login_result.error_code} {login_result.error_msg}")
+    _safe_login()
 
     try:
         fieldnames = fields.split(",")
@@ -103,15 +168,14 @@ def fetch_kline_panel(
                 batch_codes = year_pending_codes[batch_start : batch_start + batch_size]
                 batch_rows: list[dict[str, str]] = []
                 for code in batch_codes:
-                    rs = bs.query_history_k_data_plus(
-                        code,
-                        fields,
+                    rows = _query_with_relogin(
+                        code=code,
+                        fields=fields,
                         start_date=window_start,
                         end_date=window_end,
                         frequency=frequency,
                         adjustflag=adjustflag,
                     )
-                    rows = _query_to_rows(rs)
                     for row in rows:
                         row["query_year"] = str(year_label) if partition_by_year else ""
                     batch_rows.extend(rows)
@@ -135,6 +199,8 @@ def fetch_kline_panel(
                     "last_completed_year": year_label,
                     "output_path": str(output_path),
                     "partition_by_year": partition_by_year,
+                    "year_complete": False,
+                    "run_complete": False,
                 }
                 _save_progress(effective_progress_path, progress)
                 print(
@@ -144,10 +210,24 @@ def fetch_kline_panel(
                 )
                 if stop_after_batches is not None and batch_counter >= stop_after_batches:
                     break
+            progress = {
+                **progress,
+                "last_completed_year": year_label,
+                "year_complete": True,
+                "run_complete": False,
+            }
+            _save_progress(effective_progress_path, progress)
+            print(f"[baostock-kline] year complete: {year_label}", flush=True)
             if stop_after_batches is not None and batch_counter >= stop_after_batches:
                 break
+        progress = {
+            **progress,
+            "run_complete": True,
+        }
+        _save_progress(effective_progress_path, progress)
+        print("[baostock-kline] run complete", flush=True)
     finally:
-        bs.logout()
+        _safe_logout()
 
 
 def main() -> None:

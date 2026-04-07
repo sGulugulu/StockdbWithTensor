@@ -4,7 +4,7 @@ import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from data.year_windows import iter_year_date_ranges
+from data.year_windows import iter_month_date_ranges, iter_year_date_ranges
 
 
 class YearWindowsTests(unittest.TestCase):
@@ -22,6 +22,16 @@ class YearWindowsTests(unittest.TestCase):
         self.assertEqual(
             iter_year_date_ranges("2026-03-01", "2026-04-01"),
             [("2026-03-01", "2026-04-01", 2026)],
+        )
+
+    def test_iter_month_date_ranges_splits_month_boundaries(self) -> None:
+        self.assertEqual(
+            iter_month_date_ranges("2026-01-30", "2026-03-02"),
+            [
+                ("2026-01-30", "2026-01-31", 2026, 1),
+                ("2026-02-01", "2026-02-28", 2026, 2),
+                ("2026-03-01", "2026-03-02", 2026, 3),
+            ],
         )
 
 

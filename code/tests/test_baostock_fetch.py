@@ -1,5 +1,6 @@
 from pathlib import Path
 import sys
+import tempfile
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -7,9 +8,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from data.fetch_baostock_data import (
     _all_a_codes_from_stock_basic_rows,
     _derive_change_rows,
+    _group_quarters_by_year,
     _is_cn_a_equity_row,
     _iter_quarters,
+    _load_completed_units_from_output,
     _resolve_stage2_codes,
+    _select_query_names,
+    _stage2_dataset_output_path,
     _to_baostock_code,
     fetch_baostock_bundle,
     build_all_a_tradable_history_rows,
@@ -31,6 +36,55 @@ class BaostockFetchTests(unittest.TestCase):
                 (2025, 4),
             ],
         )
+
+    def test_group_quarters_by_year_groups_each_year_separately(self) -> None:
+        self.assertEqual(
+            _group_quarters_by_year([(2025, 1), (2025, 2), (2026, 1)]),
+            {
+                2025: [(2025, 1), (2025, 2)],
+                2026: [(2026, 1)],
+            },
+        )
+
+    def test_select_query_names_validates_requested_datasets(self) -> None:
+        self.assertEqual(
+            _select_query_names(["profit_data", "growth_data"], "profit_data"),
+            ["profit_data"],
+        )
+        with self.assertRaises(ValueError):
+            _select_query_names(["profit_data"], "unknown_data")
+
+    def test_stage2_dataset_output_path_uses_dataset_and_year_subdirectories(self) -> None:
+        self.assertEqual(
+            _stage2_dataset_output_path(
+                output_root=Path("code/data/formal/baostock"),
+                stage="financial",
+                dataset="profit_data",
+                year=2015,
+            ).as_posix(),
+            "code/data/formal/baostock/financial/profit_data/2015.csv",
+        )
+
+    def test_load_completed_units_from_output_reads_existing_dataset_year_file(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            path = root / "financial" / "profit_data" / "2015.csv"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(
+                "\n".join(
+                    [
+                        "code,dataset,query_year,query_quarter",
+                        "sh.600000,profit_data,2015,1",
+                        "sh.600000,profit_data,2015,2",
+                        "sz.000001,profit_data,2015,1",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            self.assertEqual(
+                _load_completed_units_from_output(path, 2015),
+                {"sh.600000|2015", "sz.000001|2015"},
+            )
 
     def test_derive_change_rows_detects_add_and_remove(self) -> None:
         rows = [
@@ -137,6 +191,8 @@ class BaostockFetchTests(unittest.TestCase):
                 skip_metadata=True,
                 metadata_scope="selected",
                 stage2_scope="selected",
+                financial_datasets=None,
+                report_datasets=None,
                 all_a_history_output=Path("code/data/formal/universes/all_a_tradable_history.csv"),
                 selected_codes_file=Path("code/data/formal/baostock/metadata/selected_codes.csv"),
                 resume=False,

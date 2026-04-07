@@ -54,7 +54,7 @@ RULES:
 ## MUTABLE SECTION
 <!-- Update each round with justification for changes -->
 
-### Plan Version: 4 (Updated: Round 3)
+### Plan Version: 5 (Updated: Round 4)
 
 #### Plan Evolution Log
 <!-- Document any changes to the plan with justification -->
@@ -66,6 +66,7 @@ RULES:
 | 1 | 正式 profile 配置路径已切到 `code/data/formal/universes/` 与 `code/data/formal/factors/`，后端市场目录也已移除废弃的 `formal_cn_a` / `CSI_A500` 入口 | 这一部分实现与 Round 0 的正式研究口径一致，避免后端继续暴露已废弃的正式 A500 入口 | 直接推进 AC-1、AC-4、AC-7、AC-10，但不改变 AC-2、AC-3、AC-5 仍未完成的事实 |
 | 2 | all-A Stage 2 代码列表改为输出 baostock 原生代码格式，canonical refresh 默认源不再指向旧 `baostock_fg_test` / `baostock_sz50_fg` / `baostock_zz500_fg`，并新增可执行的 `CSV -> Parquet` 转换脚本 | Round 1 review 指出的两个正确性缺陷已在代码层被修复，同时 `Parquet` 不再只是 README 意图，而是具备了实际入口脚本 | 直接推进 AC-2、AC-3、AC-5、AC-7、AC-12，但不代表正式全量产物和 manifest parity 已完成 |
 | 3 | canonical manifest provenance 改为直接根据当前 canonical file set 重建，且 `.venv` 中已生成当前 structured CSV 基座对应的 parquet 输出并写入 parity 摘要 | Round 2 review 指出的 manifest 自反读取问题已被修复，同时 `Parquet` 不再停留在“脚本存在”阶段，而是已有可验证产物与 manifest 记录 | 直接推进 AC-2、AC-5、AC-12，但不改变 full-range shared master / factor / financial / report 仍未完成的事实 |
+| 4 | 长窗口 baostock 抓取新增按年分片能力：shared kline 抓取支持 `--partition-by-year` 且 formal batch 默认启用，report 查询也改为按自然年拆分；同时后端 JSON 读取对瞬时 `JSONDecodeError` 增加重试 | Round 3 review 后确认长窗口 API 拉取与异步轮询各有一个真实稳定性风险，本轮代码先把这两个风险降下来 | 直接推进 AC-2、AC-3、AC-10、AC-12 的执行安全性，但不改变 full-range shared master / factor / financial / report 仍未完成，且 Stage 2 year-granular resume 仍未真正落地的事实 |
 
 #### Active Tasks
 <!-- Map each task to its target Acceptance Criterion and routing tag -->
@@ -74,8 +75,8 @@ RULES:
 | 重构正式数据目录，明确区分样例目录、正式全量目录、universe 历史目录以及 `CSV/Parquet` 双形态输出 | AC-1, AC-5, AC-6 | in_progress | coding | claude | structured `universes/`、`factors/`、`master/` 已在使用，且 `parquet/universes`、`parquet/factors`、`parquet/master` 已有真实输出；但 shared master / factor 仍是短窗口夹具，`financial/` 与 `reports/` 仍为空，Stage 4 也尚未覆盖这些缺失的正式全量 CSV |
 | 完成全 A 股基础资料、行业信息和全 A 可交易股票池历史的本地落盘与 manifest 记录 | AC-1, AC-2, AC-4 | in_progress | coding | claude | canonical formal root 下已真实落盘 `stock_basic.csv`、`stock_industry.csv`、`all_a_codes.csv`、`all_a_tradable_history.csv`；canonical manifest provenance 已改为直接基于当前 canonical files 重建，但它记录的 structured shared master / factor 仍是短窗口状态，不是最终正式基座 |
 | 完成 `HS300` / `SZ50` / `ZZ500` 指数成分股快照、变更记录与成员历史文件构建 | AC-2, AC-4 | pending | coding | claude | 回测必须按历史时点成员过滤，不能退化为静态股票名单 |
-| 完成全 A 股前复权行情抓取与统一主数据落盘，并为正式 profile 提供共享输入 | AC-1, AC-2, AC-4 | pending | coding | claude | batch 脚本已切到 `metadata/all_a_codes.csv` 作为 shared kline 输入，但仓库中已提交的 `shared_kline_panel.csv` 与 factor panels 仍是 `572` 只股票、`2026-03-02` 到 `2026-04-03` 的短窗口夹具，不是计划要求的全 A 正式主数据 |
-| 完成全 A 股财务与报告数据按表类型的正式落盘，并补齐 canonical `financial/` 与 `reports/` 目录 | AC-1, AC-3, AC-12 | pending | coding | claude | 这是当前已知最大数据缺口，必须支持恢复执行 |
+| 完成全 A 股前复权行情抓取与统一主数据落盘，并为正式 profile 提供共享输入 | AC-1, AC-2, AC-4 | pending | coding | claude | batch 脚本已切到 `metadata/all_a_codes.csv` 作为 shared kline 输入，且 `fetch_baostock_kline.py` 现已支持 per-code per-year 进度记录；但仓库中已提交的 `shared_kline_panel.csv` 与 factor panels 仍是 `572` 只股票、`2026-03-02` 到 `2026-04-03` 的短窗口夹具，不是计划要求的全 A 正式主数据，且标准 batch 输出当前还没有与 `master/shared_kline_panel.csv` 对应的 progress 文件 |
+| 完成全 A 股财务与报告数据按表类型的正式落盘，并补齐 canonical `financial/` 与 `reports/` 目录 | AC-1, AC-3, AC-12 | pending | coding | claude | report 查询虽然已拆成年度窗口并写入 `query_year`，但当前 Stage 2 仍只按“整只股票完成”写盘和 checkpoint，尚未实现 year-granular resume；canonical `financial/` 与 `reports/` 也仍为空，因此这是当前已知最大数据缺口 |
 | 生成正式因子面板与张量输入，确保 `formal_hs300` / `formal_sz50` / `formal_zz500` 都引用真实正式数据 | AC-4, AC-7, AC-9, AC-13 | pending | coding | claude | formal profile 不能回退样例数据，也不能出现 `universe_id` 与文件路径失配 |
 | 将正式数据从 `CSV` 转换为 `Parquet`，并保证字段合同、日期区间与 manifest 一致 | AC-5, AC-12 | pending | coding | claude | `convert_formal_csv_to_parquet.py` 已在 `.venv` 中生成当前 structured CSV 基座对应的 parquet 输出，manifest 也已记录 row-count / column / date-range parity；但 batch 流程仍未调用转换脚本，且当前 parquet 仅镜像短窗口 structured CSV，不是计划要求的 full-range formal 数据 |
 | 保持并补强 Web 后端 / 前端对正式 profile 的支持，保证市场列表、运行配置和结果展示与新正式数据结构一致 | AC-9, AC-10, AC-13 | pending | coding | claude | 前端构建与后端 API 合同都要持续回归 |
@@ -101,3 +102,5 @@ RULES:
 | 虽然 all-A metadata / history 已真实落盘，且 manifest provenance 已修复，但 `code/data/formal/master/shared_kline_panel.csv` 与三个 structured factor panels 仍是 `2026-03-02` 到 `2026-04-03` 的短窗口夹具，不是计划要求的 `2015-01-01` 到 `2026-04-01` shared market base | 3 | AC-1, AC-2, AC-4, AC-5 | 必须用真实 all-A shared kline 重建 `master/` 与 `factors/`，再让 formal profiles、manifest 与 parquet 一起切到 full-range 正式版本 |
 | `run_baostock_full.sh` 仍未调用 `convert_formal_csv_to_parquet.py`，因此标准 batch 运行不会自动重建 Stage 4 parquet 镜像，现有 parquet 产物仍可能与未来 CSV 变化脱节 | 3 | AC-5, AC-12 | 在标准 formal batch 末尾加入 CSV -> Parquet 转换，再刷新 manifest，确保 fresh run 可稳定重建 Stage 4 输出与 parity 元数据 |
 | `.venv` 中虽已安装 `pyarrow` 且当前 structured CSV 基座已有 parquet / parity 记录，但 canonical `financial/` 与 `reports/` 仍为空，Stage 4 也因此无法覆盖计划要求的财务/报告正式数据集 | 3 | AC-3, AC-5, AC-12 | 先完成 all-A Stage 2 正式抓取，再将对应 CSV 纳入转换目标并把 parity 记录写入 canonical manifest |
+| `fetch_baostock_data.py` 的 report 抓取虽然已拆成按年查询，但仍在单只股票全部年份抓完后才一次性写盘并把该 code 标记完成，因此 Stage 2 报表路径并没有真正做到按年落盘和按年恢复 | 4 | AC-3, AC-12 | 将 report 抓取改成按 `code + year` 逐单位追加写盘与 checkpoint，避免长窗口任务在单只股票中途失败时丢失已完成年份并重复抓取 |
+| `run_baostock_full.sh` 现已默认对 `master/shared_kline_panel.csv` 启用 `--partition-by-year`，但标准输出路径当前没有对应的 `shared_kline_panel.progress.json`，且脚本也未在 fresh run 前清理旧 CSV；直接重跑时仍可能把新结果追加到已有短窗口文件后面 | 4 | AC-2, AC-5, AC-12 | 为标准 batch 显式传入稳定 progress 路径并定义 fresh-run 清理策略，或在开始新正式重建前先删除旧 `shared_kline_panel.csv` / progress 文件，避免重复行污染 shared master |

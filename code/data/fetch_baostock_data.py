@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import signal
 import time
 from bisect import bisect_left
 from dataclasses import dataclass
@@ -62,6 +63,16 @@ def _report_queries() -> dict[str, Callable[..., object]]:
     }
 
 
+def _select_query_names(available_names: list[str], requested_names: str | None) -> list[str]:
+    if not requested_names:
+        return list(available_names)
+    requested = [item.strip() for item in requested_names.split(",") if item.strip()]
+    invalid = [item for item in requested if item not in available_names]
+    if invalid:
+        raise ValueError(f"Unsupported dataset names: {', '.join(sorted(invalid))}")
+    return requested
+
+
 def _log(message: str) -> None:
     print(message, flush=True)
 
@@ -95,10 +106,60 @@ def _today_iso() -> str:
     return date.today().isoformat()
 
 
-def _query_to_rows(resultset: object) -> list[dict[str, str]]:
+def _is_not_logged_in_error(error_code: str | None) -> bool:
+    return str(error_code or "").strip() == "10001001"
+
+
+def _safe_login(client: object) -> None:
+    login_result = client.login()
+    if getattr(login_result, "error_code", None) != "0":
+        raise RuntimeError(
+            f"baostock login failed: {getattr(login_result, 'error_code', '?')} "
+            f"{getattr(login_result, 'error_msg', '')}"
+        )
+    _log("[baostock] login success")
+
+
+def _safe_logout(client: object) -> None:
+    try:
+        logout_result = client.logout()
+        if getattr(logout_result, "error_code", "0") not in {"0", None, ""}:
+            _log(
+                f"[baostock] logout failed: {getattr(logout_result, 'error_code', '?')} "
+                f"{getattr(logout_result, 'error_msg', '')}"
+            )
+            return
+    except Exception as exc:
+        _log(f"[baostock] logout failed: {exc}")
+        return
+    _log("[baostock] logout success")
+
+
+class _QueryTimeoutError(TimeoutError):
+    pass
+
+
+def _call_with_timeout(timeout_seconds: int, func: Callable[[], object]) -> object:
+    if timeout_seconds <= 0 or not hasattr(signal, "SIGALRM"):
+        return func()
+
+    def _handler(signum, frame):
+        raise _QueryTimeoutError(f"query timed out after {timeout_seconds}s")
+
+    previous_handler = signal.getsignal(signal.SIGALRM)
+    signal.signal(signal.SIGALRM, _handler)
+    try:
+        signal.alarm(timeout_seconds)
+        return func()
+    finally:
+        signal.alarm(0)
+        signal.signal(signal.SIGALRM, previous_handler)
+
+
+def _query_to_rows(resultset: object, *, context: str = "") -> list[dict[str, str]]:
     if getattr(resultset, "error_code", None) != "0":
         raise RuntimeError(
-            f"baostock query failed: {getattr(resultset, 'error_code', '?')} "
+            f"baostock query failed: {context} error_code={getattr(resultset, 'error_code', '?')} "
             f"{getattr(resultset, 'error_msg', '')}"
         )
     rows: list[dict[str, str]] = []
@@ -106,6 +167,43 @@ def _query_to_rows(resultset: object) -> list[dict[str, str]]:
     while resultset.next():
         rows.append(dict(zip(fields, resultset.get_row_data(), strict=False)))
     return rows
+
+
+def _query_with_relogin(
+    query_func: Callable[..., object],
+    *,
+    relogin: Callable[[], None],
+    context: str,
+    timeout_seconds: int = 30,
+    **kwargs: object,
+) -> list[dict[str, str]]:
+    max_attempts = 2
+    last_error: Exception | None = None
+    for attempt in range(1, max_attempts + 1):
+        try:
+            resultset = _call_with_timeout(timeout_seconds, lambda: query_func(**kwargs))
+        except _QueryTimeoutError as exc:
+            last_error = TimeoutError(f"{context}: {exc}")
+            if attempt < max_attempts:
+                _log(f"[baostock] timeout, relogin and retry: {context}")
+                relogin()
+                continue
+            break
+        error_code = getattr(resultset, "error_code", None)
+        if error_code == "0":
+            return _query_to_rows(resultset, context=context)
+        if _is_not_logged_in_error(str(error_code)) and attempt < max_attempts:
+            _log(f"[baostock] session expired, relogin and retry: {context}")
+            relogin()
+            continue
+        last_error = RuntimeError(
+            f"baostock query failed: {context} error_code={error_code} "
+            f"{getattr(resultset, 'error_msg', '')}"
+        )
+        break
+    if last_error is not None:
+        raise last_error
+    raise RuntimeError(f"baostock query failed without result: {context}")
 
 
 def _write_csv(path: Path, rows: list[dict[str, object]]) -> None:
@@ -288,7 +386,13 @@ def _resolve_stage2_codes(
 
 def _fetch_trade_dates(start_date: str, end_date: str) -> list[str]:
     client = _require_baostock()
-    rows = _query_to_rows(client.query_trade_dates(start_date=start_date, end_date=end_date))
+    rows = _query_with_relogin(
+        client.query_trade_dates,
+        relogin=lambda: _safe_login(client),
+        context=f"trade_dates start_date={start_date} end_date={end_date}",
+        start_date=start_date,
+        end_date=end_date,
+    )
     return [row["calendar_date"] for row in rows if row.get("is_trading_day") == "1"]
 
 
@@ -305,6 +409,12 @@ def _fetch_index_snapshots(
     def get_snapshot(query_date: str) -> list[dict[str, str]]:
         if query_date not in snapshot_cache:
             raw_rows = _query_to_rows(query(query_date))
+            raw_rows = _query_with_relogin(
+                query,
+                relogin=lambda: _safe_login(_require_baostock()),
+                context=f"index_snapshots index_id={index_id} query_date={query_date}",
+                query_date=query_date,
+            )
             snapshot_cache[query_date] = _normalize_index_date(raw_rows, query_date, index_id)
             effective_date_cache[query_date] = (
                 snapshot_cache[query_date][0]["effective_date"] if snapshot_cache[query_date] else ""
@@ -357,7 +467,11 @@ def _fetch_index_snapshots(
 
 def _fetch_stock_basic(codes: set[str] | None = None) -> list[dict[str, str]]:
     client = _require_baostock()
-    rows = _query_to_rows(client.query_stock_basic())
+    rows = _query_with_relogin(
+        client.query_stock_basic,
+        relogin=lambda: _safe_login(client),
+        context="stock_basic",
+    )
     filtered = rows if codes is None else [row for row in rows if row.get("code") in codes]
     filtered.sort(key=lambda row: row["code"])
     return filtered
@@ -365,7 +479,12 @@ def _fetch_stock_basic(codes: set[str] | None = None) -> list[dict[str, str]]:
 
 def _fetch_stock_industry(codes: set[str] | None, as_of_date: str) -> list[dict[str, str]]:
     client = _require_baostock()
-    rows = _query_to_rows(client.query_stock_industry(date=as_of_date))
+    rows = _query_with_relogin(
+        client.query_stock_industry,
+        relogin=lambda: _safe_login(client),
+        context=f"stock_industry date={as_of_date}",
+        date=as_of_date,
+    )
     filtered = rows if codes is None else [row for row in rows if row.get("code") in codes]
     filtered.sort(key=lambda row: row["code"])
     return filtered
@@ -399,6 +518,23 @@ def _save_progress(path: Path, payload: dict[str, list[str]]) -> None:
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
+def _stage2_dataset_output_path(*, output_root: Path, stage: str, dataset: str, year: int) -> Path:
+    return output_root / stage / dataset / f"{year}.csv"
+
+
+def _load_completed_units_from_output(path: Path, year: int) -> set[str]:
+    if not path.exists():
+        return set()
+    completed: set[str] = set()
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        for row in csv.DictReader(handle):
+            code = row.get("code", "").strip()
+            query_year = row.get("query_year", "").strip()
+            if code and query_year == str(year):
+                completed.add(f"{code}|{year}")
+    return completed
+
+
 def _fetch_financial_rows(
     *,
     query_name: str,
@@ -406,11 +542,19 @@ def _fetch_financial_rows(
     quarter_pairs: list[tuple[int, int]],
     sleep_seconds: float,
 ) -> list[dict[str, str]]:
+    client = _require_baostock()
     query = _financial_queries()[query_name]
     rows: list[dict[str, str]] = []
     for code in codes:
         for year, quarter in quarter_pairs:
-            query_rows = _query_to_rows(query(code=code, year=year, quarter=quarter))
+            query_rows = _query_with_relogin(
+                query,
+                relogin=lambda: _safe_login(client),
+                context=f"financial dataset={query_name} code={code} year={year} quarter={quarter}",
+                code=code,
+                year=year,
+                quarter=quarter,
+            )
             for row in query_rows:
                 row["dataset"] = query_name
                 row["query_year"] = str(year)
@@ -421,6 +565,13 @@ def _fetch_financial_rows(
     return rows
 
 
+def _group_quarters_by_year(quarter_pairs: list[tuple[int, int]]) -> dict[int, list[tuple[int, int]]]:
+    grouped: dict[int, list[tuple[int, int]]] = {}
+    for year, quarter in quarter_pairs:
+        grouped.setdefault(year, []).append((year, quarter))
+    return grouped
+
+
 def _fetch_report_rows(
     *,
     query_name: str,
@@ -429,12 +580,23 @@ def _fetch_report_rows(
     end_date: str,
     sleep_seconds: float,
 ) -> list[dict[str, str]]:
+    client = _require_baostock()
     query = _report_queries()[query_name]
     rows: list[dict[str, str]] = []
     date_windows = iter_year_date_ranges(start_date, end_date)
     for code in codes:
         for window_start, window_end, year_label in date_windows:
-            query_rows = _query_to_rows(query(code=code, start_date=window_start, end_date=window_end))
+            query_rows = _query_with_relogin(
+                query,
+                relogin=lambda: _safe_login(client),
+                context=(
+                    f"report dataset={query_name} code={code} "
+                    f"start_date={window_start} end_date={window_end}"
+                ),
+                code=code,
+                start_date=window_start,
+                end_date=window_end,
+            )
             for row in query_rows:
                 row["dataset"] = query_name
                 row["query_year"] = str(year_label)
@@ -460,6 +622,8 @@ def fetch_baostock_bundle(
     skip_metadata: bool,
     metadata_scope: str,
     stage2_scope: str,
+    financial_datasets: str | None,
+    report_datasets: str | None,
     all_a_history_output: Path | None,
     selected_codes_file: Path | None,
     resume: bool,
@@ -472,10 +636,7 @@ def fetch_baostock_bundle(
         f"end_date={end_date}, indices={indices}, financial_years={financial_start_year}-{financial_end_year}"
     )
     client = _require_baostock()
-    login_result = client.login()
-    if login_result.error_code != "0":
-        raise RuntimeError(f"baostock login failed: {login_result.error_code} {login_result.error_msg}")
-    _log("[baostock] login success")
+    _safe_login(client)
 
     stats = FetchStats()
     try:
@@ -552,32 +713,72 @@ def fetch_baostock_bundle(
                 output_root=output_root,
             )
             quarter_pairs = _iter_quarters(financial_start_year, financial_end_year)
+            quarter_groups = _group_quarters_by_year(quarter_pairs)
             progress_path = output_root / "financial" / "_progress.json"
             progress = _load_progress(progress_path) if resume else {}
-            for query_name in _financial_queries():
+            for query_name in _select_query_names(list(_financial_queries().keys()), financial_datasets):
                 _log(f"[baostock] fetching financial dataset: {query_name}")
-                completed_codes = set(progress.get(query_name, []))
+                completed_units = set(progress.get(query_name, []))
                 dataset_rows = 0
-                for index, code in enumerate(stage2_codes, start=1):
-                    if code in completed_codes:
-                        continue
-                    rows = _fetch_financial_rows(
-                        query_name=query_name,
-                        codes=[code],
-                        quarter_pairs=quarter_pairs,
-                        sleep_seconds=sleep_seconds,
+                for year, year_quarters in sorted(quarter_groups.items()):
+                    existing_output = _stage2_dataset_output_path(
+                        output_root=output_root,
+                        stage="financial",
+                        dataset=query_name,
+                        year=year,
                     )
-                    _append_csv(output_root / "financial" / f"{query_name}.csv", rows)
-                    dataset_rows += len(rows)
-                    stats.financial_rows += len(rows)
-                    completed_codes.add(code)
-                    progress[query_name] = sorted(completed_codes)
-                    _save_progress(progress_path, progress)
-                    if index == 1 or index % 25 == 0 or index == len(stage2_codes):
-                        _log(
-                            f"[baostock] financial progress: dataset={query_name}, "
-                            f"code_index={index}/{len(stage2_codes)}, code={code}, rows_written={dataset_rows}"
+                    completed_units.update(_load_completed_units_from_output(existing_output, year))
+                    progress["_meta"] = {
+                        "stage": "financial",
+                        "dataset": query_name,
+                        "year": year,
+                        "dataset_complete": False,
+                        "run_complete": False,
+                    }
+                    for index, code in enumerate(stage2_codes, start=1):
+                        unit = f"{code}|{year}"
+                        if unit in completed_units:
+                            continue
+                        rows = _fetch_financial_rows(
+                            query_name=query_name,
+                            codes=[code],
+                            quarter_pairs=year_quarters,
+                            sleep_seconds=sleep_seconds,
                         )
+                        _append_csv(
+                            existing_output,
+                            rows,
+                        )
+                        dataset_rows += len(rows)
+                        stats.financial_rows += len(rows)
+                        completed_units.add(unit)
+                        progress[query_name] = sorted(completed_units)
+                        progress["_meta"] = {
+                            "stage": "financial",
+                            "dataset": query_name,
+                            "year": year,
+                            "last_completed_code": code,
+                            "dataset_complete": False,
+                            "run_complete": False,
+                        }
+                        _save_progress(progress_path, progress)
+                        if index == 1 or index % 25 == 0 or index == len(stage2_codes):
+                            _log(
+                                f"[baostock] financial progress: dataset={query_name}, "
+                                f"year={year}, code_index={index}/{len(stage2_codes)}, code={code}, rows_written={dataset_rows}"
+                            )
+                    progress["_meta"] = {
+                        "stage": "financial",
+                        "dataset": query_name,
+                        "year": year,
+                        "dataset_complete": True,
+                        "run_complete": False,
+                    }
+                    _save_progress(progress_path, progress)
+                    _log(
+                        f"[baostock] financial dataset year complete: dataset={query_name}, "
+                        f"year={year}, completed_codes={len(completed_units)}"
+                    )
                 _log(f"[baostock] financial dataset complete: {query_name}, rows={dataset_rows}")
 
         if not skip_reports:
@@ -589,31 +790,71 @@ def fetch_baostock_bundle(
             )
             progress_path = output_root / "reports" / "_progress.json"
             progress = _load_progress(progress_path) if resume else {}
-            for query_name in _report_queries():
+            for query_name in _select_query_names(list(_report_queries().keys()), report_datasets):
                 _log(f"[baostock] fetching report dataset: {query_name}")
-                completed_codes = set(progress.get(query_name, []))
+                completed_units = set(progress.get(query_name, []))
                 dataset_rows = 0
-                for index, code in enumerate(stage2_codes, start=1):
-                    if code in completed_codes:
-                        continue
-                    rows = _fetch_report_rows(
-                        query_name=query_name,
-                        codes=[code],
-                        start_date=start_date,
-                        end_date=end_date,
-                        sleep_seconds=sleep_seconds,
+                report_windows = iter_year_date_ranges(start_date, end_date)
+                for window_start, window_end, year_label in report_windows:
+                    existing_output = _stage2_dataset_output_path(
+                        output_root=output_root,
+                        stage="reports",
+                        dataset=query_name,
+                        year=year_label,
                     )
-                    _append_csv(output_root / "reports" / f"{query_name}.csv", rows)
-                    dataset_rows += len(rows)
-                    stats.report_rows += len(rows)
-                    completed_codes.add(code)
-                    progress[query_name] = sorted(completed_codes)
-                    _save_progress(progress_path, progress)
-                    if index == 1 or index % 25 == 0 or index == len(stage2_codes):
-                        _log(
-                            f"[baostock] report progress: dataset={query_name}, "
-                            f"code_index={index}/{len(stage2_codes)}, code={code}, rows_written={dataset_rows}"
+                    completed_units.update(_load_completed_units_from_output(existing_output, year_label))
+                    progress["_meta"] = {
+                        "stage": "reports",
+                        "dataset": query_name,
+                        "year": year_label,
+                        "dataset_complete": False,
+                        "run_complete": False,
+                    }
+                    for index, code in enumerate(stage2_codes, start=1):
+                        unit = f"{code}|{year_label}"
+                        if unit in completed_units:
+                            continue
+                        rows = _fetch_report_rows(
+                            query_name=query_name,
+                            codes=[code],
+                            start_date=window_start,
+                            end_date=window_end,
+                            sleep_seconds=sleep_seconds,
                         )
+                        _append_csv(
+                            existing_output,
+                            rows,
+                        )
+                        dataset_rows += len(rows)
+                        stats.report_rows += len(rows)
+                        completed_units.add(unit)
+                        progress[query_name] = sorted(completed_units)
+                        progress["_meta"] = {
+                            "stage": "reports",
+                            "dataset": query_name,
+                            "year": year_label,
+                            "last_completed_code": code,
+                            "dataset_complete": False,
+                            "run_complete": False,
+                        }
+                        _save_progress(progress_path, progress)
+                        if index == 1 or index % 25 == 0 or index == len(stage2_codes):
+                            _log(
+                                f"[baostock] report progress: dataset={query_name}, "
+                                f"year={year_label}, code_index={index}/{len(stage2_codes)}, code={code}, rows_written={dataset_rows}"
+                            )
+                    progress["_meta"] = {
+                        "stage": "reports",
+                        "dataset": query_name,
+                        "year": year_label,
+                        "dataset_complete": True,
+                        "run_complete": False,
+                    }
+                    _save_progress(progress_path, progress)
+                    _log(
+                        f"[baostock] report dataset year complete: dataset={query_name}, "
+                        f"year={year_label}, completed_codes={len(completed_units)}"
+                    )
                 _log(f"[baostock] report dataset complete: {query_name}, rows={dataset_rows}")
 
         manifest_path = output_root / "manifest.json"
@@ -655,14 +896,15 @@ def fetch_baostock_bundle(
         for key, value in stage_stats.items():
             merged_stats[key] = max(int(merged_stats.get(key, 0)), int(value))
         existing_manifest["stats"] = merged_stats
+        existing_manifest["run_complete"] = True
         manifest_path.write_text(
             json.dumps(existing_manifest, indent=2, ensure_ascii=False),
             encoding="utf-8",
         )
+        _log("[baostock] stage2 run complete")
         return stats
     finally:
-        client.logout()
-        _log("[baostock] logout success")
+        _safe_logout(client)
 
 
 def main() -> None:
@@ -679,6 +921,8 @@ def main() -> None:
     parser.add_argument("--skip-metadata", action="store_true")
     parser.add_argument("--metadata-scope", choices=["selected", "all_a"], default="selected")
     parser.add_argument("--stage2-scope", choices=["selected", "all_a"], default="selected")
+    parser.add_argument("--financial-datasets", default=None)
+    parser.add_argument("--report-datasets", default=None)
     parser.add_argument(
         "--all-a-history-output",
         type=Path,
@@ -705,6 +949,8 @@ def main() -> None:
         skip_metadata=args.skip_metadata,
         metadata_scope=args.metadata_scope,
         stage2_scope=args.stage2_scope,
+        financial_datasets=args.financial_datasets,
+        report_datasets=args.report_datasets,
         all_a_history_output=args.all_a_history_output.resolve() if args.all_a_history_output else None,
         selected_codes_file=args.selected_codes_file.resolve() if args.selected_codes_file else None,
         resume=not args.no_resume,
