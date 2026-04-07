@@ -19,6 +19,7 @@ if str(CODE_ROOT) not in sys.path:
 
 from stock_tensor.pipeline import run_experiment
 from stock_tensor.path_utils import path_relative_to, repo_relative_path
+from web.backend.formal_catalog import get_formal_coverage, get_universe_members_for_date
 
 
 _RUN_STATUS_LOCKS: dict[str, threading.Lock] = {}
@@ -300,7 +301,12 @@ def _build_run_config(
     return config_override_path
 
 
-def create_app(output_root: Path | None = None, default_config_path: Path | None = None):
+def create_app(
+    output_root: Path | None = None,
+    default_config_path: Path | None = None,
+    formal_root: Path | None = None,
+    catalog_path: Path | None = None,
+):
     try:
         from fastapi import FastAPI, HTTPException
     except ImportError as exc:
@@ -309,6 +315,10 @@ def create_app(output_root: Path | None = None, default_config_path: Path | None
     app = FastAPI(title="Stock Tensor Experiment API")
     resolved_output_root = output_root or Path(os.environ.get("OUTPUT_ROOT", ROOT / "code" / "outputs"))
     config_path = default_config_path or Path(os.environ.get("DEFAULT_CONFIG_PATH", ROOT / "code" / "configs" / "default.yaml"))
+    resolved_formal_root = formal_root or Path(os.environ.get("FORMAL_ROOT", ROOT / "code" / "data" / "formal"))
+    resolved_catalog_path = catalog_path or Path(
+        os.environ.get("FORMAL_CATALOG_PATH", resolved_formal_root / "catalog.duckdb")
+    )
     config_templates = {
         "cn_a": ROOT / "code" / "configs" / "default.yaml",
         "us_equity": ROOT / "code" / "configs" / "sample_us_equity.yaml",
@@ -317,6 +327,31 @@ def create_app(output_root: Path | None = None, default_config_path: Path | None
     @app.get("/api/markets")
     async def api_markets() -> list[dict[str, Any]]:
         return get_markets()
+
+    @app.get("/api/formal/coverage")
+    async def api_formal_coverage() -> dict[str, Any]:
+        try:
+            return get_formal_coverage(
+                formal_root=resolved_formal_root,
+                catalog_path=resolved_catalog_path,
+            )
+        except ModuleNotFoundError as exc:
+            raise HTTPException(status_code=503, detail=str(exc)) from exc
+
+    @app.get("/api/formal/universes/{universe_id}")
+    async def api_formal_universe_members(universe_id: str, trade_date: str) -> list[dict[str, Any]]:
+        try:
+            rows = get_universe_members_for_date(
+                formal_root=resolved_formal_root,
+                catalog_path=resolved_catalog_path,
+                universe_id=universe_id,
+                trade_date=trade_date,
+            )
+        except KeyError as exc:
+            raise HTTPException(status_code=404, detail="Universe not found") from exc
+        except ModuleNotFoundError as exc:
+            raise HTTPException(status_code=503, detail=str(exc)) from exc
+        return rows
 
     @app.get("/api/runs")
     async def api_runs() -> list[dict[str, Any]]:

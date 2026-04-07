@@ -146,6 +146,13 @@ Run the backend:
 .venv/bin/python -m uvicorn web.backend.app:create_app --factory --reload
 ```
 
+Formal data routes now include:
+
+- `GET /api/formal/coverage`
+  - returns shared master coverage, full-master coverage, factor coverage, and financial/report dataset coverage from DuckDB views
+- `GET /api/formal/universes/{universe_id}?trade_date=YYYY-MM-DD`
+  - returns historical universe members for a specific trading date from DuckDB `vw_*_on_date` views
+
 ## Outputs
 
 Each run writes an experiment folder under `code/outputs/` with:

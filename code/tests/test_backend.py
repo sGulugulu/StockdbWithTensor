@@ -9,6 +9,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from web.backend.app import create_app
+from data.register_formal_duckdb_catalog import register_formal_duckdb_catalog
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -203,6 +204,124 @@ class BackendTests(unittest.TestCase):
                                 f"factors/{universe_id.lower()}_factor_panel.csv"
                             )
                         )
+
+            anyio.run(run_case)
+
+    @unittest.skipUnless(
+        __import__("importlib").util.find_spec("fastapi") is not None
+        and __import__("importlib").util.find_spec("duckdb") is not None,
+        "fastapi/duckdb not installed",
+    )
+    def test_formal_duckdb_routes(self) -> None:
+        import httpx
+        import anyio
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            formal_root = Path(temp_dir) / "formal"
+            (formal_root / "universes").mkdir(parents=True, exist_ok=True)
+            (formal_root / "factors").mkdir(parents=True, exist_ok=True)
+            (formal_root / "master").mkdir(parents=True, exist_ok=True)
+            (formal_root / "baostock" / "financial" / "profit_data").mkdir(parents=True, exist_ok=True)
+            (formal_root / "baostock" / "reports" / "forecast_report").mkdir(parents=True, exist_ok=True)
+
+            (formal_root / "universes" / "hs300_history.csv").write_text(
+                "\n".join(
+                    [
+                        "market_id,universe_id,stock_code,start_date,end_date",
+                        "cn_a,HS300,600000.SH,2026-03-02,2026-03-03",
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            (formal_root / "factors" / "hs300_factor_panel.csv").write_text(
+                "\n".join(
+                    [
+                        "stock_code,trade_date,industry,value_factor,momentum_factor,quality_factor,volatility_factor,future_return",
+                        "600000.SH,2026-03-02,Bank,1,2,3,4,0.1",
+                        "600000.SH,2026-03-03,Bank,1,2,3,4,0.2",
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            (formal_root / "master" / "shared_kline_panel.csv").write_text(
+                "\n".join(
+                    [
+                        "date,code,open,high,low,close,preclose,volume,amount,adjustflag,turn,tradestatus,pctChg,peTTM,pbMRQ,psTTM,pcfNcfTTM,isST",
+                        "2026-03-02,sh.600000,10,11,9,10,9.8,100,1000,3,0.2,1,2.0,6.4,0.45,1.85,-1.52,0",
+                        "2026-03-03,sh.600000,10,11,9,10,9.8,100,1000,3,0.2,1,2.0,6.4,0.45,1.85,-1.52,0",
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            (formal_root / "master" / "full_master_2026.csv").write_text(
+                "\n".join(
+                    [
+                        "date,code,open,high,low,close,preclose,volume,amount,adjustflag,pctChg,source_price_vendor,source_file,turn,tradestatus,peTTM,pbMRQ,psTTM,pcfNcfTTM,isST",
+                        "2026-03-02,sh.600000,10,11,9,10,9.8,100,1000,2,2.0,tongdaxin,a.day,0.2,1,6.4,0.45,1.85,-1.52,0",
+                        "2026-03-03,sh.600000,10,11,9,10,9.8,100,1000,2,2.0,tongdaxin,a.day,0.2,1,6.4,0.45,1.85,-1.52,0",
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            (formal_root / "baostock" / "financial" / "profit_data" / "2025.csv").write_text(
+                "\n".join(
+                    [
+                        "code,pubDate,statDate,dataset,query_year,query_quarter",
+                        "sh.600000,2025-04-30,2025-03-31,profit_data,2025,1",
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            (formal_root / "baostock" / "reports" / "forecast_report" / "2025.csv").write_text(
+                "\n".join(
+                    [
+                        "code,profitForcastExpPubDate,profitForcastExpStatDate,dataset,query_year",
+                        "sh.600000,2025-01-21,2024-12-31,forecast_report,2025",
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            catalog_path = formal_root / "catalog.duckdb"
+            register_formal_duckdb_catalog(formal_root=formal_root, catalog_path=catalog_path)
+
+            async def run_case() -> None:
+                app = create_app(formal_root=formal_root, catalog_path=catalog_path)
+                transport = httpx.ASGITransport(app=app)
+                async with httpx.AsyncClient(transport=transport, base_url="http://testserver") as client:
+                    response = await client.get("/api/formal/coverage", timeout=10.0)
+                    self.assertEqual(response.status_code, 200)
+                    coverage_payload = response.json()
+                    self.assertEqual(coverage_payload["master"]["row_count"], 2)
+                    self.assertEqual(coverage_payload["master"]["stock_count"], 1)
+                    self.assertEqual(coverage_payload["factors"][0]["universe_id"], "HS300")
+                    self.assertEqual(coverage_payload["financial"][0]["dataset_name"], "profit_data")
+                    self.assertEqual(coverage_payload["reports"][0]["dataset_name"], "forecast_report")
+
+                    response = await client.get(
+                        "/api/formal/universes/HS300",
+                        params={"trade_date": "2026-03-02"},
+                        timeout=10.0,
+                    )
+                    self.assertEqual(response.status_code, 200)
+                    universe_payload = response.json()
+                    self.assertEqual(len(universe_payload), 1)
+                    self.assertEqual(universe_payload[0]["trade_date"], "2026-03-02")
+                    self.assertEqual(universe_payload[0]["stock_code"], "600000.SH")
+                    self.assertEqual(universe_payload[0]["universe_id"], "HS300")
+
+                    response = await client.get(
+                        "/api/formal/universes/UNKNOWN",
+                        params={"trade_date": "2026-03-02"},
+                        timeout=10.0,
+                    )
+                    self.assertEqual(response.status_code, 404)
 
             anyio.run(run_case)
 
