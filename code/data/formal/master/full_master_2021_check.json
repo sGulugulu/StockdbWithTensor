@@ -1,0 +1,41 @@
+{
+  "year": 2021,
+  "path": "code/data/formal/master/full_master_2021.csv",
+  "exists": true,
+  "rows": 963582,
+  "stock_count": 4246,
+  "min_date": "2021-01-04",
+  "max_date": "2021-12-31",
+  "field_nonempty": {
+    "turn": {
+      "count": 939845,
+      "ratio": 0.975366
+    },
+    "tradestatus": {
+      "count": 939845,
+      "ratio": 0.975366
+    },
+    "peTTM": {
+      "count": 939845,
+      "ratio": 0.975366
+    },
+    "pbMRQ": {
+      "count": 939845,
+      "ratio": 0.975366
+    },
+    "psTTM": {
+      "count": 939845,
+      "ratio": 0.975366
+    },
+    "pcfNcfTTM": {
+      "count": 939845,
+      "ratio": 0.975366
+    },
+    "isST": {
+      "count": 939845,
+      "ratio": 0.975366
+    }
+  },
+  "status": "OK",
+  "issues": []
+}

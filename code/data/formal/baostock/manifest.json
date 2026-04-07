@@ -401,6 +401,33 @@
           "date_range_match": true
         }
       ]
+    },
+    "stage_financial_and_reports": {
+      "skip_index_memberships": true,
+      "skip_metadata": true,
+      "skip_financials": false,
+      "skip_reports": true,
+      "stats": {
+        "index_snapshot_rows": 0,
+        "index_change_rows": 0,
+        "unique_codes": 572,
+        "stock_basic_rows": 0,
+        "stock_industry_rows": 0,
+        "all_a_history_rows": 0,
+        "financial_rows": 19306,
+        "report_rows": 0
+      }
     }
-  }
+  },
+  "stats": {
+    "index_snapshot_rows": 0,
+    "index_change_rows": 0,
+    "unique_codes": 572,
+    "stock_basic_rows": 0,
+    "stock_industry_rows": 0,
+    "all_a_history_rows": 0,
+    "financial_rows": 19306,
+    "report_rows": 11192
+  },
+  "run_complete": true
 }

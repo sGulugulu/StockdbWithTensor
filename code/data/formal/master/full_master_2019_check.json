@@ -1,0 +1,41 @@
+{
+  "year": 2019,
+  "path": "code/data/formal/master/full_master_2019.csv",
+  "exists": true,
+  "rows": 774728,
+  "stock_count": 3310,
+  "min_date": "2019-01-02",
+  "max_date": "2019-12-31",
+  "field_nonempty": {
+    "turn": {
+      "count": 737332,
+      "ratio": 0.95173
+    },
+    "tradestatus": {
+      "count": 737332,
+      "ratio": 0.95173
+    },
+    "peTTM": {
+      "count": 737332,
+      "ratio": 0.95173
+    },
+    "pbMRQ": {
+      "count": 737332,
+      "ratio": 0.95173
+    },
+    "psTTM": {
+      "count": 737332,
+      "ratio": 0.95173
+    },
+    "pcfNcfTTM": {
+      "count": 737332,
+      "ratio": 0.95173
+    },
+    "isST": {
+      "count": 737332,
+      "ratio": 0.95173
+    }
+  },
+  "status": "OK",
+  "issues": []
+}

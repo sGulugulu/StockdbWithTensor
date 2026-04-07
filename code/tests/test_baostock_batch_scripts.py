@@ -22,6 +22,15 @@ class BaostockBatchScriptTests(unittest.TestCase):
         refresh_index = script_text.index("code/data/refresh_formal_baostock_manifest.py")
         self.assertLess(convert_index, refresh_index)
 
+    def test_run_baostock_master_fields_year_prefers_tdx_year_codes(self) -> None:
+        script_text = (REPO_ROOT / "code" / "data" / "run_baostock_master_fields_year.sh").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('TDX_BASE_PATH="code/data/formal/master/tdx_full_master_base_${YEAR}.csv"', script_text)
+        self.assertIn('CODES_FILE="${BASE_DIR}/_codes_${YEAR}.csv"', script_text)
+        self.assertIn('code/data/extract_tdx_year_codes.py', script_text)
+        self.assertIn('--codes-file "$CODES_FILE"', script_text)
+
 
 if __name__ == "__main__":
     unittest.main()

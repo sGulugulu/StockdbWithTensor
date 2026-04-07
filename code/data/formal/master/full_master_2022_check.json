@@ -1,0 +1,43 @@
+{
+  "year": 2022,
+  "path": "code/data/formal/master/full_master_2022.csv",
+  "exists": true,
+  "rows": 1063671,
+  "stock_count": 4659,
+  "min_date": "2022-01-04",
+  "max_date": "2022-12-30",
+  "field_nonempty": {
+    "turn": {
+      "count": 904130,
+      "ratio": 0.850009
+    },
+    "tradestatus": {
+      "count": 904130,
+      "ratio": 0.850009
+    },
+    "peTTM": {
+      "count": 904130,
+      "ratio": 0.850009
+    },
+    "pbMRQ": {
+      "count": 904130,
+      "ratio": 0.850009
+    },
+    "psTTM": {
+      "count": 904130,
+      "ratio": 0.850009
+    },
+    "pcfNcfTTM": {
+      "count": 904130,
+      "ratio": 0.850009
+    },
+    "isST": {
+      "count": 904130,
+      "ratio": 0.850009
+    }
+  },
+  "status": "ISSUES",
+  "issues": [
+    "补字段非空率过低: turn, tradestatus, peTTM, pbMRQ, psTTM, pcfNcfTTM, isST"
+  ]
+}

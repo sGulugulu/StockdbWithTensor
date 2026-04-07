@@ -1,0 +1,41 @@
+{
+  "year": 2016,
+  "path": "code/data/formal/master/full_master_2016.csv",
+  "exists": true,
+  "rows": 541167,
+  "stock_count": 2572,
+  "min_date": "2016-01-04",
+  "max_date": "2016-12-30",
+  "field_nonempty": {
+    "turn": {
+      "count": 541166,
+      "ratio": 0.999998
+    },
+    "tradestatus": {
+      "count": 541167,
+      "ratio": 1.0
+    },
+    "peTTM": {
+      "count": 541167,
+      "ratio": 1.0
+    },
+    "pbMRQ": {
+      "count": 541167,
+      "ratio": 1.0
+    },
+    "psTTM": {
+      "count": 541167,
+      "ratio": 1.0
+    },
+    "pcfNcfTTM": {
+      "count": 541167,
+      "ratio": 1.0
+    },
+    "isST": {
+      "count": 541167,
+      "ratio": 1.0
+    }
+  },
+  "status": "OK",
+  "issues": []
+}

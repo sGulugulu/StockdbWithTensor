@@ -1,5 +1,12 @@
 # Repository Guidelines
 
+## Rules
+- Make the smallest change that fixes the issue.
+- Always show a plan before editing.
+- Before finishing: run tests (or explain why you cannot).
+- Never commit secrets (.env, keys) or credentials.
+- 请在每次排障时，严格遵循 skills/bugfix.md 中定义的流程卡片。
+
 ## Project Structure & Module Organization
 This repository currently stores thesis deliverables at the root, including proposal, literature review, translation, slides, and working notes such as `毕设.md`. Keep these source documents in place. Put all runnable code under `code/` so research files and implementation stay separate. If you add scripts, organize them by purpose, for example `code/data/`, `code/models/`, `code/notebooks/`, and `code/tests/`.
 
@@ -27,3 +34,22 @@ This repository has no commit history yet, so there is no established convention
 
 ## Document Handling
 Do not rename or overwrite the original `.doc`, `.docx`, or `.pptx` files without a clear reason. Add generated datasets, charts, or exported results inside `code/outputs/` or another dedicated subdirectory instead of cluttering the repository root.
+
+<!-- TRELLIS:START -->
+# Trellis Instructions
+
+These instructions are for AI assistants working in this project.
+
+Use the `/trellis:start` command when starting a new session to:
+- Initialize your developer identity
+- Understand current project context
+- Read relevant guidelines
+
+Use `@/.trellis/` to learn:
+- Development workflow (`workflow.md`)
+- Project structure guidelines (`spec/`)
+- Developer workspace (`workspace/`)
+
+Keep this managed block so 'trellis update' can refresh the instructions.
+
+<!-- TRELLIS:END -->
