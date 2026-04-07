@@ -21,9 +21,22 @@ DEFAULT_FIELDS = (
 )
 
 
+def _normalize_query_code(code: str) -> str:
+    return code.strip().lower()
+
+
+def _is_supported_kline_code(code: str) -> bool:
+    normalized = _normalize_query_code(code)
+    return normalized.startswith("sh.") or normalized.startswith("sz.")
+
+
 def _read_codes(path: Path) -> list[str]:
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
-        return [row["code"] for row in csv.DictReader(handle) if row.get("code")]
+        return [
+            _normalize_query_code(row["code"])
+            for row in csv.DictReader(handle)
+            if row.get("code") and row["code"].strip()
+        ]
 
 
 def _load_progress(path: Path) -> dict[str, object]:
@@ -143,7 +156,15 @@ def fetch_kline_panel(
     stop_after_batches: int | None,
     partition_by_year: bool,
 ) -> None:
-    codes = _read_codes(codes_path)
+    raw_codes = _read_codes(codes_path)
+    unsupported_codes = [code for code in raw_codes if not _is_supported_kline_code(code)]
+    if unsupported_codes:
+        print(
+            "[baostock-kline] skipping unsupported codes: "
+            f"count={len(unsupported_codes)} sample={','.join(unsupported_codes[:3])}",
+            flush=True,
+        )
+    codes = [code for code in raw_codes if _is_supported_kline_code(code)]
     if max_codes is not None:
         codes = codes[:max_codes]
 
