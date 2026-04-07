@@ -260,8 +260,8 @@ def refresh_manifest(
     financial_dir = canonical_root / "financial"
     reports_dir = canonical_root / "reports"
     manifest["stages"]["stage_2_formal_outputs"] = {
-        "financial_files": sorted(str(path) for path in financial_dir.glob("*.csv")),
-        "report_files": sorted(str(path) for path in reports_dir.glob("*.csv")),
+        "financial_files": sorted(str(path) for path in financial_dir.rglob("*.csv")),
+        "report_files": sorted(str(path) for path in reports_dir.rglob("*.csv")),
     }
     manifest["stages"]["stage_4_parquet_outputs"] = {
         "parquet_files": summarize_parquet_outputs(formal_root),

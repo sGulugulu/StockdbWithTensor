@@ -21,6 +21,7 @@
 2. 全 A 股财务/报告数据统一保存，并按表类型拆分保存。
 3. `HS300`、`SZ50`、`ZZ500` 的成分股历史，以及全 A 可交易股票池历史各自单独保存。
 4. 正式数据先落盘为 `CSV`，再转换为 `Parquet`；原有样例文件继续保留，仅用于 smoke test 和轻量验证。
+5. 正式数据查询与 Web 服务优先采用 `Parquet + DuckDB` 的本地分析型架构，而不是把全部历史主数据直接塞进传统 OLTP 数据库。
 
 ## Acceptance Criteria
 
@@ -29,6 +30,8 @@
 - AC-3: baostock 数据抓取链路可将全 A 股财务/报告数据统一保存到正式目录，并按表类型分别落盘，例如盈利能力、营运能力、成长能力、偿债能力、现金流、杜邦指标、业绩快报、业绩预告。
 - AC-4: `HS300`、`SZ50`、`ZZ500` 的成分股历史，以及全 A 可交易股票池历史，必须分别作为独立文件保存；回测时按“历史时点成分股”口径过滤，不能用静态名单覆盖整个回测期。
 - AC-5: 正式数据先提供 `CSV` 版本，再生成与之对应的 `Parquet` 版本；二者目录、命名和 manifest 必须一一对应。
+- AC-5.1: 结构化正式数据需进一步注册到本地 `DuckDB` catalog 中，支持直接查询 `universes`、`master`、`factors`、`financial`、`reports` 与 `full_master`。
+- AC-5.2: `DuckDB` catalog 至少应提供 CSV/Parquet 外部表或视图、常用统计视图，以及供 Web 查询层直接调用的稳定对象名。
 - AC-6: 原有样例数据、样例配置和样例输出继续保留，仅作为 smoke test 和轻量验证输入，不与正式全量数据混用。
 - AC-7: 核心实验管线不依赖某个单一股票池或 A 股特有代码格式；股票池、交易日历、符号规范化和数据源都通过适配层提供。
 - AC-8: 新增 `us_equity` 市场适配接口后，不修改 CP/Tucker/PCA 核心模型代码即可接入美股数据；A 股与美股共用同一套“市场主数据 + universe 历史”抽象。
@@ -43,6 +46,7 @@
 ### Upper Bound
 - 完成全 A 股正式本地数据底座接入。
 - 完成 `HS300`、`SZ50`、`ZZ500` 及全 A 可交易股票池历史文件构建。
+- 完成 `Parquet + DuckDB` 的正式查询层，支持本地 SQL 检索、研究统计与 Web 数据读取。
 - 支持 `cn_a` 与 `us_equity` 两类市场配置。
 - 提供 FastAPI 后端与 React 前端。
 - 默认计算后端支持 `PyTorch + CUDA`，并为 `Triton/CUDA` 热点算子优化预留接口。
@@ -53,6 +57,7 @@
 ### Lower Bound
 - 先完成全 A 股正式主数据目录和至少一类正式股票池的全链路跑通。
 - baostock 抓取工具、正式配置、张量实验、统一候选池、Web API 和前端基本页面都必须存在。
+- 至少完成一组 `CSV -> Parquet -> DuckDB` 端到端样例，使 Web 和研究统计能直接从 DuckDB 读取。
 - GPU 路径最低要求是：
   - 可检测 CUDA 是否可用
   - 在可用时使用 `PyTorch` 张量在 GPU 上运行主要数值计算
@@ -64,7 +69,8 @@
 - 前端固定为 `React + Vite`。
 - GPU 计算优先使用 `PyTorch`。
 - `Triton` 或 `CUDA` 可先用于热点算子和批量评分路径，不要求一开始全量重写算法。
-- 实验结果持久化先用文件系统和轻量元数据文件。
+- 正式历史主数据优先采用 `CSV + Parquet` 文件层落盘。
+- 正式查询 / 服务层优先采用 `DuckDB`，而不是先引入 `MySQL/PostgreSQL`。
 - 不在这一版加入登录鉴权、多人协作、交易下单或生产部署编排。
 
 ## Feasibility Hints and Suggestions
@@ -73,9 +79,11 @@
   - Stage 2：全 A 股财务数据、报告数据
   - Stage 3：全 A 股前复权日线/估值面板抓取与本地因子面板构建
   - Stage 4：正式 `CSV` 转换为 `Parquet`，并补齐 manifest
+  - Stage 5：将结构化正式数据注册到 `DuckDB` catalog，并产出统一查询视图
 - 三个正式股票池应各自拥有独立 universe 历史文件和独立正式配置，不共享模糊的“formal_cn_a”语义。
 - 正式配置必须保持“股票池标识、成员文件路径、因子面板路径”三者一致，不能只改 `universe_id` 文本而读取别的指数数据。
 - 全 A 股行情和全 A 股财务数据不应按指数重复保存；指数回测通过“全 A 主数据 + universe 历史过滤”完成。
+- 不要把全部历史主数据直接作为传统关系型数据库唯一底座；`DuckDB` 更适合当前单机研究、批量分析、Parquet 直查与 Web 查询聚合场景。
 - 原有样例数据目录必须保留，但要与正式全量目录完全隔离，避免 smoke 数据污染正式回测结果。
 - 选股逻辑不要绑定单一分解方法。统一从 `ModelResult` 生成候选池，并对不同模型结果做聚合或一致化输出。
 - GPU 计算不要一开始就拆成三套完全独立实现：
@@ -94,10 +102,12 @@
 2. 再完成全 A 股主数据抓取链路，包括行情、财务、报告和 manifest。
 3. 再完成 `HS300`、`SZ50`、`ZZ500` 及全 A 可交易股票池历史文件生成。
 4. 在正式数据之上构建因子面板、张量实验输入和正式 profile。
-5. 将数值计算主路径迁移到 `PyTorch`，加入 CUDA/CPU 双路径，并为 `Triton/CUDA` 热点实现留口。
-6. 完成统一候选池输出和实验结果结构化。
-7. 再做 Web API 和前端页面整合。
-8. 最后保留 `us_equity` 接口作为后续扩展入口。
+5. 将结构化 CSV 转为 Parquet，并完成 parity 校验。
+6. 将正式 CSV / Parquet 数据注册到 DuckDB catalog，补齐统一查询视图。
+7. 将数值计算主路径迁移到 `PyTorch`，加入 CUDA/CPU 双路径，并为 `Triton/CUDA` 热点实现留口。
+8. 完成统一候选池输出和实验结果结构化。
+9. 再做 Web API 和前端页面整合。
+10. 最后保留 `us_equity` 接口作为后续扩展入口。
 
 ### External Dependencies
 - baostock API
@@ -105,6 +115,7 @@
 - Python 依赖：`baostock`、`numpy`、`PyYAML`、`fastapi`、`uvicorn`、`httpx`
 - GPU 依赖：`torch`
 - 列式存储依赖：`pyarrow` 或 `fastparquet`
+- 本地分析数据库依赖：`duckdb`
 - 可选性能增强：`triton` 或 CUDA toolchain
 - 前端依赖：`node`、`vite`、`react`
 
@@ -162,7 +173,26 @@
 - 在 `CSV` 稳定后生成对应 `Parquet` 文件，用于后续高性能读取和大规模训练。
 - `CSV` 与 `Parquet` 的文件命名、时间范围、字段合同和 manifest 保持一致。
 
-### 6. GPU 计算后端
+### 6. DuckDB 查询层
+- 建立本地 `DuckDB` catalog，例如：
+  - `code/data/formal/catalog.duckdb`
+- 至少注册以下逻辑对象：
+  - `universes.*`
+  - `master.*`
+  - `factors.*`
+  - `financial.*`
+  - `reports.*`
+  - `full_master.*`
+- `DuckDB` 层优先读取 `Parquet`，必要时兼容直接读取 `CSV`。
+- 为常见研究和服务查询提供稳定视图，例如：
+  - `vw_all_a_tradable_on_date`
+  - `vw_hs300_on_date`
+  - `vw_shared_master_coverage`
+  - `vw_factor_panel_coverage`
+  - `vw_financial_dataset_coverage`
+- 记录 DuckDB 中每个对象与其底层 CSV/Parquet 文件的映射关系，并纳入 manifest。
+
+### 7. GPU 计算后端
 - 将主要数值计算路径统一迁移到 `PyTorch`。
 - 增加运行时设备配置：
   - `device=cpu`
@@ -176,7 +206,7 @@
   - 大规模候选池评分计算
 - 对性能热点预留 `Triton` 或 `CUDA` 实现接口，优先落在批量评分、矩阵规约和候选池聚合等热点路径。
 
-### 7. 选股输出与结果合同
+### 8. 选股输出与结果合同
 - 保持统一候选池输出：
   - `selection_candidates.csv`
   - `selection_candidates.json`
@@ -192,7 +222,7 @@
   - Top3 因子及其贡献值
 - 候选池必须保证 `trade_date + stock_code` 唯一
 
-### 8. Web 后端与前端
+### 9. Web 后端与前端
 - 后端保留并完善：
   - `POST /api/runs`
   - `GET /api/runs`
@@ -202,6 +232,7 @@
   - `GET /api/markets`
 - `/api/markets` 返回唯一 `option_id`
 - formal profile 由后端作为唯一真源，不允许 profile 与底层文件路径失配
+- Web 查询层优先从 `DuckDB` 读取统计、覆盖率、主数据摘要与选股辅助信息，而不是直接扫描大型 CSV。
 - 前端配置页支持切换：
   - `formal_hs300`
   - `formal_sz50`
@@ -209,17 +240,20 @@
   - `sample_cn_smoke`
   - `sample_us_equity`
 
-### 9. 测试与验证
+### 10. 测试与验证
 - 单元测试：
   - 正式配置解析
   - 历史成员过滤
   - baostock 快照变更推导
   - 全 A 主数据与 universe 历史的联动一致性
   - `CSV` / `Parquet` 字段合同一致性
+  - `DuckDB` 对 CSV/Parquet 的对象注册与查询一致性
+  - `DuckDB` 视图的日期范围、行数与底层数据一致性
   - 统一候选池唯一性
   - profile 与数据路径一致性
 - 集成测试：
   - baostock smoke 抓取落盘
+  - `CSV -> Parquet -> DuckDB` 链路可运行
   - 后端 API 返回结构
   - formal profile 提交后生成的 `submitted_config.yaml` 一致性
 - 运行验证：
