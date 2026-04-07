@@ -1,0 +1,23 @@
+{
+  "year": 2019,
+  "tdx_base_path": "code\\data\\formal\\master\\tdx_full_master_base_2019.csv",
+  "baostock_path": "code\\data\\formal\\master\\baostock_fields\\2019.csv",
+  "tdx_rows": 774728,
+  "baostock_rows": 890495,
+  "intersection_keys": 774728,
+  "duplicate_key_count": 0,
+  "duplicate_keys": [],
+  "missing_field_counts": {
+    "turn": 0,
+    "tradestatus": 0,
+    "peTTM": 0,
+    "pbMRQ": 0,
+    "psTTM": 0,
+    "pcfNcfTTM": 0,
+    "isST": 0
+  },
+  "missing_field_top_dates": {},
+  "missing_field_top_codes": {},
+  "status": "OK",
+  "issues": []
+}

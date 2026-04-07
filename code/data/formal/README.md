@@ -18,12 +18,28 @@ For the newer formal layout, prefer the following structure:
   - `zz500_history.csv`
 - `code/data/formal/master/`
   - shared CN-A master / shared kline panel used by formal profile builders
+  - transitional / final `full master` files
 - `code/data/formal/financial/`
   - table-split full-data financial exports
 - `code/data/formal/reports/`
   - table-split full-data report exports
 - `code/data/formal/parquet/`
   - parquet mirrors of validated CSV outputs
+
+Each structured subdirectory now also has its own `README.md` with:
+
+- runnable commands
+- file formats
+- parameter notes
+- expected inputs / outputs
+
+`code/data/formal/master/README.md` 另外还会说明：
+
+- full master 的标准字段合同
+- 通达信价格量底座如何生成
+- baostock shared master 如何补齐估值 / 状态字段
+- 如何生成某一年的过渡版 full master 进行验证
+- 如何在 Windows PowerShell 中通过 `code/data/build_full_master_for_existing_year.ps1` 自动调用 WSL `.venv` 生成某一年的 full master
 
 Tongdaxin workflow:
 
@@ -114,3 +130,69 @@ Once the structured CSV outputs are validated, you can create parquet mirrors:
   --formal-root code/data/formal `
   --overwrite
 ```
+
+## Stage 2 Dataset-Year Runner
+
+你现在可以用统一入口脚本按“表 + 年份”执行 Stage 2：
+
+### 执行抓取
+
+```powershell
+bash code/data/run_baostock_stage2_dataset_year.sh profit_data 2015
+bash code/data/run_baostock_stage2_dataset_year.sh forecast_report 2015
+```
+
+### 检查某一年是否已经完整导入
+
+```powershell
+bash code/data/run_baostock_stage2_dataset_year.sh 2015
+```
+
+检查模式会输出：
+
+- 8 个 dataset 的完成状态
+- 已完成 `code|year` 数 / 总数
+- 对应 `dataset/year.csv` 是否存在
+- 当前行数
+
+## Full Master Route
+
+如果你准备使用“通达信价格量 + baostock补字段”的方式构建正式 shared master / full master，推荐路线如下：
+
+### Step 1
+
+先从通达信原始日线中切出某一年的原始切片：
+
+```powershell
+.venv/bin/python code/data/build_tdx_year_slice.py `
+  --input-path code/data/formal/tdx_daily_raw.csv `
+  --output-path code/data/formal/master/tdx_2015_raw.csv `
+  --year 2015
+```
+
+### Step 2
+
+把通达信原始切片转换成标准化价格量主表：
+
+```powershell
+.venv/bin/python code/data/build_tdx_full_master_base.py `
+  --input-path code/data/formal/master/tdx_2015_raw.csv `
+  --output-path code/data/formal/master/tdx_full_master_base_2015.csv `
+  --adjustflag-value 2
+```
+
+### Step 3
+
+如果当前只有短窗口的 baostock shared master，可以先生成过渡版：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File code/data/build_full_master_for_existing_year.ps1 2015
+```
+
+### Step 4
+
+如果你已经抓到某一年的独立 baostock 补字段源，例如：
+
+- `code/data/formal/master/baostock_fields/2015.csv`
+
+则优先使用它来补齐估值 / 状态字段，而不是继续用短窗口的 `shared_kline_panel.csv`。

@@ -79,6 +79,14 @@ Stage 3: build or refresh the formal daily market panel and downstream factor pa
 
 Stage 4: convert validated formal `CSV` outputs into matching `Parquet` files for larger-scale training and faster reads.
 
+Stage 5: register validated formal `CSV` / `Parquet` datasets into the local `DuckDB` catalog for stable research SQL and web-facing summary queries.
+
+```powershell
+.venv/bin/python code/data/register_formal_duckdb_catalog.py `
+  --formal-root code/data/formal `
+  --catalog-path code/data/formal/catalog.duckdb
+```
+
 Use the smoke-test configuration only for lightweight validation:
 
 ```powershell
@@ -112,6 +120,7 @@ Run the test suite:
 - `code/data/fetch_baostock_data.py`: downloader for universe histories, metadata, and formal financial/report data
 - `code/data/formal/baostock/`: canonical formal baostock root
 - `code/data/formal/`: formal derived inputs and outputs
+- `code/data/register_formal_duckdb_catalog.py`: DuckDB catalog registration for formal datasets
 - `code/stock_tensor/`: preprocessing, tensor construction, models, evaluation, and output logic
 - `code/tests/`: automated tests for config loading, dataset building, model fitting, and pipeline execution
 - `web/backend/`: minimal FastAPI backend for exposing run and stock-selection results

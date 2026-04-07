@@ -1,0 +1,43 @@
+{
+  "year": 2020,
+  "path": "code/data/formal/master/full_master_2020.csv",
+  "exists": true,
+  "rows": 840359,
+  "stock_count": 3737,
+  "min_date": "2020-01-02",
+  "max_date": "2020-12-31",
+  "field_nonempty": {
+    "turn": {
+      "count": 760983,
+      "ratio": 0.905545
+    },
+    "tradestatus": {
+      "count": 760983,
+      "ratio": 0.905545
+    },
+    "peTTM": {
+      "count": 760983,
+      "ratio": 0.905545
+    },
+    "pbMRQ": {
+      "count": 760983,
+      "ratio": 0.905545
+    },
+    "psTTM": {
+      "count": 760983,
+      "ratio": 0.905545
+    },
+    "pcfNcfTTM": {
+      "count": 760983,
+      "ratio": 0.905545
+    },
+    "isST": {
+      "count": 760983,
+      "ratio": 0.905545
+    }
+  },
+  "status": "ISSUES",
+  "issues": [
+    "补字段非空率过低: turn, tradestatus, peTTM, pbMRQ, psTTM, pcfNcfTTM, isST"
+  ]
+}
