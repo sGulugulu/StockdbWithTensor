@@ -16,10 +16,10 @@ There is no committed build pipeline yet, so keep workflow simple and reproducib
 - `git status`: check pending changes before editing or submitting work.
 - `Get-ChildItem code`: inspect the current implementation area.
 - `rg --files`: list tracked source files quickly once code is added.
-- `python3 -m venv .venv`: create the local virtual environment for WSL/Linux validation.
-- `.venv/bin/python -m pip install -r requirements.txt`: install runtime and API dependencies.
-- `.venv/bin/python code/main.py --config code/configs/sample_cn_smoke.yaml`: run the smoke-test tensor-factorization experiment pipeline.
-- `.venv/bin/python -m unittest discover -s code/tests`: run the automated test suite.
+- `python -m venv .venv`: create the local virtual environment.
+- `python -m pip install -r requirements.txt`: install runtime and API dependencies.
+- `python code/main.py --config code/configs/sample_cn_smoke.yaml`: run the smoke-test tensor-factorization experiment pipeline.
+- `python -m unittest discover -s code/tests`: run the automated test suite.
 
 If you introduce Python or another runtime, add a single documented entry point such as `python code/main.py` or `pytest code/tests`, then update this guide and the project README in the same change.
 

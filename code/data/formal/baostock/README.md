@@ -21,7 +21,7 @@
 ## 直接抓全 A 元数据
 
 ```powershell
-.venv/bin/python code/data/fetch_baostock_data.py `
+python code/data/fetch_baostock_data.py `
   --output-root code/data/formal/baostock `
   --start-date 2015-01-01 `
   --end-date 2026-04-01 `

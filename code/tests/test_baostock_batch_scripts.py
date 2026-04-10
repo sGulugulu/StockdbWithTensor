@@ -31,6 +31,26 @@ class BaostockBatchScriptTests(unittest.TestCase):
         self.assertIn('code/data/extract_tdx_year_codes.py', script_text)
         self.assertIn('--codes-file "$CODES_FILE"', script_text)
 
+    def test_rebuild_full_master_for_year_script_runs_cleanup_fetch_build_and_checks(self) -> None:
+        script_text = (REPO_ROOT / "code" / "data" / "rebuild_full_master_for_year.ps1").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('Remove-Item -Recurse -Force $yearDir -ErrorAction SilentlyContinue', script_text)
+        self.assertIn('run_baostock_master_fields_year.sh $Year $MaxParallelMonths', script_text)
+        self.assertIn('build_full_master_for_existing_year.ps1 $Year', script_text)
+        self.assertIn('check_full_master_year.py --year $Year', script_text)
+        self.assertIn('reconcile_full_master_year.py --year $Year', script_text)
+
+    def test_rebuild_full_master_for_year_generates_tdx_base_before_fetch(self) -> None:
+        script_text = (REPO_ROOT / "code" / "data" / "rebuild_full_master_for_year.ps1").read_text(
+            encoding="utf-8"
+        )
+        fetch_index = script_text.index('run_baostock_master_fields_year.sh $Year $MaxParallelMonths')
+        build_slice_index = script_text.index('build_tdx_year_slice.py')
+        build_base_index = script_text.index('build_tdx_full_master_base.py')
+        self.assertLess(build_slice_index, fetch_index)
+        self.assertLess(build_base_index, fetch_index)
+
 
 if __name__ == "__main__":
     unittest.main()

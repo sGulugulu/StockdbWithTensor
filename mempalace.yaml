@@ -1,0 +1,22 @@
+wing: "\u6BD5\u8BBE"
+rooms:
+- name: code
+  description: Files from code/
+- name: documentation
+  description: Files from docs/
+- name: web
+  description: Files from web/
+- name: "\u53C2\u8003\u6587\u732E"
+  description: "Files from \u53C2\u8003\u6587\u732E/"
+- name: scripts
+  description: Files from scripts/
+- name: configuration
+  description: Files from configs/
+- name: testing
+  description: Files from tests/
+- name: backend
+  description: Files from backend/
+- name: frontend
+  description: Files from frontend/
+- name: general
+  description: Files that don't fit other rooms

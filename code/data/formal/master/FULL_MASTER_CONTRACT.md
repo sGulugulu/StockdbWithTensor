@@ -110,7 +110,7 @@
 通达信原始日线 -> TDX Base Master
 
 ```powershell
-.venv/bin/python code/data/build_tdx_full_master_base.py `
+python code/data/build_tdx_full_master_base.py `
   --input-path code/data/formal/tdx_daily_raw.csv `
   --output-path code/data/formal/master/tdx_full_master_base.csv `
   --adjustflag-value 2
@@ -121,7 +121,7 @@
 用 baostock shared master 补齐估值 / 状态字段
 
 ```powershell
-.venv/bin/python code/data/merge_baostock_master_fields.py `
+python code/data/merge_baostock_master_fields.py `
   --tdx-base-path code/data/formal/master/tdx_full_master_base.csv `
   --baostock-path code/data/formal/master/shared_kline_panel.csv `
   --output-path code/data/formal/master/full_master.csv

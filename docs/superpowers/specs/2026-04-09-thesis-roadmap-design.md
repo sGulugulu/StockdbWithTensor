@@ -1,312 +1,311 @@
-# Thesis Roadmap Design
+# 毕设总体路线图设计
 
-## Purpose
+## 设计目的
 
-This design unifies the thesis roadmap for `基于张量分解的股票因子降维与模式发现` across research, data, system, and delivery concerns. The goal is not to produce an implementation checklist yet, but to define a stable top-level structure that explains:
+这份设计文档用于统一 `基于张量分解的股票因子降维与模式发现` 这一课题在研究、数据、系统和交付四个维度上的总体路线。目标不是立刻展开实现任务清单，而是先建立一套稳定的顶层叙事框架，明确回答以下问题：
 
-1. what the project is fundamentally trying to prove,
-2. what historical problems must be cleaned up,
-3. what the current main workstreams are,
-4. how future extensions should remain bounded.
+1. 这个项目本质上要证明什么。
+2. 历史上哪些问题必须被收拾干净。
+3. 当前真正的主工作流是什么。
+4. 未来扩展应该保留到什么边界，不至于无限膨胀。
 
-The roadmap covers both the thesis period and post-thesis evolution, but keeps the extension boundary conservative.
+这份路线图既覆盖毕设阶段，也覆盖毕设之后的自然延伸，但后续扩展边界保持保守，不展开为完整商业产品路线。
 
-## Project Positioning
+## 项目定位
 
-This project is not just a stock selection system, and it is not just a paper detached from implementation. Its core positioning is:
+这个项目既不是单纯的选股系统，也不是脱离实现的纯论文工作。它更准确的定位应该是：
 
-- the thesis focuses on tensor-decomposition-based factor reduction and pattern discovery,
-- the experiment system validates and externalizes the method,
-- the web system makes the experiment and result contracts queryable and demonstrable.
+- 论文主线聚焦于基于张量分解的股票因子降维与模式发现；
+- 实验系统负责把方法跑通、验证并沉淀结果；
+- Web 系统负责把实验能力、结果合同和查询能力变成可展示、可调用、可复现的系统接口。
 
-The research core is:
+研究核心对象明确为：
 
-- build a three-dimensional tensor with `stock-factor-time`,
-- use `CP` decomposition and `Tucker` decomposition as the main methodological paths,
-- verify method effectiveness on representative index-based experiment samples,
-- preserve a broader long-term stock universe for future decision support.
+- 构造 `股票-因子-时间` 三维张量；
+- 以 `CP` 分解和 `Tucker` 分解作为主要方法路径；
+- 在当前正式实验样本上验证方法有效性；
+- 同时保留更大的长期股票覆盖范围，为未来决策应用留口。
 
-## Unified Narrative
+## 统一叙事框架
 
-The roadmap adopts a dual narrative:
+总体路线图采用“双主线叙事”，但顺序上仍然体现系统优先于论文：
 
-1. **training-sample validation**
-   - the current formal experiments use representative index-based samples,
-   - the purpose is to verify whether tensor decomposition can achieve meaningful factor reduction and pattern discovery.
-2. **future decision application**
-   - the long-term data range still preserves the broader A-share universe,
-   - the system should later support decision use beyond the current experiment samples.
+1. **实验样本验证**
+   - 当前正式实验在代表性指数样本上开展；
+   - 目标是验证张量分解是否能够有效完成因子降维与模式发现。
+2. **未来决策应用**
+   - 系统长期仍保留更广股票范围；
+   - 方法一旦验证成立，应当能够迁移到更广股票范围的决策支持场景。
 
-The thesis should therefore be written as:
+因此，论文不应写成普通股票系统说明书，而应写成：
 
-- a method paper centered on tensor decomposition over `stock-factor-time`,
-- with experiment validation on the current sample universes,
-- and with a clearly bounded application extension path.
+- 以 `股票-因子-时间` 三维张量为统一研究对象；
+- 以 `CP` / `Tucker` 为核心方法；
+- 以当前正式实验样本完成方法验证；
+- 以未来更广应用作为受控扩展方向。
 
-## Core Scope Decisions
+## 核心范围决策
 
-### Formal Experiment Scope
+### 1. 当前正式实验样本
 
-The current formal experiment samples are centered on:
+当前正式实验主要围绕以下三个指数开展：
 
 - `HS300`
 - `SZ50`
 - `ZZ500`
 
-These are not the only long-term supported stock universes. They are the current main experiment samples.
+这三个指数是当前主要实验样本，不等于系统长期只保留这三个股票池。
 
-### Long-Term Stock Range
+### 2. 长期股票范围
 
-The long-term system-level stock range should still preserve the broader A-share universe. The architecture must therefore distinguish:
+系统长期股票范围仍然保留更广的 A 股覆盖范围。也就是说，架构上必须区分：
 
-- the long-term stock coverage range,
-- the current experiment sample layer,
-- the current main index-focused experiment configuration.
+- 长期股票覆盖范围；
+- 当前实验样本层；
+- 当前重点指数实验配置。
 
-### Tensor Definition
+### 3. 张量定义
 
-The unified tensor object is:
+统一研究对象为：
 
-- stock dimension
-- factor dimension
-- time dimension
+- 第一维：股票
+- 第二维：因子
+- 第三维：时间
 
-This is the core research object for the thesis and the main experiment pipeline.
+这是一切实验、方法、结果解释和论文叙事的核心对象。
 
-### Primary Methods
+### 4. 主要方法
 
-The main methods are:
+核心方法固定为：
 
-- `CP` decomposition
-- `Tucker` decomposition
+- `CP` 分解
+- `Tucker` 分解
 
-These are first pattern-discovery and factor-reduction methods, and only secondarily evaluated through prediction or decision effectiveness.
+它们首先是因子降维与模式发现方法，其次才在预测或决策阶段接受有效性检验。
 
-### Reference Basis
+### 5. 参考依据
 
-The method direction is aligned with the literature under `./参考文献`, which currently consists primarily of PDF references related to tensor methods, tensor decomposition, financial time series, and stock applications.
+方法方向以 `./参考文献` 下的 PDF 文献为主要参考来源，相关文献覆盖张量方法、张量分解、金融时间序列和股票应用等方向。
 
-## Task Tree Structure
+## 总体任务树结构
 
-The roadmap should use four top-level branches:
+总体路线图采用 4 个一级分支：
 
-1. **Research Data and Experiment Foundation**
-2. **System Implementation and Demonstration**
-3. **Thesis Delivery and Defense Materials**
-4. **Future Extension and Long-Term Evolution**
+1. **研究数据与实验底座**
+2. **系统实现与演示**
+3. **论文交付与答辩材料**
+4. **后续扩展与长期演进**
 
-The branch order should reflect practical priority:
+一级分支的排序体现实际优先级：
 
-1. Research Data and Experiment Foundation
-2. System Implementation and Demonstration
-3. Thesis Delivery and Defense Materials
-4. Future Extension and Long-Term Evolution
+1. 研究数据与实验底座
+2. 系统实现与演示
+3. 论文交付与答辩材料
+4. 后续扩展与长期演进
 
-## Historical Review Framework
+## 历史复盘框架
 
-Historical review should be written in two layers:
+历史复盘采用双层结构：
 
-1. high-level problem categories,
-2. concrete historical decisions and their effects.
+1. 先给出高层问题分类；
+2. 再在每类下列出关键历史决策及其影响。
 
-The recommended categories are:
+建议的高层分类如下：
 
-### 1. Research Scope Drift
+### 1. 研究边界漂移
 
-- experiment universes were not always consistently defined,
-- old sample semantics and current formal semantics diverged,
-- the formal window had to be explicitly fixed.
+- 正式实验股票池口径曾不够稳定；
+- 旧样例语义与当前 formal 语义一度脱节；
+- 正式时间窗口需要被显式固定。
 
-### 2. Data Foundation Instability
+### 2. 数据底座不稳定
 
-- the project moved from duplicated per-index storage thinking to shared market data plus universe history filtering,
-- multiple intermediate routes now coexist, including shared kline, transitional full master, and formal long-term targets.
+- 项目从“按指数重复存完整数据”转向“共享市场主数据 + universe 历史过滤”；
+- 当前仍存在 shared kline、过渡 full master 和 formal 长期目标并行痕迹。
 
-### 3. System Boundary Shifts
+### 3. 系统边界反复调整
 
-- the Python backend scaffold exists,
-- the long-term backend direction has shifted to a pure Go API gateway,
-- Python remains the experiment runtime rather than the long-term HTTP gateway.
+- Python backend scaffold 仍然存在；
+- 长期后端方向已经转向纯 Go API 网关；
+- Python 保留为实验运行时，而不是长期 HTTP 网关。
 
-### 4. Thesis and Engineering Misalignment
+### 4. 论文与工程脱节
 
-- engineering outputs and files existed before the academic narrative fully stabilized,
-- the thesis now needs to explicitly reorganize those results around the tensor-decomposition research question.
+- 工程产物、结果文件和接口雏形先于论文叙事完全稳定；
+- 现在必须围绕张量分解研究问题重新组织工程结果。
 
-## Future Task Tree Conventions
+## 未来任务树约定
 
-Each top-level branch should be expanded with three layers:
+每个一级分支都采用三层结构展开：
 
-1. **past legacy tasks**
-2. **current main tasks**
-3. **future extension tasks**
+1. **过去遗留任务**
+2. **当前主任务**
+3. **未来延伸任务**
 
-Each node under those layers should be documented using:
+每个节点用以下三类信息展开：
 
-- goal,
-- dependencies,
-- deliverables.
+- 目标
+- 依赖关系
+- 交付物
 
-This keeps the roadmap useful both for retrospective cleanup and forward planning.
+这样既能支撑复盘，也能支撑后续实施计划。
 
-## Branch 1: Research Data and Experiment Foundation
+## 一级分支一：研究数据与实验底座
 
-### Past Legacy Tasks
+### 过去遗留任务
 
-- formal experiment universes were previously unstable,
-- the shared data route and transitional data route coexisted without a clear hierarchy,
-- preprocessing was not always treated as its own explicit stage,
-- long-term stock range and current experiment sample semantics could blur together.
+- 正式实验样本定义曾不够稳定；
+- shared 数据路线与过渡路线并行但未完全收束；
+- 数据预处理没有被提升为独立阶段；
+- 长期股票范围与当前实验样本语义容易混淆。
 
-### Current Main Tasks
+### 当前主任务
 
-1. unify the formal data directories and field contracts,
-2. complete universe-history files,
-3. converge shared kline and full master routes,
-4. elevate preprocessing into an explicit phase,
-5. stabilize formal factor panels and tensor inputs,
-6. close the baseline experiment loop,
-7. unify metrics and result artifact contracts.
+1. 统一 formal 数据目录和字段合同；
+2. 完备 universe 历史文件；
+3. 收敛 shared kline 与 full master 路线；
+4. 将数据预处理提升为独立阶段；
+5. 稳定 formal factor panel 与 tensor input；
+6. 完成 baseline 实验闭环；
+7. 统一 metrics 与结果产物合同。
 
-### Future Extension Tasks
+### 未来延伸任务
 
-1. extend the factor set,
-2. expand experiment samples,
-3. extend application ranges,
-4. expand comparative method evaluation.
+1. 扩展因子集合；
+2. 扩展实验样本；
+3. 扩展应用范围；
+4. 扩展方法比较框架。
 
-## Experiment Sample Protocol
+## 实验样本协议
 
-The experiment layer should distinguish between long-term stock coverage and current experiment setup.
+实验层必须区分长期股票范围与当前实验配置。
 
-### Long-Term Coverage
+### 长期覆盖范围
 
-The broader A-share range should still be preserved at the system and data-foundation level.
+更广的 A 股范围仍然保留在系统和数据底座层，不因为当前论文实验样本较少而被删除。
 
-### Current Main Experiment Samples
+### 当前主要实验样本
 
-Current formal experiments are centered on:
+当前主要实验围绕：
 
 - `HS300`
 - `SZ50`
 - `ZZ500`
 
-These experiments should be run separately rather than prematurely merged into one combined sample.
+这三个指数分别建实验，不先混合成单一总样本池。
 
-### Split Strategy
+### 切分策略
 
-The system should support configurable split strategies:
+系统层必须支持可配置切分策略：
 
-- ratio configurable,
-- axis configurable,
-- time-based / stock-based / hybrid split modes supported.
+- 比例可配置；
+- 维度可配置；
+- 支持按时间切分、按股票切分、混合切分。
 
-### Thesis Default Split
+### 论文默认切分
 
-The thesis default main experiment should use **time-based split**. Other split strategies remain valid system capabilities and future robustness experiments.
+论文主实验默认采用**按时间切分**。其他切分方式是系统能力和后续稳健性实验方向，不强行塞进当前论文主结果。
 
-## Preprocessing and Leakage Control
+## 数据预处理与信息泄露控制
 
-Preprocessing should be treated as an explicit phase between raw formal data and tensor input generation.
+数据预处理必须被视为原始 formal 数据与张量输入之间的独立阶段，至少包括：
 
-It should include:
+1. 样本筛选；
+2. 时间与字段对齐；
+3. 缺失值处理；
+4. 异常值处理；
+5. 因子方向统一与标准化；
+6. 标签与元信息拆分。
 
-1. sample filtering,
-2. time and field alignment,
-3. missing-value handling,
-4. outlier handling,
-5. factor direction normalization and standardization,
-6. label and metadata separation.
+这里的硬约束是：
 
-The hard rule is:
+- 任何未来信息不得穿越训练 / 预测边界；
+- 未来收益标签只作为评价目标，不进入输入张量。
 
-- no future information may leak across the training/prediction boundary,
-- future return labels are evaluation targets and do not enter the input tensor.
+## 实验主线
 
-## Experiment Mainline
+实验主线分为三层：
 
-The experiment mainline should be described in three layers:
+1. **张量构造**
+   - 按当前实验样本分别构造 `股票-因子-时间` 三维张量。
+2. **张量分解**
+   - 应用 `CP` 和 `Tucker`。
+3. **验证**
+   - 比较分解质量、模式发现能力，以及在后续窗口上的预测或决策有效性。
 
-1. **tensor construction**
-   - build `stock-factor-time` tensors per experiment sample.
-2. **decomposition**
-   - apply `CP` and `Tucker`.
-3. **validation**
-   - compare decomposition quality, pattern discovery quality, and downstream predictive or decision usefulness.
+论文中必须避免把 `CP` / `Tucker` 降格成普通收益预测工具，它们首先是因子降维与模式发现方法。
 
-The thesis should avoid reducing `CP` and `Tucker` to mere predictive tools. They are primarily factor-reduction and pattern-discovery methods.
+## 评估框架
 
-## Evaluation Framework
+评价体系建议分三层：
 
-Evaluation should be layered:
+1. **分解质量**
+   - 重构质量、rank 行为等。
+2. **模式发现与解释**
+   - 因子贡献、股票结构、时间模式、不同方法的解释差异。
+3. **预测或决策有效性**
+   - 训练阶段提取出的结构在后续窗口中是否仍有价值。
 
-1. **decomposition quality**
-   - reconstruction quality and rank behavior.
-2. **pattern discovery and interpretation**
-   - factor contribution, stock structure, temporal regimes, explanatory differences between methods.
-3. **prediction or decision usefulness**
-   - whether structures extracted on the training part remain useful on the later part.
+这三层同时服务：
 
-This framework should serve both:
+- 论文结果章节；
+- 系统结果页与 API 合同。
 
-- the thesis result chapters,
-- the system result pages and API contracts.
+## 一级分支二：系统实现与演示
 
-## Branch 2: System Implementation and Demonstration
+### 过去遗留任务
 
-### Past Legacy Tasks
+- HTTP、执行、状态与结果职责历史上混在 Python 中；
+- 配置语义更像脚本内部参数，而不是网关级 API 配置模型；
+- 结果文件已存在，但尚未完全稳定为正式接口合同。
 
-- HTTP, execution, state, and result responsibilities historically mixed in Python,
-- configuration semantics were closer to script-level operation than gateway-grade API modeling,
-- result files existed but were not fully stabilized as formal API contracts.
+### 当前主任务
 
-### Current Main Tasks
+1. 定义实验配置模型；
+2. 建立 Go 任务主控层；
+3. 固化 Python runner 主路径；
+4. 暴露 formal 数据查询接口；
+5. 暴露 run 结果查询接口；
+6. 打通前端演示闭环。
 
-1. define the experiment configuration model,
-2. build the Go run-control layer,
-3. define the Python runner primary path,
-4. expose formal data query endpoints,
-5. expose run-result query endpoints,
-6. close the frontend demonstration loop.
+### 未来延伸任务
 
-### Future Extension Tasks
+1. 扩展切分策略实验支持；
+2. 支持更灵活的实验样本配置；
+3. 增强 run 管理和事件历史；
+4. 强化结果沉淀与检索能力。
 
-1. broaden split-strategy experimentation support,
-2. support richer experiment-sample configuration,
-3. improve run management and event history,
-4. strengthen result persistence and retrieval.
+## 系统边界
 
-## System Boundary
+长期目标架构固定为：
 
-The target backend architecture is:
+- 纯 Go API 网关；
+- Python 作为实验执行器和数据处理运行时；
+- DuckDB 作为 formal 数据查询层和 run 归档层；
+- `code/outputs` 作为 run 结果产物层。
 
-- a pure Go API gateway,
-- Python as experiment runner and data-processing runtime,
-- DuckDB for formal data querying and run archival,
-- `code/outputs` as the run-result artifact layer.
+### Go 职责
 
-### Go Responsibilities
+- 提供 HTTP 服务；
+- 做请求校验；
+- 提供统一响应体；
+- 管理任务生命周期；
+- 持久化状态；
+- 做归档；
+- 聚合 DuckDB 查询与结果文件读取。
 
-- HTTP service,
-- request validation,
-- unified response structure,
-- run lifecycle management,
-- state persistence,
-- run archival,
-- query aggregation from DuckDB and result files.
+### Python 职责
 
-### Python Responsibilities
+- 解析 run 请求；
+- 生成 `submitted_config.yaml`；
+- 执行实验；
+- 将结果写入 `code/outputs/<run_id>/`。
 
-- parse run requests,
-- generate `submitted_config.yaml`,
-- execute experiments,
-- write outputs under `code/outputs/<run_id>/`.
+## API 与运行设计
 
-## API and Run Design
+### 统一响应包裹结构
 
-### Unified Response Envelope
-
-The gateway should return a wrapped response:
+Go 网关统一返回如下包裹结构：
 
 ```json
 {
@@ -318,130 +317,130 @@ The gateway should return a wrapped response:
 }
 ```
 
-### Route Groups
+### 路由分组
 
-Recommended route groups:
+建议的路由分组：
 
-1. run submission and lifecycle
-2. run result queries
-3. formal data queries
+1. run 提交与生命周期管理；
+2. run 结果查询；
+3. formal 数据查询。
 
-### Default Submission Model
+### 默认提交模型
 
-`POST /api/runs` should be asynchronous by default:
+`POST /api/runs` 默认异步：
 
-- validate request,
-- allocate `run_id`,
-- persist run state,
-- return `202 Accepted`,
-- start Python runner asynchronously,
-- let the frontend poll status or detail endpoints.
+- 校验请求；
+- 分配 `run_id`；
+- 写入运行态；
+- 返回 `202 Accepted`；
+- 异步启动 Python runner；
+- 由前端轮询状态或详情接口。
 
-### Experiment Configuration Model
+### 实验配置模型
 
-A run request should model at least:
+一个 run 请求至少应当包含：
 
-- config profile,
-- training sample configuration,
-- prediction sample configuration,
-- split strategy,
-- model settings,
-- output settings.
+- config profile；
+- 训练样本配置；
+- 预测样本配置；
+- 切分策略；
+- 模型设置；
+- 输出设置。
 
-This is the preferred design starting point, rather than defining routes first and experiment semantics later.
+因此系统设计应先定义实验配置模型，再定义路由，而不是反过来。
 
-### State Source of Truth
+### 状态真源
 
-Go should own the run state source of truth through:
+Go 持有运行状态真源，采用双层结构：
 
-- runtime JSON state, for example `var/runs/<run_id>.json`,
-- DuckDB archival tables, for example `gateway_runs` and `gateway_run_events`.
+- 运行态 JSON，例如 `var/runs/<run_id>.json`；
+- DuckDB 归档表，例如 `gateway_runs`、`gateway_run_events`。
 
-Python should not overwrite the Go-owned state source of truth.
+Python 不反向覆盖 Go 的状态真源。
 
-## Branch 3: Thesis Delivery and Defense Materials
+## 一级分支三：论文交付与答辩材料
 
-### Past Legacy Tasks
+### 过去遗留任务
 
-- the thesis question risked becoming too system-centric,
-- engineering outputs existed before the academic storyline fully stabilized,
-- sample-range semantics and long-term application semantics were not always clearly distinguished.
+- 论文问题曾有被系统功能稀释的风险；
+- 工程结果先出现，学术叙事后稳定；
+- 当前实验样本与长期应用范围关系曾不够清楚。
 
-### Current Main Tasks
+### 当前主任务
 
-1. lock the thesis core problem statement,
-2. define the dual structure of validation and application,
-3. write the method section around the tensor object and decomposition methods,
-4. write the data and preprocessing section,
-5. write the experiment and result interpretation section,
-6. prepare defense materials.
+1. 固化论文核心问题；
+2. 明确“样本验证 + 预测/应用扩展”的双段结构；
+3. 写清方法章节中的张量对象和分解方法；
+4. 写清数据与预处理章节；
+5. 写清实验设计与结果解释章节；
+6. 准备答辩材料。
 
-### Future Extension Tasks
+### 未来延伸任务
 
-1. add robustness experiment writeups,
-2. compare more methods,
-3. expand application discussion when the system matures further.
+1. 增加稳健性实验写法；
+2. 比较更多方法；
+3. 在系统更成熟后扩展应用讨论。
 
-## Thesis Narrative
+## 论文叙事
 
-The thesis should be organized as:
+论文建议采用双段式结构：
 
-1. **sample-based validation**
-   - validate the tensor-decomposition method on the current main experiment samples.
-2. **prediction/application extension**
-   - explain how the validated method can be carried into broader future use.
+1. **样本验证**
+   - 在当前主要实验样本上验证张量分解方法。
+2. **预测 / 应用扩展**
+   - 说明验证后的方法如何迁移到更广未来使用场景。
 
-The thesis should not collapse into a generic stock system report. Its center remains tensor-based factor reduction and pattern discovery.
+论文中心必须始终是张量分解驱动的因子降维与模式发现，而不是一般股票系统报告。
 
-## Branch 4: Future Extension and Long-Term Evolution
+## 一级分支四：后续扩展与长期演进
 
-### Past Legacy Tasks
+### 过去遗留任务
 
-- extension directions were previously too easy to let expand without boundary,
-- future ideas could blur into current implementation priorities.
+- 扩展方向曾容易过度发散；
+- 长期想法与当前主任务边界一度不够清晰。
 
-### Current Main Tasks
+### 当前主任务
 
-1. keep a bounded extension map,
-2. preserve market-extension hooks,
-3. preserve richer factor and method extension space,
-4. preserve stronger run and result management directions.
+1. 定义保守边界下的扩展图谱；
+2. 保留市场扩展入口；
+3. 保留更丰富因子和方法的扩展空间；
+4. 保留更强 run 管理与结果沉淀方向。
 
-### Future Extension Tasks
+### 未来延伸任务
 
-1. add more experiment samples,
-2. extend application ranges,
-3. evaluate more split strategies,
-4. evolve into a more durable research platform.
+1. 增加更多实验样本；
+2. 扩展应用范围；
+3. 系统比较更多切分策略；
+4. 将当前项目逐步沉淀为长期研究平台。
 
-## Dependency Structure
+## 依赖关系
 
-The branch dependencies should be explicit:
+四个一级分支之间的依赖关系应明确为：
 
-1. **Research Data and Experiment Foundation** is the upstream base.
-2. **System Implementation and Demonstration** depends on that base.
-3. **Thesis Delivery and Defense Materials** depends on both experiment outputs and system-stabilized contracts.
-4. **Future Extension and Long-Term Evolution** depends on the first three branches reaching stability.
+1. **研究数据与实验底座** 是上游基础；
+2. **系统实现与演示** 依赖实验底座；
+3. **论文交付与答辩材料** 同时依赖实验结果和系统稳定合同；
+4. **后续扩展与长期演进** 依赖前三条主线基本稳定。
 
-Parallel work is possible, but only after the upstream contracts are stable enough:
+允许一定并行，但前提是上游合同已经稳定：
 
-- late data-foundation work can overlap with early system work,
-- late system work can overlap with early thesis packaging.
+- 数据底座后半段可以与系统前半段并行；
+- 系统后半段可以与论文整理前半段并行。
 
-## Non-Goals
+## 非目标
 
-This roadmap does not define:
+这份路线图当前不定义：
 
-- a full commercial product roadmap,
-- multi-user permissions,
-- production operations and monitoring,
-- complete market-by-market rollout plans beyond conservative research-linked extensions.
+- 完整商业产品路线；
+- 多用户权限体系；
+- 生产监控与运维体系；
+- 超出研究边界的市场级大规模扩展规划。
 
-## Success Criteria For This Design
+## 设计成功标准
 
-This design is successful if it gives the project a stable narrative and planning scaffold where:
+如果这份设计是成功的，它应该让项目具备一套稳定的总体叙事和规划骨架，使得：
 
-1. the thesis remains centered on tensor decomposition over `stock-factor-time`,
-2. the system work remains aligned with the experiment and result contracts,
-3. historical cleanup and future planning can live in one roadmap without becoming a vague diary,
-4. the roadmap can later be turned into implementation plans branch by branch.
+1. 论文始终围绕 `股票-因子-时间` 张量上的张量分解展开；
+2. 系统实现始终围绕实验配置、结果合同和查询能力收束；
+3. 过去问题复盘与未来任务规划可以被放在同一份路线图中，而不变成流水账；
+4. 后续可以按一级分支继续拆成正式实施计划。

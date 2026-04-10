@@ -17,9 +17,10 @@ class FormalConfigTests(unittest.TestCase):
         manifest_text = (output_dir / "run_manifest.json").read_text(encoding="utf-8")
         snapshot = yaml.safe_load((output_dir / "config_snapshot.yaml").read_text(encoding="utf-8"))
         run_log = (output_dir / "run.log").read_text(encoding="utf-8")
+        repo_root = str(ROOT.parent.resolve()).replace("\\", "/")
 
-        self.assertNotIn("/mnt/d/Personal folders/Desktop/宋田琦/毕设", manifest_text)
-        self.assertNotIn("/mnt/d/Personal folders/Desktop/宋田琦/毕设", run_log)
+        self.assertNotIn(repo_root, manifest_text.replace("\\", "/"))
+        self.assertNotIn(repo_root, run_log.replace("\\", "/"))
         self.assertEqual(snapshot["output"]["root_dir"], "code/outputs")
         self.assertFalse(Path(snapshot["market"]["universe_path"]).is_absolute())
         self.assertFalse(Path(snapshot["data"]["path"]).is_absolute())

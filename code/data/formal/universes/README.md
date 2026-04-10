@@ -31,7 +31,7 @@
 前提：先有 `code/data/formal/baostock/metadata/stock_basic.csv`
 
 ```powershell
-.venv/bin/python code/data/build_all_a_tradable_history.py `
+python code/data/build_all_a_tradable_history.py `
   --stock-basic-path code/data/formal/baostock/metadata/stock_basic.csv `
   --output-path code/data/formal/universes/all_a_tradable_history.csv `
   --horizon-date 2026-04-01
@@ -42,7 +42,7 @@
 ### HS300
 
 ```powershell
-.venv/bin/python code/data/build_baostock_member_history.py `
+python code/data/build_baostock_member_history.py `
   --snapshot code/data/formal/baostock/index_memberships/hs300_snapshots.csv `
   --output code/data/formal/universes/hs300_history.csv `
   --horizon-date 2026-04-01
@@ -51,7 +51,7 @@
 ### SZ50
 
 ```powershell
-.venv/bin/python code/data/build_baostock_member_history.py `
+python code/data/build_baostock_member_history.py `
   --snapshot code/data/formal/baostock/index_memberships/sz50_snapshots.csv `
   --output code/data/formal/universes/sz50_history.csv `
   --horizon-date 2026-04-01
@@ -60,7 +60,7 @@
 ### ZZ500
 
 ```powershell
-.venv/bin/python code/data/build_baostock_member_history.py `
+python code/data/build_baostock_member_history.py `
   --snapshot code/data/formal/baostock/index_memberships/zz500_snapshots.csv `
   --output code/data/formal/universes/zz500_history.csv `
   --horizon-date 2026-04-01
