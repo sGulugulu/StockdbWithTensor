@@ -31,7 +31,7 @@
 ### HS300
 
 ```powershell
-.venv/bin/python code/data/build_formal_factor_panel.py `
+python code/data/build_formal_factor_panel.py `
   --kline-path code/data/formal/master/shared_kline_panel.csv `
   --industry-path code/data/formal/baostock/metadata/stock_industry.csv `
   --membership-path code/data/formal/universes/hs300_history.csv `
@@ -41,7 +41,7 @@
 ### SZ50
 
 ```powershell
-.venv/bin/python code/data/build_formal_factor_panel.py `
+python code/data/build_formal_factor_panel.py `
   --kline-path code/data/formal/master/shared_kline_panel.csv `
   --industry-path code/data/formal/baostock/metadata/stock_industry.csv `
   --membership-path code/data/formal/universes/sz50_history.csv `
@@ -51,7 +51,7 @@
 ### ZZ500
 
 ```powershell
-.venv/bin/python code/data/build_formal_factor_panel.py `
+python code/data/build_formal_factor_panel.py `
   --kline-path code/data/formal/master/shared_kline_panel.csv `
   --industry-path code/data/formal/baostock/metadata/stock_industry.csv `
   --membership-path code/data/formal/universes/zz500_history.csv `

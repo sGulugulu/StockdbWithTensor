@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
+import FormalDataPanel from "./components/FormalDataPanel.jsx";
 
-const API_BASE = import.meta.env.VITE_API_BASE ?? "http://127.0.0.1:8000";
+const API_BASE = import.meta.env.VITE_API_BASE ?? "http://127.0.0.1:8080";
 
 export default function App() {
   const [view, setView] = useState("config");
@@ -134,6 +135,7 @@ export default function App() {
         <button className={view === "runs" ? "tab active" : "tab"} onClick={() => setView("runs")}>实验列表页</button>
         <button className={view === "detail" ? "tab active" : "tab"} onClick={() => setView("detail")}>实验详情页</button>
         <button className={view === "selection" ? "tab active" : "tab"} onClick={() => setView("selection")}>选股结果页</button>
+        <button className={view === "formal" ? "tab active" : "tab"} onClick={() => setView("formal")}>Formal 数据页</button>
       </section>
 
       <section className="grid">
@@ -400,6 +402,8 @@ export default function App() {
             </tbody>
           </table> : <p>当前运行尚未生成候选股，或结果仍在处理中。</p>}
         </div>}
+
+        {view === "formal" && <FormalDataPanel apiBase={API_BASE} />}
       </section>
     </div>
   );

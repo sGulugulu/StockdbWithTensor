@@ -51,7 +51,7 @@ bash code/data/run_baostock_stage3_year.sh 2015
 ### 直接跑底层脚本
 
 ```powershell
-.venv/bin/python code/data/fetch_baostock_kline.py `
+python code/data/fetch_baostock_kline.py `
   --codes-file code/data/formal/baostock/metadata/all_a_codes.csv `
   --output-path code/data/formal/master/shared_kline_panel.csv `
   --progress-path code/data/formal/master/shared_kline_panel_2015.progress.json `
@@ -109,14 +109,14 @@ powershell -ExecutionPolicy Bypass -File code/data/build_full_master_for_existin
 .\code\data\build_full_master_for_existing_year.ps1 2015
 ```
 
-这个 `.ps1` 入口脚本已经适配了 **Windows PowerShell -> WSL `.venv/bin/python`** 的调用方式。
+这个 `.ps1` 入口脚本已经适配了 **Windows PowerShell -> 本地 Python** 的调用方式。
 
 也就是说：
 
 - 你在 Windows PowerShell 里直接运行即可
-- 不需要手动切到 WSL shell
-- 脚本内部会自动调用 WSL 里的 `.venv/bin/python`
-- 中文路径编码问题已经处理过，不需要你手工写 `/mnt/d/...`
+- 不需要手动切到其他 shell
+- 脚本内部会自动解析本地 Python 可执行文件
+- 中文路径和空格路径不需要额外转换
 
 ### 输入文件
 
@@ -155,7 +155,7 @@ powershell -ExecutionPolicy Bypass -File code/data/build_full_master_for_existin
 ### 1. 通达信原始日线 -> TDX Base Master
 
 ```powershell
-.venv/bin/python code/data/build_tdx_full_master_base.py `
+python code/data/build_tdx_full_master_base.py `
   --input-path code/data/formal/tdx_daily_raw.csv `
   --output-path code/data/formal/master/tdx_full_master_base.csv `
   --adjustflag-value 2
@@ -164,7 +164,7 @@ powershell -ExecutionPolicy Bypass -File code/data/build_full_master_for_existin
 ### 2. 用 baostock shared master 补齐估值 / 状态字段
 
 ```powershell
-.venv/bin/python code/data/merge_baostock_master_fields.py `
+python code/data/merge_baostock_master_fields.py `
   --tdx-base-path code/data/formal/master/tdx_full_master_base.csv `
   --baostock-path code/data/formal/master/shared_kline_panel.csv `
   --output-path code/data/formal/master/full_master.csv
@@ -173,7 +173,7 @@ powershell -ExecutionPolicy Bypass -File code/data/build_full_master_for_existin
 ### 3. 先切某一年的通达信切片再单独验证
 
 ```powershell
-.venv/bin/python code/data/build_tdx_year_slice.py `
+python code/data/build_tdx_year_slice.py `
   --input-path code/data/formal/tdx_daily_raw.csv `
   --output-path code/data/formal/master/tdx_2015_raw.csv `
   --year 2015
@@ -209,12 +209,37 @@ bash code/data/run_baostock_master_fields_year.sh 2015 2
 .\code\data\build_full_master_for_existing_year.ps1 2015
 ```
 
+如果你想把“清理旧结果 -> 重抓该年补字段源 -> 重建 full master -> 跑检查”整条链一次跑完，可以直接用：
+
+```powershell
+.\code\data\rebuild_full_master_for_year.ps1 2024
+```
+
+可选地传第二个参数控制并行月份数：
+
+```powershell
+.\code\data\rebuild_full_master_for_year.ps1 2024 10
+```
+
+这个脚本会自动执行：
+
+- 删除 `baostock_fields/<year>/`、`baostock_fields/<year>.csv`
+- 删除该年份旧的 `tdx_<year>_raw.csv`、`tdx_full_master_base_<year>.csv`、`full_master_<year>.csv`
+- 先重建该年份的 `tdx_<year>_raw.csv` 和 `tdx_full_master_base_<year>.csv`
+- 重新运行 `run_baostock_master_fields_year.sh`
+- 重新运行 `build_full_master_for_existing_year.ps1`
+- 再运行 `check_full_master_year.py`
+- 再运行 `reconcile_full_master_year.py`
+
+这样 `run_baostock_master_fields_year.sh` 在抓补字段前就能拿到最新的 `tdx_full_master_base_<year>.csv`，
+从中提取该年份真实出现的股票代码集合，而不是错误回退到 `all_a_codes.csv`。
+
 ## 检查某一年的 full master
 
 如果你想检查某一年 `full_master_<year>.csv` 是否完整，可以运行：
 
 ```powershell
-.venv/bin/python code/data/check_full_master_year.py --year 2015
+python code/data/check_full_master_year.py --year 2015
 ```
 
 默认会输出并写入：
@@ -248,7 +273,7 @@ bash code/data/run_baostock_master_fields_year.sh 2015 2
 可以运行：
 
 ```powershell
-.venv/bin/python code/data/reconcile_full_master_year.py --year 2019
+python code/data/reconcile_full_master_year.py --year 2019
 ```
 
 默认会输出并写入：
@@ -286,7 +311,7 @@ bash code/data/run_baostock_master_fields_year.sh 2015 2
 可以运行：
 
 ```powershell
-.venv/bin/python code/data/audit_baostock_fields_year.py --year 2019
+python code/data/audit_baostock_fields_year.py --year 2019
 ```
 
 默认会输出并写入：

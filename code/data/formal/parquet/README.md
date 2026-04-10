@@ -16,7 +16,7 @@
 ## 转换命令
 
 ```powershell
-.venv/bin/python code/data/convert_formal_csv_to_parquet.py `
+python code/data/convert_formal_csv_to_parquet.py `
   --formal-root code/data/formal `
   --overwrite
 ```

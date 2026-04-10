@@ -39,7 +39,7 @@ Each structured subdirectory now also has its own `README.md` with:
 - 通达信价格量底座如何生成
 - baostock shared master 如何补齐估值 / 状态字段
 - 如何生成某一年的过渡版 full master 进行验证
-- 如何在 Windows PowerShell 中通过 `code/data/build_full_master_for_existing_year.ps1` 自动调用 WSL `.venv` 生成某一年的 full master
+- 如何在 Windows PowerShell 中通过 `code/data/build_full_master_for_existing_year.ps1` 直接调用本地 Python 生成某一年的 full master
 
 Tongdaxin workflow:
 
@@ -76,7 +76,7 @@ Baostock workflow:
 4. Example command:
 
 ```powershell
-.venv/bin/python code/data/fetch_baostock_data.py `
+python code/data/fetch_baostock_data.py `
   --output-root code/data/formal/baostock `
   --start-date 2015-01-01 `
   --end-date 2026-04-01 `
@@ -100,14 +100,14 @@ Output layout:
 After the constituent snapshots are ready, you can build member-history files and kline panels:
 
 ```powershell
-.venv/bin/python code/data/build_baostock_member_history.py `
+python code/data/build_baostock_member_history.py `
   --snapshot code/data/formal/baostock/index_memberships/hs300_snapshots.csv `
   --output code/data/formal/universes/hs300_history.csv `
   --horizon-date 2026-04-01
 ```
 
 ```powershell
-.venv/bin/python code/data/fetch_baostock_kline.py `
+python code/data/fetch_baostock_kline.py `
   --codes-file code/data/formal/baostock/metadata/all_a_codes.csv `
   --output-path code/data/formal/master/shared_kline_panel.csv `
   --start-date 2015-01-01 `
@@ -117,7 +117,7 @@ After the constituent snapshots are ready, you can build member-history files an
 If `stock_basic.csv` already exists, you can build the tradable all-A-share universe history offline:
 
 ```powershell
-.venv/bin/python code/data/build_all_a_tradable_history.py `
+python code/data/build_all_a_tradable_history.py `
   --stock-basic-path code/data/formal/baostock/metadata/stock_basic.csv `
   --output-path code/data/formal/universes/all_a_tradable_history.csv `
   --horizon-date 2026-04-01
@@ -126,7 +126,7 @@ If `stock_basic.csv` already exists, you can build the tradable all-A-share univ
 Once the structured CSV outputs are validated, you can create parquet mirrors:
 
 ```powershell
-.venv/bin/python code/data/convert_formal_csv_to_parquet.py `
+python code/data/convert_formal_csv_to_parquet.py `
   --formal-root code/data/formal `
   --overwrite
 ```
@@ -164,7 +164,7 @@ bash code/data/run_baostock_stage2_dataset_year.sh 2015
 先从通达信原始日线中切出某一年的原始切片：
 
 ```powershell
-.venv/bin/python code/data/build_tdx_year_slice.py `
+python code/data/build_tdx_year_slice.py `
   --input-path code/data/formal/tdx_daily_raw.csv `
   --output-path code/data/formal/master/tdx_2015_raw.csv `
   --year 2015
@@ -175,7 +175,7 @@ bash code/data/run_baostock_stage2_dataset_year.sh 2015
 把通达信原始切片转换成标准化价格量主表：
 
 ```powershell
-.venv/bin/python code/data/build_tdx_full_master_base.py `
+python code/data/build_tdx_full_master_base.py `
   --input-path code/data/formal/master/tdx_2015_raw.csv `
   --output-path code/data/formal/master/tdx_full_master_base_2015.csv `
   --adjustflag-value 2

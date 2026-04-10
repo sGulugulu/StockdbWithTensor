@@ -1,0 +1,750 @@
+<!DOCTYPE html><html><head>
+      <title>毕设</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.38/dist/katex.min.css">
+      
+      
+      
+      
+      
+      <style>
+      code[class*=language-],pre[class*=language-]{color:#333;background:0 0;font-family:Consolas,"Liberation Mono",Menlo,Courier,monospace;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.4;-moz-tab-size:8;-o-tab-size:8;tab-size:8;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*=language-]{padding:.8em;overflow:auto;border-radius:3px;background:#f5f5f5}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal;background:#f5f5f5}.token.blockquote,.token.comment{color:#969896}.token.cdata{color:#183691}.token.doctype,.token.macro.property,.token.punctuation,.token.variable{color:#333}.token.builtin,.token.important,.token.keyword,.token.operator,.token.rule{color:#a71d5d}.token.attr-value,.token.regex,.token.string,.token.url{color:#183691}.token.atrule,.token.boolean,.token.code,.token.command,.token.constant,.token.entity,.token.number,.token.property,.token.symbol{color:#0086b3}.token.prolog,.token.selector,.token.tag{color:#63a35c}.token.attr-name,.token.class,.token.class-name,.token.function,.token.id,.token.namespace,.token.pseudo-class,.token.pseudo-element,.token.url-reference .token.variable{color:#795da3}.token.entity{cursor:help}.token.title,.token.title .token.punctuation{font-weight:700;color:#1d3e81}.token.list{color:#ed6a43}.token.inserted{background-color:#eaffea;color:#55a532}.token.deleted{background-color:#ffecec;color:#bd2c00}.token.bold{font-weight:700}.token.italic{font-style:italic}.language-json .token.property{color:#183691}.language-markup .token.tag .token.punctuation{color:#333}.language-css .token.function,code.language-css{color:#0086b3}.language-yaml .token.atrule{color:#63a35c}code.language-yaml{color:#183691}.language-ruby .token.function{color:#333}.language-markdown .token.url{color:#795da3}.language-makefile .token.symbol{color:#795da3}.language-makefile .token.variable{color:#183691}.language-makefile .token.builtin{color:#0086b3}.language-bash .token.keyword{color:#0086b3}pre[data-line]{position:relative;padding:1em 0 1em 3em}pre[data-line] .line-highlight-wrapper{position:absolute;top:0;left:0;background-color:transparent;display:block;width:100%}pre[data-line] .line-highlight{position:absolute;left:0;right:0;padding:inherit 0;margin-top:1em;background:hsla(24,20%,50%,.08);background:linear-gradient(to right,hsla(24,20%,50%,.1) 70%,hsla(24,20%,50%,0));pointer-events:none;line-height:inherit;white-space:pre}pre[data-line] .line-highlight:before,pre[data-line] .line-highlight[data-end]:after{content:attr(data-start);position:absolute;top:.4em;left:.6em;min-width:1em;padding:0 .5em;background-color:hsla(24,20%,50%,.4);color:#f4f1ef;font:bold 65%/1.5 sans-serif;text-align:center;vertical-align:.3em;border-radius:999px;text-shadow:none;box-shadow:0 1px #fff}pre[data-line] .line-highlight[data-end]:after{content:attr(data-end);top:auto;bottom:.4em}html body{font-family:'Helvetica Neue',Helvetica,'Segoe UI',Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ol,html body>ul{margin-bottom:16px}html body ol,html body ul{padding-left:2em}html body ol.no-list,html body ul.no-list{padding:0;list-style-type:none}html body ol ol,html body ol ul,html body ul ol,html body ul ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;background-color:#f0f0f0;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:700;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:700}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::after,html body code::before{letter-spacing:-.2em;content:'\00a0'}html body pre>code{padding:0;margin:0;word-break:normal;white-space:pre;background:0 0;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:after,html body pre code:before,html body pre tt:after,html body pre tt:before{content:normal}html body blockquote,html body dl,html body ol,html body p,html body pre,html body ul{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body code,html body pre{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview ul{list-style:disc}.markdown-preview ul ul{list-style:circle}.markdown-preview ul ul ul{list-style:square}.markdown-preview ol{list-style:decimal}.markdown-preview ol ol,.markdown-preview ul ol{list-style-type:lower-roman}.markdown-preview ol ol ol,.markdown-preview ol ul ol,.markdown-preview ul ol ol,.markdown-preview ul ul ol{list-style-type:lower-alpha}.markdown-preview .newpage,.markdown-preview .pagebreak{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center!important}.markdown-preview:not([data-for=preview]) .code-chunk .code-chunk-btn-group{display:none}.markdown-preview:not([data-for=preview]) .code-chunk .status{display:none}.markdown-preview:not([data-for=preview]) .code-chunk .output-div{margin-bottom:16px}.markdown-preview .md-toc{padding:0}.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link{display:inline;padding:.25rem 0}.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link div,.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link p{display:inline}.markdown-preview .md-toc .md-toc-link-wrapper.highlighted .md-toc-link{font-weight:800}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,.66);border:4px solid rgba(150,150,150,.66);background-clip:content-box}html body[for=html-export]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0;min-height:100vh}@media screen and (min-width:914px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px + 2em)}}@media screen and (max-width:914px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{font-size:14px!important;padding:1em}}@media print{html body[for=html-export]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for=html-export]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,.66);border:4px solid rgba(150,150,150,.66);background-clip:content-box}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc{padding:0 16px}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link{display:inline;padding:.25rem 0}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link div,html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link p{display:inline}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper.highlighted .md-toc-link{font-weight:800}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% - 300px);padding:2em calc(50% - 457px - 300px / 2);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for=html-export]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for=html-export]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+
+      </style>
+      <script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", function () {
+    // your code here
+  });
+</script>
+    </head>
+    <body for="html-export">
+      <div class="crossnote markdown-preview  ">
+      
+<h1 id="毕设处理记录">毕设处理记录 </h1>
+<p>日期：2026-04-03</p>
+<h2 id="本次处理内容">本次处理内容 </h2>
+<ol>
+<li>读取并参考了以下 3 份文档：
+<ul>
+<li><code>D:\Personal folders\Desktop\范文.doc</code></li>
+<li><code>D:\Personal folders\Desktop\22大数据一班2200805127宋田琦文献综述.docx</code></li>
+<li><code>D:\Personal folders\Desktop\开题报告1.docx</code></li>
+</ul>
+</li>
+<li>重新撰写并生成了新的开题报告：
+<ul>
+<li><code>D:\Personal folders\Desktop\开题报告.docx</code></li>
+</ul>
+</li>
+<li>修正了原有内容中与课题主题不一致的部分，按“基于张量分解的股票因子降维与模式发现”重新组织背景、意义、研究目的、研究内容、进度安排和参考文献。</li>
+<li>重点补强了第三章，补入了以下内容：
+<ul>
+<li>三阶张量表示公式</li>
+<li>标准化公式</li>
+<li>CP 分解与 Tucker 分解公式</li>
+<li>交替最小二乘法更新思路</li>
+<li>模式发现相关指标</li>
+<li>重构误差、BIC、IC、IR 等评价指标</li>
+</ul>
+</li>
+<li>已将正文中的 17 条公式转换为 Word 正式公式对象，不再是普通文本公式。</li>
+</ol>
+<h2 id="结果文件">结果文件 </h2>
+<ul>
+<li><code>D:\Personal folders\Desktop\开题报告.docx</code></li>
+</ul>
+<h2 id="关于会话密钥">关于“会话密钥” </h2>
+<p>无法访问、导出或写入任何内部会话密钥、系统密钥或平台侧隐藏凭据，因此此项未写入具体值。</p>
+<hr>
+<p>日期：2026-04-04</p>
+<h2 id="当前开发环境结论">当前开发环境结论 </h2>
+<ol>
+<li>WSL 中的 RLCR 基础环境已修复，可继续用于后续循环开发与审查。</li>
+<li>当前已确认 WSL 内关键工具状态如下：
+<ul>
+<li><code>node</code>：<code>v20.20.2</code></li>
+<li><code>codex</code>：<code>codex-cli 0.118.0</code></li>
+<li><code>jq</code>：<code>jq-1.7.1</code></li>
+</ul>
+</li>
+<li><code>humanize</code> 相关脚本已可在 WSL 下正常执行，不再存在此前的以下基础设施问题：
+<ul>
+<li>旧版 Node 导致 <code>codex</code> 无法运行</li>
+<li><code>jq</code> 缺失导致 <code>rlcr-stop-gate.sh</code> 直接失败</li>
+<li><code>.sh</code> 脚本 CRLF 换行导致的 <code>bad interpreter</code> 或 <code>^M</code> 问题</li>
+</ul>
+</li>
+<li>需要区分两件事：
+<ul>
+<li>RLCR 运行环境本身已经修好</li>
+<li>但 RLCR 审查结果是否通过，仍取决于代码和计划完成度，不代表环境修好后一定直接通过审查</li>
+</ul>
+</li>
+</ol>
+<h2 id="数据方案补充思考">数据方案补充思考 </h2>
+<ol>
+<li>A 股股票数据可优先使用通达信导出的日线数据作为基础输入。</li>
+<li>后续可以按不同股票池分别整理数据，而不是一开始混在同一个总表里。</li>
+<li>当前建议优先按以下指数范围分别抽取并保存：
+<ul>
+<li>沪深300</li>
+<li>中证A500</li>
+<li>中证A50</li>
+</ul>
+</li>
+<li>建议每个股票池单独维护一个 CSV 文件，便于后续：
+<ul>
+<li>分别建模</li>
+<li>分别做张量构建</li>
+<li>分别比较不同股票池上的降维效果与选股效果</li>
+</ul>
+</li>
+<li>这些 CSV 文件中建议至少包含以下日线字段：
+<ul>
+<li><code>stock_code</code></li>
+<li><code>trade_date</code></li>
+<li><code>open</code></li>
+<li><code>high</code></li>
+<li><code>low</code></li>
+<li><code>close</code></li>
+<li><code>volume</code></li>
+<li><code>amount</code></li>
+<li>复权价格或可用于复权处理的相关字段</li>
+</ul>
+</li>
+<li>如果后续要做“股票 × 因子 × 时间”的三阶张量，仅有原始日线行情还不够，还需要在此基础上继续计算或补充：
+<ul>
+<li>技术类因子</li>
+<li>收益率标签</li>
+<li>必要的行业、指数成分、股票池归属信息</li>
+</ul>
+</li>
+<li>因为课题后续还要支持美股测试，所以数据接口设计上应保持统一，不把 A 股特有格式写死在模型层。</li>
+</ol>
+<h2 id="后续数据整理建议">后续数据整理建议 </h2>
+<ol>
+<li>先从通达信中分别导出沪深300、中证A500、中证A50对应股票池的日线数据。</li>
+<li>将三个股票池的数据分别保存到单独的 CSV 文件中。</li>
+<li>文件命名建议保持清晰，例如：
+<ul>
+<li><code>hs300_daily.csv</code></li>
+<li><code>csi_a500_daily.csv</code></li>
+<li><code>csi_a50_daily.csv</code></li>
+</ul>
+</li>
+<li>后续在代码中增加正式数据入口时，应优先支持读取这些按股票池拆分的 CSV。</li>
+<li>如果能补充对应指数的历史成分变更文件，则中证A500等股票池的“历史时点口径”会更严谨，也更符合论文实证要求。</li>
+</ol>
+<hr>
+<p>日期：2026-04-05</p>
+<h2 id="新版正式实施计划同步">新版正式实施计划同步 </h2>
+<h3 id="一-正式研究范围调整">一、正式研究范围调整 </h3>
+<ol>
+<li>正式 A 股实验范围不再以中证 A500 为目标，而是以以下三类核心指数股票池为主：
+<ul>
+<li>沪深300（<code>HS300</code>）</li>
+<li>上证50（<code>SZ50</code>）</li>
+<li>中证500（<code>ZZ500</code>）</li>
+</ul>
+</li>
+<li>正式数据底座不再采用“三指数并集公司”作为长期主存储范围，而是改为：
+<ul>
+<li>全 A 股主数据统一保存</li>
+<li><code>HS300</code>、<code>SZ50</code>、<code>ZZ500</code> 的成分股历史分别单独保存</li>
+<li>全 A 可交易股票池历史单独保存</li>
+</ul>
+</li>
+<li>旧有样例数据、样例配置和样例输出继续保留，仅作为 smoke test、联调和演示输入，不与正式全量数据混用。</li>
+</ol>
+<h3 id="二-正式数据窗口与存储原则">二、正式数据窗口与存储原则 </h3>
+<ol>
+<li>本阶段正式全量数据窗口固定为：
+<ul>
+<li>起始日期：<code>2015-01-01</code></li>
+<li>截止日期：<code>2026-04-01</code></li>
+</ul>
+</li>
+<li>财务数据与报告数据的抓取截止日期同样固定为 <code>2026-04-01</code>。</li>
+<li>正式数据先落盘为 <code>CSV</code>，便于检查、抽样验证和脚本兼容。</li>
+<li>在 <code>CSV</code> 稳定后，再生成对应的 <code>Parquet</code> 文件，用于后续高性能读取和大规模计算。</li>
+<li><code>CSV</code> 与 <code>Parquet</code> 的命名、字段合同、时间范围和 manifest 需要保持一一对应。</li>
+</ol>
+<h3 id="三-正式数据底座结构">三、正式数据底座结构 </h3>
+<ol>
+<li>全 A 股行情数据统一保存为正式主数据，不按指数重复保存多套完整行情文件。</li>
+<li>全 A 股财务/报告数据统一保存，并按表类型分别落盘，至少包括：
+<ul>
+<li><code>profit_data</code></li>
+<li><code>operation_data</code></li>
+<li><code>growth_data</code></li>
+<li><code>balance_data</code></li>
+<li><code>cash_flow_data</code></li>
+<li><code>dupont_data</code></li>
+<li><code>performance_express_report</code></li>
+<li><code>forecast_report</code></li>
+</ul>
+</li>
+<li>universe 层单独维护历史文件，不与主数据混写，至少包括：
+<ul>
+<li><code>HS300</code> 成分股快照与变更记录</li>
+<li><code>SZ50</code> 成分股快照与变更记录</li>
+<li><code>ZZ500</code> 成分股快照与变更记录</li>
+<li>全 A 可交易股票池历史</li>
+</ul>
+</li>
+<li>指数回测时，不再依赖单独的“指数完整行情库”，而是采用：
+<ul>
+<li>全 A 主数据</li>
+<li>对应 universe 历史过滤</li>
+<li>历史时点成分口径回测</li>
+</ul>
+</li>
+</ol>
+<h3 id="四-张量实验与选股主线">四、张量实验与选股主线 </h3>
+<ol>
+<li>在正式数据之上构建“股票 × 因子 × 时间”的张量实验管线。</li>
+<li>继续保留并对比以下模型路径：
+<ul>
+<li><code>CP</code></li>
+<li><code>Tucker</code></li>
+<li><code>PCA</code></li>
+</ul>
+</li>
+<li>选股层需要支持按指定交易日输出候选股票列表，至少包含：
+<ul>
+<li>股票代码</li>
+<li>综合评分</li>
+<li>所属市场</li>
+<li>所属股票池</li>
+<li>主要贡献因子</li>
+</ul>
+</li>
+<li>正式配置文件至少维护：
+<ul>
+<li><code>formal_hs300.yaml</code></li>
+<li><code>formal_sz50.yaml</code></li>
+<li><code>formal_zz500.yaml</code></li>
+</ul>
+</li>
+<li>各配置通过 universe 历史文件从全 A 主数据中过滤出对应股票池，而不是各自维护重复的完整主数据文件。</li>
+</ol>
+<h3 id="五-gpu-与高性能计算路线">五、GPU 与高性能计算路线 </h3>
+<ol>
+<li>计算后端优先统一到 <code>PyTorch</code> 主路径。</li>
+<li>运行时需要支持：
+<ul>
+<li><code>device=cpu</code></li>
+<li><code>device=cuda</code></li>
+<li><code>device=auto</code></li>
+</ul>
+</li>
+<li>在 CUDA 可用时，优先使用 GPU 路径执行主要数值计算。</li>
+<li>后续对热点算子预留：
+<ul>
+<li><code>Triton</code></li>
+<li>原生 <code>CUDA</code><br>
+的优化接口。</li>
+</ul>
+</li>
+<li>首阶段不要求一开始就把所有算法全部改写成 <code>Triton/CUDA</code>，而是先通过 <code>PyTorch</code> 打通统一设备层，再根据 profiling 决定下沉哪些热点算子。</li>
+</ol>
+<h3 id="六-web-端与系统形态">六、Web 端与系统形态 </h3>
+<ol>
+<li>后端继续采用 Python，并优先使用 <code>FastAPI</code>。</li>
+<li>前端继续采用 <code>React + Vite</code>。</li>
+<li>Web 端需要支持：
+<ul>
+<li>发起实验运行</li>
+<li>查看历史实验</li>
+<li>查看指标结果</li>
+<li>按指定日期浏览候选股</li>
+<li>在 <code>HS300</code>、<code>SZ50</code>、<code>ZZ500</code> 三类正式股票池之间切换</li>
+</ul>
+</li>
+<li>输出目录应提供结构化产物，供 Web 端直接读取，例如：
+<ul>
+<li><code>run_manifest.json</code></li>
+<li><code>selection_candidates.json</code></li>
+<li><code>factor_summary_*.json</code></li>
+<li><code>factor_association_*.json</code></li>
+</ul>
+</li>
+</ol>
+<h3 id="七-与旧方案相比的关键修正">七、与旧方案相比的关键修正 </h3>
+<ol>
+<li>不再把中证 A500 作为正式实验主目标。</li>
+<li>不再把“三指数并集公司”作为正式长期主存储方案。</li>
+<li>不再把正式全量数据和 smoke test 样例数据混在一起。</li>
+<li>不再使用“先按指数分别存多套完整行情/财务主数据”的思路，而是改为“全 A 主数据 + universe 历史过滤”。</li>
+<li>明确将正式全量数据窗口固定为 <code>2015-01-01</code> 到 <code>2026-04-01</code>。</li>
+<li>明确加入 <code>CSV -&gt; Parquet</code> 的双形态落盘规划。</li>
+<li>明确把 <code>PyTorch + CUDA</code> 作为第一阶段 GPU 主路径，并为 <code>Triton/CUDA</code> 预留接口。</li>
+</ol>
+<h3 id="八-当前执行顺序">八、当前执行顺序 </h3>
+<ol>
+<li>先完成正式数据目录重构，区分样例数据与正式全量数据。</li>
+<li>再完成全 A 股主数据抓取，包括行情、财务、报告和 manifest。</li>
+<li>再完成 <code>HS300</code>、<code>SZ50</code>、<code>ZZ500</code> 以及全 A 可交易股票池历史文件生成。</li>
+<li>在正式数据之上构建因子面板、张量实验输入和正式 profile。</li>
+<li>将数值计算主路径迁移到 <code>PyTorch</code>，加入 CUDA/CPU 双路径，并为 <code>Triton/CUDA</code> 热点实现留口。</li>
+<li>完成统一候选池输出和实验结果结构化。</li>
+<li>再做 Web API 和前端页面整合。</li>
+<li>最后保留 <code>us_equity</code> 接口作为后续扩展入口。</li>
+</ol>
+<hr>
+<p>日期：2026-04-08</p>
+<h2 id="因子选取与预处理方法补充">因子选取与预处理方法补充 </h2>
+<h3 id="一-正式训练样本范围修正">一、正式训练样本范围修正 </h3>
+<ol>
+<li>本课题正式训练样本范围统一写为：
+<ul>
+<li>沪深300（<code>HS300</code>）</li>
+<li>上证50（<code>SZ50</code>）</li>
+<li>中证500（<code>ZZ500</code>）</li>
+</ul>
+</li>
+<li>不再使用“上证500”或“中证50”这类与当前项目配置不一致的写法。</li>
+<li>三个股票池都应按历史成分股口径构建样本，而不是使用某个时点的静态名单覆盖整个研究区间。</li>
+</ol>
+<h3 id="二-推荐因子集合">二、推荐因子集合 </h3>
+<h4 id="1-baseline-版本">1. Baseline 版本 </h4>
+<p>为了先稳定跑通“股票 × 因子 × 时间”的张量实验管线，建议先使用以下 6 个核心因子：</p>
+<ol>
+<li><code>BP = 1 / pbMRQ</code>
+<ul>
+<li>表示账面市值比，反映估值水平。</li>
+</ul>
+</li>
+<li><code>EP = 1 / peTTM</code>
+<ul>
+<li>表示盈利收益率，反映盈利相对估值水平。</li>
+</ul>
+</li>
+<li><code>SP = 1 / psTTM</code>
+<ul>
+<li>表示销售收益率，补充估值维度。</li>
+</ul>
+</li>
+<li><code>MOM20</code>
+<ul>
+<li>20 日收益率，反映中短期价格动量。</li>
+</ul>
+</li>
+<li><code>VOL_SPREAD = |MOM5 - MOM20|</code>
+<ul>
+<li>用短周期与中周期收益差近似刻画波动与趋势分化。</li>
+</ul>
+</li>
+<li><code>TURN</code>
+<ul>
+<li>换手率，反映交易活跃度和流动性特征。</li>
+</ul>
+</li>
+</ol>
+<p>该版本优点是：</p>
+<ol>
+<li>与当前工程中已落地的 <code>value_factor</code>、<code>momentum_factor</code>、<code>quality_factor</code>、<code>volatility_factor</code>、<code>turn_factor</code>、<code>ps_ttm</code> 最接近。</li>
+<li>对正式数据底座要求较低，适合作为论文实验的第一阶段 baseline。</li>
+<li>有利于先验证 CP、Tucker、PCA 在多股票池上的降维效果和模式发现能力。</li>
+</ol>
+<h4 id="2-正式论文版本">2. 正式论文版本 </h4>
+<p>在财务数据和 full master 补字段稳定后，建议扩展到 12 个左右的正式因子集合：</p>
+<ol>
+<li>估值类：
+<ul>
+<li><code>BP = 1 / pbMRQ</code></li>
+<li><code>EP = 1 / peTTM</code></li>
+<li><code>SP = 1 / psTTM</code></li>
+<li><code>CFP = 1 / pcfNcfTTM</code></li>
+</ul>
+</li>
+<li>动量趋势类：
+<ul>
+<li><code>MOM20</code></li>
+<li><code>MOM60</code></li>
+</ul>
+</li>
+<li>风险流动性类：
+<ul>
+<li><code>VOL20</code></li>
+<li><code>TURN20</code></li>
+</ul>
+</li>
+<li>质量经营类：
+<ul>
+<li><code>ROE</code></li>
+<li><code>AssetTurnover</code></li>
+</ul>
+</li>
+<li>成长类：
+<ul>
+<li><code>RevenueYOY</code></li>
+<li><code>ProfitYOY</code></li>
+</ul>
+</li>
+</ol>
+<h4 id="3-不建议直接作为张量输入因子的字段">3. 不建议直接作为张量输入因子的字段 </h4>
+<ol>
+<li><code>future_return</code>
+<ul>
+<li>只作为预测标签和评价指标，不应作为输入因子。</li>
+</ul>
+</li>
+<li><code>industry</code>
+<ul>
+<li>适合作为分组、解释和缺失值填补辅助信息，不建议在第一版直接作为连续因子放入张量。</li>
+</ul>
+</li>
+<li><code>tradestatus</code>、<code>isST</code>
+<ul>
+<li>更适合作为样本过滤条件，而不是主要风格因子。</li>
+</ul>
+</li>
+</ol>
+<h4 id="4-论文表格版">4. 论文表格版 </h4>
+<h5 id="表-1-baseline-因子表">表 1 Baseline 因子表 </h5>
+<table>
+<thead>
+<tr>
+<th>因子名称</th>
+<th>计算公式</th>
+<th>来源表</th>
+<th>经济含义</th>
+<th>预处理方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BP</code></td>
+<td><code>BP = 1 / pbMRQ</code></td>
+<td><code>master/full_master</code></td>
+<td>衡量账面价值相对市值的高低，反映价值风格暴露</td>
+<td>空值剔除或填补后按日截面缩尾，再做 <code>z-score</code> 标准化</td>
+</tr>
+<tr>
+<td><code>EP</code></td>
+<td><code>EP = 1 / peTTM</code></td>
+<td><code>master/full_master</code></td>
+<td>衡量盈利相对价格的水平，反映盈利收益率特征</td>
+<td>先统一方向，再按日截面缩尾和标准化</td>
+</tr>
+<tr>
+<td><code>SP</code></td>
+<td><code>SP = 1 / psTTM</code></td>
+<td><code>master/full_master</code></td>
+<td>衡量销售收入相对价格的水平，补充估值维度</td>
+<td>与估值类因子同口径处理，统一做缩尾和标准化</td>
+</tr>
+<tr>
+<td><code>MOM20</code></td>
+<td><code>close_t / close_{t-20} - 1</code></td>
+<td><code>master/shared_kline_panel</code> 或 <code>master/full_master</code></td>
+<td>反映中短期价格趋势和惯性效应</td>
+<td>统一复权口径，窗口不足样本剔除，按日截面标准化</td>
+</tr>
+<tr>
+<td><code>VOL_SPREAD</code></td>
+<td>`</td>
+<td>MOM5 - MOM20</td>
+<td>`</td>
+<td><code>master/shared_kline_panel</code> 或 <code>master/full_master</code></td>
+</tr>
+<tr>
+<td><code>TURN</code></td>
+<td>当日换手率 <code>turn</code></td>
+<td><code>master/full_master</code></td>
+<td>反映交易活跃度和流动性强弱</td>
+<td>对极端值缩尾，必要时做对数化，再按日截面标准化</td>
+</tr>
+</tbody>
+</table>
+<h5 id="表-2-正式论文扩展因子表">表 2 正式论文扩展因子表 </h5>
+<table>
+<thead>
+<tr>
+<th>因子名称</th>
+<th>计算公式</th>
+<th>来源表</th>
+<th>经济含义</th>
+<th>预处理方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CFP</code></td>
+<td><code>CFP = 1 / pcfNcfTTM</code></td>
+<td><code>master/full_master</code></td>
+<td>衡量现金流相对价格的水平，补充估值质量信息</td>
+<td>与其他估值类因子统一方向后缩尾、标准化</td>
+</tr>
+<tr>
+<td><code>MOM60</code></td>
+<td><code>close_t / close_{t-60} - 1</code></td>
+<td><code>master/shared_kline_panel</code> 或 <code>master/full_master</code></td>
+<td>反映中期趋势特征，补充短周期动量信息</td>
+<td>样本需满足 60 日窗口，按日截面标准化</td>
+</tr>
+<tr>
+<td><code>VOL20</code></td>
+<td>近 20 日收益率标准差</td>
+<td><code>master/shared_kline_panel</code> 或 <code>master/full_master</code></td>
+<td>衡量中短期价格波动风险</td>
+<td>对极端值缩尾后标准化</td>
+</tr>
+<tr>
+<td><code>TURN20</code></td>
+<td>近 20 日平均换手率</td>
+<td><code>master/full_master</code></td>
+<td>衡量持续性流动性与交易拥挤度</td>
+<td>先做滚动均值，再缩尾和标准化</td>
+</tr>
+<tr>
+<td><code>ROE</code></td>
+<td><code>净利润 / 股东权益</code></td>
+<td><code>financial/dupont_data</code> 或 <code>financial/profit_data + balance_data</code></td>
+<td>衡量企业盈利质量与股东回报能力</td>
+<td>按报告期向后对齐，异常值缩尾，按日截面标准化</td>
+</tr>
+<tr>
+<td><code>AssetTurnover</code></td>
+<td><code>营业收入 / 平均总资产</code></td>
+<td><code>financial/operation_data</code> 或 <code>financial/dupont_data</code></td>
+<td>衡量资产运营效率</td>
+<td>财务数据按最近披露期填充，再缩尾和标准化</td>
+</tr>
+<tr>
+<td><code>RevenueYOY</code></td>
+<td><code>(本期营业收入 - 上年同期营业收入) / 上年同期营业收入</code></td>
+<td><code>financial/growth_data</code></td>
+<td>衡量营业收入增长能力</td>
+<td>财报频率对齐到交易日，极端增长率缩尾后标准化</td>
+</tr>
+<tr>
+<td><code>ProfitYOY</code></td>
+<td><code>(本期净利润 - 上年同期净利润) / 上年同期净利润</code></td>
+<td><code>financial/growth_data</code> 或 <code>financial/profit_data</code></td>
+<td>衡量利润增长能力与成长弹性</td>
+<td>处理负基数和极端值后，再做截面标准化</td>
+</tr>
+</tbody>
+</table>
+<h5 id="表-3-标签与辅助字段说明">表 3 标签与辅助字段说明 </h5>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>计算公式或定义</th>
+<th>来源表</th>
+<th>作用</th>
+<th>处理方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>future_return_5</code></td>
+<td><code>close_{t+5} / close_t - 1</code></td>
+<td><code>master/shared_kline_panel</code> 或 <code>master/full_master</code></td>
+<td>作为短周期预测标签，用于 IC、RankIC 和候选股排序评价</td>
+<td>单独保存，不进入输入张量</td>
+</tr>
+<tr>
+<td><code>future_return_10</code></td>
+<td><code>close_{t+10} / close_t - 1</code></td>
+<td><code>master/shared_kline_panel</code> 或 <code>master/full_master</code></td>
+<td>作为中短周期预测标签</td>
+<td>单独保存，不进入输入张量</td>
+</tr>
+<tr>
+<td><code>future_return_20</code></td>
+<td><code>close_{t+20} / close_t - 1</code></td>
+<td><code>master/shared_kline_panel</code> 或 <code>master/full_master</code></td>
+<td>作为中周期预测标签</td>
+<td>单独保存，不进入输入张量</td>
+</tr>
+<tr>
+<td><code>industry</code></td>
+<td>股票所属行业分类</td>
+<td><code>baostock/metadata/stock_industry.csv</code></td>
+<td>用于行业分组、缺失值填补和中性化分析</td>
+<td>作为元信息字段独立保存</td>
+</tr>
+<tr>
+<td><code>universe_id</code></td>
+<td>股票所属样本池标识</td>
+<td><code>universes/*.csv</code></td>
+<td>用于区分 <code>HS300</code>、<code>SZ50</code>、<code>ZZ500</code> 的来源和分组实验</td>
+<td>作为元信息字段独立保存</td>
+</tr>
+</tbody>
+</table>
+<h3 id="三-论文中可直接使用的因子说明">三、论文中可直接使用的因子说明 </h3>
+<h4 id="1-因子分类原则">1. 因子分类原则 </h4>
+<p>本课题的因子选取遵循以下原则：</p>
+<ol>
+<li>经济含义明确。</li>
+<li>与股票收益形成机制存在理论联系。</li>
+<li>可以覆盖估值、趋势、风险、流动性、质量、成长等多个维度。</li>
+<li>在多股票池和长时间窗口下具有较好的可得性与可比性。</li>
+<li>因子数量适中，既能支撑张量分解的模式发现，又避免因子冗余过高导致解释性下降。</li>
+</ol>
+<h4 id="2-推荐写法">2. 推荐写法 </h4>
+<p>在论文方法部分可表述为：</p>
+<p>“考虑到张量分解模型既要求输入因子具有较强的经济含义，又要求在股票池与时间维度上保持相对稳定的数据覆盖率，本文将股票因子划分为估值类、动量趋势类、风险流动性类、质量经营类和成长类五个组别。初始实验阶段采用 BP、EP、SP、MOM20、VOL_SPREAD、TURN 六个核心因子构建基准张量；在财务数据补齐后，进一步扩展为包含 CFP、MOM60、VOL20、TURN20、ROE、AssetTurnover、RevenueYOY、ProfitYOY 在内的正式因子集合，以增强因子结构表达能力和模式识别能力。”</p>
+<h3 id="四-使用-hs300-sz50-zz500-作为训练样本时的数据预处理方法">四、使用 HS300、SZ50、ZZ500 作为训练样本时的数据预处理方法 </h3>
+<h4 id="1-样本口径统一">1. 样本口径统一 </h4>
+<ol>
+<li>按历史成分股口径筛选样本。</li>
+<li>对每个交易日，仅保留该日属于对应股票池的股票。</li>
+<li>将三个股票池分别建 panel，再分别构建张量并做实验对比。</li>
+<li>若后续做联合训练，也应先保留 <code>universe_id</code> 字段，避免不同股票池混合后失去来源信息。</li>
+</ol>
+<h4 id="2-时间对齐与交易日对齐">2. 时间对齐与交易日对齐 </h4>
+<ol>
+<li>使用统一交易日历对齐三个股票池的样本日期。</li>
+<li>对停牌、退市、上市未满窗口期的样本做显式标记。</li>
+<li>所有滚动因子只能使用当前日及历史日信息，禁止引入未来数据。</li>
+<li>未来收益标签应在因子构造之后单独生成，避免信息泄露。</li>
+</ol>
+<h4 id="3-样本过滤">3. 样本过滤 </h4>
+<p>建议在构造张量前执行以下过滤规则：</p>
+<ol>
+<li>剔除 <code>ST</code>、<code>*ST</code>、长期停牌样本。</li>
+<li>剔除上市时间过短的股票。
+<ul>
+<li>例如上市不足 60 个交易日的股票，不参与含 60 日窗口的动量与波动因子计算。</li>
+</ul>
+</li>
+<li>对明显错误记录进行剔除。
+<ul>
+<li>如成交量为负、价格为零但显示正常交易等异常记录。</li>
+</ul>
+</li>
+<li>对缺失比例过高的股票或因子直接剔除。
+<ul>
+<li>当前项目可沿用 <code>max_missing_ratio</code> 控制思想。</li>
+</ul>
+</li>
+</ol>
+<h4 id="4-缺失值处理">4. 缺失值处理 </h4>
+<p>建议采用分层缺失处理策略：</p>
+<ol>
+<li>时间序列内缺失：
+<ul>
+<li>先对单只股票单个因子做前向填充和后向填充。</li>
+</ul>
+</li>
+<li>截面缺失：
+<ul>
+<li>若某交易日个别股票缺失，可优先使用同行业股票的截面中位数填补。</li>
+</ul>
+</li>
+<li>财务因子缺失：
+<ul>
+<li>采用报告期向后对齐方式，在下一次财报披露前沿用最近一期有效值。</li>
+</ul>
+</li>
+<li>对无法可靠填补的股票或因子，直接剔除，避免人为引入噪声。</li>
+</ol>
+<h4 id="5-异常值处理">5. 异常值处理 </h4>
+<ol>
+<li>对估值类、成长类、盈利类因子做缩尾处理。</li>
+<li>推荐使用分位数缩尾：
+<ul>
+<li>例如将每个交易日每个因子截面按 5% 和 95% 分位数 winsorize。</li>
+</ul>
+</li>
+<li>对极端异常但有明确业务含义的样本，应保留记录并在论文中说明处理原则，不建议无条件删除。</li>
+</ol>
+<h4 id="6-标准化处理">6. 标准化处理 </h4>
+<p>在张量构建前，建议对每个交易日的因子截面进行标准化：</p>
+<ol>
+<li>先做异常值缩尾。</li>
+<li>再做截面 <code>z-score</code> 标准化。</li>
+<li>对方向不同的因子先统一方向。
+<ul>
+<li>例如将 <code>pbMRQ</code>、<code>peTTM</code>、<code>psTTM</code>、<code>pcfNcfTTM</code> 先转换成 <code>BP</code>、<code>EP</code>、<code>SP</code>、<code>CFP</code>，使“值越大越便宜”。</li>
+</ul>
+</li>
+<li>标准化后再进入张量，避免因量纲不同导致分解结果偏向某一类因子。</li>
+</ol>
+<h4 id="7-行业中性化与市值中性化">7. 行业中性化与市值中性化 </h4>
+<p>若论文希望增强实证严谨性，建议在正式实验中加入中性化处理：</p>
+<ol>
+<li>行业中性化：
+<ul>
+<li>对每个交易日按行业做截面回归或行业内标准化，剔除行业结构差异对因子的影响。</li>
+</ul>
+</li>
+<li>市值中性化：
+<ul>
+<li>对与市值高度相关的因子做残差化处理，减少“因子实际只是市值代理变量”的问题。</li>
+</ul>
+</li>
+<li>若第一阶段实现成本较高，可先不做回归中性化，但至少应在结果分析中单独讨论行业与市值暴露。</li>
+</ol>
+<h4 id="8-标签构造">8. 标签构造 </h4>
+<ol>
+<li>未来收益标签建议使用：
+<ul>
+<li><code>future_return_5</code></li>
+<li><code>future_return_10</code></li>
+<li><code>future_return_20</code></li>
+</ul>
+</li>
+<li>第一阶段可以先采用 <code>future_return_5</code> 作为统一标签。</li>
+<li>标签只用于评价 IC、RankIC、分组收益和候选股排序，不进入输入张量。</li>
+</ol>
+<h4 id="9-张量构建前的最终组织方式">9. 张量构建前的最终组织方式 </h4>
+<p>建议最终组织成如下三阶张量：</p>
+<ol>
+<li>第一维：股票维 <code>stock</code></li>
+<li>第二维：因子维 <code>factor</code></li>
+<li>第三维：时间维 <code>time</code></li>
+</ol>
+<p>具体到预处理后的输入，应满足：</p>
+<ol>
+<li>同一交易日所有入选股票的因子字段完整且方向一致。</li>
+<li>不同股票池的数据格式完全统一。</li>
+<li>因子值已经完成缺失处理、异常值处理和标准化。</li>
+<li>标签与元信息独立保存。
+<ul>
+<li>标签：<code>future_return</code></li>
+<li>元信息：<code>industry</code>、<code>market_id</code>、<code>universe_id</code></li>
+</ul>
+</li>
+</ol>
+<h3 id="五-推荐的完整预处理顺序">五、推荐的完整预处理顺序 </h3>
+<p>建议在论文和实现中统一采用以下顺序：</p>
+<ol>
+<li>按 <code>HS300</code>、<code>SZ50</code>、<code>ZZ500</code> 历史成分筛选样本。</li>
+<li>统一股票代码、日期格式和复权口径。</li>
+<li>计算原始价格量因子与估值因子。</li>
+<li>合并财务表，构造质量类和成长类因子。</li>
+<li>生成未来收益标签。</li>
+<li>处理停牌、退市、上市不足窗口期等异常样本。</li>
+<li>执行缺失值填补与高缺失样本剔除。</li>
+<li>对各因子按交易日截面做 winsorize。</li>
+<li>对处理后的因子做截面 <code>z-score</code> 标准化。</li>
+<li>必要时执行行业中性化与市值中性化。</li>
+<li>构建 <code>股票 × 因子 × 时间</code> 张量。</li>
+<li>分别在 <code>HS300</code>、<code>SZ50</code>、<code>ZZ500</code> 上执行 CP、Tucker、PCA 对比实验。</li>
+</ol>
+<h3 id="六-可直接写入论文的方法结论">六、可直接写入论文的方法结论 </h3>
+<p>可直接写成如下结论：</p>
+<p>“本文采用沪深300、上证50和中证500三个代表性股票池作为训练与比较样本，并严格按照历史成分股口径构建研究对象。数据预处理流程包括样本过滤、时间对齐、缺失值填补、异常值缩尾、截面标准化以及必要的行业中性化处理。因子体系采用‘先 baseline、后扩展’的两阶段方案：首先选取 BP、EP、SP、MOM20、VOL_SPREAD、TURN 六个核心因子完成基准实验；随后在财务数据覆盖稳定的条件下，进一步加入 CFP、MOM60、VOL20、TURN20、ROE、AssetTurnover、RevenueYOY 和 ProfitYOY 等因子，构建更完整的正式张量输入，从而提升股票因子结构刻画能力与潜在市场模式发现能力。”</p>
+
+      </div>
+      
+      
+    
+    
+    
+    
+    
+    
+  
+    </body></html>

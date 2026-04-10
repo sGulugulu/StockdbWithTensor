@@ -31,8 +31,8 @@ The legacy sample datasets remain in the repository only for smoke tests and lig
 Create the local virtual environment and install dependencies:
 
 ```powershell
-python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements.txt
+python -m venv .venv
+python -m pip install -r requirements.txt
 ```
 
 The runtime now expects a PyTorch-capable environment so the project can use:
@@ -46,7 +46,7 @@ When CUDA is available, the numerical post-processing path prefers GPU execution
 Stage 1: fetch universe-history inputs and metadata from baostock:
 
 ```powershell
-.venv/bin/python code/data/fetch_baostock_data.py `
+python code/data/fetch_baostock_data.py `
   --output-root code/data/formal/baostock `
   --start-date 2015-01-01 `
   --end-date 2026-04-01 `
@@ -66,7 +66,7 @@ Formal A-share config profiles now exist for:
 Stage 2: fetch formal financial and report tables with resume support:
 
 ```powershell
-.venv/bin/python code/data/fetch_baostock_data.py `
+python code/data/fetch_baostock_data.py `
   --output-root code/data/formal/baostock `
   --start-date 2015-01-01 `
   --end-date 2026-04-01 `
@@ -82,7 +82,7 @@ Stage 4: convert validated formal `CSV` outputs into matching `Parquet` files fo
 Stage 5: register validated formal `CSV` / `Parquet` datasets into the local `DuckDB` catalog for stable research SQL and web-facing summary queries.
 
 ```powershell
-.venv/bin/python code/data/register_formal_duckdb_catalog.py `
+python code/data/register_formal_duckdb_catalog.py `
   --formal-root code/data/formal `
   --catalog-path code/data/formal/catalog.duckdb
 ```
@@ -90,13 +90,13 @@ Stage 5: register validated formal `CSV` / `Parquet` datasets into the local `Du
 Use the smoke-test configuration only for lightweight validation:
 
 ```powershell
-.venv/bin/python code/main.py --config code/configs/sample_cn_smoke.yaml
+python code/main.py --config code/configs/sample_cn_smoke.yaml
 ```
 
 For formal runs, prefer the full-data profiles instead of the smoke profile:
 
 ```powershell
-.venv/bin/python code/main.py --config code/configs/formal_hs300.yaml
+python code/main.py --config code/configs/formal_hs300.yaml
 ```
 
 The formal profiles are expected to read from the shared all-A-share master data plus universe-history filtering, rather than from duplicated per-index full market datasets.
@@ -104,7 +104,7 @@ The formal profiles are expected to read from the shared all-A-share master data
 Run the test suite:
 
 ```powershell
-.venv/bin/python -m unittest discover -s code/tests
+python -m unittest discover -s code/tests
 ```
 
 ## Structure
@@ -123,7 +123,7 @@ Run the test suite:
 - `code/data/register_formal_duckdb_catalog.py`: DuckDB catalog registration for formal datasets
 - `code/stock_tensor/`: preprocessing, tensor construction, models, evaluation, and output logic
 - `code/tests/`: automated tests for config loading, dataset building, model fitting, and pipeline execution
-- `web/backend/`: minimal FastAPI backend for exposing run and stock-selection results
+- `web/backend/`: legacy Python backend scaffold; the target production-facing API layer is a Go gateway that reads DuckDB and `code/outputs`, and invokes Python scripts for experiment runs
 - `web/frontend/`: React + Vite frontend scaffold for experiment and selection views
 - `code/outputs/`: generated experiment artifacts
 
@@ -140,10 +140,46 @@ This layout avoids duplicating the full market dataset once per index and keeps 
 
 ## Web API
 
-Run the backend:
+The target backend architecture is:
+
+- a pure `Go` API gateway for HTTP services
+- `Go` reads `DuckDB` and `code/outputs/`
+- `POST /api/runs` triggers Python experiment execution via command/script calls
+- Python remains the experiment runner and data-processing runtime
+
+Current repository note:
+
+- `web/backend/` still contains a legacy Python scaffold
+- it is no longer the target long-term API gateway architecture
+
+Planned Go gateway responsibilities include:
+
+- `GET /api/formal/coverage`
+- `GET /api/formal/universes/{universe_id}?trade_date=YYYY-MM-DD`
+- `GET /api/runs`
+- `GET /api/runs/{run_id}`
+- `GET /api/runs/{run_id}/metrics`
+- `GET /api/runs/{run_id}/selection`
+- `POST /api/runs`
+
+Run the Go backend:
 
 ```powershell
-.venv/bin/python -m uvicorn web.backend.app:create_app --factory --reload
+go run ./web/backend-go/cmd/server
+```
+
+The frontend now defaults to `http://127.0.0.1:8080`.
+
+If you still need to compare against the legacy Python backend, set:
+
+```powershell
+$env:VITE_API_BASE="http://127.0.0.1:8000"
+```
+
+Legacy scaffold run command for reference only:
+
+```powershell
+python -m uvicorn web.backend.app:create_app --factory --reload
 ```
 
 Formal data routes now include:

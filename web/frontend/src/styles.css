@@ -131,6 +131,108 @@ select {
   max-width: 720px;
 }
 
+.compact {
+  max-width: 560px;
+}
+
+.muted-text {
+  color: rgba(31, 41, 55, 0.68);
+}
+
+.error-text {
+  color: #b42318;
+  background: rgba(180, 35, 24, 0.08);
+  border: 1px solid rgba(180, 35, 24, 0.16);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.formal-panel {
+  display: grid;
+  gap: 24px;
+}
+
+.formal-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: end;
+}
+
+.coverage-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.coverage-card {
+  border: 1px solid rgba(15, 118, 110, 0.14);
+  border-radius: 18px;
+  padding: 16px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(243, 249, 247, 0.95)),
+    radial-gradient(circle at top right, rgba(15, 118, 110, 0.08), transparent 40%);
+}
+
+.coverage-card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.coverage-card-header h3 {
+  margin: 0;
+}
+
+.coverage-card-header span {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(15, 118, 110, 0.1);
+  color: #0f766e;
+  font-size: 12px;
+}
+
+.coverage-card-body {
+  display: grid;
+  gap: 12px;
+}
+
+.coverage-record {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 14px;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(31, 41, 55, 0.06);
+}
+
+.coverage-record strong {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(15, 118, 110, 0.86);
+}
+
+.coverage-record p {
+  margin: 4px 0 0;
+  font-size: 15px;
+}
+
+.formal-members-section {
+  display: grid;
+  gap: 16px;
+}
+
+.formal-query-bar {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(180px, 260px));
+  gap: 12px;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -164,5 +266,10 @@ td {
 
   .detail-grid {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .coverage-grid,
+  .formal-query-bar {
+    grid-template-columns: 1fr;
   }
 }
