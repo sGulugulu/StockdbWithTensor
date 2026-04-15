@@ -10,6 +10,7 @@ export default function App() {
   const [selectedRun, setSelectedRun] = useState(null);
   const [selectionRows, setSelectionRows] = useState([]);
   const [detail, setDetail] = useState(null);
+  const [submitError, setSubmitError] = useState("");
   const [tradeDate, setTradeDate] = useState("2026-01-09");
   const [configForm, setConfigForm] = useState({
     option_id: "formal_hs300",
@@ -91,7 +92,8 @@ export default function App() {
   }, [selectedRun, tradeDate, configForm.selection_top_n]);
 
   async function createRun() {
-    await fetch(`${API_BASE}/api/runs`, {
+    setSubmitError("");
+    const response = await fetch(`${API_BASE}/api/runs`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -113,6 +115,19 @@ export default function App() {
         }
       })
     });
+    if (!response.ok) {
+      let detail = "启动实验失败，请检查配置后重试。";
+      try {
+        const payload = await response.json();
+        if (payload?.detail) {
+          detail = String(payload.detail);
+        }
+      } catch {
+        // 保持默认错误提示。
+      }
+      setSubmitError(detail);
+      return;
+    }
     setView("runs");
     await refreshRuns();
   }
@@ -194,10 +209,19 @@ export default function App() {
             候选股 Top N
             <input
               type="number"
+              min="1"
               value={configForm.selection_top_n}
-              onChange={(event) => setConfigForm((current) => ({ ...current, selection_top_n: Number(event.target.value) }))}
+              onChange={(event) =>
+                setConfigForm((current) => {
+                  if (event.target.value === "") {
+                    return current;
+                  }
+                  return { ...current, selection_top_n: Number(event.target.value) };
+                })
+              }
             />
           </label>
+          {submitError ? <p className="error-text">{submitError}</p> : null}
           <label>
             模型选择
             <div className="checkbox-group">
