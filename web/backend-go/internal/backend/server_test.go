@@ -332,6 +332,40 @@ func TestCreateRunRoute(t *testing.T) {
 		t.Fatalf("expected blocked_config_run directory to be absent, got err=%v", err)
 	}
 
+	externalConfigDir := t.TempDir()
+	externalDefaultConfigPath := filepath.Join(externalConfigDir, "default.yaml")
+	externalVariantConfigPath := filepath.Join(externalConfigDir, "variant.yaml")
+	writeTextFile(t, externalDefaultConfigPath, "market:\n  market_id: cn_a\n  universe_id: CSI_A500\n  start_date: 2025-01-01\n  end_date: 2026-01-31\n  timezone: Asia/Shanghai\n  currency: CNY\ndata:\n  path: ../data/sample.csv\n  format: wide\n  stock_column: stock_code\n  date_column: trade_date\n  factor_columns: [value_factor]\npreprocess:\n  max_missing_ratio: 0.5\n  winsor_limits: [0.05, 0.95]\nmodels:\n  seed: 7\n  cp:\n    enabled: true\n    ranks: [2]\n    max_iter: 5\n    tol: 1.0e-6\n  tucker:\n    enabled: false\n    ranks: [[2,2,2]]\n    max_iter: 5\n    tol: 1.0e-6\n  pca:\n    enabled: false\n    ranks: [2]\nevaluation:\n  top_k_pairs: 5\n  rolling_window: 3\nruntime:\n  selection_top_n: 20\noutput:\n  root_dir: ../outputs\n  experiment_name: default_run\n")
+	writeTextFile(t, externalVariantConfigPath, "market:\n  market_id: cn_a\n  universe_id: CSI_A500\n  start_date: 2025-01-01\n  end_date: 2026-01-31\n  timezone: Asia/Shanghai\n  currency: CNY\ndata:\n  path: ../data/sample.csv\n  format: wide\n  stock_column: stock_code\n  date_column: trade_date\n  factor_columns: [value_factor]\npreprocess:\n  max_missing_ratio: 0.5\n  winsor_limits: [0.05, 0.95]\nmodels:\n  seed: 7\n  cp:\n    enabled: true\n    ranks: [2]\n    max_iter: 5\n    tol: 1.0e-6\n  tucker:\n    enabled: false\n    ranks: [[2,2,2]]\n    max_iter: 5\n    tol: 1.0e-6\n  pca:\n    enabled: false\n    ranks: [2]\nevaluation:\n  top_k_pairs: 5\n  rolling_window: 3\nruntime:\n  selection_top_n: 20\noutput:\n  root_dir: ../outputs\n  experiment_name: default_run\n")
+	externalHandler, err := NewHandler(Config{
+		RepoRoot:            root,
+		OutputRoot:          outputRoot,
+		FormalRoot:          formalRoot,
+		CatalogPath:         filepath.Join(formalRoot, "catalog.duckdb"),
+		DefaultConfigPath:   externalDefaultConfigPath,
+		PythonExecutable:    "python",
+		RunnerScriptPath:    runnerScriptPath,
+		RegistrarScriptPath: filepath.Join(actualRepoRoot, "code", "data", "register_formal_duckdb_catalog.py"),
+	})
+	if err != nil {
+		t.Fatalf("new external handler failed: %v", err)
+	}
+	relativeConfigBody, err := json.Marshal(map[string]any{
+		"run_id":      "external_relative_variant",
+		"run_sync":    false,
+		"config_path": "variant.yaml",
+	})
+	if err != nil {
+		t.Fatalf("marshal relative config body failed: %v", err)
+	}
+	recorder = httptest.NewRecorder()
+	request = httptest.NewRequest(http.MethodPost, "/api/runs", bytes.NewReader(relativeConfigBody))
+	request.Header.Set("Content-Type", "application/json")
+	externalHandler.ServeHTTP(recorder, request)
+	if recorder.Code != http.StatusOK {
+		t.Fatalf("expected 200 for external relative config_path, got %d: %s", recorder.Code, recorder.Body.String())
+	}
+
 	invalidSelectionBody, err := json.Marshal(map[string]any{
 		"run_id":          "invalid_selection_top_n",
 		"run_sync":        false,
