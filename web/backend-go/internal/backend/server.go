@@ -878,15 +878,23 @@ func generateRunID() (string, error) {
 }
 
 func (a *App) submitRun(payload map[string]any) (map[string]any, error) {
-	runID, _ := payload["run_id"].(string)
-	if strings.TrimSpace(runID) == "" {
+	runID, hasRunID := payload["run_id"]
+	if hasRunID && runID != nil {
+		runIDString, ok := runID.(string)
+		if !ok {
+			return nil, newValidationError("run_id 必须是字符串")
+		}
+		runID = runIDString
+	}
+	runIDString, _ := runID.(string)
+	if strings.TrimSpace(runIDString) == "" {
 		generated, err := generateRunID()
 		if err != nil {
 			return nil, err
 		}
-		runID = generated
+		runIDString = generated
 	}
-	safeRunID, err := validateRunID(runID)
+	safeRunID, err := validateRunID(runIDString)
 	if err != nil {
 		return nil, err
 	}
@@ -963,8 +971,14 @@ func (a *App) resolveRequestedConfig(payload map[string]any) (string, error) {
 	configProfile, _ := payload["config_profile"].(string)
 	marketID, _ := payload["market_id"].(string)
 	universeID, _ := payload["universe_id"].(string)
-	if configPath, ok := payload["config_path"].(string); ok && strings.TrimSpace(configPath) != "" {
-		return a.resolveRequestedConfigPath(configPath)
+	if rawConfigPath, exists := payload["config_path"]; exists && rawConfigPath != nil {
+		configPath, ok := rawConfigPath.(string)
+		if !ok {
+			return "", newValidationError("config_path 必须是字符串")
+		}
+		if strings.TrimSpace(configPath) != "" {
+			return a.resolveRequestedConfigPath(configPath)
+		}
 	}
 	profiles := map[string]string{
 		"formal_hs300":     filepath.Join(a.config.RepoRoot, "code", "configs", "formal_hs300.yaml"),
