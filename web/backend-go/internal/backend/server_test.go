@@ -274,4 +274,53 @@ func TestCreateRunRoute(t *testing.T) {
 	if recorder.Code != http.StatusUnprocessableEntity {
 		t.Fatalf("expected 422 for invalid config_path, got %d", recorder.Code)
 	}
+	if _, err := os.Stat(filepath.Join(outputRoot, "blocked_config_run")); !os.IsNotExist(err) {
+		t.Fatalf("expected blocked_config_run directory to be absent, got err=%v", err)
+	}
+
+	invalidSelectionBody, err := json.Marshal(map[string]any{
+		"run_id":          "invalid_selection_top_n",
+		"run_sync":        false,
+		"config_path":     defaultConfigPath,
+		"selection_top_n": 0,
+	})
+	if err != nil {
+		t.Fatalf("marshal invalid selection body failed: %v", err)
+	}
+	recorder = httptest.NewRecorder()
+	request = httptest.NewRequest(http.MethodPost, "/api/runs", bytes.NewReader(invalidSelectionBody))
+	request.Header.Set("Content-Type", "application/json")
+	handler.ServeHTTP(recorder, request)
+	if recorder.Code != http.StatusUnprocessableEntity {
+		t.Fatalf("expected 422 for invalid selection_top_n, got %d", recorder.Code)
+	}
+	if _, err := os.Stat(filepath.Join(outputRoot, "invalid_selection_top_n")); !os.IsNotExist(err) {
+		t.Fatalf("expected invalid_selection_top_n directory to be absent, got err=%v", err)
+	}
+
+	symlinkOutsidePath := filepath.Join(root, "symlink-outside.yaml")
+	writeTextFile(t, symlinkOutsidePath, "market:\n  market_id: cn_a\n")
+	linkedConfigPath := filepath.Join(root, "code", "configs", "linked_outside.yaml")
+	if err := os.MkdirAll(filepath.Dir(linkedConfigPath), 0o755); err != nil {
+		t.Fatalf("mkdir linked config dir failed: %v", err)
+	}
+	if err := os.Symlink(symlinkOutsidePath, linkedConfigPath); err == nil {
+		symlinkBody, err := json.Marshal(map[string]any{
+			"run_id":      "linked_outside_run",
+			"run_sync":    false,
+			"config_path": linkedConfigPath,
+		})
+		if err != nil {
+			t.Fatalf("marshal symlink body failed: %v", err)
+		}
+		recorder = httptest.NewRecorder()
+		request = httptest.NewRequest(http.MethodPost, "/api/runs", bytes.NewReader(symlinkBody))
+		request.Header.Set("Content-Type", "application/json")
+		handler.ServeHTTP(recorder, request)
+		if recorder.Code != http.StatusUnprocessableEntity {
+			t.Fatalf("expected 422 for symlinked external config_path, got %d", recorder.Code)
+		}
+	} else {
+		t.Logf("skip symlink config test: %v", err)
+	}
 }

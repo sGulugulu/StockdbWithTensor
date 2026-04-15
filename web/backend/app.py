@@ -334,7 +334,7 @@ def _build_run_config(
     if "top_k_pairs" in payload and payload["top_k_pairs"] is not None:
         evaluation["top_k_pairs"] = int(payload["top_k_pairs"])
     if "selection_top_n" in payload and payload["selection_top_n"] is not None:
-        runtime["selection_top_n"] = int(payload["selection_top_n"])
+        runtime["selection_top_n"] = _validate_positive_int(int(payload["selection_top_n"]), "selection_top_n")
     if "models_enabled" in payload and isinstance(payload["models_enabled"], dict):
         for model_name, enabled in payload["models_enabled"].items():
             if model_name in models and isinstance(models[model_name], dict):
@@ -345,6 +345,7 @@ def _build_run_config(
                 models[model_name]["ranks"] = ranks
 
     config_override_path = run_dir / "submitted_config.yaml"
+    run_dir.mkdir(parents=True, exist_ok=True)
     config_override_path.write_text(
         yaml.safe_dump(config_data, sort_keys=False, allow_unicode=True),
         encoding="utf-8",
@@ -415,8 +416,6 @@ def create_app(
         run_sync = bool(body.get("run_sync", False))
         try:
             actual_run_id = _validate_run_id(requested_run_id) if requested_run_id else uuid.uuid4().hex[:12]
-            run_dir = _resolve_run_dir(resolved_output_root, actual_run_id)
-            run_dir.mkdir(parents=True, exist_ok=True)
         except ValueError as exc:
             raise HTTPException(status_code=422, detail=str(exc)) from exc
         config_profile = str(body.get("config_profile", ""))
@@ -435,8 +434,11 @@ def create_app(
                 requested_config = config_templates[body["market_id"]].resolve()
             else:
                 requested_config = Path(config_path).resolve()
+            if "selection_top_n" in body and body["selection_top_n"] is not None:
+                _validate_positive_int(int(body["selection_top_n"]), "selection_top_n")
         except ValueError as exc:
             raise HTTPException(status_code=422, detail=str(exc)) from exc
+        run_dir = _resolve_run_dir(resolved_output_root, actual_run_id)
         built_config_path = _build_run_config(
             base_config_path=requested_config,
             run_dir=run_dir,

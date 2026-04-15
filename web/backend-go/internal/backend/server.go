@@ -220,6 +220,14 @@ func isPathWithinRoot(candidate string, root string) bool {
 	return relative != ".." && !strings.HasPrefix(relative, fmt.Sprintf("..%c", filepath.Separator))
 }
 
+func evalSymlinkPath(path string) (string, error) {
+	resolvedPath, err := filepath.EvalSymlinks(path)
+	if err != nil {
+		return "", err
+	}
+	return filepath.Clean(resolvedPath), nil
+}
+
 func validateRunID(runID string) (string, error) {
 	candidate := strings.TrimSpace(runID)
 	if !runIDPattern.MatchString(candidate) {
@@ -233,6 +241,33 @@ func validatePositiveInt(value int, fieldName string) error {
 		return newValidationError(fmt.Sprintf("%s 必须是大于 0 的整数", fieldName))
 	}
 	return nil
+}
+
+func coercePositiveInt(value any, fieldName string) (int, error) {
+	switch typed := value.(type) {
+	case int:
+		return typed, validatePositiveInt(typed, fieldName)
+	case int64:
+		converted := int(typed)
+		if int64(converted) != typed {
+			return 0, newValidationError(fmt.Sprintf("%s 必须是整数", fieldName))
+		}
+		return converted, validatePositiveInt(converted, fieldName)
+	case float64:
+		if typed != float64(int(typed)) {
+			return 0, newValidationError(fmt.Sprintf("%s 必须是整数", fieldName))
+		}
+		converted := int(typed)
+		return converted, validatePositiveInt(converted, fieldName)
+	case string:
+		parsed, err := strconv.Atoi(strings.TrimSpace(typed))
+		if err != nil {
+			return 0, newValidationError(fmt.Sprintf("%s 必须是整数", fieldName))
+		}
+		return parsed, validatePositiveInt(parsed, fieldName)
+	default:
+		return 0, newValidationError(fmt.Sprintf("%s 必须是整数", fieldName))
+	}
 }
 
 func (a *App) resolveRunDir(runID string) (string, error) {
@@ -265,6 +300,10 @@ func (a *App) resolveRequestedConfigPath(rawConfigPath string) (string, error) {
 	if _, err := os.Stat(resolvedPath); err != nil {
 		return "", newValidationError("config_path 指向的配置文件不存在")
 	}
+	realConfigPath, err := evalSymlinkPath(resolvedPath)
+	if err != nil {
+		return "", newValidationError("config_path 无法解析符号链接")
+	}
 
 	// 自定义配置只允许落在受控目录，避免任意文件被注入到实验执行链路。
 	allowedRoots := []string{
@@ -272,8 +311,12 @@ func (a *App) resolveRequestedConfigPath(rawConfigPath string) (string, error) {
 		filepath.Clean(filepath.Dir(a.config.DefaultConfigPath)),
 	}
 	for _, root := range allowedRoots {
-		if isPathWithinRoot(resolvedPath, root) {
-			return resolvedPath, nil
+		realRoot, err := evalSymlinkPath(root)
+		if err != nil {
+			return "", newValidationError("允许的配置目录无法解析")
+		}
+		if isPathWithinRoot(realConfigPath, realRoot) {
+			return realConfigPath, nil
 		}
 	}
 	return "", newValidationError("config_path 不在允许的配置目录内")
@@ -809,6 +852,17 @@ func (a *App) submitRun(payload map[string]any) (map[string]any, error) {
 	if err != nil {
 		return nil, err
 	}
+	baseConfigPath, err := a.resolveRequestedConfig(payload)
+	if err != nil {
+		return nil, err
+	}
+	if value, exists := payload["selection_top_n"]; exists && value != nil {
+		parsed, err := coercePositiveInt(value, "selection_top_n")
+		if err != nil {
+			return nil, err
+		}
+		payload["selection_top_n"] = parsed
+	}
 	runDir, err := a.resolveRunDir(safeRunID)
 	if err != nil {
 		return nil, err
@@ -817,7 +871,7 @@ func (a *App) submitRun(payload map[string]any) (map[string]any, error) {
 		return nil, err
 	}
 
-	configPath, err := a.buildRunConfig(safeRunID, runDir, payload)
+	configPath, err := a.buildRunConfig(safeRunID, runDir, baseConfigPath, payload)
 	if err != nil {
 		return nil, err
 	}
@@ -928,11 +982,7 @@ func convertArray(value any) []any {
 	return nil
 }
 
-func (a *App) buildRunConfig(runID string, runDir string, payload map[string]any) (string, error) {
-	baseConfigPath, err := a.resolveRequestedConfig(payload)
-	if err != nil {
-		return "", err
-	}
+func (a *App) buildRunConfig(runID string, runDir string, baseConfigPath string, payload map[string]any) (string, error) {
 	content, err := os.ReadFile(baseConfigPath)
 	if err != nil {
 		return "", err
@@ -971,7 +1021,11 @@ func (a *App) buildRunConfig(runID string, runDir string, payload map[string]any
 		evaluation["top_k_pairs"] = value
 	}
 	if value, exists := payload["selection_top_n"]; exists && value != nil {
-		runtime["selection_top_n"] = value
+		parsed, err := coercePositiveInt(value, "selection_top_n")
+		if err != nil {
+			return "", err
+		}
+		runtime["selection_top_n"] = parsed
 	}
 	if enabledMap := coerceStringMap(payload["models_enabled"]); len(enabledMap) > 0 {
 		for modelName, enabled := range enabledMap {
