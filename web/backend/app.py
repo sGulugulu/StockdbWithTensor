@@ -171,10 +171,12 @@ def _coerce_positive_int(value: Any, field_name: str) -> int:
 
 
 def _resolve_requested_config_path(
-    raw_config_path: str,
+    raw_config_path: Any,
     default_config_path: Path,
     output_root: Path | None = None,
 ) -> Path:
+    if not isinstance(raw_config_path, str):
+        raise ValueError("config_path 必须是字符串。")
     candidate = Path(raw_config_path).expanduser()
     default_config_dir = default_config_path.resolve().parent
     if candidate.is_absolute():
@@ -453,17 +455,17 @@ def create_app(
     @app.post("/api/runs")
     async def api_create_run(payload: dict[str, Any] | None = None) -> dict[str, Any]:
         body = payload or {}
-        requested_run_id = body.get("run_id")
+        has_run_id = "run_id" in body and body["run_id"] is not None
         run_sync = bool(body.get("run_sync", False))
         try:
-            actual_run_id = _validate_run_id(requested_run_id) if requested_run_id else uuid.uuid4().hex[:12]
+            actual_run_id = _validate_run_id(body["run_id"]) if has_run_id else uuid.uuid4().hex[:12]
         except ValueError as exc:
             raise HTTPException(status_code=422, detail=str(exc)) from exc
         config_profile = str(body.get("config_profile", ""))
         try:
-            if body.get("config_path"):
+            if "config_path" in body and body["config_path"] is not None:
                 requested_config = _resolve_requested_config_path(
-                    str(body["config_path"]),
+                    body["config_path"],
                     Path(config_path),
                     resolved_output_root,
                 )

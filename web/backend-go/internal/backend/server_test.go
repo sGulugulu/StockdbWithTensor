@@ -481,4 +481,29 @@ func TestCreateRunRoute(t *testing.T) {
 	} else {
 		t.Logf("skip symlink config test: %v", err)
 	}
+
+	symlinkRunOutsideDir := filepath.Join(root, "outside-run-dir")
+	if err := os.MkdirAll(symlinkRunOutsideDir, 0o755); err != nil {
+		t.Fatalf("mkdir symlink run outside dir failed: %v", err)
+	}
+	linkedRunDir := filepath.Join(outputRoot, "linked_run")
+	if err := os.Symlink(symlinkRunOutsideDir, linkedRunDir); err == nil {
+		symlinkRunBody, err := json.Marshal(map[string]any{
+			"run_id":      "linked_run",
+			"run_sync":    false,
+			"config_path": defaultConfigPath,
+		})
+		if err != nil {
+			t.Fatalf("marshal symlink run body failed: %v", err)
+		}
+		recorder = httptest.NewRecorder()
+		request = httptest.NewRequest(http.MethodPost, "/api/runs", bytes.NewReader(symlinkRunBody))
+		request.Header.Set("Content-Type", "application/json")
+		handler.ServeHTTP(recorder, request)
+		if recorder.Code != http.StatusUnprocessableEntity {
+			t.Fatalf("expected 422 for symlinked run directory, got %d", recorder.Code)
+		}
+	} else {
+		t.Logf("skip symlink run directory test: %v", err)
+	}
 }
