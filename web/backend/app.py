@@ -238,6 +238,8 @@ def list_runs(output_root: Path) -> list[dict[str, Any]]:
     for child in sorted(output_root.iterdir()):
         if not child.is_dir():
             continue
+        if not _is_path_within_root(child.resolve(), output_root):
+            continue
         status = _load_status(child)
         manifest_path = child / "run_manifest.json"
         metrics_path = child / "metrics.json"
