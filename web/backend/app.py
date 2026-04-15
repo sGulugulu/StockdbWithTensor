@@ -151,10 +151,34 @@ def _validate_positive_int(value: int, field_name: str) -> int:
     return value
 
 
+def _coerce_positive_int(value: Any, field_name: str) -> int:
+    if isinstance(value, bool):
+        raise ValueError(f"{field_name} 必须是整数。")
+    if isinstance(value, int):
+        return _validate_positive_int(value, field_name)
+    if isinstance(value, float):
+        if not value.is_integer():
+            raise ValueError(f"{field_name} 必须是整数。")
+        return _validate_positive_int(int(value), field_name)
+    if isinstance(value, str):
+        candidate = value.strip()
+        if not candidate or not re.fullmatch(r"[+-]?\d+", candidate):
+            raise ValueError(f"{field_name} 必须是整数。")
+        return _validate_positive_int(int(candidate), field_name)
+    raise ValueError(f"{field_name} 必须是整数。")
+
+
 def _resolve_requested_config_path(raw_config_path: str, default_config_path: Path) -> Path:
     candidate = Path(raw_config_path).expanduser()
     default_config_dir = default_config_path.resolve().parent
-    resolved_path = candidate.resolve() if candidate.is_absolute() else (default_config_dir / candidate).resolve()
+    if candidate.is_absolute():
+        resolved_path = candidate.resolve()
+    else:
+        candidate_paths = [
+            (default_config_dir / candidate).resolve(),
+            (ROOT / candidate).resolve(),
+        ]
+        resolved_path = next((path for path in candidate_paths if path.is_file()), candidate_paths[0])
     if resolved_path.suffix.lower() not in _CONFIG_FILE_SUFFIXES:
         raise ValueError("config_path 只能指向 YAML 配置文件。")
     if not resolved_path.is_file():
@@ -341,7 +365,7 @@ def _build_run_config(
     if "top_k_pairs" in payload and payload["top_k_pairs"] is not None:
         evaluation["top_k_pairs"] = int(payload["top_k_pairs"])
     if "selection_top_n" in payload and payload["selection_top_n"] is not None:
-        runtime["selection_top_n"] = _validate_positive_int(int(payload["selection_top_n"]), "selection_top_n")
+        runtime["selection_top_n"] = _coerce_positive_int(payload["selection_top_n"], "selection_top_n")
     if "models_enabled" in payload and isinstance(payload["models_enabled"], dict):
         for model_name, enabled in payload["models_enabled"].items():
             if model_name in models and isinstance(models[model_name], dict):
@@ -442,7 +466,7 @@ def create_app(
             else:
                 requested_config = Path(config_path).resolve()
             if "selection_top_n" in body and body["selection_top_n"] is not None:
-                _validate_positive_int(int(body["selection_top_n"]), "selection_top_n")
+                _coerce_positive_int(body["selection_top_n"], "selection_top_n")
         except ValueError as exc:
             raise HTTPException(status_code=422, detail=str(exc)) from exc
         run_dir = _resolve_run_dir(resolved_output_root, actual_run_id)
