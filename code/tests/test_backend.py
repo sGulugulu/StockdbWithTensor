@@ -114,6 +114,21 @@ class BackendTests(unittest.TestCase):
                         )
                         self.assertEqual(response.status_code, 422)
                         self.assertIn("config_path", response.json()["detail"])
+                        self.assertFalse((Path(temp_dir) / "blocked_config_run").exists())
+
+                    response = await client.post(
+                        "/api/runs",
+                        json={
+                            "run_id": "invalid_selection_top_n",
+                            "run_sync": False,
+                            "config_path": str(temp_config),
+                            "selection_top_n": 0,
+                        },
+                        timeout=10.0,
+                    )
+                    self.assertEqual(response.status_code, 422)
+                    self.assertIn("selection_top_n", response.json()["detail"])
+                    self.assertFalse((Path(temp_dir) / "invalid_selection_top_n").exists())
 
                     queued_dir = Path(temp_dir) / "queued_run"
                     queued_dir.mkdir(parents=True, exist_ok=True)
