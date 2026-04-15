@@ -591,9 +591,13 @@ func (a *App) listRuns() []map[string]any {
 }
 
 func (a *App) getRunDetail(runID string) (map[string]any, error) {
-	runDir := filepath.Join(a.config.OutputRoot, runID)
+	safeRunID, err := validateRunID(runID)
+	if err != nil {
+		return nil, err
+	}
+	runDir := filepath.Join(a.config.OutputRoot, safeRunID)
 	detail := map[string]any{
-		"run_id":              runID,
+		"run_id":              safeRunID,
 		"status":              a.loadStatus(runDir),
 		"manifest":            []any{},
 		"metrics":             []any{},
@@ -635,7 +639,11 @@ func (a *App) getRunDetail(runID string) (map[string]any, error) {
 }
 
 func (a *App) getSelectionForDate(runID string, tradeDate string, topN int) ([]map[string]any, error) {
-	selectionAny, err := readJSONFile(filepath.Join(a.config.OutputRoot, runID, "selection_candidates.json"))
+	safeRunID, err := validateRunID(runID)
+	if err != nil {
+		return nil, err
+	}
+	selectionAny, err := readJSONFile(filepath.Join(a.config.OutputRoot, safeRunID, "selection_candidates.json"))
 	if err != nil {
 		return nil, err
 	}
