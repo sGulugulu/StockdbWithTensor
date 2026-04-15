@@ -19,7 +19,11 @@
 
 - `2015-01-01` 到 `2026-04-01`
 
-正式数据架构采用：
+长期股票覆盖范围保留更广的全 A 股，不将系统长期边界写死为上述三个指数样本。
+
+## 正式数据结构
+
+正式数据底座采用：
 
 - 一套共享的 **全 A 股主市场数据**
 - 一套共享的 **全 A 股财务/报告数据**，按表类型拆分保存
@@ -28,28 +32,79 @@
   - `SZ50`
   - `ZZ500`
   - 全 A 可交易股票池
+- 稳定的 `CSV -> Parquet -> DuckDB` 路线
 
 仓库中的旧样例数据仅用于 smoke test 和轻量联调，不属于正式研究基线。
 
+## 实验协议
 
-## Run
+正式实验默认采用按时间切分，但系统层必须保留可配置切分能力，至少支持：
 
-Create the local virtual environment and install dependencies:
+- 按时间切分
+- 按股票切分
+- 混合切分
+
+在构造 `股票-因子-时间` 三维张量之前，预处理阶段必须独立存在，且至少包括：
+
+- 样本筛选
+- 时间对齐
+- 缺失值处理
+- 异常值处理
+- 因子方向统一
+- 截面标准化
+- 标签与元信息拆分
+
+其中有两条硬约束：
+
+- 未来收益标签只用于评估，不得进入输入张量
+- 不允许未来信息穿越训练 / 预测边界
+
+## 评估框架
+
+正式评估框架固定为三层：
+
+1. 分解质量  
+   关注重构误差、秩选择行为与结果稳定性。
+2. 模式发现与解释  
+   关注股票结构、因子贡献和时间模式的可解释性。
+3. 预测或决策有效性  
+   关注后续窗口中的排序效果、候选股票输出和泛化表现。
+
+这三层评估同时服务于论文结果章节、系统结果页和 API 输出契约。
+
+## 系统边界
+
+当前项目的长期系统边界固定为：
+
+- `Go` 负责 HTTP 接口、运行状态、结果查询与 formal 查询聚合
+- `Python` 负责数据处理、实验执行与结果落盘
+- `DuckDB` 负责 formal 数据查询与稳定 catalog 视图
+- `code/outputs` 负责运行结果产物
+
+这意味着：
+
+- `web/backend/` 下的 Python 服务仅保留为兼容入口或过渡实现
+- 长期正式网关仍然是 `web/backend-go/`
+- 不将 Python 实验执行逻辑重新混入 Go 网关
+
+## 运行方式
+
+先创建本地虚拟环境并安装依赖：
 
 ```powershell
 python -m venv .venv
 python -m pip install -r requirements.txt
 ```
 
-The runtime now expects a PyTorch-capable environment so the project can use:
+当前运行时支持：
 
 - `device=cpu`
 - `device=cuda`
 - `device=auto`
 
-When CUDA is available, the numerical post-processing path prefers GPU execution; otherwise it safely falls back to CPU. The first-stage GPU path is `PyTorch`, with `Triton` or native `CUDA` reserved for later hotspot optimization.
+当 CUDA 可用时，数值后处理优先走 GPU；否则自动回退到 CPU。当前 GPU 主路径是 `PyTorch`，后续热点优化再考虑 `Triton` 或原生 `CUDA`。
 
-Stage 1: fetch universe-history inputs and metadata from baostock:
+### Stage 1：抓取 universe-history 与 metadata
 
 ```powershell
 python code/data/fetch_baostock_data.py `
@@ -61,15 +116,9 @@ python code/data/fetch_baostock_data.py `
   --skip-reports
 ```
 
-For formal daily panels, the repository now defaults to **鍓嶅鏉?* (`adjustflag=2`) when pulling baostock kline data.
+formal 日频面板默认采用 **前复权**（`adjustflag=2`）口径抓取 baostock kline 数据。
 
-Formal A-share config profiles now exist for:
-
-- `code/configs/formal_hs300.yaml`
-- `code/configs/formal_sz50.yaml`
-- `code/configs/formal_zz500.yaml`
-
-Stage 2: fetch formal financial and report tables with resume support:
+### Stage 2：抓取 formal 财务与报告数据
 
 ```powershell
 python code/data/fetch_baostock_data.py `
@@ -81,11 +130,15 @@ python code/data/fetch_baostock_data.py `
   --skip-metadata
 ```
 
-Stage 3: build or refresh the formal daily market panel and downstream factor panel from the canonical formal root.
+### Stage 3：构建 formal 市场面板与因子面板
 
-Stage 4: convert validated formal `CSV` outputs into matching `Parquet` files for larger-scale training and faster reads.
+从 canonical formal root 构建或刷新日频市场面板、因子面板和实验输入。
 
-Stage 5: register validated formal `CSV` / `Parquet` datasets into the local `DuckDB` catalog for stable research SQL and web-facing summary queries.
+### Stage 4：生成 Parquet
+
+将验证通过的 formal `CSV` 输出转换为对应的 `Parquet` 文件，用于后续大规模训练和更快读写。
+
+### Stage 5：注册 DuckDB catalog
 
 ```powershell
 python code/data/register_formal_duckdb_catalog.py `
@@ -93,72 +146,59 @@ python code/data/register_formal_duckdb_catalog.py `
   --catalog-path code/data/formal/catalog.duckdb
 ```
 
-Use the smoke-test configuration only for lightweight validation:
+## 配置文件
+
+正式 A 股 profile：
+
+- `code/configs/formal_hs300.yaml`
+- `code/configs/formal_sz50.yaml`
+- `code/configs/formal_zz500.yaml`
+
+样例 profile：
+
+- `code/configs/sample_cn_smoke.yaml`
+- `code/configs/sample_us_equity.yaml`
+
+正式 profile 应基于共享全 A 主数据与 universe-history 过滤，不再依赖按指数重复存储的完整市场数据。
+
+## 运行实验
+
+轻量联调用 smoke 配置：
 
 ```powershell
 python code/main.py --config code/configs/sample_cn_smoke.yaml
 ```
 
-For formal runs, prefer the full-data profiles instead of the smoke profile:
+正式实验优先使用 formal profile：
 
 ```powershell
 python code/main.py --config code/configs/formal_hs300.yaml
 ```
 
-The formal profiles are expected to read from the shared all-A-share master data plus universe-history filtering, rather than from duplicated per-index full market datasets.
+## 测试
 
-Run the test suite:
+Python 测试：
 
 ```powershell
 python -m unittest discover -s code/tests
 ```
 
-## Structure
+Go 后端测试：
 
-- `code/configs/default.yaml`: legacy compatibility config, not the formal baseline
-- `code/configs/formal_hs300.yaml`: formal HS300 profile
-- `code/configs/formal_sz50.yaml`: formal SZ50 profile
-- `code/configs/formal_zz500.yaml`: formal ZZ500 profile
-- `code/configs/sample_cn_smoke.yaml`: smoke-test configuration for the bundled A-share sample data
-- `code/configs/sample_us_equity.yaml`: sample US-equity configuration showing the future market interface
-- `code/data/sample_a_share_factors.csv`: synthetic A-share style factor sample
-- `code/data/sample_csi_a500_history.csv`: sample CSI A500 membership history input
-- `code/data/fetch_baostock_data.py`: downloader for universe histories, metadata, and formal financial/report data
-- `code/data/formal/baostock/`: canonical formal baostock root
-- `code/data/formal/`: formal derived inputs and outputs
-- `code/data/register_formal_duckdb_catalog.py`: DuckDB catalog registration for formal datasets
-- `code/stock_tensor/`: preprocessing, tensor construction, models, evaluation, and output logic
-- `code/tests/`: automated tests for config loading, dataset building, model fitting, and pipeline execution
-- `web/backend/`: legacy Python backend scaffold; the target production-facing API layer is a Go gateway that reads DuckDB and `code/outputs`, and invokes Python scripts for experiment runs
-- `web/frontend/`: React + Vite frontend scaffold for experiment and selection views
-- `code/outputs/`: generated experiment artifacts
+```powershell
+go test ./web/backend-go/internal/backend
+```
 
-## Formal Data Layout
+前端测试：
 
-The intended formal data layout is:
-
-- all-A-share master market data in one shared dataset
-- all-A-share financial/report tables split by source table
-- separate universe-history files for `HS300`, `SZ50`, `ZZ500`, and tradable all-A-share
-- formal outputs available first as `CSV`, then mirrored into `Parquet`
-
-This layout avoids duplicating the full market dataset once per index and keeps the backtest logic aligned with historical universe membership.
+```powershell
+cd web/frontend
+npm test -- --run
+```
 
 ## Web API
 
-The target backend architecture is:
-
-- a pure `Go` API gateway for HTTP services
-- `Go` reads `DuckDB` and `code/outputs/`
-- `POST /api/runs` triggers Python experiment execution via command/script calls
-- Python remains the experiment runner and data-processing runtime
-
-Current repository note:
-
-- `web/backend/` still contains a legacy Python scaffold
-- it is no longer the target long-term API gateway architecture
-
-Planned Go gateway responsibilities include:
+Go 网关长期负责以下接口：
 
 - `GET /api/formal/coverage`
 - `GET /api/formal/universes/{universe_id}?trade_date=YYYY-MM-DD`
@@ -168,43 +208,52 @@ Planned Go gateway responsibilities include:
 - `GET /api/runs/{run_id}/selection`
 - `POST /api/runs`
 
-Run the Go backend:
+启动 Go 后端：
 
 ```powershell
 go run ./web/backend-go/cmd/server
 ```
 
-The frontend now defaults to `http://127.0.0.1:8080`.
+前端默认指向：
 
-If you still need to compare against the legacy Python backend, set:
+```text
+http://127.0.0.1:8080
+```
+
+如果需要对比遗留 Python 后端，可临时设置：
 
 ```powershell
 $env:VITE_API_BASE="http://127.0.0.1:8000"
 ```
 
-Legacy scaffold run command for reference only:
+遗留 Python scaffold 仅作兼容参考：
 
 ```powershell
 python -m uvicorn web.backend.app:create_app --factory --reload
 ```
 
-Formal data routes now include:
+## 输出产物
 
-- `GET /api/formal/coverage`
-  - returns shared master coverage, full-master coverage, factor coverage, and financial/report dataset coverage from DuckDB views
-- `GET /api/formal/universes/{universe_id}?trade_date=YYYY-MM-DD`
-  - returns historical universe members for a specific trading date from DuckDB `vw_*_on_date` views
-
-## Outputs
-
-Each run writes an experiment folder under `code/outputs/` with:
+每次运行会在 `code/outputs/` 下生成独立实验目录，至少包含：
 
 - `run_manifest.json`
 - `config_snapshot.yaml`
-- `metrics.csv` and `metrics.json`
-- `selection_*.csv` and `selection_*.json`
-- `factor_summary_*.csv` and `factor_summary_*.json`
+- `metrics.csv` 与 `metrics.json`
+- `selection_*.csv` 与 `selection_*.json`
+- `factor_summary_*.csv` 与 `factor_summary_*.json`
 - `stock_similarity_*.csv`
 - `factor_association_*.csv`
 - `time_regimes_*.csv`
-- summary SVG charts and `summary.md`
+- `summary.md` 与配套图表
+
+## 目录结构
+
+- `code/configs/`：实验配置
+- `code/data/formal/`：formal 正式数据根目录
+- `code/data/register_formal_duckdb_catalog.py`：DuckDB catalog 注册脚本
+- `code/stock_tensor/`：预处理、张量构建、模型、评估与输出逻辑
+- `code/tests/`：自动化测试
+- `web/backend-go/`：长期正式 Go 网关
+- `web/backend/`：遗留 Python 后端兼容层
+- `web/frontend/`：React + Vite 前端
+- `code/outputs/`：实验结果产物
