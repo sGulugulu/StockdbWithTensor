@@ -158,6 +158,31 @@ func TestReadOnlyRoutes(t *testing.T) {
 		t.Fatalf("expected legacy run_id in detail payload, got %#v", detailPayload["run_id"])
 	}
 
+	symlinkOutputRoot := filepath.Join(root, "linked-output-root")
+	if err := os.Symlink(outputRoot, symlinkOutputRoot); err == nil {
+		symlinkHandler, err := NewHandler(Config{
+			RepoRoot:            root,
+			OutputRoot:          symlinkOutputRoot,
+			FormalRoot:          formalRoot,
+			CatalogPath:         catalogPath,
+			DefaultConfigPath:   defaultConfigPath,
+			PythonExecutable:    "python",
+			RunnerScriptPath:    filepath.Join(root, "runner.py"),
+			RegistrarScriptPath: filepath.Join(actualRepoRoot, "code", "data", "register_formal_duckdb_catalog.py"),
+		})
+		if err != nil {
+			t.Fatalf("new symlink output handler failed: %v", err)
+		}
+		recorder = httptest.NewRecorder()
+		request = httptest.NewRequest(http.MethodGet, "/api/runs/legacy.run", nil)
+		symlinkHandler.ServeHTTP(recorder, request)
+		if recorder.Code != http.StatusOK {
+			t.Fatalf("expected 200 for legacy run detail via symlink output root, got %d", recorder.Code)
+		}
+	} else {
+		t.Logf("skip symlink output root test: %v", err)
+	}
+
 	recorder = httptest.NewRecorder()
 	request = httptest.NewRequest(http.MethodGet, "/api/runs/go_read_run/metrics", nil)
 	handler.ServeHTTP(recorder, request)
