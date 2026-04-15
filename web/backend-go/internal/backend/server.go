@@ -289,6 +289,13 @@ func (a *App) resolveRunDir(runID string, validatePattern bool) (string, error) 
 		return "", err
 	}
 	runDir := filepath.Clean(filepath.Join(a.config.OutputRoot, safeRunID))
+	if _, statErr := os.Lstat(runDir); statErr == nil {
+		resolvedRunDir, err := evalSymlinkPath(runDir)
+		if err != nil {
+			return "", newValidationError("run_id 对应的运行目录无法解析")
+		}
+		runDir = resolvedRunDir
+	}
 	// 这里用真实路径边界约束 run_id，避免路径穿越进入 outputs 目录之外。
 	if !isPathWithinRoot(runDir, a.config.OutputRoot) {
 		return "", newValidationError("run_id 超出输出目录边界")

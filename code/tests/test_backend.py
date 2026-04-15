@@ -116,6 +116,14 @@ class BackendTests(unittest.TestCase):
                     self.assertEqual(response.status_code, 422)
                     self.assertIn("run_id", response.json()["detail"])
 
+                    response = await client.post(
+                        "/api/runs",
+                        json={"run_sync": False, "config_path": False},
+                        timeout=10.0,
+                    )
+                    self.assertEqual(response.status_code, 422)
+                    self.assertIn("config_path", response.json()["detail"])
+
                     with tempfile.TemporaryDirectory() as outside_dir:
                         outside_config = Path(outside_dir) / "outside.yaml"
                         outside_config.write_text(
