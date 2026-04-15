@@ -13,6 +13,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -37,6 +38,14 @@ type Config struct {
 type App struct {
 	config Config
 	mu     sync.Mutex
+}
+
+type validationError struct {
+	message string
+}
+
+func (e validationError) Error() string {
+	return e.message
 }
 
 type marketOption struct {
@@ -96,6 +105,13 @@ var universeViewByID = map[string]string{
 	"HS300":          "universes.vw_hs300_on_date",
 	"SZ50":           "universes.vw_sz50_on_date",
 	"ZZ500":          "universes.vw_zz500_on_date",
+}
+
+var runIDPattern = regexp.MustCompile(`^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$`)
+
+var allowedConfigSuffixes = map[string]struct{}{
+	".yaml": {},
+	".yml":  {},
 }
 
 func NewHandler(cfg Config) (http.Handler, error) {
@@ -187,6 +203,82 @@ func writeError(w http.ResponseWriter, status int, detail string) {
 	writeJSON(w, status, map[string]string{"detail": detail})
 }
 
+func newValidationError(message string) error {
+	return validationError{message: message}
+}
+
+func isValidationError(err error) bool {
+	var target validationError
+	return errors.As(err, &target)
+}
+
+func isPathWithinRoot(candidate string, root string) bool {
+	relative, err := filepath.Rel(root, candidate)
+	if err != nil {
+		return false
+	}
+	return relative != ".." && !strings.HasPrefix(relative, fmt.Sprintf("..%c", filepath.Separator))
+}
+
+func validateRunID(runID string) (string, error) {
+	candidate := strings.TrimSpace(runID)
+	if !runIDPattern.MatchString(candidate) {
+		return "", newValidationError("run_id 只能包含字母、数字、下划线和中划线，且长度不能超过 64")
+	}
+	return candidate, nil
+}
+
+func validatePositiveInt(value int, fieldName string) error {
+	if value <= 0 {
+		return newValidationError(fmt.Sprintf("%s 必须是大于 0 的整数", fieldName))
+	}
+	return nil
+}
+
+func (a *App) resolveRunDir(runID string) (string, error) {
+	safeRunID, err := validateRunID(runID)
+	if err != nil {
+		return "", err
+	}
+	runDir := filepath.Clean(filepath.Join(a.config.OutputRoot, safeRunID))
+	// 这里用真实路径边界约束 run_id，避免路径穿越进入 outputs 目录之外。
+	if !isPathWithinRoot(runDir, a.config.OutputRoot) {
+		return "", newValidationError("run_id 超出输出目录边界")
+	}
+	return runDir, nil
+}
+
+func (a *App) resolveRequestedConfigPath(rawConfigPath string) (string, error) {
+	candidate := strings.TrimSpace(rawConfigPath)
+	if candidate == "" {
+		return "", newValidationError("config_path 不能为空")
+	}
+	resolvedPath := candidate
+	if !filepath.IsAbs(resolvedPath) {
+		resolvedPath = filepath.Join(a.config.RepoRoot, resolvedPath)
+	}
+	resolvedPath = filepath.Clean(resolvedPath)
+
+	if _, ok := allowedConfigSuffixes[strings.ToLower(filepath.Ext(resolvedPath))]; !ok {
+		return "", newValidationError("config_path 只能指向 YAML 配置文件")
+	}
+	if _, err := os.Stat(resolvedPath); err != nil {
+		return "", newValidationError("config_path 指向的配置文件不存在")
+	}
+
+	// 自定义配置只允许落在受控目录，避免任意文件被注入到实验执行链路。
+	allowedRoots := []string{
+		filepath.Clean(filepath.Join(a.config.RepoRoot, "code", "configs")),
+		filepath.Clean(filepath.Dir(a.config.DefaultConfigPath)),
+	}
+	for _, root := range allowedRoots {
+		if isPathWithinRoot(resolvedPath, root) {
+			return resolvedPath, nil
+		}
+	}
+	return "", newValidationError("config_path 不在允许的配置目录内")
+}
+
 func (a *App) handleMarkets(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, marketOptions)
 }
@@ -221,7 +313,11 @@ func (a *App) handleRuns(w http.ResponseWriter, r *http.Request) {
 
 func (a *App) handleRunDetail(w http.ResponseWriter, r *http.Request) {
 	runID := r.PathValue("run_id")
-	runDir := filepath.Join(a.config.OutputRoot, runID)
+	runDir, err := a.resolveRunDir(runID)
+	if err != nil {
+		writeError(w, http.StatusUnprocessableEntity, err.Error())
+		return
+	}
 	if _, err := os.Stat(runDir); err != nil {
 		writeError(w, http.StatusNotFound, "Run not found")
 		return
@@ -236,7 +332,11 @@ func (a *App) handleRunDetail(w http.ResponseWriter, r *http.Request) {
 
 func (a *App) handleRunMetrics(w http.ResponseWriter, r *http.Request) {
 	runID := r.PathValue("run_id")
-	runDir := filepath.Join(a.config.OutputRoot, runID)
+	runDir, err := a.resolveRunDir(runID)
+	if err != nil {
+		writeError(w, http.StatusUnprocessableEntity, err.Error())
+		return
+	}
 	if _, err := os.Stat(runDir); err != nil {
 		writeError(w, http.StatusNotFound, "Run not found")
 		return
@@ -260,11 +360,22 @@ func (a *App) handleRunSelection(w http.ResponseWriter, r *http.Request) {
 	tradeDate := r.URL.Query().Get("trade_date")
 	topN := 50
 	if value := r.URL.Query().Get("top_n"); value != "" {
-		if parsed, err := strconv.Atoi(value); err == nil {
-			topN = parsed
+		parsed, err := strconv.Atoi(value)
+		if err != nil {
+			writeError(w, http.StatusUnprocessableEntity, "top_n 必须是整数")
+			return
 		}
+		topN = parsed
 	}
-	runDir := filepath.Join(a.config.OutputRoot, runID)
+	if err := validatePositiveInt(topN, "top_n"); err != nil {
+		writeError(w, http.StatusUnprocessableEntity, err.Error())
+		return
+	}
+	runDir, err := a.resolveRunDir(runID)
+	if err != nil {
+		writeError(w, http.StatusUnprocessableEntity, err.Error())
+		return
+	}
 	if _, err := os.Stat(runDir); err != nil {
 		writeError(w, http.StatusNotFound, "Run not found")
 		return
@@ -300,6 +411,10 @@ func (a *App) handleCreateRun(w http.ResponseWriter, r *http.Request) {
 
 	status, err := a.submitRun(payload)
 	if err != nil {
+		if isValidationError(err) {
+			writeError(w, http.StatusUnprocessableEntity, err.Error())
+			return
+		}
 		writeError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -420,9 +535,9 @@ func (a *App) listRuns() []map[string]any {
 		}
 		_, metricsExistsErr := os.Stat(filepath.Join(runDir, "metrics.json"))
 		runs = append(runs, map[string]any{
-			"run_id":        entry.Name(),
-			"status":        status,
-			"manifest":      manifest,
+			"run_id":         entry.Name(),
+			"status":         status,
+			"manifest":       manifest,
 			"metrics_exists": metricsExistsErr == nil,
 		})
 	}
@@ -690,26 +805,33 @@ func (a *App) submitRun(payload map[string]any) (map[string]any, error) {
 		}
 		runID = generated
 	}
-	runDir := filepath.Join(a.config.OutputRoot, runID)
+	safeRunID, err := validateRunID(runID)
+	if err != nil {
+		return nil, err
+	}
+	runDir, err := a.resolveRunDir(safeRunID)
+	if err != nil {
+		return nil, err
+	}
 	if err := os.MkdirAll(runDir, 0o755); err != nil {
 		return nil, err
 	}
 
-	configPath, err := a.buildRunConfig(runID, runDir, payload)
+	configPath, err := a.buildRunConfig(safeRunID, runDir, payload)
 	if err != nil {
 		return nil, err
 	}
 
 	status := a.updateStatus(runDir, "queued", map[string]any{
-		"run_id":      runID,
+		"run_id":      safeRunID,
 		"config_path": repoRelativePath(a.config.RepoRoot, configPath),
 	})
 
 	runSync, _ := payload["run_sync"].(bool)
 	if runSync {
-		a.executeRun(runID, runDir, configPath)
+		a.executeRun(safeRunID, runDir, configPath)
 	} else {
-		go a.executeRun(runID, runDir, configPath)
+		go a.executeRun(safeRunID, runDir, configPath)
 	}
 	return status, nil
 }
@@ -745,42 +867,39 @@ func (a *App) executeRun(runID string, runDir string, configPath string) {
 	a.updateStatus(runDir, "completed", extra)
 }
 
-func (a *App) resolveRequestedConfig(payload map[string]any) string {
+func (a *App) resolveRequestedConfig(payload map[string]any) (string, error) {
 	configProfile, _ := payload["config_profile"].(string)
 	marketID, _ := payload["market_id"].(string)
 	universeID, _ := payload["universe_id"].(string)
 	if configPath, ok := payload["config_path"].(string); ok && strings.TrimSpace(configPath) != "" {
-		if filepath.IsAbs(configPath) {
-			return configPath
-		}
-		return filepath.Join(a.config.RepoRoot, configPath)
+		return a.resolveRequestedConfigPath(configPath)
 	}
 	profiles := map[string]string{
-		"formal_hs300":    filepath.Join(a.config.RepoRoot, "code", "configs", "formal_hs300.yaml"),
-		"formal_sz50":     filepath.Join(a.config.RepoRoot, "code", "configs", "formal_sz50.yaml"),
-		"formal_zz500":    filepath.Join(a.config.RepoRoot, "code", "configs", "formal_zz500.yaml"),
-		"sample_cn_smoke": filepath.Join(a.config.RepoRoot, "code", "configs", "sample_cn_smoke.yaml"),
+		"formal_hs300":     filepath.Join(a.config.RepoRoot, "code", "configs", "formal_hs300.yaml"),
+		"formal_sz50":      filepath.Join(a.config.RepoRoot, "code", "configs", "formal_sz50.yaml"),
+		"formal_zz500":     filepath.Join(a.config.RepoRoot, "code", "configs", "formal_zz500.yaml"),
+		"sample_cn_smoke":  filepath.Join(a.config.RepoRoot, "code", "configs", "sample_cn_smoke.yaml"),
 		"sample_us_equity": filepath.Join(a.config.RepoRoot, "code", "configs", "sample_us_equity.yaml"),
 	}
 	if resolved, ok := profiles[configProfile]; ok {
-		return resolved
+		return resolved, nil
 	}
 	if marketID == "cn_a" && universeID == "HS300" {
-		return profiles["formal_hs300"]
+		return profiles["formal_hs300"], nil
 	}
 	if marketID == "cn_a" && universeID == "SZ50" {
-		return profiles["formal_sz50"]
+		return profiles["formal_sz50"], nil
 	}
 	if marketID == "cn_a" && universeID == "ZZ500" {
-		return profiles["formal_zz500"]
+		return profiles["formal_zz500"], nil
 	}
 	if marketID == "us_equity" {
-		return profiles["sample_us_equity"]
+		return profiles["sample_us_equity"], nil
 	}
 	if marketID == "cn_a" {
-		return a.config.DefaultConfigPath
+		return a.config.DefaultConfigPath, nil
 	}
-	return a.config.DefaultConfigPath
+	return a.config.DefaultConfigPath, nil
 }
 
 func coerceStringMap(value any) map[string]any {
@@ -810,7 +929,10 @@ func convertArray(value any) []any {
 }
 
 func (a *App) buildRunConfig(runID string, runDir string, payload map[string]any) (string, error) {
-	baseConfigPath := a.resolveRequestedConfig(payload)
+	baseConfigPath, err := a.resolveRequestedConfig(payload)
+	if err != nil {
+		return "", err
+	}
 	content, err := os.ReadFile(baseConfigPath)
 	if err != nil {
 		return "", err

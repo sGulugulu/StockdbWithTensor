@@ -144,6 +144,27 @@ func TestReadOnlyRoutes(t *testing.T) {
 	if len(selectionPayload) != 1 || selectionPayload[0]["stock_code"] != "600000.SH" {
 		t.Fatalf("unexpected selection payload: %#v", selectionPayload)
 	}
+
+	recorder = httptest.NewRecorder()
+	request = httptest.NewRequest(http.MethodGet, "/api/runs/go_read_run/selection?trade_date=2026-01-09&top_n=0", nil)
+	handler.ServeHTTP(recorder, request)
+	if recorder.Code != http.StatusUnprocessableEntity {
+		t.Fatalf("expected 422 for invalid top_n, got %d", recorder.Code)
+	}
+
+	recorder = httptest.NewRecorder()
+	request = httptest.NewRequest(http.MethodGet, "/api/runs/go_read_run/selection?trade_date=2026-01-09&top_n=abc", nil)
+	handler.ServeHTTP(recorder, request)
+	if recorder.Code != http.StatusUnprocessableEntity {
+		t.Fatalf("expected 422 for non-integer top_n, got %d", recorder.Code)
+	}
+
+	recorder = httptest.NewRecorder()
+	request = httptest.NewRequest(http.MethodGet, "/api/runs/..%5Cinvalid", nil)
+	handler.ServeHTTP(recorder, request)
+	if recorder.Code != http.StatusUnprocessableEntity {
+		t.Fatalf("expected 422 for invalid run_id, got %d", recorder.Code)
+	}
 }
 
 func TestCreateRunRoute(t *testing.T) {
@@ -175,12 +196,12 @@ func TestCreateRunRoute(t *testing.T) {
 	}
 
 	requestBody, err := json.Marshal(map[string]any{
-		"run_id":           "go_submit_run",
-		"run_sync":         false,
-		"market_id":        "us_equity",
-		"selection_top_n":  7,
-		"models_enabled":   map[string]any{"cp": true, "tucker": false, "pca": true},
-		"model_ranks":      map[string]any{"cp": []any{2}, "pca": []any{2}},
+		"run_id":          "go_submit_run",
+		"run_sync":        false,
+		"market_id":       "us_equity",
+		"selection_top_n": 7,
+		"models_enabled":  map[string]any{"cp": true, "tucker": false, "pca": true},
+		"model_ranks":     map[string]any{"cp": []any{2}, "pca": []any{2}},
 	})
 	if err != nil {
 		t.Fatalf("marshal body failed: %v", err)
@@ -218,5 +239,39 @@ func TestCreateRunRoute(t *testing.T) {
 	statusPayload, ok := detailPayload["status"].(map[string]any)
 	if !ok || statusPayload["status"] != "completed" {
 		t.Fatalf("expected completed status, got %#v", detailPayload["status"])
+	}
+
+	invalidBody, err := json.Marshal(map[string]any{
+		"run_id":      "..\\invalid",
+		"run_sync":    false,
+		"config_path": defaultConfigPath,
+	})
+	if err != nil {
+		t.Fatalf("marshal invalid body failed: %v", err)
+	}
+	recorder = httptest.NewRecorder()
+	request = httptest.NewRequest(http.MethodPost, "/api/runs", bytes.NewReader(invalidBody))
+	request.Header.Set("Content-Type", "application/json")
+	handler.ServeHTTP(recorder, request)
+	if recorder.Code != http.StatusUnprocessableEntity {
+		t.Fatalf("expected 422 for invalid run_id create request, got %d", recorder.Code)
+	}
+
+	outsideConfigPath := filepath.Join(root, "outside.yaml")
+	writeTextFile(t, outsideConfigPath, "market:\n  market_id: cn_a\n")
+	outsideBody, err := json.Marshal(map[string]any{
+		"run_id":      "blocked_config_run",
+		"run_sync":    false,
+		"config_path": outsideConfigPath,
+	})
+	if err != nil {
+		t.Fatalf("marshal outside body failed: %v", err)
+	}
+	recorder = httptest.NewRecorder()
+	request = httptest.NewRequest(http.MethodPost, "/api/runs", bytes.NewReader(outsideBody))
+	request.Header.Set("Content-Type", "application/json")
+	handler.ServeHTTP(recorder, request)
+	if recorder.Code != http.StatusUnprocessableEntity {
+		t.Fatalf("expected 422 for invalid config_path, got %d", recorder.Code)
 	}
 }
