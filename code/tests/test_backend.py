@@ -86,8 +86,7 @@ class BackendTests(unittest.TestCase):
                     self.assertIn("top_n", response.json()["detail"])
 
                     response = await client.get("/api/runs/..\\invalid", timeout=10.0)
-                    self.assertEqual(response.status_code, 422)
-                    self.assertIn("run_id", response.json()["detail"])
+                    self.assertEqual(response.status_code, 404)
 
                     response = await client.post(
                         "/api/runs",
@@ -130,6 +129,22 @@ class BackendTests(unittest.TestCase):
                     self.assertIn("selection_top_n", response.json()["detail"])
                     self.assertFalse((Path(temp_dir) / "invalid_selection_top_n").exists())
 
+                    relative_variant_config = Path(temp_dir) / "variant.yaml"
+                    relative_variant_config.write_text(
+                        yaml.safe_dump(config_data, sort_keys=False),
+                        encoding="utf-8",
+                    )
+                    response = await client.post(
+                        "/api/runs",
+                        json={
+                            "run_id": "relative_variant_run",
+                            "run_sync": False,
+                            "config_path": "variant.yaml",
+                        },
+                        timeout=60.0,
+                    )
+                    self.assertEqual(response.status_code, 200)
+
                     queued_dir = Path(temp_dir) / "queued_run"
                     queued_dir.mkdir(parents=True, exist_ok=True)
                     (queued_dir / "run_status.json").write_text(
@@ -138,6 +153,35 @@ class BackendTests(unittest.TestCase):
                     )
                     response = await client.get("/api/runs/queued_run/metrics", timeout=10.0)
                     self.assertEqual(response.status_code, 409)
+
+                    legacy_dir = Path(temp_dir) / "legacy.run"
+                    legacy_dir.mkdir(parents=True, exist_ok=True)
+                    (legacy_dir / "run_status.json").write_text(
+                        '{"run_id":"legacy.run","status":"completed","created_at":"x","updated_at":"x"}',
+                        encoding="utf-8",
+                    )
+                    (legacy_dir / "run_manifest.json").write_text(
+                        '{"market_id":"cn_a","universe_id":"HS300","selection_top_n":1}',
+                        encoding="utf-8",
+                    )
+                    (legacy_dir / "metrics.json").write_text(
+                        '[{"model":"cp","rank":"2","mse":0.1,"explained_variance":0.9}]',
+                        encoding="utf-8",
+                    )
+                    (legacy_dir / "selection_candidates.json").write_text(
+                        '[{"trade_date":"2026-01-09","stock_code":"600000.SH","total_score":0.9,"model_count":1,"cluster_label":"A","top_factor_1":"value","time_regime_score":0.3}]',
+                        encoding="utf-8",
+                    )
+                    response = await client.get("/api/runs/legacy.run", timeout=10.0)
+                    self.assertEqual(response.status_code, 200)
+                    self.assertEqual(response.json()["run_id"], "legacy.run")
+                    response = await client.get(
+                        "/api/runs/legacy.run/selection",
+                        params={"trade_date": "2026-01-09", "top_n": 1},
+                        timeout=10.0,
+                    )
+                    self.assertEqual(response.status_code, 200)
+                    self.assertEqual(response.json()[0]["stock_code"], "600000.SH")
 
                     response = await client.post(
                         "/api/runs",
