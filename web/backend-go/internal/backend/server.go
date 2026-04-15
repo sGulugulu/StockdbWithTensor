@@ -366,7 +366,7 @@ func (a *App) handleRuns(w http.ResponseWriter, r *http.Request) {
 
 func (a *App) handleRunDetail(w http.ResponseWriter, r *http.Request) {
 	runID := r.PathValue("run_id")
-	runDir, err := a.resolveRunDir(runID, true)
+	runDir, err := a.resolveRunDir(runID, false)
 	if err != nil {
 		writeError(w, http.StatusUnprocessableEntity, err.Error())
 		return
@@ -385,7 +385,7 @@ func (a *App) handleRunDetail(w http.ResponseWriter, r *http.Request) {
 
 func (a *App) handleRunMetrics(w http.ResponseWriter, r *http.Request) {
 	runID := r.PathValue("run_id")
-	runDir, err := a.resolveRunDir(runID, true)
+	runDir, err := a.resolveRunDir(runID, false)
 	if err != nil {
 		writeError(w, http.StatusUnprocessableEntity, err.Error())
 		return
@@ -424,7 +424,7 @@ func (a *App) handleRunSelection(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	runDir, err := a.resolveRunDir(runID, true)
+	runDir, err := a.resolveRunDir(runID, false)
 	if err != nil {
 		writeError(w, http.StatusUnprocessableEntity, err.Error())
 		return

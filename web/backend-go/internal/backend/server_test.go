@@ -120,8 +120,8 @@ func TestReadOnlyRoutes(t *testing.T) {
 	}
 	var runsPayload []map[string]any
 	readJSONResponse(t, recorder, &runsPayload)
-	if len(runsPayload) != 1 {
-		t.Fatalf("expected one run, got %#v", runsPayload)
+	if len(runsPayload) != 2 {
+		t.Fatalf("expected two runs, got %#v", runsPayload)
 	}
 
 	recorder = httptest.NewRecorder()
