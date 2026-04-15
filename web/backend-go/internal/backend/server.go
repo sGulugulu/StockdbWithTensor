@@ -290,12 +290,14 @@ func (a *App) resolveRunDir(runID string, validatePattern bool) (string, error) 
 	}
 	runDir := filepath.Clean(filepath.Join(a.config.OutputRoot, safeRunID))
 	comparisonRoot := filepath.Clean(a.config.OutputRoot)
+	outputRootResolved := false
 	if _, statErr := os.Lstat(comparisonRoot); statErr == nil {
 		resolvedOutputRoot, err := evalSymlinkPath(comparisonRoot)
 		if err != nil {
 			return "", newValidationError("输出目录无法解析")
 		}
 		comparisonRoot = resolvedOutputRoot
+		outputRootResolved = true
 	}
 	if _, statErr := os.Lstat(runDir); statErr == nil {
 		resolvedRunDir, err := evalSymlinkPath(runDir)
@@ -303,6 +305,8 @@ func (a *App) resolveRunDir(runID string, validatePattern bool) (string, error) 
 			return "", newValidationError("run_id 对应的运行目录无法解析")
 		}
 		runDir = resolvedRunDir
+	} else if outputRootResolved {
+		runDir = filepath.Clean(filepath.Join(comparisonRoot, safeRunID))
 	}
 	// 这里用真实路径边界约束 run_id，避免路径穿越进入 outputs 目录之外。
 	if !isPathWithinRoot(runDir, comparisonRoot) {
