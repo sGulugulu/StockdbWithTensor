@@ -270,8 +270,18 @@ func coercePositiveInt(value any, fieldName string) (int, error) {
 	}
 }
 
-func (a *App) resolveRunDir(runID string) (string, error) {
-	safeRunID, err := validateRunID(runID)
+func (a *App) resolveRunDir(runID string, validatePattern bool) (string, error) {
+	candidate := strings.TrimSpace(runID)
+	var safeRunID string
+	var err error
+	if validatePattern {
+		safeRunID, err = validateRunID(candidate)
+	} else {
+		if candidate == "" {
+			return "", newValidationError("run_id 不能为空")
+		}
+		safeRunID = candidate
+	}
 	if err != nil {
 		return "", err
 	}
@@ -356,7 +366,7 @@ func (a *App) handleRuns(w http.ResponseWriter, r *http.Request) {
 
 func (a *App) handleRunDetail(w http.ResponseWriter, r *http.Request) {
 	runID := r.PathValue("run_id")
-	runDir, err := a.resolveRunDir(runID)
+	runDir, err := a.resolveRunDir(runID, true)
 	if err != nil {
 		writeError(w, http.StatusUnprocessableEntity, err.Error())
 		return
@@ -375,7 +385,7 @@ func (a *App) handleRunDetail(w http.ResponseWriter, r *http.Request) {
 
 func (a *App) handleRunMetrics(w http.ResponseWriter, r *http.Request) {
 	runID := r.PathValue("run_id")
-	runDir, err := a.resolveRunDir(runID)
+	runDir, err := a.resolveRunDir(runID, true)
 	if err != nil {
 		writeError(w, http.StatusUnprocessableEntity, err.Error())
 		return
@@ -414,7 +424,7 @@ func (a *App) handleRunSelection(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	runDir, err := a.resolveRunDir(runID)
+	runDir, err := a.resolveRunDir(runID, true)
 	if err != nil {
 		writeError(w, http.StatusUnprocessableEntity, err.Error())
 		return
@@ -591,13 +601,12 @@ func (a *App) listRuns() []map[string]any {
 }
 
 func (a *App) getRunDetail(runID string) (map[string]any, error) {
-	safeRunID, err := validateRunID(runID)
+	runDir, err := a.resolveRunDir(runID, false)
 	if err != nil {
 		return nil, err
 	}
-	runDir := filepath.Join(a.config.OutputRoot, safeRunID)
 	detail := map[string]any{
-		"run_id":              safeRunID,
+		"run_id":              filepath.Base(runDir),
 		"status":              a.loadStatus(runDir),
 		"manifest":            []any{},
 		"metrics":             []any{},
@@ -639,11 +648,11 @@ func (a *App) getRunDetail(runID string) (map[string]any, error) {
 }
 
 func (a *App) getSelectionForDate(runID string, tradeDate string, topN int) ([]map[string]any, error) {
-	safeRunID, err := validateRunID(runID)
+	runDir, err := a.resolveRunDir(runID, false)
 	if err != nil {
 		return nil, err
 	}
-	selectionAny, err := readJSONFile(filepath.Join(a.config.OutputRoot, safeRunID, "selection_candidates.json"))
+	selectionAny, err := readJSONFile(filepath.Join(runDir, "selection_candidates.json"))
 	if err != nil {
 		return nil, err
 	}
@@ -871,7 +880,7 @@ func (a *App) submitRun(payload map[string]any) (map[string]any, error) {
 		}
 		payload["selection_top_n"] = parsed
 	}
-	runDir, err := a.resolveRunDir(safeRunID)
+	runDir, err := a.resolveRunDir(safeRunID, true)
 	if err != nil {
 		return nil, err
 	}
