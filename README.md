@@ -1,30 +1,36 @@
-# Thesis Experiment Pipeline
+# 基于张量分解的股票因子降维与模式发现
 
-This repository now includes a runnable Python experiment pipeline under `code/` for the thesis topic `基于张量分解的股票因子降维与模式发现`.
+本仓库用于支撑毕业设计《基于张量分解的股票因子降维与模式发现》的实验、数据与系统实现。当前代码主线位于 `code/` 目录下，目标不是构建通用量化平台，而是围绕以下研究主线收敛：
 
-## Formal Scope
+1. 以 `股票-因子-时间` 三维张量作为统一研究对象。
+2. 以 `CP` / `Tucker` 作为核心方法路径。
+3. 在正式样本范围内验证因子降维、模式发现与后续选股有效性。
+4. 将实验系统、结果产物和 Web 查询能力统一到同一条论文叙事之下。
 
-The formal A-share research scope is now based on:
+## 正式范围
+
+当前正式 A 股研究样本固定为：
 
 - `HS300`
 - `SZ50`
 - `ZZ500`
 
-The formal data architecture is:
+当前正式全量时间窗口固定为：
 
-- one shared **all-A-share master dataset** for market data
-- one shared **all-A-share financial/report dataset** split by table type
-- separate universe-history files for:
+- `2015-01-01` 到 `2026-04-01`
+
+正式数据架构采用：
+
+- 一套共享的 **全 A 股主市场数据**
+- 一套共享的 **全 A 股财务/报告数据**，按表类型拆分保存
+- 独立维护的 universe-history 文件：
   - `HS300`
   - `SZ50`
   - `ZZ500`
-  - tradable all-A-share universe
+  - 全 A 可交易股票池
 
-The formal full-data window is fixed to:
+仓库中的旧样例数据仅用于 smoke test 和轻量联调，不属于正式研究基线。
 
-- `2015-01-01` to `2026-04-01`
-
-The legacy sample datasets remain in the repository only for smoke tests and lightweight validation. They are not the formal research baseline.
 
 ## Run
 
@@ -55,7 +61,7 @@ python code/data/fetch_baostock_data.py `
   --skip-reports
 ```
 
-For formal daily panels, the repository now defaults to **前复权** (`adjustflag=2`) when pulling baostock kline data.
+For formal daily panels, the repository now defaults to **鍓嶅鏉?* (`adjustflag=2`) when pulling baostock kline data.
 
 Formal A-share config profiles now exist for:
 
