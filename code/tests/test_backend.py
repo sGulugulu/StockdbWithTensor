@@ -145,6 +145,31 @@ class BackendTests(unittest.TestCase):
                     )
                     self.assertEqual(response.status_code, 200)
 
+                    response = await client.post(
+                        "/api/runs",
+                        json={
+                            "run_id": "repo_relative_variant_run",
+                            "run_sync": False,
+                            "config_path": "code/configs/sample_cn_smoke.yaml",
+                        },
+                        timeout=60.0,
+                    )
+                    self.assertEqual(response.status_code, 200)
+
+                    response = await client.post(
+                        "/api/runs",
+                        json={
+                            "run_id": "fractional_selection_top_n",
+                            "run_sync": False,
+                            "config_path": str(temp_config),
+                            "selection_top_n": 1.9,
+                        },
+                        timeout=10.0,
+                    )
+                    self.assertEqual(response.status_code, 422)
+                    self.assertIn("selection_top_n", response.json()["detail"])
+                    self.assertFalse((Path(temp_dir) / "fractional_selection_top_n").exists())
+
                     queued_dir = Path(temp_dir) / "queued_run"
                     queued_dir.mkdir(parents=True, exist_ok=True)
                     (queued_dir / "run_status.json").write_text(
