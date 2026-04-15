@@ -77,6 +77,44 @@ class BackendTests(unittest.TestCase):
                     self.assertLessEqual(len(response.json()), 2)
                     self.assertEqual(response.json()[0]["model_count"], 3)
 
+                    response = await client.get(
+                        "/api/runs/api_test_run/selection",
+                        params={"trade_date": "2026-01-09", "top_n": 0},
+                        timeout=10.0,
+                    )
+                    self.assertEqual(response.status_code, 422)
+                    self.assertIn("top_n", response.json()["detail"])
+
+                    response = await client.get("/api/runs/..\\invalid", timeout=10.0)
+                    self.assertEqual(response.status_code, 422)
+                    self.assertIn("run_id", response.json()["detail"])
+
+                    response = await client.post(
+                        "/api/runs",
+                        json={"run_id": "..\\invalid", "run_sync": False, "config_path": str(temp_config)},
+                        timeout=10.0,
+                    )
+                    self.assertEqual(response.status_code, 422)
+                    self.assertIn("run_id", response.json()["detail"])
+
+                    with tempfile.TemporaryDirectory() as outside_dir:
+                        outside_config = Path(outside_dir) / "outside.yaml"
+                        outside_config.write_text(
+                            yaml.safe_dump(config_data, sort_keys=False),
+                            encoding="utf-8",
+                        )
+                        response = await client.post(
+                            "/api/runs",
+                            json={
+                                "run_id": "blocked_config_run",
+                                "run_sync": False,
+                                "config_path": str(outside_config),
+                            },
+                            timeout=10.0,
+                        )
+                        self.assertEqual(response.status_code, 422)
+                        self.assertIn("config_path", response.json()["detail"])
+
                     queued_dir = Path(temp_dir) / "queued_run"
                     queued_dir.mkdir(parents=True, exist_ok=True)
                     (queued_dir / "run_status.json").write_text(
