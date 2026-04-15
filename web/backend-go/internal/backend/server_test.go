@@ -60,6 +60,11 @@ func TestReadOnlyRoutes(t *testing.T) {
 	writeTextFile(t, filepath.Join(runDir, "factor_summary_cp.json"), `[{"factor_name":"value","importance":0.8}]`)
 	writeTextFile(t, filepath.Join(runDir, "factor_association_cp.json"), `[{"left":"value","right":"momentum","score":0.7}]`)
 	writeTextFile(t, filepath.Join(runDir, "time_regimes_cp.json"), `[{"from":"2026-01-08","to":"2026-01-09","shift_score":0.6}]`)
+	legacyRunDir := filepath.Join(outputRoot, "legacy.run")
+	writeTextFile(t, filepath.Join(legacyRunDir, "run_status.json"), `{"run_id":"legacy.run","status":"completed","created_at":"x","updated_at":"x"}`)
+	writeTextFile(t, filepath.Join(legacyRunDir, "run_manifest.json"), `{"market_id":"cn_a","universe_id":"HS300","selection_top_n":1}`)
+	writeTextFile(t, filepath.Join(legacyRunDir, "metrics.json"), `[{"model":"cp","rank":"2","mse":0.1,"explained_variance":0.9}]`)
+	writeTextFile(t, filepath.Join(legacyRunDir, "selection_candidates.json"), `[{"trade_date":"2026-01-09","stock_code":"600000.SH","total_score":0.9,"model_count":1,"cluster_label":"A","top_factor_1":"value","time_regime_score":0.3}]`)
 	writeTextFile(t, defaultConfigPath, "market:\n  market_id: cn_a\n  universe_id: CSI_A500\n  start_date: 2025-01-01\n  end_date: 2026-01-31\n  timezone: Asia/Shanghai\n  currency: CNY\ndata:\n  path: ../data/sample.csv\n  format: wide\n  stock_column: stock_code\n  date_column: trade_date\n  factor_columns: [value_factor]\npreprocess:\n  max_missing_ratio: 0.5\n  winsor_limits: [0.05, 0.95]\nmodels:\n  seed: 7\n  cp:\n    enabled: true\n    ranks: [2]\n    max_iter: 5\n    tol: 1.0e-6\n  tucker:\n    enabled: false\n    ranks: [[2,2,2]]\n    max_iter: 5\n    tol: 1.0e-6\n  pca:\n    enabled: false\n    ranks: [2]\nevaluation:\n  top_k_pairs: 5\n  rolling_window: 3\nruntime:\n  selection_top_n: 20\noutput:\n  root_dir: ../outputs\n  experiment_name: default_run\n")
 
 	handler, err := NewHandler(Config{
@@ -143,6 +148,17 @@ func TestReadOnlyRoutes(t *testing.T) {
 	}
 
 	recorder = httptest.NewRecorder()
+	request = httptest.NewRequest(http.MethodGet, "/api/runs/legacy.run", nil)
+	handler.ServeHTTP(recorder, request)
+	if recorder.Code != http.StatusOK {
+		t.Fatalf("expected 200 for legacy run detail, got %d", recorder.Code)
+	}
+	readJSONResponse(t, recorder, &detailPayload)
+	if detailPayload["run_id"] != "legacy.run" {
+		t.Fatalf("expected legacy run_id in detail payload, got %#v", detailPayload["run_id"])
+	}
+
+	recorder = httptest.NewRecorder()
 	request = httptest.NewRequest(http.MethodGet, "/api/runs/go_read_run/metrics", nil)
 	handler.ServeHTTP(recorder, request)
 	if recorder.Code != http.StatusOK {
@@ -170,6 +186,17 @@ func TestReadOnlyRoutes(t *testing.T) {
 	readJSONResponse(t, recorder, &selectionPayload)
 	if len(selectionPayload) != 1 || selectionPayload[0]["stock_code"] != "600000.SH" {
 		t.Fatalf("unexpected whitespace-padded selection payload: %#v", selectionPayload)
+	}
+
+	recorder = httptest.NewRecorder()
+	request = httptest.NewRequest(http.MethodGet, "/api/runs/legacy.run/selection?trade_date=2026-01-09&top_n=1", nil)
+	handler.ServeHTTP(recorder, request)
+	if recorder.Code != http.StatusOK {
+		t.Fatalf("expected 200 for legacy selection, got %d", recorder.Code)
+	}
+	readJSONResponse(t, recorder, &selectionPayload)
+	if len(selectionPayload) != 1 || selectionPayload[0]["stock_code"] != "600000.SH" {
+		t.Fatalf("unexpected legacy selection payload: %#v", selectionPayload)
 	}
 
 	recorder = httptest.NewRecorder()
@@ -261,7 +288,7 @@ func TestCreateRunRoute(t *testing.T) {
 	if recorder.Code != http.StatusOK {
 		t.Fatalf("expected 200 for submitted run detail, got %d", recorder.Code)
 	}
-	detailPayload = nil
+	var detailPayload map[string]any
 	readJSONResponse(t, recorder, &detailPayload)
 	statusPayload, ok := detailPayload["status"].(map[string]any)
 	if !ok || statusPayload["status"] != "completed" {
