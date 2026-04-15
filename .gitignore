@@ -1,8 +1,10 @@
 __pycache__/
 *.pyc
 .venv/
+.tmp/
 .worktrees/
 .codex
+tmp_external_refs/
 node_modules/
 web/frontend/dist/
 code/data/formal/baostock_fg*/
@@ -16,4 +18,5 @@ code/data/formal/*_kline_panel_batch.csv
 code/data/formal/*_kline_panel_batch.progress.json
 code/outputs/
 *.csv
+code/data/formal/parquet/**/*.parquet
 *.pdf
