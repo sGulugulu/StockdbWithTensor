@@ -268,6 +268,8 @@ func TestCreateRunRoute(t *testing.T) {
 	if recorder.Code != http.StatusOK {
 		t.Fatalf("expected 200 for create run, got %d: %s", recorder.Code, recorder.Body.String())
 	}
+	var createdStatus map[string]any
+	readJSONResponse(t, recorder, &createdStatus)
 
 	submittedConfigPath := filepath.Join(outputRoot, "go_submit_run", "submitted_config.yaml")
 	deadline := time.Now().Add(10 * time.Second)
@@ -293,6 +295,22 @@ func TestCreateRunRoute(t *testing.T) {
 	statusPayload, ok := detailPayload["status"].(map[string]any)
 	if !ok || statusPayload["status"] != "completed" {
 		t.Fatalf("expected completed status, got %#v", detailPayload["status"])
+	}
+
+	replayBody, err := json.Marshal(map[string]any{
+		"run_id":      "go_submit_run_replay",
+		"run_sync":    false,
+		"config_path": createdStatus["config_path"],
+	})
+	if err != nil {
+		t.Fatalf("marshal replay body failed: %v", err)
+	}
+	recorder = httptest.NewRecorder()
+	request = httptest.NewRequest(http.MethodPost, "/api/runs", bytes.NewReader(replayBody))
+	request.Header.Set("Content-Type", "application/json")
+	handler.ServeHTTP(recorder, request)
+	if recorder.Code != http.StatusOK {
+		t.Fatalf("expected 200 for replaying submitted config_path, got %d: %s", recorder.Code, recorder.Body.String())
 	}
 
 	invalidBody, err := json.Marshal(map[string]any{

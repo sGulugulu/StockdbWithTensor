@@ -330,6 +330,11 @@ func (a *App) resolveRequestedConfigPath(rawConfigPath string) (string, error) {
 	if err != nil {
 		return "", newValidationError("config_path 无法解析符号链接")
 	}
+	if realOutputRoot, err := evalSymlinkPath(a.config.OutputRoot); err == nil {
+		if filepath.Base(realConfigPath) == "submitted_config.yaml" && isPathWithinRoot(realConfigPath, realOutputRoot) {
+			return realConfigPath, nil
+		}
+	}
 
 	// 自定义配置只允许落在受控目录，避免任意文件被注入到实验执行链路。
 	allowedRoots := []string{
