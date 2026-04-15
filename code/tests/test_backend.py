@@ -67,6 +67,14 @@ class BackendTests(unittest.TestCase):
                     self.assertEqual(response.status_code, 200)
                     self.assertTrue(any(run["run_id"] == "api_test_run" for run in response.json()))
 
+                    external_symlink_target = Path(temp_dir).parent / "external_symlink_run_target"
+                    external_symlink_target.mkdir(parents=True, exist_ok=True)
+                    external_symlink = Path(temp_dir) / "external_symlink_run"
+                    if not external_symlink.exists():
+                        external_symlink.symlink_to(external_symlink_target, target_is_directory=True)
+                    response = await client.get("/api/runs", timeout=10.0)
+                    self.assertFalse(any(run["run_id"] == "external_symlink_run" for run in response.json()))
+
                     response = await client.get("/api/runs/api_test_run", timeout=10.0)
                     self.assertEqual(response.status_code, 200)
                     self.assertEqual(response.json()["status"]["status"], "completed")

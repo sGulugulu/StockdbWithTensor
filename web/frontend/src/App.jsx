@@ -143,6 +143,7 @@ export default function App() {
           </p>
         </div>
         <button onClick={() => createRun()}>启动默认实验</button>
+        {submitError ? <p className="error-text">{submitError}</p> : null}
       </section>
 
       <section className="tabs">
@@ -221,7 +222,6 @@ export default function App() {
               }
             />
           </label>
-          {submitError ? <p className="error-text">{submitError}</p> : null}
           <label>
             模型选择
             <div className="checkbox-group">
