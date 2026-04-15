@@ -170,7 +170,11 @@ def _coerce_positive_int(value: Any, field_name: str) -> int:
     raise ValueError(f"{field_name} 必须是整数。")
 
 
-def _resolve_requested_config_path(raw_config_path: str, default_config_path: Path) -> Path:
+def _resolve_requested_config_path(
+    raw_config_path: str,
+    default_config_path: Path,
+    output_root: Path | None = None,
+) -> Path:
     candidate = Path(raw_config_path).expanduser()
     default_config_dir = default_config_path.resolve().parent
     if candidate.is_absolute():
@@ -185,6 +189,10 @@ def _resolve_requested_config_path(raw_config_path: str, default_config_path: Pa
         raise ValueError("config_path 只能指向 YAML 配置文件。")
     if not resolved_path.is_file():
         raise ValueError("config_path 指向的配置文件不存在。")
+    if output_root is not None:
+        resolved_output_root = output_root.resolve()
+        if resolved_path.name == "submitted_config.yaml" and _is_path_within_root(resolved_path, resolved_output_root):
+            return resolved_path
 
     # 这里只允许仓库配置目录或当前默认配置同目录，避免把任意文件伪装成实验配置注入执行链路。
     allowed_roots = {
@@ -454,7 +462,11 @@ def create_app(
         config_profile = str(body.get("config_profile", ""))
         try:
             if body.get("config_path"):
-                requested_config = _resolve_requested_config_path(str(body["config_path"]), Path(config_path))
+                requested_config = _resolve_requested_config_path(
+                    str(body["config_path"]),
+                    Path(config_path),
+                    resolved_output_root,
+                )
             elif config_profile in _PROFILE_CONFIGS:
                 requested_config = _PROFILE_CONFIGS[config_profile].resolve()
             elif body.get("market_id") == "cn_a" and body.get("universe_id") == "HS300":

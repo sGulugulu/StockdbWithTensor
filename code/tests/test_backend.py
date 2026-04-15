@@ -40,6 +40,7 @@ class BackendTests(unittest.TestCase):
                     )
                     self.assertEqual(response.status_code, 200)
                     self.assertIn(response.json()["status"], {"queued", "running", "completed"})
+                    initial_status_payload = response.json()
 
                     detail_payload = None
                     for _ in range(50):
@@ -50,6 +51,17 @@ class BackendTests(unittest.TestCase):
                         await anyio.sleep(0.1)
                     self.assertIsNotNone(detail_payload)
                     self.assertEqual(detail_payload["status"]["status"], "completed")
+
+                    response = await client.post(
+                        "/api/runs",
+                        json={
+                            "run_id": "api_test_run_replay",
+                            "run_sync": False,
+                            "config_path": initial_status_payload["config_path"],
+                        },
+                        timeout=60.0,
+                    )
+                    self.assertEqual(response.status_code, 200)
 
                     response = await client.get("/api/runs", timeout=10.0)
                     self.assertEqual(response.status_code, 200)
