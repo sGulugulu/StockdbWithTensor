@@ -21,21 +21,6 @@
 
 长期股票覆盖范围保留更广的全 A 股，不将系统长期边界写死为上述三个指数样本。
 
-## 正式数据结构
-
-正式数据底座采用：
-
-- 一套共享的 **全 A 股主市场数据**
-- 一套共享的 **全 A 股财务/报告数据**，按表类型拆分保存
-- 独立维护的 universe-history 文件：
-  - `HS300`
-  - `SZ50`
-  - `ZZ500`
-  - 全 A 可交易股票池
-- 稳定的 `CSV -> Parquet -> DuckDB` 路线
-
-仓库中的旧样例数据仅用于 smoke test 和轻量联调，不属于正式研究基线。
-
 ## 实验协议
 
 正式实验默认采用按时间切分，但系统层必须保留可配置切分能力，至少支持：
@@ -86,6 +71,119 @@
 - `web/backend/` 下的 Python 服务仅保留为兼容入口或过渡实现
 - 长期正式网关仍然是 `web/backend-go/`
 - 不将 Python 实验执行逻辑重新混入 Go 网关
+
+## API 与运行契约
+
+Go 网关长期应遵循统一响应包裹结构：
+
+```json
+{
+  "code": 0,
+  "message": "ok",
+  "data": {},
+  "request_id": "req_xxx",
+  "timestamp": "2026-04-09T00:00:00Z"
+}
+```
+
+`POST /api/runs` 默认采用异步提交流程：
+
+1. 校验请求与实验配置；
+2. 分配 `run_id`；
+3. 写入运行态；
+4. 返回 `202 Accepted` 和 `run_id`；
+5. 异步启动 Python runner；
+6. 前端轮询状态或详情接口获取结果。
+
+实验配置模型至少需要覆盖：
+
+- `config_profile`
+- 训练/预测样本配置
+- 切分策略
+- 模型设置
+- 输出设置
+
+状态真源采用双层结构：
+
+- 运行态 JSON
+- DuckDB 归档与查询视图
+
+Python 不反向覆盖 Go 持有的状态真源。
+
+## formal 数据主链
+
+当前 formal 数据主链固定为：
+
+1. `baostock` 原始层
+2. `universes` 股票池历史层
+3. `master` 主市场数据层
+4. `financial` 财务分表层
+5. `reports` 报告分表层
+6. `factors` 因子面板层
+7. `parquet` 列式镜像层
+8. `DuckDB` catalog 查询层
+9. `code/outputs` 实验输入与输出层
+
+对应职责如下：
+
+- `code/data/formal/baostock/`
+  - canonical baostock root，保存共享 metadata、index memberships、shared kline 和 manifest
+- `code/data/formal/universes/`
+  - 保存 `HS300`、`SZ50`、`ZZ500` 和全 A 可交易股票池历史
+- `code/data/formal/master/`
+  - 保存共享主市场数据、shared kline 与 `full master`
+- `code/data/formal/financial/`
+  - 按表类型保存财务数据
+- `code/data/formal/reports/`
+  - 按表类型保存报告数据
+- `code/data/formal/factors/`
+  - 保存正式股票池因子面板
+- `code/data/formal/parquet/`
+  - 保存已验证 CSV 的 Parquet 镜像
+- `code/data/formal/catalog.duckdb`
+  - 提供稳定 DuckDB 查询目录
+- `code/outputs/`
+  - 保存实验运行产物
+
+该主链的核心原则是：
+
+- 使用共享全 A 主数据 + universe 历史过滤，不按指数重复存储完整市场主数据
+- 使用 `CSV -> Parquet -> DuckDB` 形成稳定、可检查、可查询的正式路线
+
+## 总体任务树
+
+总体路线稳定拆分为四个一级分支：
+
+1. **研究数据与实验底座**
+2. **系统实现与演示**
+3. **论文交付与答辩材料**
+4. **后续扩展与长期演进**
+
+其排序同时就是依赖顺序：
+
+1. 先完成研究数据与实验底座；
+2. 再完成系统实现与演示；
+3. 再完成论文交付与答辩材料；
+4. 最后再进入后续扩展与长期演进。
+
+其中依赖关系需要显式明确：
+
+- 系统线依赖实验底座；
+- 论文线依赖实验结果与稳定合同；
+- 长期扩展线依赖前三条主线基本稳定。
+
+## 历史复盘框架
+
+当前项目的历史问题至少分为四类：
+
+1. 研究边界漂移  
+   例如正式样本范围、主问题定义和时间窗口曾多次摇摆。
+2. 数据底座不稳定  
+   例如 shared kline、full master 与 formal 长期目标一度并行且边界不清。
+3. 系统边界反复调整  
+   例如 Python backend 与长期 Go gateway 目标曾并存且边界模糊。
+4. 论文与工程脱节  
+   例如工程结果先出现，而学术叙事和正式合同后补。
 
 ## 运行方式
 
