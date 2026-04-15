@@ -131,8 +131,14 @@ def _validate_run_id(run_id: str) -> str:
     return candidate
 
 
-def _resolve_run_dir(output_root: Path, run_id: str) -> Path:
-    safe_run_id = _validate_run_id(run_id)
+def _resolve_run_dir(output_root: Path, run_id: str, *, validate_pattern: bool = True) -> Path:
+    candidate = str(run_id).strip()
+    if validate_pattern:
+        safe_run_id = _validate_run_id(candidate)
+    else:
+        if not candidate:
+            raise ValueError("run_id 不能为空。")
+        safe_run_id = candidate
     run_dir = (output_root / safe_run_id).resolve()
     if not _is_path_within_root(run_dir, output_root):
         raise ValueError("run_id 超出输出目录边界。")
@@ -147,7 +153,8 @@ def _validate_positive_int(value: int, field_name: str) -> int:
 
 def _resolve_requested_config_path(raw_config_path: str, default_config_path: Path) -> Path:
     candidate = Path(raw_config_path).expanduser()
-    resolved_path = candidate.resolve() if candidate.is_absolute() else (ROOT / candidate).resolve()
+    default_config_dir = default_config_path.resolve().parent
+    resolved_path = candidate.resolve() if candidate.is_absolute() else (default_config_dir / candidate).resolve()
     if resolved_path.suffix.lower() not in _CONFIG_FILE_SUFFIXES:
         raise ValueError("config_path 只能指向 YAML 配置文件。")
     if not resolved_path.is_file():
@@ -210,7 +217,7 @@ def list_runs(output_root: Path) -> list[dict[str, Any]]:
 
 
 def get_run_detail(output_root: Path, run_id: str) -> dict[str, Any]:
-    run_dir = _resolve_run_dir(output_root, run_id)
+    run_dir = _resolve_run_dir(output_root, run_id, validate_pattern=False)
     factor_summaries = {
         path.stem.replace("factor_summary_", ""): _read_json(path)
         for path in run_dir.glob("factor_summary_*.json")
@@ -235,12 +242,12 @@ def get_run_detail(output_root: Path, run_id: str) -> dict[str, Any]:
 
 
 def get_run_metrics(output_root: Path, run_id: str) -> list[dict[str, Any]]:
-    run_dir = _resolve_run_dir(output_root, run_id)
+    run_dir = _resolve_run_dir(output_root, run_id, validate_pattern=False)
     return _read_json(run_dir / "metrics.json")
 
 
 def get_selection_for_date(output_root: Path, run_id: str, trade_date: str, top_n: int) -> list[dict[str, Any]]:
-    run_dir = _resolve_run_dir(output_root, run_id)
+    run_dir = _resolve_run_dir(output_root, run_id, validate_pattern=False)
     selection_file = run_dir / "selection_candidates.json"
     selection_rows = [
         row
@@ -455,7 +462,7 @@ def create_app(
     @app.get("/api/runs/{run_id}")
     async def api_run_detail(run_id: str) -> dict[str, Any]:
         try:
-            run_dir = _resolve_run_dir(resolved_output_root, run_id)
+            run_dir = _resolve_run_dir(resolved_output_root, run_id, validate_pattern=False)
         except ValueError as exc:
             raise HTTPException(status_code=422, detail=str(exc)) from exc
         if not run_dir.exists():
@@ -465,7 +472,7 @@ def create_app(
     @app.get("/api/runs/{run_id}/metrics")
     async def api_run_metrics(run_id: str) -> list[dict[str, Any]]:
         try:
-            run_dir = _resolve_run_dir(resolved_output_root, run_id)
+            run_dir = _resolve_run_dir(resolved_output_root, run_id, validate_pattern=False)
         except ValueError as exc:
             raise HTTPException(status_code=422, detail=str(exc)) from exc
         if not run_dir.exists():
@@ -478,7 +485,7 @@ def create_app(
     @app.get("/api/runs/{run_id}/selection")
     async def api_run_selection(run_id: str, trade_date: str, top_n: int = 50) -> list[dict[str, Any]]:
         try:
-            run_dir = _resolve_run_dir(resolved_output_root, run_id)
+            run_dir = _resolve_run_dir(resolved_output_root, run_id, validate_pattern=False)
             validated_top_n = _validate_positive_int(top_n, "top_n")
         except ValueError as exc:
             raise HTTPException(status_code=422, detail=str(exc)) from exc
