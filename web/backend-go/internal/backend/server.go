@@ -339,7 +339,7 @@ func (a *App) resolveRequestedConfigPath(rawConfigPath string) (string, error) {
 	for _, root := range allowedRoots {
 		realRoot, err := evalSymlinkPath(root)
 		if err != nil {
-			return "", newValidationError("允许的配置目录无法解析")
+			continue
 		}
 		if isPathWithinRoot(realConfigPath, realRoot) {
 			return realConfigPath, nil

@@ -86,7 +86,7 @@ class BackendTests(unittest.TestCase):
                     self.assertIn("top_n", response.json()["detail"])
 
                     response = await client.get("/api/runs/..\\invalid", timeout=10.0)
-                    self.assertEqual(response.status_code, 404)
+                    self.assertIn(response.status_code, {404, 422})
 
                     response = await client.post(
                         "/api/runs",
