@@ -272,6 +272,9 @@ func coercePositiveInt(value any, fieldName string) (int, error) {
 
 func (a *App) resolveRunDir(runID string, validatePattern bool) (string, error) {
 	candidate := strings.TrimSpace(runID)
+	if strings.Contains(candidate, "\\") {
+		return "", newValidationError("run_id 不能包含路径分隔符")
+	}
 	var safeRunID string
 	var err error
 	if validatePattern {
@@ -298,9 +301,22 @@ func (a *App) resolveRequestedConfigPath(rawConfigPath string) (string, error) {
 	if candidate == "" {
 		return "", newValidationError("config_path 不能为空")
 	}
-	resolvedPath := candidate
-	if !filepath.IsAbs(resolvedPath) {
-		resolvedPath = filepath.Join(a.config.RepoRoot, resolvedPath)
+	var resolvedPath string
+	if filepath.IsAbs(candidate) {
+		resolvedPath = candidate
+	} else {
+		defaultConfigDir := filepath.Dir(a.config.DefaultConfigPath)
+		candidatePaths := []string{
+			filepath.Join(defaultConfigDir, candidate),
+			filepath.Join(a.config.RepoRoot, candidate),
+		}
+		resolvedPath = candidatePaths[0]
+		for _, path := range candidatePaths {
+			if _, err := os.Stat(path); err == nil {
+				resolvedPath = path
+				break
+			}
+		}
 	}
 	resolvedPath = filepath.Clean(resolvedPath)
 
