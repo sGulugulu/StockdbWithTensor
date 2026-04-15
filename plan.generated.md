@@ -2,7 +2,7 @@
 
 ## Goal Description
 
-基于当前 `draft.md`、`README.md`、`毕设.md` 以及 `code/data/formal/` 下的正式数据文档，形成一份可直接执行的实施计划，统一论文、实验系统与 Web 系统的叙事口径，并将项目收敛为一条围绕 `股票-因子-时间` 三维张量与 `CP` / `Tucker` 方法展开的正式研究路线。该计划既要明确正式实验样本、时间窗口、实验协议、评估框架和系统边界，也要给出 formal 数据主链、一级任务树和依赖顺序，并把 `draft.md` 中已经列出的代码级要求、脚本名、输出目录、DuckDB view 和测试清单纳入真正可执行的实现范围。
+基于当前 `draft.md`、`README.md`、`毕设.md` 以及 `code/data/formal/` 下的正式数据文档，形成一份可直接执行的实施计划，统一论文、实验系统与 Web 系统的叙事口径，并将项目收敛为一条围绕 `股票-因子-时间` 三维张量与 `CP` / `Tucker` 方法展开的正式研究路线。该计划既要明确正式实验样本、时间窗口、实验协议、评估框架和系统边界，也要给出 formal 数据主链、一级任务树和依赖顺序，避免项目继续在研究口径、数据结构和系统职责上漂移。
 
 ## Acceptance Criteria
 
@@ -10,7 +10,7 @@ Following TDD philosophy, each criterion includes positive and negative tests fo
 
 - AC-1: 项目主问题必须统一定义为“基于张量分解的股票因子降维与模式发现”，统一研究对象为 `股票-因子-时间` 三维张量，核心方法固定为 `CP` / `Tucker`。
   - Positive Tests (expected to PASS):
-    - `draft.md`、`README.md`、`plan.md` 均明确写出统一研究对象是 `股票-因子-时间` 三维张量。
+    - `draft.md`、`README.md`、`plan.generated.md` 均明确写出统一研究对象是 `股票-因子-时间` 三维张量。
     - 文档明确 `CP` / `Tucker` 首先用于因子降维与模式发现，而不是普通收益预测器。
   - Negative Tests (expected to FAIL):
     - 任一文档把项目改写成通用量化平台或黑箱收益预测系统。
@@ -26,7 +26,7 @@ Following TDD philosophy, each criterion includes positive and negative tests fo
 
 - AC-3: 正式时间窗口必须固定为 `2015-01-01` 到 `2026-04-01`，并在文档、配置与 formal 数据路线中保持一致。
   - Positive Tests (expected to PASS):
-    - `draft.md`、`README.md`、`plan.md` 和 `code/data/formal/README.md` 均明确写出该时间窗口。
+    - `draft.md`、`README.md`、`plan.generated.md` 和 `code/data/formal/README.md` 均明确写出该时间窗口。
     - 文档明确禁止继续使用“当前最新可用日期”作为漂移窗口。
   - Negative Tests (expected to FAIL):
     - 不同文档对正式时间窗口给出不同日期范围。
@@ -92,11 +92,11 @@ Following TDD philosophy, each criterion includes positive and negative tests fo
 
 ### Upper Bound (Maximum Acceptable Scope)
 
-计划完整收口项目的研究口径、正式样本、正式时间窗口、实验协议、评估框架、系统边界、API 运行契约、formal 数据主链、任务树和历史复盘框架，并将 Baostock 扩展的脚本级清单、DuckDB view、输出目录与测试清单纳入可执行实现范围。该计划内容可直接作为后续 RLCR、实现阶段和论文写作的正式上游约束文档使用。
+计划完整收口项目的研究口径、正式样本、正式时间窗口、实验协议、评估框架、系统边界、API 运行契约、formal 数据主链、任务树和历史复盘框架，并明确哪些是当前实现、哪些是长期目标。计划内容可直接作为后续 RLCR、实现阶段和论文写作的正式上游约束文档使用。
 
 ### Lower Bound (Minimum Acceptable Scope)
 
-至少形成一份结构清晰的计划文件，明确项目主问题、正式样本、固定时间窗口、三类切分策略、预处理边界、三层评估框架、Go/Python/DuckDB/outputs 边界、formal 数据主链、四个一级分支，以及 Baostock 扩展所需的最小脚本与输出路径。如果暂不展开全部实现细节，也必须让计划足以约束后续实现不再继续漂移。
+至少形成一份结构清晰的计划文件，明确项目主问题、正式样本、固定时间窗口、三类切分策略、预处理边界、三层评估框架、Go/Python/DuckDB/outputs 边界、formal 数据主链和四个一级分支。即使暂不展开实现细节，也必须让计划足以约束后续实现不再继续漂移。
 
 ### Allowed Choices
 
@@ -117,15 +117,15 @@ Following TDD philosophy, each criterion includes positive and negative tests fo
 
 ### Conceptual Approach
 
-可按“先统一顶层叙事，再收口正式数据主链，最后映射为任务树和代码清单”的顺序推进：
+可按“先统一顶层叙事，再收口正式数据主链，最后映射为任务树”的顺序生成计划：
 
 1. 先从 `draft.md` 提炼 Goal Description，锁定主问题、研究对象和方法主线。
 2. 再从 `draft.md`、`README.md`、`code/data/formal/README.md`、`DATABASE_DESIGN.md` 提取正式样本、时间窗口、数据主链和系统边界。
-3. 最后把这些约束映射为 Acceptance Criteria、里程碑、任务拆分和具体脚本/输出清单。
+3. 最后把这些约束映射为 Acceptance Criteria、里程碑和任务拆分。
 
 ### Relevant References
 
-- `draft.md` - 项目研究定位、formal 主链和代码级任务清单的最完整草稿来源
+- `draft.md` - 项目研究定位、formal 主链和任务清单的最完整草稿来源
 - `README.md` - 当前对外主入口文档，应与计划保持一致
 - `code/data/formal/README.md` - formal 数据目录职责与数据路线参考
 - `code/data/formal/DATABASE_DESIGN.md` - DuckDB、schema 和查询层设计参考
@@ -151,10 +151,6 @@ Following TDD philosophy, each criterion includes positive and negative tests fo
    - Phase A: 明确四个一级分支及依赖顺序
    - Phase B: 明确历史复盘框架与后续扩展边界
 
-5. Milestone 5: formal 数据扩展实施
-   - Phase A: 构建 Baostock 扩展最小闭环
-   - Phase B: 将新增 raw 数据接到解释层、supplement 层与后续分析链路
-
 ## Task Breakdown
 
 Each task must include exactly one routing tag:
@@ -170,116 +166,6 @@ Each task must include exactly one routing tag:
 | task5 | 固化 Go/Python/DuckDB/outputs 边界与 API 运行契约 | AC-7, AC-8 | coding | task4 |
 | task6 | 固化 formal 数据主链、目录职责与数据路线 | AC-9 | coding | task5 |
 | task7 | 固化四个一级分支、依赖顺序与历史复盘框架 | AC-10 | coding | task6 |
-| task8 | 抽出 Baostock 公共能力模块 `code/data/baostock_common.py` | AC-9 | coding | task6 |
-| task9 | 新增 `code/data/fetch_baostock_adjust_factor.py` 并落盘 `code/data/formal/baostock/adjust_factor/<year>.csv` | AC-9 | coding | task8 |
-| task10 | 新增 `code/data/fetch_baostock_dividend.py` 并落盘 dividend 三类 CSV 与 progress 文件 | AC-9 | coding | task8 |
-| task11 | 新增 `code/data/fetch_baostock_macro.py`，支持首批宏观数据集并落盘到 `macro/<dataset>/<year>.csv` | AC-9 | coding | task8 |
-| task12 | 扩展 `code/data/register_formal_duckdb_catalog.py`，新增 adjust/dividend/macro raw 与 coverage view | AC-9 | coding | task9 |
-| task13 | 新增 `code/data/build_adjust_factor_panel.py`，输出 `code/data/formal/master/adjust_factor_daily.csv` | AC-9 | coding | task9 |
-| task14 | 新增 `code/data/build_dividend_event_panel.py`，输出 `code/data/formal/reports/dividend_events.csv` | AC-9 | coding | task10 |
-| task15 | 补齐扩展对应的测试文件清单 | AC-9 | coding | task12 |
-
-## Planned Scripts and Outputs
-
-### 必做
-
-1. `code/data/baostock_common.py`
-   - 统一 `login/logout`
-   - 统一 `query_with_relogin`
-   - 统一股票代码规范化
-   - 统一 `progress / append / resume`
-
-2. `code/data/fetch_baostock_adjust_factor.py`
-   - 输出：
-     - `code/data/formal/baostock/adjust_factor/<year>.csv`
-     - `code/data/formal/baostock/adjust_factor/_progress.json`
-   - 恢复单元：`code|year`
-
-3. `code/data/fetch_baostock_dividend.py`
-   - 输出：
-     - `code/data/formal/baostock/dividend/report/<year>.csv`
-     - `code/data/formal/baostock/dividend/operate/<year>.csv`
-     - `code/data/formal/baostock/dividend/dividend/<year>.csv`
-     - `code/data/formal/baostock/dividend/_progress.json`
-   - 恢复单元：`code|year|year_type`
-
-4. `code/data/fetch_baostock_macro.py`
-   - 首批数据集：
-     - `deposit_rate`
-     - `loan_rate`
-     - `required_reserve_ratio`
-     - `money_supply_month`
-     - `money_supply_year`
-     - `shibor`
-   - 输出：
-     - `code/data/formal/baostock/macro/<dataset>/<year>.csv`
-     - `code/data/formal/baostock/macro/_progress.json`
-   - 恢复单元：`dataset|year`
-
-5. DuckDB 注册扩展
-   - 更新：`code/data/register_formal_duckdb_catalog.py`
-   - 新增视图：
-     - `vw_baostock_adjust_factor_raw`
-     - `vw_baostock_dividend_raw`
-     - `vw_baostock_macro_raw`
-     - `vw_formal_adjust_factor_coverage`
-     - `vw_formal_dividend_coverage`
-     - `vw_formal_macro_coverage`
-
-6. 面板与事件产物
-   - `code/data/build_adjust_factor_panel.py`
-     - 输出：`code/data/formal/master/adjust_factor_daily.csv`
-   - `code/data/build_dividend_event_panel.py`
-     - 输出：`code/data/formal/reports/dividend_events.csv`
-
-7. 文档与 manifest 更新
-   - `README.md`
-   - `code/data/formal/baostock/README.md`
-   - `code/data/formal/baostock/manifest.json`
-
-8. 必做测试清单
-   - `code/tests/test_baostock_common.py`
-   - `code/tests/test_fetch_baostock_adjust_factor.py`
-   - `code/tests/test_fetch_baostock_dividend.py`
-   - `code/tests/test_fetch_baostock_macro.py`
-   - `code/tests/test_register_formal_duckdb_catalog_aux.py`
-   - `code/tests/test_build_adjust_factor_panel.py`
-   - `code/tests/test_build_dividend_event_panel.py`
-
-### 可选
-
-1. `code/data/build_financial_point_in_time.py`
-   - 将财务 raw / report raw 转成按公告日生效的时点有效区间数据
-
-2. `code/data/build_macro_aligned_panel.py`
-   - 输出：
-     - `code/data/formal/master/macro_daily.csv`
-     - `code/data/formal/master/macro_monthly.csv`
-
-3. `full_master` supplement
-   - 复权因子
-   - 分红事件标记
-   - 少量共享宏观特征
-
-4. factor panel supplement
-   - 在财务 point-in-time 稳定后，并入一部分基本面特征
-
-5. aux stage 批处理入口
-   - `code/data/run_baostock_stage2_aux_dataset_year.sh`
-   - `code/data/run_baostock_stage3_aux.sh`
-
-6. 前端 / Go 侧 formal coverage 展示
-   - 直接暴露 `adjust_factor`、`dividend`、`macro` 的覆盖情况
-
-### 暂缓
-
-1. 引入 MySQL 或双存储体系
-2. 引入外部项目整套 pipeline 或运行骨架
-3. 一开始就把所有宏观字段并入 `full_master`
-4. 一开始就把所有新增 raw 字段并入 tensor 输入
-5. 为新增 Baostock 数据单独设计一套与主链平行的工程结构
-6. 把 `Triton` 提前用于数据层，而不是保持在模型服务层
-7. 为未稳定的数据能力过早设计复杂前端页面
 
 ## Claude-Codex Deliberation
 
@@ -290,7 +176,7 @@ Each task must include exactly one routing tag:
 
 ### Resolved Disagreements
 
-- 无显著分歧。本次计划整合以现有仓库文档为统一来源，重点在结构化整理而非方案竞争。
+- 无显著分歧。本次生成计划以现有仓库文档为统一来源，重点在结构化整理而非方案竞争。
 
 ### Convergence Status
 
@@ -298,10 +184,10 @@ Each task must include exactly one routing tag:
 
 ## Pending User Decisions
 
-- DEC-1: 是否将 `plan.generated.md` 整体替换现有 `plan.md`
-  - Claude Position: 更推荐保留现有 `plan.md` 的项目贴合度，并吸收生成版的结构化段落。
+- DEC-1: 是否用生成的新计划替换现有 `plan.md`
+  - Claude Position: 先生成到新文件，复核无误后再决定是否替换现有计划。
   - Codex Position: 无显式分歧。
-  - Tradeoff Summary: 直接全量替换风险更高；合并增强更稳妥。
+  - Tradeoff Summary: 直接覆盖现有 `plan.md` 风险更高；先生成新文件可保留回退路径。
   - Decision Status: `PENDING`
 
 ## Implementation Notes
@@ -311,3 +197,4 @@ Each task must include exactly one routing tag:
 - 实施代码和注释不得包含 `AC-`、`Milestone`、`Phase`、`Task ID` 等计划术语。
 - 这些术语仅用于计划文档，不直接进入生产代码或配置文件。
 - 代码中应使用与金融张量分解领域匹配的自然命名。
+
