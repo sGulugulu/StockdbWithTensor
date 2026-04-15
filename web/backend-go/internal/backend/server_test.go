@@ -125,6 +125,22 @@ func TestReadOnlyRoutes(t *testing.T) {
 	if recorder.Code != http.StatusOK {
 		t.Fatalf("expected 200 for run detail, got %d", recorder.Code)
 	}
+	var detailPayload map[string]any
+	readJSONResponse(t, recorder, &detailPayload)
+	if detailPayload["run_id"] != "go_read_run" {
+		t.Fatalf("expected sanitized run_id in detail payload, got %#v", detailPayload["run_id"])
+	}
+
+	recorder = httptest.NewRecorder()
+	request = httptest.NewRequest(http.MethodGet, "/api/runs/%20go_read_run%20", nil)
+	handler.ServeHTTP(recorder, request)
+	if recorder.Code != http.StatusOK {
+		t.Fatalf("expected 200 for whitespace-padded run detail, got %d", recorder.Code)
+	}
+	readJSONResponse(t, recorder, &detailPayload)
+	if detailPayload["run_id"] != "go_read_run" {
+		t.Fatalf("expected sanitized whitespace-padded run_id, got %#v", detailPayload["run_id"])
+	}
 
 	recorder = httptest.NewRecorder()
 	request = httptest.NewRequest(http.MethodGet, "/api/runs/go_read_run/metrics", nil)
@@ -143,6 +159,17 @@ func TestReadOnlyRoutes(t *testing.T) {
 	readJSONResponse(t, recorder, &selectionPayload)
 	if len(selectionPayload) != 1 || selectionPayload[0]["stock_code"] != "600000.SH" {
 		t.Fatalf("unexpected selection payload: %#v", selectionPayload)
+	}
+
+	recorder = httptest.NewRecorder()
+	request = httptest.NewRequest(http.MethodGet, "/api/runs/%20go_read_run%20/selection?trade_date=2026-01-09&top_n=1", nil)
+	handler.ServeHTTP(recorder, request)
+	if recorder.Code != http.StatusOK {
+		t.Fatalf("expected 200 for whitespace-padded selection, got %d", recorder.Code)
+	}
+	readJSONResponse(t, recorder, &selectionPayload)
+	if len(selectionPayload) != 1 || selectionPayload[0]["stock_code"] != "600000.SH" {
+		t.Fatalf("unexpected whitespace-padded selection payload: %#v", selectionPayload)
 	}
 
 	recorder = httptest.NewRecorder()
@@ -234,7 +261,7 @@ func TestCreateRunRoute(t *testing.T) {
 	if recorder.Code != http.StatusOK {
 		t.Fatalf("expected 200 for submitted run detail, got %d", recorder.Code)
 	}
-	var detailPayload map[string]any
+	detailPayload = nil
 	readJSONResponse(t, recorder, &detailPayload)
 	statusPayload, ok := detailPayload["status"].(map[string]any)
 	if !ok || statusPayload["status"] != "completed" {
