@@ -74,7 +74,7 @@
 
 ## API 与运行契约
 
-Go 网关长期应遵循统一响应包裹结构：
+当前 Go 网关的**现状**是直接返回数组或对象，错误响应采用 `{detail: ...}` 结构；下面的统一响应包裹结构是**长期目标契约**，用于约束后续正式网关设计：
 
 ```json
 {
@@ -91,7 +91,7 @@ Go 网关长期应遵循统一响应包裹结构：
 1. 校验请求与实验配置；
 2. 分配 `run_id`；
 3. 写入运行态；
-4. 返回 `202 Accepted` 和 `run_id`；
+4. 当前实现返回 `200 OK` 和 `run_id`；长期目标是显式返回 `202 Accepted`；
 5. 异步启动 Python runner；
 6. 前端轮询状态或详情接口获取结果。
 
@@ -284,7 +284,8 @@ python -m unittest discover -s code/tests
 Go 后端测试：
 
 ```powershell
-go test ./web/backend-go/internal/backend
+cd web/backend-go
+go test ./internal/backend
 ```
 
 前端测试：
