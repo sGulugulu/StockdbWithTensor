@@ -96,6 +96,14 @@ class BackendTests(unittest.TestCase):
                     self.assertEqual(response.status_code, 422)
                     self.assertIn("run_id", response.json()["detail"])
 
+                    response = await client.post(
+                        "/api/runs",
+                        json={"run_id": 123, "run_sync": False, "config_path": str(temp_config)},
+                        timeout=10.0,
+                    )
+                    self.assertEqual(response.status_code, 422)
+                    self.assertIn("run_id", response.json()["detail"])
+
                     with tempfile.TemporaryDirectory() as outside_dir:
                         outside_config = Path(outside_dir) / "outside.yaml"
                         outside_config.write_text(
@@ -198,6 +206,9 @@ class BackendTests(unittest.TestCase):
                         encoding="utf-8",
                     )
                     response = await client.get("/api/runs/legacy.run", timeout=10.0)
+                    self.assertEqual(response.status_code, 200)
+                    self.assertEqual(response.json()["run_id"], "legacy.run")
+                    response = await client.get("/api/runs/%20legacy.run%20", timeout=10.0)
                     self.assertEqual(response.status_code, 200)
                     self.assertEqual(response.json()["run_id"], "legacy.run")
                     response = await client.get(

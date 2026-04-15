@@ -124,8 +124,10 @@ def _is_path_within_root(candidate: Path, root: Path) -> bool:
         return False
 
 
-def _validate_run_id(run_id: str) -> str:
-    candidate = str(run_id).strip()
+def _validate_run_id(run_id: Any) -> str:
+    if not isinstance(run_id, str):
+        raise ValueError("run_id 必须是字符串。")
+    candidate = run_id.strip()
     if not _RUN_ID_PATTERN.fullmatch(candidate):
         raise ValueError("run_id 只能包含字母、数字、下划线和中划线，且长度不能超过 64。")
     return candidate
@@ -255,7 +257,7 @@ def get_run_detail(output_root: Path, run_id: str) -> dict[str, Any]:
         for path in run_dir.glob("time_regimes_*.json")
     }
     return {
-        "run_id": run_id,
+        "run_id": run_dir.name,
         "status": _load_status(run_dir),
         "manifest": _read_json(run_dir / "run_manifest.json") if (run_dir / "run_manifest.json").exists() else None,
         "metrics": _read_json(run_dir / "metrics.json") if (run_dir / "metrics.json").exists() else [],
