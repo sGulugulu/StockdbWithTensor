@@ -363,6 +363,10 @@ func TestCreateRunRoute(t *testing.T) {
 
 	outsideConfigPath := filepath.Join(root, "outside.yaml")
 	writeTextFile(t, outsideConfigPath, "market:\n  market_id: cn_a\n")
+	directoryConfigPath := filepath.Join(root, "dir_config.yaml")
+	if err := os.MkdirAll(directoryConfigPath, 0o755); err != nil {
+		t.Fatalf("mkdir directory config path failed: %v", err)
+	}
 	outsideBody, err := json.Marshal(map[string]any{
 		"run_id":      "blocked_config_run",
 		"run_sync":    false,
@@ -380,6 +384,22 @@ func TestCreateRunRoute(t *testing.T) {
 	}
 	if _, err := os.Stat(filepath.Join(outputRoot, "blocked_config_run")); !os.IsNotExist(err) {
 		t.Fatalf("expected blocked_config_run directory to be absent, got err=%v", err)
+	}
+
+	directoryBody, err := json.Marshal(map[string]any{
+		"run_id":      "directory_config_run",
+		"run_sync":    false,
+		"config_path": directoryConfigPath,
+	})
+	if err != nil {
+		t.Fatalf("marshal directory config body failed: %v", err)
+	}
+	recorder = httptest.NewRecorder()
+	request = httptest.NewRequest(http.MethodPost, "/api/runs", bytes.NewReader(directoryBody))
+	request.Header.Set("Content-Type", "application/json")
+	handler.ServeHTTP(recorder, request)
+	if recorder.Code != http.StatusUnprocessableEntity {
+		t.Fatalf("expected 422 for directory config_path, got %d", recorder.Code)
 	}
 
 	externalConfigDir := t.TempDir()

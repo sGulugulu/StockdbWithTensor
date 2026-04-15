@@ -323,8 +323,10 @@ func (a *App) resolveRequestedConfigPath(rawConfigPath string) (string, error) {
 	if _, ok := allowedConfigSuffixes[strings.ToLower(filepath.Ext(resolvedPath))]; !ok {
 		return "", newValidationError("config_path 只能指向 YAML 配置文件")
 	}
-	if _, err := os.Stat(resolvedPath); err != nil {
+	if info, err := os.Stat(resolvedPath); err != nil {
 		return "", newValidationError("config_path 指向的配置文件不存在")
+	} else if info.IsDir() {
+		return "", newValidationError("config_path 必须指向配置文件")
 	}
 	realConfigPath, err := evalSymlinkPath(resolvedPath)
 	if err != nil {
