@@ -329,6 +329,38 @@ func TestCreateRunRoute(t *testing.T) {
 		t.Fatalf("expected 422 for invalid run_id create request, got %d", recorder.Code)
 	}
 
+	invalidTypeRunIDBody, err := json.Marshal(map[string]any{
+		"run_id":      123,
+		"run_sync":    false,
+		"config_path": defaultConfigPath,
+	})
+	if err != nil {
+		t.Fatalf("marshal invalid type run_id body failed: %v", err)
+	}
+	recorder = httptest.NewRecorder()
+	request = httptest.NewRequest(http.MethodPost, "/api/runs", bytes.NewReader(invalidTypeRunIDBody))
+	request.Header.Set("Content-Type", "application/json")
+	handler.ServeHTTP(recorder, request)
+	if recorder.Code != http.StatusUnprocessableEntity {
+		t.Fatalf("expected 422 for non-string run_id, got %d", recorder.Code)
+	}
+
+	invalidTypeConfigPathBody, err := json.Marshal(map[string]any{
+		"run_id":      "invalid_config_path_type",
+		"run_sync":    false,
+		"config_path": 123,
+	})
+	if err != nil {
+		t.Fatalf("marshal invalid type config_path body failed: %v", err)
+	}
+	recorder = httptest.NewRecorder()
+	request = httptest.NewRequest(http.MethodPost, "/api/runs", bytes.NewReader(invalidTypeConfigPathBody))
+	request.Header.Set("Content-Type", "application/json")
+	handler.ServeHTTP(recorder, request)
+	if recorder.Code != http.StatusUnprocessableEntity {
+		t.Fatalf("expected 422 for non-string config_path, got %d", recorder.Code)
+	}
+
 	outsideConfigPath := filepath.Join(root, "outside.yaml")
 	writeTextFile(t, outsideConfigPath, "market:\n  market_id: cn_a\n")
 	outsideBody, err := json.Marshal(map[string]any{
