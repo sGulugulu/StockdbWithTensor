@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import threading
 import time
 import uuid
@@ -24,6 +25,8 @@ from web.backend.formal_catalog import get_formal_coverage, get_universe_members
 
 _RUN_STATUS_LOCKS: dict[str, threading.Lock] = {}
 _RUN_STATUS_LOCKS_GUARD = threading.Lock()
+_RUN_ID_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$")
+_CONFIG_FILE_SUFFIXES = {".yaml", ".yml"}
 _PROFILE_CONFIGS: dict[str, Path] = {
     "formal_hs300": ROOT / "code" / "configs" / "formal_hs300.yaml",
     "formal_sz50": ROOT / "code" / "configs" / "formal_sz50.yaml",
@@ -113,6 +116,53 @@ def _status_path(run_dir: Path) -> Path:
     return run_dir / "run_status.json"
 
 
+def _is_path_within_root(candidate: Path, root: Path) -> bool:
+    try:
+        candidate.resolve().relative_to(root.resolve())
+        return True
+    except ValueError:
+        return False
+
+
+def _validate_run_id(run_id: str) -> str:
+    candidate = str(run_id).strip()
+    if not _RUN_ID_PATTERN.fullmatch(candidate):
+        raise ValueError("run_id 只能包含字母、数字、下划线和中划线，且长度不能超过 64。")
+    return candidate
+
+
+def _resolve_run_dir(output_root: Path, run_id: str) -> Path:
+    safe_run_id = _validate_run_id(run_id)
+    run_dir = (output_root / safe_run_id).resolve()
+    if not _is_path_within_root(run_dir, output_root):
+        raise ValueError("run_id 超出输出目录边界。")
+    return run_dir
+
+
+def _validate_positive_int(value: int, field_name: str) -> int:
+    if value <= 0:
+        raise ValueError(f"{field_name} 必须是大于 0 的整数。")
+    return value
+
+
+def _resolve_requested_config_path(raw_config_path: str, default_config_path: Path) -> Path:
+    candidate = Path(raw_config_path).expanduser()
+    resolved_path = candidate.resolve() if candidate.is_absolute() else (ROOT / candidate).resolve()
+    if resolved_path.suffix.lower() not in _CONFIG_FILE_SUFFIXES:
+        raise ValueError("config_path 只能指向 YAML 配置文件。")
+    if not resolved_path.is_file():
+        raise ValueError("config_path 指向的配置文件不存在。")
+
+    # 这里只允许仓库配置目录或当前默认配置同目录，避免把任意文件伪装成实验配置注入执行链路。
+    allowed_roots = {
+        (ROOT / "code" / "configs").resolve(),
+        default_config_path.resolve().parent,
+    }
+    if not any(_is_path_within_root(resolved_path, root) for root in allowed_roots):
+        raise ValueError("config_path 不在允许的配置目录内。")
+    return resolved_path
+
+
 def _load_status(run_dir: Path) -> dict[str, Any]:
     path = _status_path(run_dir)
     if path.exists():
@@ -160,7 +210,7 @@ def list_runs(output_root: Path) -> list[dict[str, Any]]:
 
 
 def get_run_detail(output_root: Path, run_id: str) -> dict[str, Any]:
-    run_dir = output_root / run_id
+    run_dir = _resolve_run_dir(output_root, run_id)
     factor_summaries = {
         path.stem.replace("factor_summary_", ""): _read_json(path)
         for path in run_dir.glob("factor_summary_*.json")
@@ -185,11 +235,12 @@ def get_run_detail(output_root: Path, run_id: str) -> dict[str, Any]:
 
 
 def get_run_metrics(output_root: Path, run_id: str) -> list[dict[str, Any]]:
-    return _read_json(output_root / run_id / "metrics.json")
+    run_dir = _resolve_run_dir(output_root, run_id)
+    return _read_json(run_dir / "metrics.json")
 
 
 def get_selection_for_date(output_root: Path, run_id: str, trade_date: str, top_n: int) -> list[dict[str, Any]]:
-    run_dir = output_root / run_id
+    run_dir = _resolve_run_dir(output_root, run_id)
     selection_file = run_dir / "selection_candidates.json"
     selection_rows = [
         row
@@ -230,8 +281,8 @@ def submit_run(
     run_id: str | None = None,
     run_sync: bool = False,
 ) -> dict[str, Any]:
-    actual_run_id = run_id or uuid.uuid4().hex[:12]
-    run_dir = output_root / actual_run_id
+    actual_run_id = _validate_run_id(run_id) if run_id else uuid.uuid4().hex[:12]
+    run_dir = _resolve_run_dir(output_root, actual_run_id)
     run_dir.mkdir(parents=True, exist_ok=True)
     status_payload = _update_status(
         run_dir,
@@ -362,24 +413,30 @@ def create_app(
         body = payload or {}
         requested_run_id = body.get("run_id")
         run_sync = bool(body.get("run_sync", False))
-        actual_run_id = requested_run_id or uuid.uuid4().hex[:12]
-        run_dir = resolved_output_root / actual_run_id
-        run_dir.mkdir(parents=True, exist_ok=True)
+        try:
+            actual_run_id = _validate_run_id(requested_run_id) if requested_run_id else uuid.uuid4().hex[:12]
+            run_dir = _resolve_run_dir(resolved_output_root, actual_run_id)
+            run_dir.mkdir(parents=True, exist_ok=True)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
         config_profile = str(body.get("config_profile", ""))
-        if body.get("config_path"):
-            requested_config = Path(body["config_path"]).resolve()
-        elif config_profile in _PROFILE_CONFIGS:
-            requested_config = _PROFILE_CONFIGS[config_profile].resolve()
-        elif body.get("market_id") == "cn_a" and body.get("universe_id") == "HS300":
-            requested_config = (ROOT / "code" / "configs" / "formal_hs300.yaml").resolve()
-        elif body.get("market_id") == "cn_a" and body.get("universe_id") == "SZ50":
-            requested_config = (ROOT / "code" / "configs" / "formal_sz50.yaml").resolve()
-        elif body.get("market_id") == "cn_a" and body.get("universe_id") == "ZZ500":
-            requested_config = (ROOT / "code" / "configs" / "formal_zz500.yaml").resolve()
-        elif body.get("market_id") in config_templates:
-            requested_config = config_templates[body["market_id"]].resolve()
-        else:
-            requested_config = Path(config_path).resolve()
+        try:
+            if body.get("config_path"):
+                requested_config = _resolve_requested_config_path(str(body["config_path"]), Path(config_path))
+            elif config_profile in _PROFILE_CONFIGS:
+                requested_config = _PROFILE_CONFIGS[config_profile].resolve()
+            elif body.get("market_id") == "cn_a" and body.get("universe_id") == "HS300":
+                requested_config = (ROOT / "code" / "configs" / "formal_hs300.yaml").resolve()
+            elif body.get("market_id") == "cn_a" and body.get("universe_id") == "SZ50":
+                requested_config = (ROOT / "code" / "configs" / "formal_sz50.yaml").resolve()
+            elif body.get("market_id") == "cn_a" and body.get("universe_id") == "ZZ500":
+                requested_config = (ROOT / "code" / "configs" / "formal_zz500.yaml").resolve()
+            elif body.get("market_id") in config_templates:
+                requested_config = config_templates[body["market_id"]].resolve()
+            else:
+                requested_config = Path(config_path).resolve()
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
         built_config_path = _build_run_config(
             base_config_path=requested_config,
             run_dir=run_dir,
@@ -395,14 +452,20 @@ def create_app(
 
     @app.get("/api/runs/{run_id}")
     async def api_run_detail(run_id: str) -> dict[str, Any]:
-        run_dir = resolved_output_root / run_id
+        try:
+            run_dir = _resolve_run_dir(resolved_output_root, run_id)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
         if not run_dir.exists():
             raise HTTPException(status_code=404, detail="Run not found")
         return get_run_detail(resolved_output_root, run_id)
 
     @app.get("/api/runs/{run_id}/metrics")
     async def api_run_metrics(run_id: str) -> list[dict[str, Any]]:
-        run_dir = resolved_output_root / run_id
+        try:
+            run_dir = _resolve_run_dir(resolved_output_root, run_id)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
         if not run_dir.exists():
             raise HTTPException(status_code=404, detail="Run not found")
         status = _load_status(run_dir)
@@ -412,12 +475,16 @@ def create_app(
 
     @app.get("/api/runs/{run_id}/selection")
     async def api_run_selection(run_id: str, trade_date: str, top_n: int = 50) -> list[dict[str, Any]]:
-        run_dir = resolved_output_root / run_id
+        try:
+            run_dir = _resolve_run_dir(resolved_output_root, run_id)
+            validated_top_n = _validate_positive_int(top_n, "top_n")
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
         if not run_dir.exists():
             raise HTTPException(status_code=404, detail="Run not found")
         status = _load_status(run_dir)
         if status["status"] != "completed" or not (run_dir / "selection_candidates.json").exists():
             raise HTTPException(status_code=409, detail="Selection results are not available yet")
-        return get_selection_for_date(resolved_output_root, run_id, trade_date, top_n)
+        return get_selection_for_date(resolved_output_root, run_id, trade_date, validated_top_n)
 
     return app
