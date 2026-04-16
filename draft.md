@@ -297,7 +297,126 @@ Python 负责：
 3. demo 式绝对路径输出
 4. 每个函数独立 login/logout 的粗粒度方式
 
-### 11.4 新增数据类别
+### 11.4 Baostock 抓取层改造计划
+
+这部分是基于当前仓库已有 Baostock 主链与 `tmp_external_refs` 下参考项目的对照分析后得出的改造结论，用于约束后续抓取层的演化方向。
+
+当前仓库已经存在一条比外部参考项目更适合本项目继续演化的主链，至少包括：
+
+1. `code/data/fetch_baostock_data.py`
+2. `code/data/fetch_baostock_kline.py`
+3. `code/data/refresh_formal_baostock_manifest.py`
+4. `code/data/register_formal_duckdb_catalog.py`
+
+因此，后续 Baostock 抓取层改造的原则不是“重新选一个外部项目照搬”，而是：
+
+1. 保持当前 `canonical root -> manifest -> DuckDB catalog -> formal outputs` 主链不变
+2. 仅吸收外部项目在接口覆盖、输入校验、字段裁剪、轻量标准化上的优点
+3. 不吸收外部项目的数据库设计、业务系统边界和运行骨架
+
+#### 11.4.1 应该吸收的部分
+
+1. `BaoStockDemo`
+   - 主要作为“接口覆盖字典”使用
+   - 重点吸收 `adjust_factor`、`dividend`、`deposit_rate`、`loan_rate`、`required_reserve_ratio`、`money_supply_month`、`money_supply_year`、`shibor` 等接口的调用方式
+   - 不把其 demo 脚本当成工程实现模板
+
+2. `mcp-baostock-server`
+   - 重点吸收统一 API 包装、股票代码规范化、输入参数校验思路
+   - 特别适合参考其 `sh/sz` 代码修正、接口入参校验、按接口拆方法的组织方式
+   - 适合作为 `baostock_common.py` 与后续 dataset spec 的设计参考
+
+3. `vnpy_baostock`
+   - 重点吸收最小字段抓取、频率映射、按用途裁剪字段的思路
+   - 适合用于后续 `macro`、`adjust_factor`、`dividend` 类脚本设计时控制字段集，避免不必要的 schema 漂移
+
+4. `stock-quant`
+   - 重点吸收轻量标准化思路
+   - 即抓取后尽快补齐统一列、统一 `stock_code / stock_name / market` 元信息、统一基本列名
+   - 只吸收这一层，不吸收其多市场业务系统与前端回测结构
+
+5. `shimencaiji/baostock`
+   - 重点吸收按接口拆脚本、按数据类型组织抓取逻辑的方式
+   - 适合指导本项目把 `adjust_factor`、`dividend`、`macro` 继续拆成清晰的独立脚本
+
+#### 11.4.2 明确放弃的部分
+
+以下内容必须明确放弃，避免后续抓取层再次跑偏：
+
+1. MySQL 落库主链
+   - 不吸收 `tmp_external_refs/baostock` 里围绕 `pymysql`、按股票建表、按表写入的实现方式
+   - 本项目正式主链仍然是 `CSV -> Parquet -> DuckDB`
+
+2. demo 式绝对路径输出
+   - 不接受类似 `D:\\adjust_factor_data.csv` 这类输出方式
+   - 所有新数据仍然必须落到 `code/data/formal/baostock/...` 之下
+
+3. 每个函数独立 `login/logout`
+   - 不吸收单个 query 函数内部各自登录、查询、退出的粗粒度模式
+   - 当前项目更需要可批量执行、可恢复、可复用 session 的抓取主路径
+
+4. 外部项目整套工程骨架
+   - 不吸收 MCP 服务骨架、交易引擎抽象、前端回测系统、任务调度平台等与当前论文主线无关的系统边界
+   - 外部参考只服务于抓取层，不得反向改写本项目的整体架构
+
+5. 单票导出式 ad hoc 数据组织
+   - 不把抓取层结果组织成面向人工临时查看的单股票文件集合
+   - 新增 raw 数据必须继续进入 canonical root、manifest、DuckDB view 和后续面板构建链路
+
+#### 11.4.3 对本项目最值得落地的改造点
+
+结合当前仓库现状，Baostock 抓取层最值得优先改造的部分包括：
+
+1. 抽出真正独立的 `code/data/baostock_common.py`
+   - 统一 `login/logout`
+   - 统一 `query_with_relogin`
+   - 统一 timeout / session expired 处理
+   - 统一股票代码规范化
+   - 统一 `append / progress / resume` 语义
+
+2. 建立“数据集注册表”而不是继续散落式写脚本
+   - 对 `adjust_factor`
+   - 对 `dividend(report / operate / dividend)`
+   - 对 `macro(deposit_rate / loan_rate / required_reserve_ratio / money_supply_month / money_supply_year / shibor)`
+   - 每类数据要明确：查询函数、分片方式、输出目录、恢复粒度、主键字段、DuckDB raw view 名称
+
+3. 补统一输入校验
+   - 股票代码格式
+   - 指数代码格式
+   - `yearType` 合法值
+   - `frequency` 合法值
+   - 日期范围合法性
+   - dataset 名称合法性
+
+4. 补“最小字段策略”
+   - 按用途定义字段集，而不是默认把接口能返回的所有字段都抓下来
+   - 对辅助数据尤其要控制字段集，减少后续 schema 漂移与无效字段扩散
+
+5. 补统一输出 schema
+   - 统一 raw CSV 列结构
+   - 统一元信息列
+   - 统一 manifest 统计字段
+   - 统一 DuckDB view schema
+
+6. 把外部 demo 变成测试依据，而不是实现骨架
+   - 外部样例用于确认字段名、参数语义、yearType 语义、接口覆盖范围
+   - 本项目正式实现必须以当前 canonical root 和本地测试为准
+
+#### 11.4.4 改造后的执行边界
+
+如果抓取层改造是成功的，那么它应满足以下边界：
+
+1. 当前 `fetch_baostock_data.py`、`fetch_baostock_kline.py` 的核心主链不会被推翻，只会被公共模块与 dataset 化方式进一步收口
+2. 外部参考项目不会成为运行依赖
+3. 所有新增抓取能力都能接入：
+   - canonical root
+   - manifest
+   - DuckDB catalog
+   - 后续面板构建
+   - formal 查询与论文解释层
+4. 抓取层改造后，项目仍然是“研究型 formal 数据工程”，而不是转向“通用量化数据平台”
+
+### 11.5 新增数据类别
 
 后续要扩展的 Baostock 数据包括三类：
 
@@ -573,3 +692,16 @@ Python 负责：
 - 但它能让整个项目“从 Baostock 抓取、落盘、恢复、校验、注册、下游使用”的总吞吐更高，返工更少，重跑更快。
 
 也就是说，它提升的是整条数据工程链路的效率，而不是单个 HTTP/Socket 请求的瞬时速度。
+
+## 17.关于论文的书写
+
+按照 2026理学院毕业设计指导书-V1(1).doc 的规范执行
+把摘要、目录、正文、参考文献、附录、外文翻译、文献综述、开题材料、附件清单等交付入任务树
+
+- 使用typst完成写作
+- 参考文献数量与近三年文献要求
+- 中英文摘要、关键词
+- 页码、字体、字号、行距图表、公式、附录
+- 最终导出PDF/Word 提交物
+- 将实验结果沉淀到论文章节
+- 正片论文写作,校对,附件整理
