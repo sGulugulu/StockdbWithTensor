@@ -264,6 +264,7 @@ def run_experiment(
         validation_raw_dataset.stock_codes,
         validation_raw_dataset.factor_names,
         validation_raw_dataset.dates,
+        validation_raw_dataset.industries,
         preprocess_state,
         config.preprocess,
         partition_name="validation",
@@ -285,6 +286,7 @@ def run_experiment(
         test_raw_dataset.stock_codes,
         test_raw_dataset.factor_names,
         test_raw_dataset.dates,
+        test_raw_dataset.industries,
         preprocess_state,
         config.preprocess,
         partition_name="test",
@@ -306,6 +308,7 @@ def run_experiment(
         refit_dataset.stock_codes,
         refit_dataset.factor_names,
         refit_dataset.dates,
+        refit_dataset.industries,
         preprocess_state,
         config.preprocess,
         partition_name="refit",
@@ -449,7 +452,10 @@ def run_experiment(
             f"refit_shape={refit_dataset.tensor.shape}; held_out_test_mse={metrics['mse']:.6f}"
         )
 
-    candidate_rows = build_candidate_pool(selection_rows)
+    candidate_rows = build_candidate_pool(
+        selection_rows,
+        selection_top_n=config.runtime.selection_top_n,
+    )
     split_metadata = split_plan.metadata
 
     output_dir = config.output.root_dir / config.output.experiment_name

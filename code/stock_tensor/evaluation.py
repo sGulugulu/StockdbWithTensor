@@ -241,6 +241,8 @@ def build_selection_records(
 
 def build_candidate_pool(
     selection_rows_by_model: dict[str, list[SelectionRecord]],
+    *,
+    selection_top_n: int | None = None,
 ) -> list[dict[str, float | int | str]]:
     grouped: dict[tuple[str, str], list[SelectionRecord]] = defaultdict(list)
     for rows in selection_rows_by_model.values():
@@ -273,4 +275,20 @@ def build_candidate_pool(
             }
         )
     candidate_rows.sort(key=lambda item: (str(item["trade_date"]), -float(item["total_score"]), str(item["stock_code"])))
+    if selection_top_n is not None and selection_top_n > 0:
+        filtered_rows: list[dict[str, float | int | str]] = []
+        current_date = None
+        current_rows: list[dict[str, float | int | str]] = []
+        for row in candidate_rows:
+            trade_date = str(row["trade_date"])
+            if current_date is None:
+                current_date = trade_date
+            if trade_date != current_date:
+                filtered_rows.extend(current_rows[:selection_top_n])
+                current_rows = []
+                current_date = trade_date
+            current_rows.append(row)
+        if current_rows:
+            filtered_rows.extend(current_rows[:selection_top_n])
+        candidate_rows = filtered_rows
     return candidate_rows

@@ -50,6 +50,26 @@ class PipelineTests(unittest.TestCase):
             self.assertIn("cluster_label", selections[0])
             self.assertEqual(selections[0]["model_count"], 3)
 
+    def test_pipeline_selection_top_n_truncates_candidate_pool_per_date(self) -> None:
+        config_path = ROOT / "configs" / "sample_cn_smoke.yaml"
+        config_data = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            config_data["market"]["universe_path"] = str((ROOT / "data" / "sample_csi_a500_history.csv").resolve())
+            config_data["data"]["path"] = str((ROOT / "data" / "sample_a_share_factors.csv").resolve())
+            config_data["output"]["root_dir"] = temp_dir
+            config_data["output"]["experiment_name"] = "pipeline_topn_test"
+            config_data["runtime"]["selection_top_n"] = 1
+            temp_config = Path(temp_dir) / "topn_config.yaml"
+            temp_config.write_text(yaml.safe_dump(config_data, sort_keys=False), encoding="utf-8")
+
+            output_dir = run_experiment(temp_config)
+            candidate_rows = yaml.safe_load((output_dir / "selection_candidates.json").read_text(encoding="utf-8"))
+            trade_dates = {row["trade_date"] for row in candidate_rows}
+            self.assertEqual(len(candidate_rows), len(trade_dates))
+            selections = get_selection_for_date(Path(temp_dir), "pipeline_topn_test", sorted(trade_dates)[0], 5)
+            self.assertEqual(len(selections), 1)
+
 
 if __name__ == "__main__":
     unittest.main()

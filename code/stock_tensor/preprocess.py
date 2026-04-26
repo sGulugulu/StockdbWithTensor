@@ -198,7 +198,7 @@ def fit_preprocess_state(
         factor_global_median=factor_global_median,
         factor_date_medians=factor_date_medians,
         last_train_values=last_train_values,
-        industries={stock_code: industries.get(stock_code) for stock_code in filtered_stocks},
+        industries={stock_code: industries.get(stock_code) for stock_code in stock_codes},
     )
     summary = {
         "max_missing_ratio": config.max_missing_ratio,
@@ -231,6 +231,7 @@ def apply_preprocess_state(
     stock_codes: list[str],
     factor_names: list[str],
     dates: list[str],
+    industries: dict[str, str | None],
     state: PreprocessState,
     config: PreprocessConfig,
     *,
@@ -295,7 +296,7 @@ def apply_preprocess_state(
         returns=kept_returns,
         stock_codes=kept_stock_codes,
         factor_names=kept_factor_names,
-        industries={stock_code: state.industries.get(stock_code) for stock_code in kept_stock_codes},
+        industries={stock_code: industries.get(stock_code) for stock_code in kept_stock_codes},
         summary=summary,
     )
 
@@ -327,6 +328,7 @@ def preprocess_tensor(
         stock_codes,
         factor_names,
         dates,
+        industries,
         state,
         config,
         partition_name="train",
