@@ -1,0 +1,77 @@
+market:
+  market_id: cn_a
+  universe_id: SZ50
+  start_date: 2015-01-01
+  end_date: 2026-04-01
+  timezone: Asia/Shanghai
+  currency: CNY
+  universe_path: ../data/formal/universes/sz50_history.csv
+  universe_symbol_column: stock_code
+  universe_start_column: start_date
+  universe_end_column: end_date
+  universe_market_column: market_id
+  universe_id_column: universe_id
+
+data:
+  path: ../data/formal/factors/sz50_factor_panel_extended.csv
+  format: wide
+  stock_column: stock_code
+  date_column: trade_date
+  industry_column: industry
+  return_column: future_return
+  factor_columns:
+    - value_factor
+    - momentum_factor
+    - quality_factor
+    - volatility_factor
+    - pit_roe_avg
+    - pit_np_margin
+    - pit_gp_margin
+    - pit_eps_ttm
+    - perf_express_eps_chg_pct
+    - perf_express_roe_wa
+    - perf_express_gryoy
+    - perf_express_opyoy
+    - perf_express_flag
+
+preprocess:
+  max_missing_ratio: 0.45
+  winsor_limits: [0.05, 0.95]
+  fill_strategy: forward_backward_industry_median
+  standardize_method: winsorize_zscore
+
+split:
+  strategy: time
+  train_ratio: 0.6
+  validation_ratio: 0.2
+  test_ratio: 0.2
+
+models:
+  seed: 7
+  cp:
+    enabled: true
+    ranks: [2, 3]
+    max_iter: 75
+    tol: 1.0e-6
+  tucker:
+    enabled: true
+    ranks:
+      - [2, 2, 2]
+      - [3, 2, 2]
+    max_iter: 20
+    tol: 1.0e-6
+  pca:
+    enabled: true
+    ranks: [2, 3]
+
+evaluation:
+  top_k_pairs: 5
+  rolling_window: 3
+
+runtime:
+  selection_top_n: 20
+  device: auto
+
+output:
+  root_dir: ../outputs
+  experiment_name: formal_sz50_extended_run

@@ -32,6 +32,24 @@ class ConfigProfileTests(unittest.TestCase):
         self.assertIn("universes/zz500_history.csv", str(config.market.universe_path).replace("\\", "/"))
         self.assertIn("factors/zz500_factor_panel.csv", str(config.data.path).replace("\\", "/"))
 
+    def test_formal_hs300_extended_profile(self) -> None:
+        config = load_config(ROOT / "configs" / "formal_hs300_extended.yaml")
+        self.assertEqual(config.market.universe_id, "HS300")
+        self.assertIn("factors/hs300_factor_panel_extended.csv", str(config.data.path).replace("\\", "/"))
+        self.assertIn("pit_roe_avg", config.data.factor_columns)
+
+    def test_formal_sz50_extended_profile(self) -> None:
+        config = load_config(ROOT / "configs" / "formal_sz50_extended.yaml")
+        self.assertEqual(config.market.universe_id, "SZ50")
+        self.assertIn("factors/sz50_factor_panel_extended.csv", str(config.data.path).replace("\\", "/"))
+        self.assertIn("perf_express_flag", config.data.factor_columns)
+
+    def test_formal_zz500_extended_profile(self) -> None:
+        config = load_config(ROOT / "configs" / "formal_zz500_extended.yaml")
+        self.assertEqual(config.market.universe_id, "ZZ500")
+        self.assertIn("factors/zz500_factor_panel_extended.csv", str(config.data.path).replace("\\", "/"))
+        self.assertIn("pit_eps_ttm", config.data.factor_columns)
+
 
 if __name__ == "__main__":
     unittest.main()
