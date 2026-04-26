@@ -11,6 +11,7 @@ from .compute_backend import (
     compute_abs_contribution,
     compute_stock_clusters,
     compute_time_shift_scores,
+    resolve_device,
     torch,
 )
 
@@ -214,7 +215,7 @@ def fit_cp_model(
             time_loadings=as_numpy(c_mat),
             objective=mse,
             param_count=stock_count * rank + factor_count * rank + time_count * rank + rank,
-            diagnostics=diagnostics,
+            diagnostics={**diagnostics, "weights": as_numpy(weights)},
             context=device_context,
         )
 
@@ -263,7 +264,7 @@ def fit_cp_model(
         time_loadings=c_mat,
         objective=mse,
         param_count=stock_count * rank + factor_count * rank + time_count * rank + rank,
-        diagnostics=diagnostics,
+        diagnostics={**diagnostics, "weights": weights.copy()},
         context=device_context,
     )
 
@@ -331,7 +332,7 @@ def fit_tucker_model(
                 + tensor.shape[2] * time_rank
                 + stock_rank * factor_rank * time_rank
             ),
-            diagnostics=diagnostics,
+            diagnostics={**diagnostics, "core": as_numpy(core)},
             context=device_context,
         )
 
@@ -377,7 +378,7 @@ def fit_tucker_model(
             + tensor.shape[2] * time_rank
             + stock_rank * factor_rank * time_rank
         ),
-        diagnostics=diagnostics,
+        diagnostics={**diagnostics, "core": core.copy()},
         context=device_context,
     )
 
@@ -408,7 +409,10 @@ def fit_pca_model(tensor: np.ndarray, rank: int, device_context: DeviceContext) 
             time_loadings=as_numpy(scores_tensor.mean(dim=0)),
             objective=mse,
             param_count=stock_count * time_count * rank + factor_count * rank + factor_count,
-            diagnostics={"explained_singular_values": as_numpy(singular_values[:rank]).tolist()},
+            diagnostics={
+                "explained_singular_values": as_numpy(singular_values[:rank]).tolist(),
+                "mean_vector": as_numpy(mean_vector).reshape(-1),
+            },
             context=device_context,
         )
 
@@ -434,6 +438,156 @@ def fit_pca_model(tensor: np.ndarray, rank: int, device_context: DeviceContext) 
         time_loadings=scores_tensor.mean(axis=0),
         objective=mse,
         param_count=stock_count * time_count * rank + factor_count * rank + factor_count,
-        diagnostics={"explained_singular_values": singular_values[:rank].tolist()},
+        diagnostics={
+            "explained_singular_values": singular_values[:rank].tolist(),
+            "mean_vector": mean_vector.reshape(-1).copy(),
+        },
         context=device_context,
+    )
+
+
+def _pinv_solve(row_major_matrix: np.ndarray, basis_matrix: np.ndarray) -> np.ndarray:
+    if basis_matrix.size == 0:
+        raise ValueError("Basis matrix for held-out scoring cannot be empty.")
+    return row_major_matrix @ np.linalg.pinv(basis_matrix)
+
+
+def score_cp_model(
+    tensor: np.ndarray,
+    trained_model: ModelResult,
+    *,
+    infer_stock: bool,
+    infer_time: bool,
+    max_iter: int = 8,
+) -> ModelResult:
+    weights = np.asarray(trained_model.diagnostics["weights"], dtype=float)
+    factor_loadings = np.asarray(trained_model.factor_loadings, dtype=float)
+    weighted_factor_loadings = factor_loadings * weights[np.newaxis, :]
+    stock_loadings = np.asarray(trained_model.stock_loadings, dtype=float)
+    time_loadings = np.asarray(trained_model.time_loadings, dtype=float)
+
+    if infer_stock and infer_time:
+        if tensor.shape[0] == 0 or tensor.shape[2] == 0:
+            raise ValueError("Held-out tensor must have non-empty stock and time dimensions.")
+        time_rank = time_loadings.shape[1]
+        left, _, _ = np.linalg.svd(unfold(tensor, 2), full_matrices=False)
+        inferred_time = left[:, :time_rank]
+        if inferred_time.shape[1] < time_rank:
+            inferred_time = np.pad(inferred_time, ((0, 0), (0, time_rank - inferred_time.shape[1])))
+        inferred_stock = np.zeros((tensor.shape[0], stock_loadings.shape[1]), dtype=float)
+        for _ in range(max_iter):
+            stock_basis = khatri_rao(inferred_time, weighted_factor_loadings).T
+            inferred_stock = _pinv_solve(unfold(tensor, 0), stock_basis)
+            time_basis = khatri_rao(weighted_factor_loadings, inferred_stock).T
+            inferred_time = _pinv_solve(unfold(tensor, 2), time_basis)
+        stock_loadings = inferred_stock
+        time_loadings = inferred_time
+    elif infer_stock:
+        stock_basis = khatri_rao(time_loadings, weighted_factor_loadings).T
+        stock_loadings = _pinv_solve(unfold(tensor, 0), stock_basis)
+    elif infer_time:
+        time_basis = khatri_rao(weighted_factor_loadings, stock_loadings).T
+        time_loadings = _pinv_solve(unfold(tensor, 2), time_basis)
+
+    reconstruction = _reconstruct_cp(
+        np.ones(weighted_factor_loadings.shape[1], dtype=float),
+        (stock_loadings, weighted_factor_loadings, time_loadings),
+    )
+    mse = float(np.mean((tensor - reconstruction) ** 2))
+    return _enrich_result(
+        name=trained_model.name,
+        rank=trained_model.rank,
+        reconstruction=reconstruction,
+        stock_loadings=stock_loadings,
+        factor_loadings=factor_loadings,
+        time_loadings=time_loadings,
+        objective=mse,
+        param_count=trained_model.param_count,
+        diagnostics={**trained_model.diagnostics, "scored_from_train_fit": True},
+        context=resolve_device("cpu"),
+    )
+
+
+def score_tucker_model(
+    tensor: np.ndarray,
+    trained_model: ModelResult,
+    *,
+    infer_stock: bool,
+    infer_time: bool,
+    max_iter: int = 8,
+) -> ModelResult:
+    core = np.asarray(trained_model.diagnostics["core"], dtype=float)
+    stock_loadings = np.asarray(trained_model.stock_loadings, dtype=float)
+    factor_loadings = np.asarray(trained_model.factor_loadings, dtype=float)
+    time_loadings = np.asarray(trained_model.time_loadings, dtype=float)
+
+    if infer_stock and infer_time:
+        time_rank = time_loadings.shape[1]
+        left, _, _ = np.linalg.svd(unfold(tensor, 2), full_matrices=False)
+        inferred_time = left[:, :time_rank]
+        if inferred_time.shape[1] < time_rank:
+            inferred_time = np.pad(inferred_time, ((0, 0), (0, time_rank - inferred_time.shape[1])))
+        inferred_stock = np.zeros((tensor.shape[0], stock_loadings.shape[1]), dtype=float)
+        for _ in range(max_iter):
+            stock_basis = unfold(_mode_product(_mode_product(core, factor_loadings, 1), inferred_time, 2), 0)
+            inferred_stock = _pinv_solve(unfold(tensor, 0), stock_basis)
+            time_basis = unfold(_mode_product(_mode_product(core, inferred_stock, 0), factor_loadings, 1), 2)
+            inferred_time = _pinv_solve(unfold(tensor, 2), time_basis)
+        stock_loadings = inferred_stock
+        time_loadings = inferred_time
+    elif infer_stock:
+        stock_basis = unfold(_mode_product(_mode_product(core, factor_loadings, 1), time_loadings, 2), 0)
+        stock_loadings = _pinv_solve(unfold(tensor, 0), stock_basis)
+    elif infer_time:
+        time_basis = unfold(_mode_product(_mode_product(core, stock_loadings, 0), factor_loadings, 1), 2)
+        time_loadings = _pinv_solve(unfold(tensor, 2), time_basis)
+
+    reconstruction = _mode_product(
+        _mode_product(_mode_product(core, stock_loadings, 0), factor_loadings, 1),
+        time_loadings,
+        2,
+    )
+    mse = float(np.mean((tensor - reconstruction) ** 2))
+    return _enrich_result(
+        name=trained_model.name,
+        rank=trained_model.rank,
+        reconstruction=reconstruction,
+        stock_loadings=stock_loadings,
+        factor_loadings=factor_loadings,
+        time_loadings=time_loadings,
+        objective=mse,
+        param_count=trained_model.param_count,
+        diagnostics={**trained_model.diagnostics, "scored_from_train_fit": True},
+        context=resolve_device("cpu"),
+    )
+
+
+def score_pca_model(
+    tensor: np.ndarray,
+    trained_model: ModelResult,
+) -> ModelResult:
+    stock_count, factor_count, time_count = tensor.shape
+    observation_matrix = np.transpose(tensor, (0, 2, 1)).reshape(stock_count * time_count, factor_count)
+    mean_vector = np.asarray(trained_model.diagnostics["mean_vector"], dtype=float).reshape(1, factor_count)
+    components = np.asarray(trained_model.factor_loadings, dtype=float)
+    centered = observation_matrix - mean_vector
+    scores = centered @ components
+    reconstruction_matrix = scores @ components.T + mean_vector
+    reconstruction = np.transpose(
+        reconstruction_matrix.reshape(stock_count, time_count, factor_count),
+        (0, 2, 1),
+    )
+    scores_tensor = scores.reshape(stock_count, time_count, components.shape[1])
+    mse = float(np.mean((tensor - reconstruction) ** 2))
+    return _enrich_result(
+        name=trained_model.name,
+        rank=trained_model.rank,
+        reconstruction=reconstruction,
+        stock_loadings=scores_tensor.mean(axis=1),
+        factor_loadings=components,
+        time_loadings=scores_tensor.mean(axis=0),
+        objective=mse,
+        param_count=trained_model.param_count,
+        diagnostics={**trained_model.diagnostics, "scored_from_train_fit": True},
+        context=resolve_device("cpu"),
     )

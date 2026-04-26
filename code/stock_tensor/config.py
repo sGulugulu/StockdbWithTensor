@@ -40,6 +40,16 @@ class MarketConfig:
 class PreprocessConfig:
     max_missing_ratio: float
     winsor_limits: tuple[float, float]
+    fill_strategy: str
+    standardize_method: str
+
+
+@dataclass(slots=True)
+class SplitConfig:
+    strategy: str
+    train_ratio: float
+    validation_ratio: float
+    test_ratio: float
 
 
 @dataclass(slots=True)
@@ -95,6 +105,7 @@ class ExperimentConfig:
     market: MarketConfig
     data: DataConfig
     preprocess: PreprocessConfig
+    split: SplitConfig
     models: ModelConfig
     evaluation: EvaluationConfig
     runtime: RuntimeConfig
@@ -113,10 +124,11 @@ def load_config(path: str | Path) -> ExperimentConfig:
     if not isinstance(raw, dict):
         raise ValueError("Config file must be a mapping.")
 
-    _require_keys(raw, ["market", "data", "preprocess", "models", "evaluation", "output"], "root")
+    _require_keys(raw, ["market", "data", "preprocess", "split", "models", "evaluation", "output"], "root")
     market = raw["market"]
     data = raw["data"]
     preprocess = raw["preprocess"]
+    split = raw["split"]
     models = raw["models"]
     evaluation = raw["evaluation"]
     runtime = raw.get("runtime", {})
@@ -145,6 +157,22 @@ def load_config(path: str | Path) -> ExperimentConfig:
     winsor_limits = tuple(preprocess["winsor_limits"])
     if len(winsor_limits) != 2:
         raise ValueError("preprocess.winsor_limits must contain [lower, upper].")
+    fill_strategy = str(preprocess.get("fill_strategy", "forward_backward_industry_median"))
+    standardize_method = str(preprocess.get("standardize_method", "winsorize_zscore"))
+
+    _require_keys(split, ["strategy", "train_ratio", "validation_ratio", "test_ratio"], "split")
+    split_strategy = str(split["strategy"])
+    if split_strategy not in {"time", "stock", "hybrid"}:
+        raise ValueError("split.strategy must be one of 'time', 'stock', or 'hybrid'.")
+    split_ratios = (
+        float(split["train_ratio"]),
+        float(split["validation_ratio"]),
+        float(split["test_ratio"]),
+    )
+    if any(ratio <= 0 for ratio in split_ratios):
+        raise ValueError("split ratios must all be positive.")
+    if abs(sum(split_ratios) - 1.0) > 1.0e-6:
+        raise ValueError("split ratios must sum to 1.0.")
 
     _require_keys(models, ["seed", "cp", "tucker", "pca"], "models")
     cp = models["cp"]
@@ -191,6 +219,14 @@ def load_config(path: str | Path) -> ExperimentConfig:
         preprocess=PreprocessConfig(
             max_missing_ratio=float(preprocess["max_missing_ratio"]),
             winsor_limits=(float(winsor_limits[0]), float(winsor_limits[1])),
+            fill_strategy=fill_strategy,
+            standardize_method=standardize_method,
+        ),
+        split=SplitConfig(
+            strategy=split_strategy,
+            train_ratio=split_ratios[0],
+            validation_ratio=split_ratios[1],
+            test_ratio=split_ratios[2],
         ),
         models=ModelConfig(
             seed=int(models["seed"]),

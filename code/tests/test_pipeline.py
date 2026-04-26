@@ -36,6 +36,10 @@ class PipelineTests(unittest.TestCase):
             self.assertTrue((output_dir / "selection_cp.json").exists())
             self.assertTrue((output_dir / "selection_candidates.json").exists())
             self.assertTrue((output_dir / "factor_summary_cp.json").exists())
+            manifest = yaml.safe_load((output_dir / "run_manifest.json").read_text(encoding="utf-8"))
+            self.assertEqual(manifest["split"]["strategy"], "time")
+            self.assertEqual(manifest["split"]["label_role"], "evaluation_only")
+            self.assertTrue(manifest["split"]["input_tensor_excludes_labels"])
 
             detail = get_run_detail(Path(temp_dir), "pipeline_test")
             self.assertEqual(detail["manifest"]["market_id"], "cn_a")

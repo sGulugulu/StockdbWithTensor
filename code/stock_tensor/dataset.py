@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from collections import Counter, defaultdict
+from collections import Counter
 from dataclasses import dataclass
 
 import numpy as np
 
 from .config import PreprocessConfig
+from .preprocess import preprocess_tensor
 
 
 @dataclass(slots=True)
@@ -27,47 +28,37 @@ class TensorDataset:
     factor_names: list[str]
     dates: list[str]
     industries: dict[str, str | None]
-
-def _forward_backward_fill(values: np.ndarray) -> np.ndarray:
-    filled = values.copy()
-    last = np.nan
-    for index, value in enumerate(filled):
-        if np.isnan(value):
-            if not np.isnan(last):
-                filled[index] = last
-        else:
-            last = value
-
-    last = np.nan
-    for index in range(len(filled) - 1, -1, -1):
-        value = filled[index]
-        if np.isnan(value):
-            if not np.isnan(last):
-                filled[index] = last
-        else:
-            last = value
-    return filled
+    preprocess_summary: dict[str, object]
 
 
-def _winsorize(values: np.ndarray, lower: float, upper: float) -> np.ndarray:
-    if values.size == 0:
-        return values
-    low = np.quantile(values, lower)
-    high = np.quantile(values, upper)
-    return np.clip(values, low, high)
+def slice_tensor_dataset(
+    dataset: TensorDataset,
+    *,
+    stock_codes: list[str],
+    dates: list[str],
+) -> TensorDataset:
+    stock_index = {stock_code: index for index, stock_code in enumerate(dataset.stock_codes)}
+    date_index = {trade_date: index for index, trade_date in enumerate(dataset.dates)}
+
+    stock_positions = [stock_index[stock_code] for stock_code in stock_codes]
+    date_positions = [date_index[trade_date] for trade_date in dates]
+    sliced_tensor = dataset.tensor[np.ix_(stock_positions, np.arange(len(dataset.factor_names)), date_positions)]
+    sliced_raw_tensor = dataset.raw_tensor[np.ix_(stock_positions, np.arange(len(dataset.factor_names)), date_positions)]
+    sliced_returns = dataset.returns[np.ix_(stock_positions, date_positions)]
+
+    return TensorDataset(
+        tensor=sliced_tensor.copy(),
+        raw_tensor=sliced_raw_tensor.copy(),
+        returns=sliced_returns.copy(),
+        stock_codes=list(stock_codes),
+        factor_names=list(dataset.factor_names),
+        dates=list(dates),
+        industries={stock_code: dataset.industries.get(stock_code) for stock_code in stock_codes},
+        preprocess_summary={**dataset.preprocess_summary},
+    )
 
 
-def _zscore(values: np.ndarray) -> np.ndarray:
-    if values.size == 0:
-        return values
-    mean = values.mean()
-    std = values.std()
-    if std == 0:
-        return np.zeros_like(values)
-    return (values - mean) / std
-
-
-def build_tensor_dataset(records: list[NormalizedRecord], config: PreprocessConfig) -> TensorDataset:
+def build_raw_tensor_dataset(records: list[NormalizedRecord]) -> TensorDataset:
     stock_codes = sorted({record.stock_code for record in records})
     factor_names = sorted({record.factor_name for record in records})
     dates = sorted({record.trade_date for record in records})
@@ -78,7 +69,7 @@ def build_tensor_dataset(records: list[NormalizedRecord], config: PreprocessConf
 
     tensor = np.full((len(stock_codes), len(factor_names), len(dates)), np.nan, dtype=float)
     returns = np.full((len(stock_codes), len(dates)), np.nan, dtype=float)
-    industry_votes: dict[str, list[str]] = defaultdict(list)
+    industry_votes: dict[str, list[str]] = {}
     seen_factor_keys: set[tuple[str, str, str]] = set()
     seen_return_keys: dict[tuple[str, str], float] = {}
 
@@ -93,7 +84,7 @@ def build_tensor_dataset(records: list[NormalizedRecord], config: PreprocessConf
         tensor[s_idx, f_idx, d_idx] = record.factor_value
 
         if record.industry:
-            industry_votes[record.stock_code].append(record.industry)
+            industry_votes.setdefault(record.stock_code, []).append(record.industry)
         if record.future_return is not None:
             return_key = (record.stock_code, record.trade_date)
             prior = seen_return_keys.get(return_key)
@@ -102,71 +93,43 @@ def build_tensor_dataset(records: list[NormalizedRecord], config: PreprocessConf
             seen_return_keys[return_key] = record.future_return
             returns[s_idx, d_idx] = record.future_return
 
-    raw_tensor = tensor.copy()
-
-    stock_missing = np.isnan(tensor).mean(axis=(1, 2))
-    factor_missing = np.isnan(tensor).mean(axis=(0, 2))
-    stock_keep = stock_missing <= config.max_missing_ratio
-    factor_keep = factor_missing <= config.max_missing_ratio
-    if stock_keep.sum() < 2 or factor_keep.sum() < 2:
-        raise ValueError("Missing-value filtering removed too many stocks or factors.")
-
-    tensor = tensor[stock_keep][:, factor_keep, :]
-    raw_tensor = raw_tensor[stock_keep][:, factor_keep, :]
-    returns = returns[stock_keep]
-    stock_codes = [stock_code for stock_code, keep in zip(stock_codes, stock_keep) if keep]
-    factor_names = [factor_name for factor_name, keep in zip(factor_names, factor_keep) if keep]
-
-    industries: dict[str, str | None] = {}
-    for stock_code in stock_codes:
-        votes = industry_votes.get(stock_code, [])
-        industries[stock_code] = Counter(votes).most_common(1)[0][0] if votes else None
-
-    stock_index = {stock_code: index for index, stock_code in enumerate(stock_codes)}
-    industry_groups: dict[str, list[int]] = defaultdict(list)
-    for stock_code, industry in industries.items():
-        if industry:
-            industry_groups[industry].append(stock_index[stock_code])
-
-    for s_idx in range(tensor.shape[0]):
-        for f_idx in range(tensor.shape[1]):
-            tensor[s_idx, f_idx, :] = _forward_backward_fill(tensor[s_idx, f_idx, :])
-
-    for f_idx in range(tensor.shape[1]):
-        for d_idx in range(tensor.shape[2]):
-            column = tensor[:, f_idx, d_idx]
-            missing_positions = np.where(np.isnan(column))[0]
-            for s_idx in missing_positions:
-                stock_code = stock_codes[s_idx]
-                industry = industries.get(stock_code)
-                fill_value = np.nan
-                if industry and industry_groups[industry]:
-                    peer_values = column[industry_groups[industry]]
-                    peer_values = peer_values[~np.isnan(peer_values)]
-                    if peer_values.size:
-                        fill_value = float(np.median(peer_values))
-                if np.isnan(fill_value):
-                    available = column[~np.isnan(column)]
-                    if available.size:
-                        fill_value = float(np.median(available))
-                if np.isnan(fill_value):
-                    factor_slice = tensor[:, f_idx, :]
-                    available = factor_slice[~np.isnan(factor_slice)]
-                    fill_value = float(np.median(available)) if available.size else 0.0
-                tensor[s_idx, f_idx, d_idx] = fill_value
-
-    lower, upper = config.winsor_limits
-    for f_idx in range(tensor.shape[1]):
-        for d_idx in range(tensor.shape[2]):
-            column = tensor[:, f_idx, d_idx]
-            tensor[:, f_idx, d_idx] = _zscore(_winsorize(column, lower, upper))
-
+    industries = {
+        stock_code: Counter(industry_votes.get(stock_code, [])).most_common(1)[0][0]
+        if industry_votes.get(stock_code)
+        else None
+        for stock_code in stock_codes
+    }
     return TensorDataset(
-        tensor=tensor,
-        raw_tensor=raw_tensor,
+        tensor=tensor.copy(),
+        raw_tensor=tensor.copy(),
         returns=returns,
         stock_codes=stock_codes,
         factor_names=factor_names,
         dates=dates,
         industries=industries,
+        preprocess_summary={},
+    )
+
+
+def build_tensor_dataset(records: list[NormalizedRecord], config: PreprocessConfig) -> TensorDataset:
+    raw_dataset = build_raw_tensor_dataset(records)
+    preprocessed = preprocess_tensor(
+        tensor=raw_dataset.tensor,
+        raw_tensor=raw_dataset.raw_tensor,
+        returns=raw_dataset.returns,
+        stock_codes=raw_dataset.stock_codes,
+        factor_names=raw_dataset.factor_names,
+        dates=raw_dataset.dates,
+        industries=raw_dataset.industries,
+        config=config,
+    )
+    return TensorDataset(
+        tensor=preprocessed.tensor,
+        raw_tensor=preprocessed.raw_tensor,
+        returns=preprocessed.returns,
+        stock_codes=preprocessed.stock_codes,
+        factor_names=preprocessed.factor_names,
+        dates=raw_dataset.dates,
+        industries=preprocessed.industries,
+        preprocess_summary=preprocessed.summary,
     )

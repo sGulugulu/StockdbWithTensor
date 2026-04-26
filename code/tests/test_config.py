@@ -17,12 +17,14 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(config.market.universe_id, "CSI_A500")
         self.assertEqual(config.market.start_date, "2015-01-01")
         self.assertEqual(config.data.format, "wide")
+        self.assertEqual(config.split.strategy, "time")
         self.assertEqual(config.models.cp.ranks, [2, 3])
         self.assertEqual(config.output.experiment_name, "formal_a_share_run")
 
     def test_load_smoke_config(self) -> None:
         config = load_config(ROOT / "configs" / "sample_cn_smoke.yaml")
         self.assertEqual(config.market.start_date, "2026-01-01")
+        self.assertEqual(config.split.test_ratio, 0.2)
         self.assertEqual(config.output.experiment_name, "sample_run")
 
 
