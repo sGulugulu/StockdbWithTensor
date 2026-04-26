@@ -94,7 +94,7 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
                 ),
                 encoding="utf-8",
             )
-            for index_name, code in (("hs300_index_daily.csv", "000300.SH"), ("000050_index_daily.csv", "000050.SH"), ("csi_a500_index_daily.csv", "000905.SH")):
+            for index_name, code in (("hs300_index_daily.csv", "000300.SH"), ("000050_index_daily.csv", "000050.SH"), ("zz500_index_daily.csv", "000905.SH")):
                 (root / "index_daily" / index_name).write_text(
                     "\n".join(
                         [

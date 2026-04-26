@@ -458,9 +458,6 @@ def build_portfolio_backtest(
                 end_index = len(full_ranked_rows) if bucket_index == bucket_count - 1 else min(start_index + bucket_size, len(full_ranked_rows))
                 quantile_slices.append(full_ranked_rows[start_index:end_index])
                 start_index = end_index
-            while len(quantile_slices) < quantile_count:
-                quantile_slices.append([])
-
             for bucket_index, bucket_rows in enumerate(quantile_slices):
                 bucket_return = float(np.mean([row.future_return for row in bucket_rows])) if bucket_rows else 0.0
                 quantile_navs[bucket_index] *= 1.0 + bucket_return
@@ -474,8 +471,12 @@ def build_portfolio_backtest(
                     }
                 )
 
-            top_bucket_return = quantile_records[-quantile_count]["daily_return"] if quantile_records else 0.0
-            bottom_bucket_return = quantile_records[-1]["daily_return"] if quantile_records else 0.0
+            if bucket_count > 0:
+                top_bucket_return = float(quantile_records[-bucket_count]["daily_return"])
+                bottom_bucket_return = float(quantile_records[-1]["daily_return"])
+            else:
+                top_bucket_return = 0.0
+                bottom_bucket_return = 0.0
             long_short_return = float(top_bucket_return) - float(bottom_bucket_return)
             long_short_nav *= 1.0 + long_short_return
             long_short_peak = max(long_short_peak, long_short_nav)

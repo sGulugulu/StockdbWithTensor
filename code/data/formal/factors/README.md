@@ -130,7 +130,7 @@ python code/data/build_extended_factor_panel.py `
   --profit-data-path code/data/formal/baostock/financial/profit_data.csv `
   --performance-express-path code/data/formal/baostock/reports/performance_express_report `
   --forecast-report-path code/data/formal/baostock/reports/forecast_report `
-  --market-index-path code/data/formal/index_daily/csi_a500_index_daily.csv `
+  --market-index-path code/data/formal/index_daily/zz500_index_daily.csv `
   --output-path code/data/formal/factors/zz500_factor_panel_extended.csv `
   --max-trade-date 2026-03-30
 ```

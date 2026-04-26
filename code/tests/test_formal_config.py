@@ -74,8 +74,13 @@ class FormalConfigTests(unittest.TestCase):
     def test_formal_zz500_config_runs_with_committed_local_inputs(self) -> None:
         history_path = ROOT / "data" / "formal" / "universes" / "zz500_history.csv"
         panel_path = ROOT / "data" / "formal" / "factors" / "zz500_factor_panel.csv"
+        benchmark_path = ROOT / "data" / "formal" / "index_daily" / "zz500_index_daily.csv"
         if not history_path.exists() or not panel_path.exists():
             self.skipTest("committed zz500 formal inputs are not available")
+        if benchmark_path.exists():
+            benchmark_lines = benchmark_path.read_text(encoding="utf-8").splitlines()
+            self.assertGreater(len(benchmark_lines), 1)
+            self.assertIn("000905.SH", benchmark_lines[1])
 
         output_dir = run_experiment(ROOT / "configs" / "formal_zz500.yaml")
         self.assertTrue((output_dir / "run_manifest.json").exists())

@@ -99,9 +99,11 @@ class PipelineTests(unittest.TestCase):
                 cost_adjusted_rows = yaml.safe_load((output_dir / f"cost_adjusted_{model_name}.json").read_text(encoding="utf-8"))
                 excess_rows = yaml.safe_load((output_dir / f"excess_returns_{model_name}.json").read_text(encoding="utf-8"))
                 self.assertTrue(any(row["quantile"] == 1 for row in quantile_rows))
+                self.assertEqual(max(row["quantile"] for row in quantile_rows), 4)
                 self.assertEqual(len(long_short_rows), len(group_returns))
                 self.assertEqual(len(cost_adjusted_rows), len(group_returns))
                 self.assertEqual(len(excess_rows), len(group_returns))
+                self.assertTrue(all(row["short_quantile"] == 4 for row in long_short_rows))
                 for gross_row, cost_row in zip(group_returns, cost_adjusted_rows):
                     self.assertLessEqual(cost_row["net_return"], gross_row["daily_return"] + 1e-12)
 

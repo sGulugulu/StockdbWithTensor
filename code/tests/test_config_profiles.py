@@ -31,6 +31,11 @@ class ConfigProfileTests(unittest.TestCase):
         self.assertEqual(config.market.end_date, "2026-03-30")
         self.assertIn("universes/zz500_history.csv", str(config.market.universe_path).replace("\\", "/"))
         self.assertIn("factors/zz500_factor_panel.csv", str(config.data.path).replace("\\", "/"))
+        self.assertIn("index_daily/zz500_index_daily.csv", str(config.evaluation.benchmark_path).replace("\\", "/"))
+        if config.evaluation.benchmark_path.exists():
+            benchmark_lines = config.evaluation.benchmark_path.read_text(encoding="utf-8").splitlines()
+            self.assertGreater(len(benchmark_lines), 1)
+            self.assertIn("000905.SH", benchmark_lines[1])
 
     def test_formal_hs300_extended_profile(self) -> None:
         config = load_config(ROOT / "configs" / "formal_hs300_extended.yaml")

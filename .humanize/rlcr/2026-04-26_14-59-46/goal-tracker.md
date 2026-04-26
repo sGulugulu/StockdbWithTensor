@@ -35,7 +35,7 @@ Source plan: 论文不足与完善计划.md
 ## MUTABLE SECTION
 <!-- Update each round with justification for changes -->
 
-### Plan Version: 13 (Updated: Round 6 Review)
+### Plan Version: 14 (Updated: Round 7 Review)
 
 #### Plan Evolution Log
 <!-- Document any changes to the plan with justification -->
@@ -56,6 +56,7 @@ Source plan: 论文不足与完善计划.md
 | 5 | 接受 Round 5 的 tracker update request，但保持 AC1-AC5 主体未完成状态 | 本轮复核确认 formal 标签退化修复属实，`paper_body.tex` 与 `扩展特征对照实验结果.md` 的核心数值也已和 committed outputs 对齐；但原始计划的大部分扩展任务仍处于未完成状态 | 允许清除已解决 blocker，同时防止把局部修复误判为全计划完成 |
 | 5 | 新增验证命令契约失配 open issue | 当前仓库环境中 `python` 仍指向 2.7，`python3` 运行测试缺少 `PyYAML` 依赖，且本机无 `latexmk` / `xelatex`，导致 Round 5 Validation 无法按文档命令直接复现 | 需要在后续收口中同步修正文档和验证入口，避免 AC 进展无法复核 |
 | 6 | 接受 Round 6 的 tracker update request，并把 AC1 进展从“局部 PIT/快报接入”更新为“第一版完整扩展输入合同” | 本轮复核确认 extended panel、formal extended 配置、合同文档与对照说明已真实覆盖市场代理变量、财务 PIT、业绩快报和业绩预告四类输入；但更完整宏观变量与更广泛事件字典仍未完成 | 让 tracker 反映 AC1 的真实推进，同时保持 AC1-AC5 主体任务未完成的审计结论 |
+| 7 | 部分接受 Round 7 的 tracker update request，并把 AC2 进展更新为“分位数组/多空/成本/超额收益第一版合同已落盘” | 本轮复核确认六组 formal / extended 输出已真实新增 `quantile_returns_*`、`long_short_*`、`cost_adjusted_*`、`excess_returns_*` 与对应 SVG，`paper_body.tex` 也已吸收新证据；但同时发现 ZZ500 基准指数接错到 `000510.SH`，且 `quantile_count > pool_size` 时会生成伪造空分位并污染多空腿 | 让 tracker 记录 AC2 的真实推进，同时把新增 blocker 显式暴露出来，避免把第一版合同误记为稳定完成 |
 
 #### Active Tasks
 <!-- Map each task to its target Acceptance Criterion and routing tag -->
@@ -70,8 +71,8 @@ Source plan: 论文不足与完善计划.md
 | 实现显式训练/验证/测试切分与 held-out 评估，并把 split 元数据写入产物 | AC2 | in_progress | coding | claude | `sample_run` 与三组 committed formal 输出已包含 split / preprocess 合同，Top-N 合同与 `stock` / `hybrid` 行业元数据缺陷已修复；组合层基础图形化产物已落盘，但分位数组、交易成本和更完整暴露分析仍未实现 |
 | 重跑 formal HS300、SZ50、ZZ500 以刷新 split / preprocess 产物并替换旧 manifest | AC2 | completed | coding | claude | 已验证 `code/outputs/formal_*_run/run_manifest.json` 含 split / preprocess 字段，旧版简化 manifest 已被替换 |
 | 修复 factor panel 截断后测试窗口 future_return 全为 0 的标签退化 | AC2 | completed | coding | claude | 已改为先基于股票全量 K 线计算未来收益和动量，再在输出阶段按成分历史和 `max_trade_date` 过滤；`test_formal_factor_panel.py`、`test_refresh_formal_factor_panels.py` 与 `test_formal_config.py` 已覆盖这一回归路径 |
-| 实现 Top-N/分组收益/回撤/风险暴露计算 | AC2 | in_progress | coding | claude | `portfolio_metrics`、`group_returns`、`drawdown` 与 `exposure` 已在 baseline/extended formal 输出目录落盘，并新增 `group_returns_overview.svg`、`drawdown_overview.svg`；六组 formal 输出当前已不再是平线，但严格分位数组收益和交易成本情景仍未补齐 |
-| 将组合层结果与 Rank IC 指标联动分析并回写第五章 | AC2 | in_progress | coding | claude | 第五章与 `扩展特征对照实验结果.md` 已按当前 committed outputs 重写 Rank IC、累计收益和最大回撤；后续仍需继续扩展到分位数组、超额收益和更完整暴露章节 |
+| 实现 Top-N/分组收益/回撤/风险暴露计算 | AC2 | in_progress | coding | claude | `portfolio_metrics`、`group_returns`、`drawdown`、`exposure` 之外，`quantile_returns_*`、`long_short_*`、`cost_adjusted_*`、`excess_returns_*` 与三张 overview SVG 也已在六组 formal / extended 输出目录落盘；但 ZZ500 超额收益当前误用 `000510.SH` 基准，`quantile_count > pool_size` 时会生成空分位，多空腿与更系统暴露比较仍未收口 |
+| 将组合层结果与 Rank IC 指标联动分析并回写第五章 | AC2 | in_progress | coding | claude | 第五章已吸收新的多空、成本后净值和超额收益证据；但 `paper_body.tex` 中涉及 ZZ500 相对基准表述需在基准修正后重算，且仍缺更长窗口稳健性检验与更系统暴露章节 |
 | 设计全 A 股、行业分层、市值分层扩展实验路径 | AC3 | pending | coding | claude | BitLesson=NONE；先补样本边界说明，再落配置与脚本 |
 | 落地全 A 股、行业分层、市值分层配置并生成运行产物 | AC3 | pending | coding | claude | 需形成真实实验结果，而非仅保留扩展路径说明 |
 | 将样本边界扩展影响回写论文正文 | AC3 | pending | coding | claude | BitLesson=NONE；依赖扩展实验结果 |
@@ -107,5 +108,6 @@ Source plan: 论文不足与完善计划.md
 | 样本边界扩展尚无全 A/行业/市值分层配置与运行产物 | 0 | AC3 | 下一轮补样本派生脚本和配置 |
 | 增强图组与基础图文已落盘，但股票潜在结构图、样本边界对比图和更完整的模式发现章节联动仍未完成 | 4 | AC4 | 继续补股票潜在结构/行业聚类图、样本边界对比图，并把章节叙事扩展到完整图系 |
 | 扩展特征已扩展到市场代理变量 + 财务 PIT + 业绩快报 + 业绩预告；baseline/extended 对照在不同样本池表现分化明显，仍需继续补更完整宏观变量与更广泛事件字典 | 4 | AC1 | 保持统一刷新入口不变，在此基础上继续扩展特征合同、筛选规则与样本池比较 |
-| 组合层虽然已生成净值曲线和回撤图，但严格分位数组收益、交易成本和更系统的暴露/超额收益分析仍未完成 | 4 | AC2 | 继续沿 `evaluation.py` / `output.py` 扩展组合层合同，并把第五章补成完整的组合回测章节 |
+| 分位数组、交易成本和超额收益基础合同已落地，但 ZZ500 当前误用 `000510.SH` 基准，且更长窗口稳健性检验与更系统暴露比较仍未完成 | 7 | AC2 | 先修正 ZZ500 benchmark contract、补 quantile 小样本回归测试并重跑受影响产物，再继续扩展暴露与稳健性章节 |
+| `quantile_count` 当前在股票池小于分位数时会补空桶，并把空桶收益误作为多空空头腿 | 7 | AC2 | 修改 `build_portfolio_backtest` 只用非空分位构造 long-short，并补充 `quantile_count > pool_size` 的回归测试 |
 | 仓库命令与当前环境解释器/依赖不一致：`python`=2.7，`python3` 默认环境缺 `PyYAML`，且本机无 `latexmk` / `xelatex`，Round 5 的验证命令无法直接复现 | 5 | ALL | 统一到 `python3` / `.venv` 入口，补齐依赖安装说明，并只保留可在仓库内复现的验证命令 |

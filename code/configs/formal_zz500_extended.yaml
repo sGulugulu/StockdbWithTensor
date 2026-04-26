@@ -77,7 +77,7 @@ evaluation:
   rolling_window: 3
   quantile_count: 5
   transaction_cost_bps: 10.0
-  benchmark_path: ../data/formal/index_daily/csi_a500_index_daily.csv
+  benchmark_path: ../data/formal/index_daily/zz500_index_daily.csv
 
 runtime:
   selection_top_n: 20
