@@ -37,6 +37,32 @@ class SelectionRecord:
     top_factor_2_score: float
     top_factor_3: str
     top_factor_3_score: float
+    industry: str | None
+    future_return: float
+
+
+@dataclass(slots=True)
+class PortfolioDailyRecord:
+    trade_date: str
+    model: str
+    top_n: int
+    daily_return: float
+    cumulative_nav: float
+    turnover: float
+    drawdown: float
+
+
+@dataclass(slots=True)
+class PortfolioSummary:
+    model: str
+    top_n: int
+    observation_count: int
+    mean_daily_return: float
+    cumulative_return: float
+    annualized_volatility: float
+    sharpe_ratio: float
+    max_drawdown: float
+    average_turnover: float
 
 
 def _pearson_corr(left: np.ndarray, right: np.ndarray) -> float:
@@ -233,6 +259,10 @@ def build_selection_records(
                     top_factor_2_score=top_scores[1],
                     top_factor_3=top_factors[2],
                     top_factor_3_score=top_scores[2],
+                    industry=dataset.industries.get(stock_code),
+                    future_return=float(dataset.returns[stock_idx, date_idx])
+                    if not np.isnan(dataset.returns[stock_idx, date_idx])
+                    else 0.0,
                 )
             )
     selection_rows.sort(key=lambda item: (item.trade_date, -item.total_score, item.stock_code))
@@ -292,3 +322,116 @@ def build_candidate_pool(
             filtered_rows.extend(current_rows[:selection_top_n])
         candidate_rows = filtered_rows
     return candidate_rows
+
+
+def build_portfolio_backtest(
+    selection_rows_by_model: dict[str, list[SelectionRecord]],
+    *,
+    selection_top_n: int,
+) -> tuple[list[dict[str, float | int | str]], dict[str, list[dict[str, float | int | str]]], dict[str, list[dict[str, float | int | str]]], dict[str, list[dict[str, float | int | str]]]]:
+    portfolio_metrics: list[dict[str, float | int | str]] = []
+    group_returns: dict[str, list[dict[str, float | int | str]]] = {}
+    drawdowns: dict[str, list[dict[str, float | int | str]]] = {}
+    exposures: dict[str, list[dict[str, float | int | str]]] = {}
+
+    for model_name, rows in selection_rows_by_model.items():
+        by_date: dict[str, list[SelectionRecord]] = defaultdict(list)
+        for row in rows:
+            by_date[row.trade_date].append(row)
+        ordered_dates = sorted(by_date)
+        cumulative_nav = 1.0
+        peak_nav = 1.0
+        previous_holdings: set[str] = set()
+        daily_records: list[dict[str, float | int | str]] = []
+        drawdown_records: list[dict[str, float | int | str]] = []
+        industry_counts: defaultdict[str, int] = defaultdict(int)
+        style_counts: defaultdict[str, int] = defaultdict(int)
+        turnover_values: list[float] = []
+        daily_returns: list[float] = []
+
+        for trade_date in ordered_dates:
+            ranked_rows = sorted(by_date[trade_date], key=lambda item: item.total_score, reverse=True)[:selection_top_n]
+            holdings = {row.stock_code for row in ranked_rows}
+            daily_return = float(np.mean([row.future_return for row in ranked_rows])) if ranked_rows else 0.0
+            daily_returns.append(daily_return)
+            cumulative_nav *= 1.0 + daily_return
+            peak_nav = max(peak_nav, cumulative_nav)
+            drawdown = 0.0 if peak_nav == 0 else (cumulative_nav / peak_nav) - 1.0
+            if not previous_holdings:
+                turnover = 1.0 if holdings else 0.0
+            else:
+                overlap = len(previous_holdings & holdings)
+                turnover = 1.0 - (overlap / max(len(holdings), 1))
+            turnover_values.append(turnover)
+            previous_holdings = holdings
+
+            for row in ranked_rows:
+                industry_counts[row.industry or "UNKNOWN"] += 1
+                style_counts[row.top_factor_1 or "UNKNOWN"] += 1
+
+            daily_records.append(
+                {
+                    "trade_date": trade_date,
+                    "model": model_name,
+                    "top_n": selection_top_n,
+                    "daily_return": daily_return,
+                    "cumulative_nav": cumulative_nav,
+                    "turnover": turnover,
+                    "drawdown": drawdown,
+                }
+            )
+            drawdown_records.append(
+                {
+                    "trade_date": trade_date,
+                    "model": model_name,
+                    "cumulative_nav": cumulative_nav,
+                    "drawdown": drawdown,
+                }
+            )
+
+        mean_daily_return = float(np.mean(daily_returns)) if daily_returns else 0.0
+        volatility = float(np.std(daily_returns)) if len(daily_returns) > 1 else 0.0
+        annualized_volatility = volatility * np.sqrt(252.0)
+        sharpe_ratio = 0.0 if volatility == 0 else float(mean_daily_return / volatility * np.sqrt(252.0))
+        max_drawdown = float(min((record["drawdown"] for record in drawdown_records), default=0.0))
+        average_turnover = float(np.mean(turnover_values)) if turnover_values else 0.0
+
+        portfolio_metrics.append(
+            {
+                "model": model_name,
+                "top_n": selection_top_n,
+                "observation_count": len(daily_records),
+                "mean_daily_return": mean_daily_return,
+                "cumulative_return": cumulative_nav - 1.0,
+                "annualized_volatility": annualized_volatility,
+                "sharpe_ratio": sharpe_ratio,
+                "max_drawdown": max_drawdown,
+                "average_turnover": average_turnover,
+            }
+        )
+        group_returns[model_name] = daily_records
+        drawdowns[model_name] = drawdown_records
+
+        total_slots = max(sum(industry_counts.values()), 1)
+        industry_rows = [
+            {
+                "model": model_name,
+                "exposure_type": "industry",
+                "name": name,
+                "weight": count / total_slots,
+            }
+            for name, count in sorted(industry_counts.items(), key=lambda item: item[1], reverse=True)
+        ]
+        style_rows = [
+            {
+                "model": model_name,
+                "exposure_type": "style",
+                "name": name,
+                "weight": count / total_slots,
+            }
+            for name, count in sorted(style_counts.items(), key=lambda item: item[1], reverse=True)
+        ]
+        exposures[model_name] = industry_rows + style_rows
+
+    portfolio_metrics.sort(key=lambda item: str(item["model"]))
+    return portfolio_metrics, group_returns, drawdowns, exposures

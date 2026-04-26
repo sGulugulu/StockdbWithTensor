@@ -511,6 +511,10 @@ def write_outputs(
     selection_rows: dict[str, list[SelectionRecord]],
     candidate_rows: list[dict[str, Any]],
     factor_summaries: dict[str, list[dict[str, Any]]],
+    portfolio_metrics: list[dict[str, Any]],
+    group_returns: dict[str, list[dict[str, Any]]],
+    drawdowns: dict[str, list[dict[str, Any]]],
+    exposures: dict[str, list[dict[str, Any]]],
     run_manifest: dict[str, Any],
 ) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -627,6 +631,29 @@ def write_outputs(
         json.dumps(candidate_rows, indent=2, ensure_ascii=False),
         encoding="utf-8",
     )
+    _write_csv(output_dir / "portfolio_metrics.csv", portfolio_metrics)
+    (output_dir / "portfolio_metrics.json").write_text(
+        json.dumps(portfolio_metrics, indent=2, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    for model_name, rows in group_returns.items():
+        _write_csv(output_dir / f"group_returns_{model_name}.csv", rows)
+        (output_dir / f"group_returns_{model_name}.json").write_text(
+            json.dumps(rows, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+    for model_name, rows in drawdowns.items():
+        _write_csv(output_dir / f"drawdown_{model_name}.csv", rows)
+        (output_dir / f"drawdown_{model_name}.json").write_text(
+            json.dumps(rows, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+    for model_name, rows in exposures.items():
+        _write_csv(output_dir / f"exposure_{model_name}.csv", rows)
+        (output_dir / f"exposure_{model_name}.json").write_text(
+            json.dumps(rows, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
 
     write_visual_assets(
         output_dir,
@@ -656,6 +683,10 @@ def write_outputs(
     summary_lines.append("- `selection_*.csv` / `selection_*.json`: per-date stock selection signals")
     summary_lines.append("- `selection_candidates.csv` / `selection_candidates.json`: unified per-date candidate pool")
     summary_lines.append("- `factor_summary_*.csv` / `factor_summary_*.json`: factor importance summaries")
+    summary_lines.append("- `portfolio_metrics.csv` / `portfolio_metrics.json`: Top-N portfolio summary metrics")
+    summary_lines.append("- `group_returns_*.csv` / `group_returns_*.json`: per-date portfolio return series")
+    summary_lines.append("- `drawdown_*.csv` / `drawdown_*.json`: cumulative nav and drawdown series")
+    summary_lines.append("- `exposure_*.csv` / `exposure_*.json`: industry and style exposure summaries")
     summary_lines.append("- `run_manifest.json`: machine-readable run metadata for web services")
     summary_lines.append("- `model_explained_variance.svg` and `model_rank_ic.svg`: signed metric bar charts")
     summary_lines.append("- `model_metrics_overview.svg`: grouped comparison of core metrics")

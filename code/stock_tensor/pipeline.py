@@ -9,6 +9,7 @@ from .config import ExperimentConfig, load_config
 from .dataset import TensorDataset, build_raw_tensor_dataset, slice_tensor_dataset
 from .evaluation import (
     build_candidate_pool,
+    build_portfolio_backtest,
     build_selection_records,
     compute_quality_metrics,
     compute_rolling_stability,
@@ -456,6 +457,10 @@ def run_experiment(
         selection_rows,
         selection_top_n=config.runtime.selection_top_n,
     )
+    portfolio_metrics, group_returns, drawdowns, exposures = build_portfolio_backtest(
+        selection_rows,
+        selection_top_n=config.runtime.selection_top_n,
+    )
     split_metadata = split_plan.metadata
 
     output_dir = config.output.root_dir / config.output.experiment_name
@@ -470,6 +475,10 @@ def run_experiment(
         selection_rows=selection_rows,
         candidate_rows=candidate_rows,
         factor_summaries=factor_summaries,
+        portfolio_metrics=portfolio_metrics,
+        group_returns=group_returns,
+        drawdowns=drawdowns,
+        exposures=exposures,
         run_manifest={
             "market_id": config.market.market_id,
             "universe_id": config.market.universe_id,
