@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import csv
 from dataclasses import asdict
 from pathlib import Path
 from typing import Callable
@@ -31,6 +32,24 @@ from .output import write_outputs
 from .path_utils import repo_relative_path
 from .preprocess import apply_preprocess_state, fit_preprocess_state
 from .splits import materialize_splits
+
+
+def _load_benchmark_returns(path: Path | None) -> dict[str, float]:
+    if path is None or not path.exists():
+        return {}
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+    rows.sort(key=lambda row: row["trade_date"])
+    benchmark_returns: dict[str, float] = {}
+    previous_close: float | None = None
+    for row in rows:
+        close_value = float(row["close"])
+        if previous_close in {None, 0.0}:
+            benchmark_returns[row["trade_date"]] = 0.0
+        else:
+            benchmark_returns[row["trade_date"]] = close_value / previous_close - 1.0
+        previous_close = close_value
+    return benchmark_returns
 
 
 def _fit_model_for_rank(
@@ -457,9 +476,22 @@ def run_experiment(
         selection_rows,
         selection_top_n=config.runtime.selection_top_n,
     )
-    portfolio_metrics, group_returns, drawdowns, exposures = build_portfolio_backtest(
+    benchmark_returns = _load_benchmark_returns(config.evaluation.benchmark_path)
+    (
+        portfolio_metrics,
+        group_returns,
+        drawdowns,
+        exposures,
+        quantile_returns,
+        long_short_returns,
+        cost_adjusted_returns,
+        excess_returns,
+    ) = build_portfolio_backtest(
         selection_rows,
         selection_top_n=config.runtime.selection_top_n,
+        quantile_count=config.evaluation.quantile_count,
+        transaction_cost_bps=config.evaluation.transaction_cost_bps,
+        benchmark_returns=benchmark_returns,
     )
     split_metadata = split_plan.metadata
 
@@ -479,6 +511,10 @@ def run_experiment(
         group_returns=group_returns,
         drawdowns=drawdowns,
         exposures=exposures,
+        quantile_returns=quantile_returns,
+        long_short_returns=long_short_returns,
+        cost_adjusted_returns=cost_adjusted_returns,
+        excess_returns=excess_returns,
         run_manifest={
             "market_id": config.market.market_id,
             "universe_id": config.market.universe_id,
@@ -491,6 +527,11 @@ def run_experiment(
             "selection_top_n": config.runtime.selection_top_n,
             "output_dir": output_dir,
             "preprocess": train_dataset.preprocess_summary,
+            "evaluation": {
+                "quantile_count": config.evaluation.quantile_count,
+                "transaction_cost_bps": config.evaluation.transaction_cost_bps,
+                "benchmark_path": config.evaluation.benchmark_path,
+            },
             "split": split_metadata,
             "status": "completed",
         },

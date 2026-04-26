@@ -35,7 +35,7 @@ Source plan: 论文不足与完善计划.md
 ## MUTABLE SECTION
 <!-- Update each round with justification for changes -->
 
-### Plan Version: 12 (Updated: Round 5 Review)
+### Plan Version: 13 (Updated: Round 6 Review)
 
 #### Plan Evolution Log
 <!-- Document any changes to the plan with justification -->
@@ -55,15 +55,16 @@ Source plan: 论文不足与完善计划.md
 | 4 | 修复 formal 标签退化并按 committed outputs 回填正文与对照文档 | 已改为先按股票全量 K 线计算动量和未来收益，再在输出阶段按 universe history 与 `max_trade_date` 过滤；六组 formal 输出重新生成后不再是平线，论文正文与对照文档也已按新结果同步 | 恢复 AC2 组合层证据的数值有效性，并消除 AC1/AC2 的文稿失配 |
 | 5 | 接受 Round 5 的 tracker update request，但保持 AC1-AC5 主体未完成状态 | 本轮复核确认 formal 标签退化修复属实，`paper_body.tex` 与 `扩展特征对照实验结果.md` 的核心数值也已和 committed outputs 对齐；但原始计划的大部分扩展任务仍处于未完成状态 | 允许清除已解决 blocker，同时防止把局部修复误判为全计划完成 |
 | 5 | 新增验证命令契约失配 open issue | 当前仓库环境中 `python` 仍指向 2.7，`python3` 运行测试缺少 `PyYAML` 依赖，且本机无 `latexmk` / `xelatex`，导致 Round 5 Validation 无法按文档命令直接复现 | 需要在后续收口中同步修正文档和验证入口，避免 AC 进展无法复核 |
+| 6 | 接受 Round 6 的 tracker update request，并把 AC1 进展从“局部 PIT/快报接入”更新为“第一版完整扩展输入合同” | 本轮复核确认 extended panel、formal extended 配置、合同文档与对照说明已真实覆盖市场代理变量、财务 PIT、业绩快报和业绩预告四类输入；但更完整宏观变量与更广泛事件字典仍未完成 | 让 tracker 反映 AC1 的真实推进，同时保持 AC1-AC5 主体任务未完成的审计结论 |
 
 #### Active Tasks
 <!-- Map each task to its target Acceptance Criterion and routing tag -->
 | Task | Target AC | Status | Tag | Owner | Notes |
 |------|-----------|--------|-----|-------|-------|
-| 建立扩展特征字典与 PIT 安全说明文档 | AC1 | in_progress | coding | claude | BitLesson=NONE；`EXTENDED_FACTOR_CONTRACT.md` 已覆盖第一版财务 PIT/业绩快报字段、披露时点与缺失处理，但宏观变量与更完整事件字典仍待补齐 |
+| 建立扩展特征字典与 PIT 安全说明文档 | AC1 | in_progress | coding | claude | BitLesson=NONE；`EXTENDED_FACTOR_CONTRACT.md` 已覆盖第一版市场代理变量、财务 PIT、业绩快报和业绩预告字段、披露时点与缺失处理，但更完整宏观变量与更广泛事件字典仍待补齐 |
 | 将训练输入边界说明回写到第三章与局限性分析 | AC1 | completed | coding | claude | BitLesson=NONE；已在数据来源与局限性部分补写 |
 | 修正《训练输入扩展与 PIT 安全说明》中对正式窗口已统一的失实表述 | AC1 | completed | coding | claude | 已改为区分数据底座窗口、formal 因子面板窗口与当前 committed formal 输出窗口 |
-| 将通过 PIT 校验的扩展特征接入统一训练接口并生成扩展版 factor panel | AC1 | in_progress | coding | claude | 第一版 PIT/业绩快报扩展列已接入，三组 extended 配置与输出已生成；`refresh_formal_factor_panels.py` 已把 baseline/extended panel 收口到统一刷新入口，但宏观变量与更完整事件特征仍未接入 |
+| 将通过 PIT 校验的扩展特征接入统一训练接口并生成扩展版 factor panel | AC1 | in_progress | coding | claude | 已接入市场代理变量、财务 PIT、业绩快报和业绩预告四类第一版特征，三组 extended 配置与输出已生成；`refresh_formal_factor_panels.py` 已把 baseline/extended panel 收口到统一刷新入口，但更完整宏观变量与更广泛事件字典仍未接入 |
 | 将 baseline/extended 对照结果回写第三章与局限性分析 | AC1 | in_progress | coding | claude | `paper_body.tex` 与 `扩展特征对照实验结果.md` 已按当前 committed `metrics.json` / `portfolio_metrics.json` 回填核心数值，但第三章数据边界说明和更多 extended 细节仍可继续补充 |
 | 修复 formal 因子面板与正式输出实际窗口仅覆盖 2026-03 的口径错位 | AC1 | completed | coding | claude | 已重建六个 baseline/extended factor panel 到 `2026-03-30`，六组 formal 输出的 `requested_end_date` 与 `actual_end_date` 也都统一为 `2026-03-30` |
 | 实现显式训练/验证/测试切分与 held-out 评估，并把 split 元数据写入产物 | AC2 | in_progress | coding | claude | `sample_run` 与三组 committed formal 输出已包含 split / preprocess 合同，Top-N 合同与 `stock` / `hybrid` 行业元数据缺陷已修复；组合层基础图形化产物已落盘，但分位数组、交易成本和更完整暴露分析仍未实现 |
@@ -105,6 +106,6 @@ Source plan: 论文不足与完善计划.md
 | 参考文献中若干 PDF 条目仍缺少完整出版元数据，当前只能先形成核对清单 | 0 | AC5 | 后续逐篇提取首页信息并统一重排参考文献格式 |
 | 样本边界扩展尚无全 A/行业/市值分层配置与运行产物 | 0 | AC3 | 下一轮补样本派生脚本和配置 |
 | 增强图组与基础图文已落盘，但股票潜在结构图、样本边界对比图和更完整的模式发现章节联动仍未完成 | 4 | AC4 | 继续补股票潜在结构/行业聚类图、样本边界对比图，并把章节叙事扩展到完整图系 |
-| 扩展特征当前仅覆盖财务 PIT 与业绩快报；baseline/extended 对照在不同样本池表现分化明显，仍需继续补宏观变量与更完整事件字典 | 4 | AC1 | 保持统一刷新入口不变，在此基础上继续扩展特征合同、筛选规则与样本池比较 |
+| 扩展特征已扩展到市场代理变量 + 财务 PIT + 业绩快报 + 业绩预告；baseline/extended 对照在不同样本池表现分化明显，仍需继续补更完整宏观变量与更广泛事件字典 | 4 | AC1 | 保持统一刷新入口不变，在此基础上继续扩展特征合同、筛选规则与样本池比较 |
 | 组合层虽然已生成净值曲线和回撤图，但严格分位数组收益、交易成本和更系统的暴露/超额收益分析仍未完成 | 4 | AC2 | 继续沿 `evaluation.py` / `output.py` 扩展组合层合同，并把第五章补成完整的组合回测章节 |
 | 仓库命令与当前环境解释器/依赖不一致：`python`=2.7，`python3` 默认环境缺 `PyYAML`，且本机无 `latexmk` / `xelatex`，Round 5 的验证命令无法直接复现 | 5 | ALL | 统一到 `python3` / `.venv` 入口，补齐依赖安装说明，并只保留可在仓库内复现的验证命令 |

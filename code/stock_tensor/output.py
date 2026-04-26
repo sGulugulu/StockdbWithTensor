@@ -626,6 +626,9 @@ def write_visual_assets(
     candidate_rows: list[dict[str, Any]],
     group_returns: dict[str, list[dict[str, Any]]] | None = None,
     drawdowns: dict[str, list[dict[str, Any]]] | None = None,
+    long_short_returns: dict[str, list[dict[str, Any]]] | None = None,
+    excess_returns: dict[str, list[dict[str, Any]]] | None = None,
+    cost_adjusted_returns: dict[str, list[dict[str, Any]]] | None = None,
     *,
     time_regime_series: list[tuple[str, float]] | None = None,
 ) -> None:
@@ -674,6 +677,48 @@ def write_visual_assets(
         y_label="回撤",
         baseline_value=0.0,
     )
+    _write_multi_line_svg(
+        output_dir / "long_short_overview.svg",
+        "多空组合累计净值对比",
+        {
+            model_name: [
+                (str(row["trade_date"]), float(row["cumulative_nav"]))
+                for row in rows
+                if row.get("trade_date") is not None and row.get("cumulative_nav") is not None
+            ]
+            for model_name, rows in (long_short_returns or {}).items()
+        },
+        y_label="累计净值",
+        baseline_value=1.0,
+    )
+    _write_multi_line_svg(
+        output_dir / "excess_returns_overview.svg",
+        "超额收益累计净值对比",
+        {
+            model_name: [
+                (str(row["trade_date"]), float(row["cumulative_nav"]))
+                for row in rows
+                if row.get("trade_date") is not None and row.get("cumulative_nav") is not None
+            ]
+            for model_name, rows in (excess_returns or {}).items()
+        },
+        y_label="累计净值",
+        baseline_value=1.0,
+    )
+    _write_multi_line_svg(
+        output_dir / "cost_adjusted_overview.svg",
+        "成本后累计净值对比",
+        {
+            model_name: [
+                (str(row["trade_date"]), float(row["cumulative_nav"]))
+                for row in rows
+                if row.get("trade_date") is not None and row.get("cumulative_nav") is not None
+            ]
+            for model_name, rows in (cost_adjusted_returns or {}).items()
+        },
+        y_label="累计净值",
+        baseline_value=1.0,
+    )
 
 
 def write_outputs(
@@ -691,6 +736,10 @@ def write_outputs(
     group_returns: dict[str, list[dict[str, Any]]],
     drawdowns: dict[str, list[dict[str, Any]]],
     exposures: dict[str, list[dict[str, Any]]],
+    quantile_returns: dict[str, list[dict[str, Any]]],
+    long_short_returns: dict[str, list[dict[str, Any]]],
+    cost_adjusted_returns: dict[str, list[dict[str, Any]]],
+    excess_returns: dict[str, list[dict[str, Any]]],
     run_manifest: dict[str, Any],
 ) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -830,6 +879,30 @@ def write_outputs(
             json.dumps(rows, indent=2, ensure_ascii=False),
             encoding="utf-8",
         )
+    for model_name, rows in quantile_returns.items():
+        _write_csv(output_dir / f"quantile_returns_{model_name}.csv", rows)
+        (output_dir / f"quantile_returns_{model_name}.json").write_text(
+            json.dumps(rows, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+    for model_name, rows in long_short_returns.items():
+        _write_csv(output_dir / f"long_short_{model_name}.csv", rows)
+        (output_dir / f"long_short_{model_name}.json").write_text(
+            json.dumps(rows, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+    for model_name, rows in cost_adjusted_returns.items():
+        _write_csv(output_dir / f"cost_adjusted_{model_name}.csv", rows)
+        (output_dir / f"cost_adjusted_{model_name}.json").write_text(
+            json.dumps(rows, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+    for model_name, rows in excess_returns.items():
+        _write_csv(output_dir / f"excess_returns_{model_name}.csv", rows)
+        (output_dir / f"excess_returns_{model_name}.json").write_text(
+            json.dumps(rows, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
 
     write_visual_assets(
         output_dir,
@@ -839,6 +912,9 @@ def write_outputs(
         candidate_rows=candidate_rows,
         group_returns=group_returns,
         drawdowns=drawdowns,
+        long_short_returns=long_short_returns,
+        excess_returns=excess_returns,
+        cost_adjusted_returns=cost_adjusted_returns,
     )
 
     summary_lines = [
@@ -865,6 +941,10 @@ def write_outputs(
     summary_lines.append("- `group_returns_*.csv` / `group_returns_*.json`: per-date portfolio return series")
     summary_lines.append("- `drawdown_*.csv` / `drawdown_*.json`: cumulative nav and drawdown series")
     summary_lines.append("- `exposure_*.csv` / `exposure_*.json`: industry and style exposure summaries")
+    summary_lines.append("- `quantile_returns_*.csv` / `quantile_returns_*.json`: quantile portfolio return series")
+    summary_lines.append("- `long_short_*.csv` / `long_short_*.json`: top-bottom long-short series")
+    summary_lines.append("- `cost_adjusted_*.csv` / `cost_adjusted_*.json`: transaction-cost adjusted series")
+    summary_lines.append("- `excess_returns_*.csv` / `excess_returns_*.json`: benchmark-relative excess return series")
     summary_lines.append("- `run_manifest.json`: machine-readable run metadata for web services")
     summary_lines.append("- `model_explained_variance.svg` and `model_rank_ic.svg`: signed metric bar charts")
     summary_lines.append("- `model_metrics_overview.svg`: grouped comparison of core metrics")
@@ -872,4 +952,7 @@ def write_outputs(
     summary_lines.append("- `factor_importance_heatmap.svg`: factor importance heatmap across models")
     summary_lines.append("- `group_returns_overview.svg`: cumulative portfolio NAV comparison")
     summary_lines.append("- `drawdown_overview.svg`: portfolio drawdown comparison")
+    summary_lines.append("- `long_short_overview.svg`: long-short portfolio NAV comparison")
+    summary_lines.append("- `excess_returns_overview.svg`: excess return NAV comparison")
+    summary_lines.append("- `cost_adjusted_overview.svg`: cost-adjusted portfolio NAV comparison")
     (output_dir / "summary.md").write_text("\n".join(summary_lines), encoding="utf-8")

@@ -86,6 +86,9 @@ class ModelConfig:
 class EvaluationConfig:
     top_k_pairs: int
     rolling_window: int
+    quantile_count: int
+    transaction_cost_bps: float
+    benchmark_path: Path | None
 
 
 @dataclass(slots=True)
@@ -250,6 +253,9 @@ def load_config(path: str | Path) -> ExperimentConfig:
         evaluation=EvaluationConfig(
             top_k_pairs=int(evaluation["top_k_pairs"]),
             rolling_window=int(evaluation["rolling_window"]),
+            quantile_count=int(evaluation.get("quantile_count", 5)),
+            transaction_cost_bps=float(evaluation.get("transaction_cost_bps", 0.0)),
+            benchmark_path=((base_dir / evaluation["benchmark_path"]).resolve() if evaluation.get("benchmark_path") else None),
         ),
         runtime=RuntimeConfig(
             selection_top_n=int(runtime.get("selection_top_n", 20)),

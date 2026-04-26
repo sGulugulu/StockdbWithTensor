@@ -328,11 +328,26 @@ def build_portfolio_backtest(
     selection_rows_by_model: dict[str, list[SelectionRecord]],
     *,
     selection_top_n: int,
-) -> tuple[list[dict[str, float | int | str]], dict[str, list[dict[str, float | int | str]]], dict[str, list[dict[str, float | int | str]]], dict[str, list[dict[str, float | int | str]]]]:
+    quantile_count: int = 5,
+    transaction_cost_bps: float = 0.0,
+    benchmark_returns: dict[str, float] | None = None,
+) -> tuple[
+    list[dict[str, float | int | str]],
+    dict[str, list[dict[str, float | int | str]]],
+    dict[str, list[dict[str, float | int | str]]],
+    dict[str, list[dict[str, float | int | str]]],
+    dict[str, list[dict[str, float | int | str]]],
+    dict[str, list[dict[str, float | int | str]]],
+    dict[str, list[dict[str, float | int | str]]],
+]:
     portfolio_metrics: list[dict[str, float | int | str]] = []
     group_returns: dict[str, list[dict[str, float | int | str]]] = {}
     drawdowns: dict[str, list[dict[str, float | int | str]]] = {}
     exposures: dict[str, list[dict[str, float | int | str]]] = {}
+    quantile_returns: dict[str, list[dict[str, float | int | str]]] = {}
+    long_short_returns: dict[str, list[dict[str, float | int | str]]] = {}
+    cost_adjusted_returns: dict[str, list[dict[str, float | int | str]]] = {}
+    excess_returns_output: dict[str, list[dict[str, float | int | str]]] = {}
 
     for model_name, rows in selection_rows_by_model.items():
         by_date: dict[str, list[SelectionRecord]] = defaultdict(list)
@@ -348,9 +363,21 @@ def build_portfolio_backtest(
         style_counts: defaultdict[str, int] = defaultdict(int)
         turnover_values: list[float] = []
         daily_returns: list[float] = []
+        quantile_navs = [1.0 for _ in range(max(quantile_count, 1))]
+        long_short_nav = 1.0
+        long_short_peak = 1.0
+        cost_adjusted_nav = 1.0
+        cost_adjusted_peak = 1.0
+        excess_nav = 1.0
+        excess_peak = 1.0
+        quantile_records: list[dict[str, float | int | str]] = []
+        long_short_records: list[dict[str, float | int | str]] = []
+        cost_adjusted_records: list[dict[str, float | int | str]] = []
+        excess_records: list[dict[str, float | int | str]] = []
 
         for trade_date in ordered_dates:
-            ranked_rows = sorted(by_date[trade_date], key=lambda item: item.total_score, reverse=True)[:selection_top_n]
+            full_ranked_rows = sorted(by_date[trade_date], key=lambda item: item.total_score, reverse=True)
+            ranked_rows = full_ranked_rows[:selection_top_n]
             holdings = {row.stock_code for row in ranked_rows}
             daily_return = float(np.mean([row.future_return for row in ranked_rows])) if ranked_rows else 0.0
             daily_returns.append(daily_return)
@@ -364,6 +391,17 @@ def build_portfolio_backtest(
                 turnover = 1.0 - (overlap / max(len(holdings), 1))
             turnover_values.append(turnover)
             previous_holdings = holdings
+            transaction_cost = turnover * transaction_cost_bps / 10000.0
+            cost_adjusted_daily_return = daily_return - transaction_cost
+            cost_adjusted_nav *= 1.0 + cost_adjusted_daily_return
+            cost_adjusted_peak = max(cost_adjusted_peak, cost_adjusted_nav)
+            cost_adjusted_drawdown = 0.0 if cost_adjusted_peak == 0 else (cost_adjusted_nav / cost_adjusted_peak) - 1.0
+
+            benchmark_return = 0.0 if benchmark_returns is None else float(benchmark_returns.get(trade_date, 0.0))
+            excess_return = daily_return - benchmark_return
+            excess_nav *= 1.0 + excess_return
+            excess_peak = max(excess_peak, excess_nav)
+            excess_drawdown = 0.0 if excess_peak == 0 else (excess_nav / excess_peak) - 1.0
 
             for row in ranked_rows:
                 industry_counts[row.industry or "UNKNOWN"] += 1
@@ -380,12 +418,79 @@ def build_portfolio_backtest(
                     "drawdown": drawdown,
                 }
             )
+            cost_adjusted_records.append(
+                {
+                    "trade_date": trade_date,
+                    "model": model_name,
+                    "top_n": selection_top_n,
+                    "gross_return": daily_return,
+                    "transaction_cost": transaction_cost,
+                    "net_return": cost_adjusted_daily_return,
+                    "cumulative_nav": cost_adjusted_nav,
+                    "drawdown": cost_adjusted_drawdown,
+                }
+            )
             drawdown_records.append(
                 {
                     "trade_date": trade_date,
                     "model": model_name,
                     "cumulative_nav": cumulative_nav,
                     "drawdown": drawdown,
+                }
+            )
+            excess_records.append(
+                {
+                    "trade_date": trade_date,
+                    "model": model_name,
+                    "portfolio_return": daily_return,
+                    "benchmark_return": benchmark_return,
+                    "excess_return": excess_return,
+                    "cumulative_nav": excess_nav,
+                    "drawdown": excess_drawdown,
+                }
+            )
+
+            bucket_count = max(min(quantile_count, len(full_ranked_rows)), 1)
+            bucket_size = max(len(full_ranked_rows) // bucket_count, 1)
+            quantile_slices: list[list[SelectionRecord]] = []
+            start_index = 0
+            for bucket_index in range(bucket_count):
+                end_index = len(full_ranked_rows) if bucket_index == bucket_count - 1 else min(start_index + bucket_size, len(full_ranked_rows))
+                quantile_slices.append(full_ranked_rows[start_index:end_index])
+                start_index = end_index
+            while len(quantile_slices) < quantile_count:
+                quantile_slices.append([])
+
+            for bucket_index, bucket_rows in enumerate(quantile_slices):
+                bucket_return = float(np.mean([row.future_return for row in bucket_rows])) if bucket_rows else 0.0
+                quantile_navs[bucket_index] *= 1.0 + bucket_return
+                quantile_records.append(
+                    {
+                        "trade_date": trade_date,
+                        "model": model_name,
+                        "quantile": bucket_index + 1,
+                        "daily_return": bucket_return,
+                        "cumulative_nav": quantile_navs[bucket_index],
+                    }
+                )
+
+            top_bucket_return = quantile_records[-quantile_count]["daily_return"] if quantile_records else 0.0
+            bottom_bucket_return = quantile_records[-1]["daily_return"] if quantile_records else 0.0
+            long_short_return = float(top_bucket_return) - float(bottom_bucket_return)
+            long_short_nav *= 1.0 + long_short_return
+            long_short_peak = max(long_short_peak, long_short_nav)
+            long_short_drawdown = 0.0 if long_short_peak == 0 else (long_short_nav / long_short_peak) - 1.0
+            long_short_records.append(
+                {
+                    "trade_date": trade_date,
+                    "model": model_name,
+                    "long_quantile": 1,
+                    "short_quantile": bucket_count,
+                    "long_return": float(top_bucket_return),
+                    "short_return": float(bottom_bucket_return),
+                    "long_short_return": long_short_return,
+                    "cumulative_nav": long_short_nav,
+                    "drawdown": long_short_drawdown,
                 }
             )
 
@@ -411,6 +516,10 @@ def build_portfolio_backtest(
         )
         group_returns[model_name] = daily_records
         drawdowns[model_name] = drawdown_records
+        quantile_returns[model_name] = quantile_records
+        long_short_returns[model_name] = long_short_records
+        cost_adjusted_returns[model_name] = cost_adjusted_records
+        excess_returns_output[model_name] = excess_records
 
         total_slots = max(sum(industry_counts.values()), 1)
         industry_rows = [
@@ -434,4 +543,13 @@ def build_portfolio_backtest(
         exposures[model_name] = industry_rows + style_rows
 
     portfolio_metrics.sort(key=lambda item: str(item["model"]))
-    return portfolio_metrics, group_returns, drawdowns, exposures
+    return (
+        portfolio_metrics,
+        group_returns,
+        drawdowns,
+        exposures,
+        quantile_returns,
+        long_short_returns,
+        cost_adjusted_returns,
+        excess_returns_output,
+    )

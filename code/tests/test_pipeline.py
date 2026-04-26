@@ -42,6 +42,13 @@ class PipelineTests(unittest.TestCase):
             self.assertTrue((output_dir / "exposure_cp.json").exists())
             self.assertTrue((output_dir / "group_returns_overview.svg").exists())
             self.assertTrue((output_dir / "drawdown_overview.svg").exists())
+            self.assertTrue((output_dir / "quantile_returns_cp.json").exists())
+            self.assertTrue((output_dir / "long_short_cp.json").exists())
+            self.assertTrue((output_dir / "cost_adjusted_cp.json").exists())
+            self.assertTrue((output_dir / "excess_returns_cp.json").exists())
+            self.assertTrue((output_dir / "long_short_overview.svg").exists())
+            self.assertTrue((output_dir / "cost_adjusted_overview.svg").exists())
+            self.assertTrue((output_dir / "excess_returns_overview.svg").exists())
             manifest = yaml.safe_load((output_dir / "run_manifest.json").read_text(encoding="utf-8"))
             self.assertEqual(manifest["split"]["strategy"], "time")
             self.assertEqual(manifest["split"]["label_role"], "evaluation_only")
@@ -86,6 +93,17 @@ class PipelineTests(unittest.TestCase):
                 for row in drawdowns:
                     self.assertEqual(row["model"], model_name)
                     self.assertEqual(set(row.keys()), {"trade_date", "model", "cumulative_nav", "drawdown"})
+
+                quantile_rows = yaml.safe_load((output_dir / f"quantile_returns_{model_name}.json").read_text(encoding="utf-8"))
+                long_short_rows = yaml.safe_load((output_dir / f"long_short_{model_name}.json").read_text(encoding="utf-8"))
+                cost_adjusted_rows = yaml.safe_load((output_dir / f"cost_adjusted_{model_name}.json").read_text(encoding="utf-8"))
+                excess_rows = yaml.safe_load((output_dir / f"excess_returns_{model_name}.json").read_text(encoding="utf-8"))
+                self.assertTrue(any(row["quantile"] == 1 for row in quantile_rows))
+                self.assertEqual(len(long_short_rows), len(group_returns))
+                self.assertEqual(len(cost_adjusted_rows), len(group_returns))
+                self.assertEqual(len(excess_rows), len(group_returns))
+                for gross_row, cost_row in zip(group_returns, cost_adjusted_rows):
+                    self.assertLessEqual(cost_row["net_return"], gross_row["daily_return"] + 1e-12)
 
             detail = get_run_detail(Path(temp_dir), "pipeline_test")
             self.assertEqual(detail["manifest"]["market_id"], "cn_a")
