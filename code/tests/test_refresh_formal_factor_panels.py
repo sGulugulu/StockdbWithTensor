@@ -27,8 +27,16 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
                         "2026-03-25,sh.600001,1,1,1,11,10,100,1000,3,0.1,1,0.02,11,2.5,3.2,4,0",
                         "2026-03-30,sh.600000,1,1,1,12,10,100,1000,3,0.1,1,0.02,10,2,3,4,0",
                         "2026-03-30,sh.600001,1,1,1,13,11,100,1000,3,0.1,1,0.02,11,2.5,3.2,4,0",
-                        "2026-04-03,sh.600000,1,1,1,14,12,100,1000,3,0.1,1,0.02,10,2,3,4,0",
-                        "2026-04-03,sh.600001,1,1,1,15,13,100,1000,3,0.1,1,0.02,11,2.5,3.2,4,0",
+                        "2026-03-31,sh.600000,1,1,1,13,12,100,1000,3,0.1,1,0.02,10,2,3,4,0",
+                        "2026-03-31,sh.600001,1,1,1,14,13,100,1000,3,0.1,1,0.02,11,2.5,3.2,4,0",
+                        "2026-04-01,sh.600000,1,1,1,14,13,100,1000,3,0.1,1,0.02,10,2,3,4,0",
+                        "2026-04-01,sh.600001,1,1,1,15,14,100,1000,3,0.1,1,0.02,11,2.5,3.2,4,0",
+                        "2026-04-02,sh.600000,1,1,1,15,14,100,1000,3,0.1,1,0.02,10,2,3,4,0",
+                        "2026-04-02,sh.600001,1,1,1,16,15,100,1000,3,0.1,1,0.02,11,2.5,3.2,4,0",
+                        "2026-04-03,sh.600000,1,1,1,16,15,100,1000,3,0.1,1,0.02,10,2,3,4,0",
+                        "2026-04-03,sh.600001,1,1,1,17,16,100,1000,3,0.1,1,0.02,11,2.5,3.2,4,0",
+                        "2026-04-06,sh.600000,1,1,1,17,16,100,1000,3,0.1,1,0.02,10,2,3,4,0",
+                        "2026-04-06,sh.600001,1,1,1,18,17,100,1000,3,0.1,1,0.02,11,2.5,3.2,4,0",
                     ]
                 ),
                 encoding="utf-8",
@@ -48,8 +56,8 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
                     "\n".join(
                         [
                             "market_id,universe_id,stock_code,start_date,end_date",
-                            "cn_a,IDX,600000,2026-03-25,2026-03-30",
-                            "cn_a,IDX,600001,2026-03-25,2026-03-30",
+                            "cn_a,IDX,600000,2026-03-25,2026-04-06",
+                            "cn_a,IDX,600001,2026-03-25,2026-04-06",
                         ]
                     ),
                     encoding="utf-8",
@@ -83,6 +91,15 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
                 content = output_path.read_text(encoding="utf-8")
                 self.assertIn("2026-03-30", content)
                 self.assertNotIn("2026-04-03", content)
+
+            baseline_rows = (
+                root / "factors" / "hs300_factor_panel.csv"
+            ).read_text(encoding="utf-8").strip().splitlines()
+            header = baseline_rows[0].split(",")
+            data_rows = [dict(zip(header, line.split(","))) for line in baseline_rows[1:]]
+            tail_rows = [row for row in data_rows if row["trade_date"] >= "2026-03-25"]
+            self.assertTrue(tail_rows)
+            self.assertTrue(any(abs(float(row["future_return"])) > 0.0 for row in tail_rows))
 
 
 if __name__ == "__main__":

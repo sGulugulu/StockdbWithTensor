@@ -21,19 +21,26 @@
 4. 扩展 AC2 的测试合同：
    - `test_pipeline.py` 新增对组合净值、回撤、首日换手、累计收益与最大回撤一致性的断言。
    - `test_formal_config.py` 新增对 `portfolio_metrics.json`、`group_returns_overview.svg`、`drawdown_overview.svg` 的存在性断言。
-5. 回写论文正文：
-   - 第四章实验设置改为明确说明 formal profile、factor panel 快照与输出目录统一到 `2026-03-30`。
-   - “选股有效性分析”补入基于组合净值/回撤图的 baseline 与 extended 数值比较。
-   - 局限性分析与结论部分改为：当前已具备 Top-N 组合净值、回撤与暴露基础证据，但仍缺分位数组、交易成本与超额收益闭环。
-6. 新增与补强测试：
-   - `test_formal_factor_panel.py` 新增 baseline panel 截断日期测试。
-   - `test_extended_factor_panel.py` 新增 extended panel 截断日期测试。
-   - 新增 `test_refresh_formal_factor_panels.py`，验证统一刷新入口能同时生成 baseline/extended 六个 panel，并按 `max_trade_date` 截断。
+5. 修复 Round 4 复审暴露的 formal 标签退化问题：
+   - `build_formal_factor_panel.py` 改为先按股票全量 K 线计算动量与 `future_return`，再按 universe history 与 `max_trade_date` 输出提交版样本窗口。
+   - `test_formal_factor_panel.py` 补充“截断但保留非零未来收益标签”的单测。
+   - `test_refresh_formal_factor_panels.py` 补充“刷新后的提交版 tail 窗口仍有非零 `future_return`”断言。
+   - `test_formal_config.py` 补充“组合层结果不能全部退化为平线”的回归断言。
+6. 重新生成 6 个 factor panel 和 6 组 formal / extended 输出后，组合层证据恢复为真实非平线结果：
+   - baseline HS300：Tucker 组合累计收益 2.11\%，最大回撤 $-0.03\%$
+   - baseline SZ50：Tucker 组合累计收益 $-0.33\%$，最大回撤 $-0.37\%$
+   - extended ZZ500：PCA / Tucker 组合累计收益分别为 3.33\% / 3.30\%
+7. 回写论文正文与对照文档：
+   - `paper_body.tex` 已按当前 committed `metrics.json` / `portfolio_metrics.json` 重写解释方差、Rank IC、稳定性、累计收益和最大回撤的核心数值。
+   - `扩展特征对照实验结果.md` 已按当前 committed outputs 更新 baseline/extended 对照表及观察结论。
+8. LaTeX 验证已补齐：
+   - `latexmk -xelatex -synctex=1 -interaction=nonstopmode -file-line-error "-outdir=.latex-build" template.tex` 编译通过。
 
 ## 修改文件
 
 - `README.md`
 - `paper_body.tex`
+- `扩展特征对照实验结果.md`
 - `训练输入扩展与PIT安全说明.md`
 - `code/configs/formal_hs300.yaml`
 - `code/configs/formal_sz50.yaml`
@@ -86,15 +93,12 @@
   - `python code/main.py --config code/configs/formal_hs300_extended.yaml`
   - `python code/main.py --config code/configs/formal_sz50_extended.yaml`
   - `python code/main.py --config code/configs/formal_zz500_extended.yaml`
+  - `latexmk -xelatex -synctex=1 -interaction=nonstopmode -file-line-error "-outdir=.latex-build" template.tex`
 
 - 额外核实：
-  - 六个 baseline/extended factor panel 的最大 `trade_date` 均为 `2026-03-30`。
-  - 六组 formal 输出目录均已存在 `group_returns_overview.svg` 与 `drawdown_overview.svg`。
-  - 六组 formal 输出目录的 `run_manifest.json` 中，`requested_end_date` 与 `actual_end_date` 均为 `2026-03-30`。
-
-- 未完成但已定位：
-  - `latexmk -xelatex -synctex=1 -interaction=nonstopmode -file-line-error -outdir=.latex-build template.tex`
-    当前调用因 `latexmk` 的 `-outdir` 参数在此环境下被拆分为独立 token 而失败，属于命令行参数传递问题，不是 `template.tex` 本身的 XeLaTeX 语法错误；需要在下一轮改用兼容此环境的调用方式重新验证。
+  - 三个 baseline factor panel 在 `2026-03-25` 至 `2026-03-30` 的 tail 窗口已恢复大量非零 `future_return`。
+  - 六组 formal 输出的 `portfolio_metrics.json` 已不再全部退化为零平线。
+  - `paper_body.tex` 与 `扩展特征对照实验结果.md` 已按当前 committed `metrics.json` / `portfolio_metrics.json` 回填关键数值。
 
 ## 当前未完成项
 
@@ -107,14 +111,13 @@
 ## Goal Tracker Update Request
 
 ### Requested Changes:
-- 将 `修复 formal 因子面板与正式输出实际窗口仅覆盖 2026-03 的口径错位` 标记为 `completed`。
-- 将 `将 baseline/extended 对照结果回写第三章与局限性分析` 从 `pending` 提升为 `in_progress`。
-- 将 AC2 中 `实现 Top-N/分组收益/回撤/风险暴露计算` 的备注更新为：结构化产物与净值/回撤 SVG 已落盘，但严格分位数组收益与交易成本场景仍未完成。
-- 删除 Open Issues 中“formal 因子面板与正式输出时间窗口不一致”和“组合层图形化产物仍未生成”两项旧问题。
-- 新增 Open Issue：组合层仍缺分位数组、交易成本和超额收益等更完整回测合同。
+- 将 `修复 factor panel 截断后测试窗口 future_return 全为 0 的标签退化` 标记为 `completed`。
+- 更新 AC2 中组合层任务备注，说明六组 formal 输出已经恢复为非平线结果。
+- 删除 Open Issues 中“formal factor panel 标签退化为 0 平线”和“正文/对照文档数值未与 committed outputs 对齐”两项已解决问题。
+- 在 `Completed and Verified` 中新增“修复 formal factor panel 截断导致的组合层平线退化”。
 
 ### Justification:
-本轮已经把 AC1 的窗口口径和 extended 刷新入口收口成可复现合同，并把 AC2 从“只有结构化 JSON”推进到“结构化 JSON + SVG 图形产物 + 论文数值分析”阶段。Tracker 需要准确反映这些真实进展，同时保留尚未完成的更深层组合回测和扩展特征任务。
+Round 4 复审指出的问题已经被真实修复：组合层产物不再只是“图存在”，而是重新恢复为有数值信息的有效证据；论文正文和对照文档也已同步到当前 committed outputs。Tracker 需要反映这一步收口，否则后续 review 仍会把已修复的问题当成当前阻塞。
 
 ## BitLesson Delta
 
@@ -122,4 +125,4 @@
 - Lesson ID(s): NONE
 - Notes:
   - 已按 RLCR 提示读取 `.humanize/bitlesson.md`。
-  - 两次调用 `bitlesson-select.sh` 时都因本地 selector 流式请求断开而失败，且当前知识库无任何条目，因此本轮按 `NONE` 执行；后续若知识库增加内容，可重新尝试 selector。
+  - `bitlesson-select.sh` 仍因本地 selector 流式请求断开而不可用，且当前知识库无有效条目，因此本轮继续按 `NONE` 执行。

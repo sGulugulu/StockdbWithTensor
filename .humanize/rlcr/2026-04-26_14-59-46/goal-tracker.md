@@ -35,7 +35,7 @@ Source plan: 论文不足与完善计划.md
 ## MUTABLE SECTION
 <!-- Update each round with justification for changes -->
 
-### Plan Version: 9 (Updated: Round 4)
+### Plan Version: 11 (Updated: Round 4 Recovery)
 
 #### Plan Evolution Log
 <!-- Document any changes to the plan with justification -->
@@ -51,6 +51,8 @@ Source plan: 论文不足与完善计划.md
 | 4 | 修正 AC4 收口备注与 Open Issue，删除已失效的“手工数值仍未更新”表述 | 本轮审计核实 `paper_body.tex` 中解释方差、Rank IC 与滚动稳定性三张 PGFPlots 已与当前 committed `metrics.json` 对齐 | 防止 tracker 继续记录已解决问题，并把注意力收束到 AC4 真正剩余的图系缺口 |
 | 4 | 批准将 AC2 的组合层闭环进展提升为“结构化产物已落盘”，并补入“分组收益图/回撤图仍缺失”为开放问题 | 本轮审计核实 `evaluation.py` / `output.py` 已生成 `portfolio_metrics`、`group_returns`、`drawdown`、`exposure` 产物，且第五章已有初版 Rank IC 联动分析；但原始计划要求的图形化结果仍未完成 | 让 tracker 同时反映真实推进与未收口缺口 |
 | 4 | 新增 formal factor panel 统一刷新入口，并将 committed factor panel、formal profile 与六组正式输出统一到 `2026-03-30` | 本轮已验证 baseline/extended 六个 factor panel 最大 `trade_date` 均为 `2026-03-30`，六组 formal 输出的 `requested_end_date` 与 `actual_end_date` 也都为 `2026-03-30` | 收口 AC1 的窗口错位，并把 extended panel 纳入统一刷新入口 |
+| 4 | 新增 formal 标签退化与论文数值失配修复任务 | Round 4 复审发现 `build_formal_factor_panel.py` 在 `max_trade_date` 截断后再计算 `future_return`，使当前 formal 测试窗口标签全为 0；同时 `paper_body.tex` 与 `扩展特征对照实验结果.md` 仍引用旧数值 | 防止 AC1/AC2 因“产物存在”而掩盖数值失真与正文失实问题 |
+| 4 | 修复 formal 标签退化并按 committed outputs 回填正文与对照文档 | 已改为先按股票全量 K 线计算动量和未来收益，再在输出阶段按 universe history 与 `max_trade_date` 过滤；六组 formal 输出重新生成后不再是平线，论文正文与对照文档也已按新结果同步 | 恢复 AC2 组合层证据的数值有效性，并消除 AC1/AC2 的文稿失配 |
 
 #### Active Tasks
 <!-- Map each task to its target Acceptance Criterion and routing tag -->
@@ -60,12 +62,13 @@ Source plan: 论文不足与完善计划.md
 | 将训练输入边界说明回写到第三章与局限性分析 | AC1 | completed | coding | claude | BitLesson=NONE；已在数据来源与局限性部分补写 |
 | 修正《训练输入扩展与 PIT 安全说明》中对正式窗口已统一的失实表述 | AC1 | completed | coding | claude | 已改为区分数据底座窗口、formal 因子面板窗口与当前 committed formal 输出窗口 |
 | 将通过 PIT 校验的扩展特征接入统一训练接口并生成扩展版 factor panel | AC1 | in_progress | coding | claude | 第一版 PIT/业绩快报扩展列已接入，三组 extended 配置与输出已生成；`refresh_formal_factor_panels.py` 已把 baseline/extended panel 收口到统一刷新入口，但宏观变量与更完整事件特征仍未接入 |
-| 将 baseline/extended 对照结果回写第三章与局限性分析 | AC1 | in_progress | coding | claude | 第四章“选股有效性分析”和局限性段落已吸收累计收益、回撤与样本池差异，但第三章的数据边界说明仍可继续细化 |
+| 将 baseline/extended 对照结果回写第三章与局限性分析 | AC1 | in_progress | coding | claude | `paper_body.tex` 与 `扩展特征对照实验结果.md` 已按当前 committed `metrics.json` / `portfolio_metrics.json` 回填核心数值，但第三章数据边界说明和更多 extended 细节仍可继续补充 |
 | 修复 formal 因子面板与正式输出实际窗口仅覆盖 2026-03 的口径错位 | AC1 | completed | coding | claude | 已重建六个 baseline/extended factor panel 到 `2026-03-30`，六组 formal 输出的 `requested_end_date` 与 `actual_end_date` 也都统一为 `2026-03-30` |
 | 实现显式训练/验证/测试切分与 held-out 评估，并把 split 元数据写入产物 | AC2 | in_progress | coding | claude | `sample_run` 与三组 committed formal 输出已包含 split / preprocess 合同，Top-N 合同与 `stock` / `hybrid` 行业元数据缺陷已修复；组合层基础图形化产物已落盘，但分位数组、交易成本和更完整暴露分析仍未实现 |
 | 重跑 formal HS300、SZ50、ZZ500 以刷新 split / preprocess 产物并替换旧 manifest | AC2 | completed | coding | claude | 已验证 `code/outputs/formal_*_run/run_manifest.json` 含 split / preprocess 字段，旧版简化 manifest 已被替换 |
-| 实现 Top-N/分组收益/回撤/风险暴露计算 | AC2 | in_progress | coding | claude | `portfolio_metrics`、`group_returns`、`drawdown` 与 `exposure` 已在 baseline/extended formal 输出目录落盘，并新增 `group_returns_overview.svg`、`drawdown_overview.svg`；但严格分位数组收益和交易成本情景仍未补齐 |
-| 将组合层结果与 Rank IC 指标联动分析并回写第五章 | AC2 | in_progress | coding | claude | 论文已补入 baseline/extended 下累计收益、回撤与 Rank IC 不同步的系统比较，并点名引用 formal 输出中的组合曲线/回撤图；但尚未扩展到分位数组、超额收益和更完整暴露章节 |
+| 修复 factor panel 截断后测试窗口 future_return 全为 0 的标签退化 | AC2 | completed | coding | claude | 已改为先基于股票全量 K 线计算未来收益和动量，再在输出阶段按成分历史和 `max_trade_date` 过滤；`test_formal_factor_panel.py`、`test_refresh_formal_factor_panels.py` 与 `test_formal_config.py` 已覆盖这一回归路径 |
+| 实现 Top-N/分组收益/回撤/风险暴露计算 | AC2 | in_progress | coding | claude | `portfolio_metrics`、`group_returns`、`drawdown` 与 `exposure` 已在 baseline/extended formal 输出目录落盘，并新增 `group_returns_overview.svg`、`drawdown_overview.svg`；六组 formal 输出当前已不再是平线，但严格分位数组收益和交易成本情景仍未补齐 |
+| 将组合层结果与 Rank IC 指标联动分析并回写第五章 | AC2 | in_progress | coding | claude | 第五章与 `扩展特征对照实验结果.md` 已按当前 committed outputs 重写 Rank IC、累计收益和最大回撤；后续仍需继续扩展到分位数组、超额收益和更完整暴露章节 |
 | 设计全 A 股、行业分层、市值分层扩展实验路径 | AC3 | pending | coding | claude | BitLesson=NONE；先补样本边界说明，再落配置与脚本 |
 | 落地全 A 股、行业分层、市值分层配置并生成运行产物 | AC3 | pending | coding | claude | 需形成真实实验结果，而非仅保留扩展路径说明 |
 | 将样本边界扩展影响回写论文正文 | AC3 | pending | coding | claude | BitLesson=NONE；依赖扩展实验结果 |
@@ -86,6 +89,7 @@ Source plan: 论文不足与完善计划.md
 | AC1 | 重跑 HS300、SZ50、ZZ500 扩展前后对比实验 | 4 | 4 | 已核实 `formal_hs300_extended_run`、`formal_sz50_extended_run`、`formal_zz500_extended_run` 均存在 `run_manifest.json` 与 `metrics.json`，并新增 `扩展特征对照实验结果.md` |
 | AC2 | 设计组合回测指标框架与产物清单 | 4 | 4 | 已核实 `output.py` 会落盘 `portfolio_metrics.*`、`group_returns_*.*`、`drawdown_*.*`、`exposure_*.*`，六个 formal / extended 输出目录均已有对应产物 |
 | AC1 | 统一 committed factor panel、formal profile 与正式输出窗口 | 4 | 4 | 已核实六个 baseline/extended factor panel 最大 `trade_date` 为 `2026-03-30`，六组 formal 输出 `run_manifest.json` 的 `requested_end_date` / `actual_end_date` 也均为 `2026-03-30` |
+| AC2 | 修复 formal factor panel 截断导致的组合层平线退化 | 4 | 4 | 已核实三组 baseline factor panel 在 `2026-03-25` 至 `2026-03-30` 仍保留大量非零 `future_return`，`test_formal_config.py` 生成的 `portfolio_metrics.json` 也不再是全零平线 |
 
 ### Explicitly Deferred
 <!-- Items here require strong justification -->

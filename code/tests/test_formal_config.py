@@ -3,6 +3,7 @@ import sys
 import unittest
 
 import yaml
+import json
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
@@ -25,6 +26,17 @@ class FormalConfigTests(unittest.TestCase):
         self.assertFalse(Path(snapshot["market"]["universe_path"]).is_absolute())
         self.assertFalse(Path(snapshot["data"]["path"]).is_absolute())
 
+    def _assert_portfolio_metrics_not_flat(self, output_dir: Path) -> None:
+        metrics = json.loads((output_dir / "portfolio_metrics.json").read_text(encoding="utf-8"))
+        self.assertTrue(
+            any(
+                abs(float(row["cumulative_return"])) > 0.0
+                or abs(float(row["annualized_volatility"])) > 0.0
+                or abs(float(row["max_drawdown"])) > 0.0
+                for row in metrics
+            )
+        )
+
     def test_formal_default_config_fails_without_real_data(self) -> None:
         with self.assertRaises(FileNotFoundError):
             run_experiment(ROOT / "configs" / "default.yaml")
@@ -42,6 +54,7 @@ class FormalConfigTests(unittest.TestCase):
         self.assertTrue((output_dir / "group_returns_overview.svg").exists())
         self.assertTrue((output_dir / "drawdown_overview.svg").exists())
         self._assert_project_paths_are_relative(output_dir)
+        self._assert_portfolio_metrics_not_flat(output_dir)
 
     def test_formal_sz50_config_runs_with_committed_local_inputs(self) -> None:
         history_path = ROOT / "data" / "formal" / "universes" / "sz50_history.csv"
@@ -56,6 +69,7 @@ class FormalConfigTests(unittest.TestCase):
         self.assertTrue((output_dir / "group_returns_overview.svg").exists())
         self.assertTrue((output_dir / "drawdown_overview.svg").exists())
         self._assert_project_paths_are_relative(output_dir)
+        self._assert_portfolio_metrics_not_flat(output_dir)
 
     def test_formal_zz500_config_runs_with_committed_local_inputs(self) -> None:
         history_path = ROOT / "data" / "formal" / "universes" / "zz500_history.csv"
@@ -70,6 +84,7 @@ class FormalConfigTests(unittest.TestCase):
         self.assertTrue((output_dir / "group_returns_overview.svg").exists())
         self.assertTrue((output_dir / "drawdown_overview.svg").exists())
         self._assert_project_paths_are_relative(output_dir)
+        self._assert_portfolio_metrics_not_flat(output_dir)
 
 
 if __name__ == "__main__":

@@ -82,11 +82,6 @@ def build_formal_factor_panel(
         reader = csv.DictReader(handle)
         for row in reader:
             normalized_code = normalizer.normalize(row[symbol_column])
-            trade_date = row[date_column]
-            if max_trade_date is not None and trade_date > max_trade_date:
-                continue
-            if not any(start_date <= trade_date <= end_date for start_date, end_date in membership_map.get(normalized_code, [])):
-                continue
             grouped_rows[normalized_code].append({**row, symbol_column: normalized_code})
 
     output_rows: list[dict[str, object]] = []
@@ -102,13 +97,19 @@ def build_formal_factor_panel(
         future_5 = _future_return(closes, 5)
 
         for index, row in enumerate(rows):
+            trade_date = row[date_column]
+            if not any(start_date <= trade_date <= end_date for start_date, end_date in membership_map.get(code, [])):
+                continue
+            # 截断只影响最终提交版样本窗口，不能反向破坏未来收益标签的前瞻计算。
+            if max_trade_date is not None and trade_date > max_trade_date:
+                continue
             value_factor = 0.0 if pb_mrq[index] == 0 else 1.0 / max(pb_mrq[index], 1e-8)
             quality_factor = 0.0 if pe_ttm[index] == 0 else 1.0 / max(pe_ttm[index], 1e-8)
             volatility_factor = abs(momentum_5[index] - momentum_20[index])
             output_rows.append(
                 {
                     "stock_code": code,
-                    "trade_date": row[date_column],
+                    "trade_date": trade_date,
                     "industry": industry_map.get(code, ""),
                     "value_factor": value_factor,
                     "momentum_factor": momentum_20[index],

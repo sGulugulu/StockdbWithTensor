@@ -77,6 +77,10 @@ class FormalFactorPanelTests(unittest.TestCase):
                         "date,code,open,high,low,close,preclose,volume,amount,adjustflag,turn,tradestatus,pctChg,peTTM,pbMRQ,psTTM,pcfNcfTTM,isST",
                         "2024-01-08,sh.600000,1,1,1,14,13,100,1000,3,0.1,1,0.06,10,2,3,4,0",
                         "2024-01-09,sh.600000,1,1,1,15,14,100,1000,3,0.1,1,0.07,10,2,3,4,0",
+                        "2024-01-10,sh.600000,1,1,1,16,15,100,1000,3,0.1,1,0.07,10,2,3,4,0",
+                        "2024-01-11,sh.600000,1,1,1,17,16,100,1000,3,0.1,1,0.07,10,2,3,4,0",
+                        "2024-01-12,sh.600000,1,1,1,18,17,100,1000,3,0.1,1,0.07,10,2,3,4,0",
+                        "2024-01-15,sh.600000,1,1,1,19,18,100,1000,3,0.1,1,0.07,10,2,3,4,0",
                     ]
                 ),
                 encoding="utf-8",
@@ -94,7 +98,7 @@ class FormalFactorPanelTests(unittest.TestCase):
                 "\n".join(
                     [
                         "market_id,universe_id,stock_code,start_date,end_date",
-                        "cn_a,HS300,600000,2024-01-08,2024-01-09",
+                        "cn_a,HS300,600000,2024-01-08,2024-01-15",
                     ]
                 ),
                 encoding="utf-8",
@@ -107,9 +111,12 @@ class FormalFactorPanelTests(unittest.TestCase):
                 output_path=output_path,
                 max_trade_date="2024-01-08",
             )
-            content = output_path.read_text(encoding="utf-8")
-            self.assertIn("2024-01-08", content)
-            self.assertNotIn("2024-01-09", content)
+            rows = output_path.read_text(encoding="utf-8").strip().splitlines()
+            self.assertEqual(len(rows), 2)
+            header = rows[0].split(",")
+            data = dict(zip(header, rows[1].split(",")))
+            self.assertEqual(data["trade_date"], "2024-01-08")
+            self.assertGreater(float(data["future_return"]), 0.0)
 
 
 if __name__ == "__main__":
