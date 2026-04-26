@@ -75,6 +75,152 @@ def _write_empty_svg(path: Path, title: str, message: str) -> None:
     path.write_text(svg, encoding="utf-8")
 
 
+def _select_tick_indices(length: int, max_ticks: int = 4) -> list[int]:
+    if length <= 0:
+        return []
+    if length <= max_ticks:
+        return list(range(length))
+    step = max((length - 1) / max(max_ticks - 1, 1), 1.0)
+    indices = [round(index * step) for index in range(max_ticks)]
+    indices[0] = 0
+    indices[-1] = length - 1
+    return sorted(set(indices))
+
+
+def _write_multi_line_svg(
+    path: Path,
+    title: str,
+    series_by_name: dict[str, list[tuple[str, float]]],
+    *,
+    y_label: str,
+    baseline_value: float,
+) -> None:
+    if not series_by_name:
+        _write_empty_svg(path, title, "暂无可视化数据")
+        return
+
+    filtered_series = {
+        name: [(label, _safe_value(value)) for label, value in points]
+        for name, points in series_by_name.items()
+        if points
+    }
+    if not filtered_series:
+        _write_empty_svg(path, title, "暂无可视化数据")
+        return
+
+    width = 920
+    height = 420
+    left = 78
+    right = 28
+    top = 56
+    bottom = 70
+    plot_width = width - left - right
+    plot_height = height - top - bottom
+    color_map = {
+        "cp": "#3b82f6",
+        "tucker": "#f59e0b",
+        "pca": "#10b981",
+    }
+    ordered_names = sorted(filtered_series, key=lambda item: {"cp": 0, "tucker": 1, "pca": 2}.get(item, 99))
+    all_values = [value for points in filtered_series.values() for _, value in points]
+    min_value, max_value = _build_chart_scale(all_values + [baseline_value])
+    baseline_y = _map_value_to_y(
+        baseline_value,
+        min_value=min_value,
+        max_value=max_value,
+        top=top,
+        height=plot_height,
+    )
+    max_length = max(len(points) for points in filtered_series.values())
+    tick_indices = _select_tick_indices(max_length)
+
+    body: list[str] = [
+        "<rect width='100%' height='100%' fill='#f7f8fb' />",
+        f"<text x='{width / 2:.1f}' y='30' text-anchor='middle' font-size='22'>{escape(title)}</text>",
+        f"<text x='{24:.1f}' y='{top - 12:.1f}' font-size='12' fill='#666'>{escape(y_label)}</text>",
+    ]
+
+    for tick in [max_value, baseline_value, min_value]:
+        tick_y = _map_value_to_y(tick, min_value=min_value, max_value=max_value, top=top, height=plot_height)
+        body.append(
+            f"<line x1='{left:.1f}' y1='{tick_y:.1f}' x2='{left + plot_width:.1f}' y2='{tick_y:.1f}' "
+            "stroke='#d7dce5' stroke-dasharray='4 4' />"
+        )
+        body.append(
+            f"<text x='{left - 8:.1f}' y='{tick_y + 4:.1f}' text-anchor='end' font-size='11' fill='#555'>"
+            f"{_format_metric_value(tick)}</text>"
+        )
+
+    body.append(
+        f"<line x1='{left:.1f}' y1='{baseline_y:.1f}' x2='{left + plot_width:.1f}' y2='{baseline_y:.1f}' "
+        "stroke='#64748b' />"
+    )
+    body.append(
+        f"<line x1='{left:.1f}' y1='{top:.1f}' x2='{left:.1f}' y2='{top + plot_height:.1f}' stroke='#333' />"
+    )
+    body.append(
+        f"<line x1='{left:.1f}' y1='{top + plot_height:.1f}' x2='{left + plot_width:.1f}' y2='{top + plot_height:.1f}' stroke='#333' />"
+    )
+
+    for tick_index in tick_indices:
+        tick_x = left if max_length <= 1 else left + tick_index / (max_length - 1) * plot_width
+        label = ""
+        for points in filtered_series.values():
+            if tick_index < len(points):
+                label = points[tick_index][0][5:]
+                break
+        body.append(
+            f"<line x1='{tick_x:.1f}' y1='{top + plot_height:.1f}' x2='{tick_x:.1f}' y2='{top + plot_height + 5:.1f}' stroke='#333' />"
+        )
+        body.append(
+            f"<text x='{tick_x:.1f}' y='{height - 18:.1f}' text-anchor='middle' font-size='11' fill='#555'>"
+            f"{escape(label)}</text>"
+        )
+
+    for legend_index, name in enumerate(ordered_names):
+        legend_x = left + legend_index * 120
+        body.append(
+            f"<line x1='{legend_x:.1f}' y1='40' x2='{legend_x + 18:.1f}' y2='40' stroke='{color_map.get(name, '#64748b')}' stroke-width='3' />"
+        )
+        body.append(
+            f"<text x='{legend_x + 24:.1f}' y='44' font-size='12' fill='#111'>{escape(name.upper())}</text>"
+        )
+
+    for name in ordered_names:
+        points = filtered_series[name]
+        if len(points) == 1:
+            x_pos = left + plot_width / 2
+            y_pos = _map_value_to_y(points[0][1], min_value=min_value, max_value=max_value, top=top, height=plot_height)
+            body.append(
+                f"<circle cx='{x_pos:.1f}' cy='{y_pos:.1f}' r='4' fill='{color_map.get(name, '#64748b')}' />"
+            )
+            continue
+
+        point_specs: list[tuple[float, float, str, float]] = []
+        for point_index, (label, value) in enumerate(points):
+            x_pos = left + point_index / max(len(points) - 1, 1) * plot_width
+            y_pos = _map_value_to_y(value, min_value=min_value, max_value=max_value, top=top, height=plot_height)
+            point_specs.append((x_pos, y_pos, label, value))
+        polyline = " ".join(f"{x_pos:.1f},{y_pos:.1f}" for x_pos, y_pos, _, _ in point_specs)
+        body.append(
+            f"<polyline fill='none' stroke='{color_map.get(name, '#64748b')}' stroke-width='3' points='{polyline}' />"
+        )
+        for x_pos, y_pos, _, _ in point_specs:
+            body.append(
+                f"<circle cx='{x_pos:.1f}' cy='{y_pos:.1f}' r='3.6' fill='{color_map.get(name, '#64748b')}' />"
+            )
+        end_x, end_y, _, end_value = point_specs[-1]
+        body.append(
+            f"<text x='{end_x + 8:.1f}' y='{end_y - 8:.1f}' font-size='11' fill='{color_map.get(name, '#64748b')}'>"
+            f"{escape(name.upper())} {_format_metric_value(end_value)}</text>"
+        )
+
+    path.write_text(
+        f"<svg xmlns='http://www.w3.org/2000/svg' width='{width}' height='{height}'>{''.join(body)}</svg>",
+        encoding="utf-8",
+    )
+
+
 def _write_simple_bar_svg(path: Path, title: str, values: dict[str, float]) -> None:
     if not values:
         _write_empty_svg(path, title, "暂无可视化数据")
@@ -478,6 +624,8 @@ def write_visual_assets(
     factor_summaries: dict[str, list[dict[str, Any]]],
     time_shifts: dict[str, list[Any]],
     candidate_rows: list[dict[str, Any]],
+    group_returns: dict[str, list[dict[str, Any]]] | None = None,
+    drawdowns: dict[str, list[dict[str, Any]]] | None = None,
     *,
     time_regime_series: list[tuple[str, float]] | None = None,
 ) -> None:
@@ -498,6 +646,34 @@ def write_visual_assets(
         time_shifts,
     )
     _write_factor_importance_heatmap_svg(output_dir / "factor_importance_heatmap.svg", factor_summaries)
+    _write_multi_line_svg(
+        output_dir / "group_returns_overview.svg",
+        "组合累计净值对比",
+        {
+            model_name: [
+                (str(row["trade_date"]), float(row["cumulative_nav"]))
+                for row in rows
+                if row.get("trade_date") is not None and row.get("cumulative_nav") is not None
+            ]
+            for model_name, rows in (group_returns or {}).items()
+        },
+        y_label="累计净值",
+        baseline_value=1.0,
+    )
+    _write_multi_line_svg(
+        output_dir / "drawdown_overview.svg",
+        "组合回撤曲线对比",
+        {
+            model_name: [
+                (str(row["trade_date"]), float(row["drawdown"]))
+                for row in rows
+                if row.get("trade_date") is not None and row.get("drawdown") is not None
+            ]
+            for model_name, rows in (drawdowns or {}).items()
+        },
+        y_label="回撤",
+        baseline_value=0.0,
+    )
 
 
 def write_outputs(
@@ -661,6 +837,8 @@ def write_outputs(
         factor_summaries=factor_summaries,
         time_shifts=time_shifts,
         candidate_rows=candidate_rows,
+        group_returns=group_returns,
+        drawdowns=drawdowns,
     )
 
     summary_lines = [
@@ -692,4 +870,6 @@ def write_outputs(
     summary_lines.append("- `model_metrics_overview.svg`: grouped comparison of core metrics")
     summary_lines.append("- `time_regime_timeline.svg`: timeline of daily regime shifts")
     summary_lines.append("- `factor_importance_heatmap.svg`: factor importance heatmap across models")
+    summary_lines.append("- `group_returns_overview.svg`: cumulative portfolio NAV comparison")
+    summary_lines.append("- `drawdown_overview.svg`: portfolio drawdown comparison")
     (output_dir / "summary.md").write_text("\n".join(summary_lines), encoding="utf-8")

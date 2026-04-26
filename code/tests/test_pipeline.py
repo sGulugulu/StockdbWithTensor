@@ -40,6 +40,8 @@ class PipelineTests(unittest.TestCase):
             self.assertTrue((output_dir / "group_returns_cp.json").exists())
             self.assertTrue((output_dir / "drawdown_cp.json").exists())
             self.assertTrue((output_dir / "exposure_cp.json").exists())
+            self.assertTrue((output_dir / "group_returns_overview.svg").exists())
+            self.assertTrue((output_dir / "drawdown_overview.svg").exists())
             manifest = yaml.safe_load((output_dir / "run_manifest.json").read_text(encoding="utf-8"))
             self.assertEqual(manifest["split"]["strategy"], "time")
             self.assertEqual(manifest["split"]["label_role"], "evaluation_only")
@@ -47,6 +49,43 @@ class PipelineTests(unittest.TestCase):
             portfolio_metrics = yaml.safe_load((output_dir / "portfolio_metrics.json").read_text(encoding="utf-8"))
             self.assertEqual(len(portfolio_metrics), 3)
             self.assertEqual(portfolio_metrics[0]["top_n"], 20)
+            metric_by_model = {row["model"]: row for row in portfolio_metrics}
+            self.assertEqual(set(metric_by_model), {"cp", "tucker", "pca"})
+
+            for model_name in ("cp", "tucker", "pca"):
+                group_returns = yaml.safe_load((output_dir / f"group_returns_{model_name}.json").read_text(encoding="utf-8"))
+                drawdowns = yaml.safe_load((output_dir / f"drawdown_{model_name}.json").read_text(encoding="utf-8"))
+                self.assertGreater(len(group_returns), 0)
+                self.assertEqual(len(group_returns), metric_by_model[model_name]["observation_count"])
+                self.assertEqual(group_returns[0]["turnover"], 1.0)
+                self.assertEqual(
+                    sorted(row["trade_date"] for row in group_returns),
+                    [row["trade_date"] for row in group_returns],
+                )
+                self.assertAlmostEqual(
+                    group_returns[-1]["cumulative_nav"] - 1.0,
+                    metric_by_model[model_name]["cumulative_return"],
+                    places=6,
+                )
+                self.assertAlmostEqual(
+                    min(row["drawdown"] for row in drawdowns),
+                    metric_by_model[model_name]["max_drawdown"],
+                    places=6,
+                )
+                for row in group_returns:
+                    self.assertEqual(row["model"], model_name)
+                    self.assertEqual(set(row.keys()), {
+                        "trade_date",
+                        "model",
+                        "top_n",
+                        "daily_return",
+                        "cumulative_nav",
+                        "turnover",
+                        "drawdown",
+                    })
+                for row in drawdowns:
+                    self.assertEqual(row["model"], model_name)
+                    self.assertEqual(set(row.keys()), {"trade_date", "model", "cumulative_nav", "drawdown"})
 
             detail = get_run_detail(Path(temp_dir), "pipeline_test")
             self.assertEqual(detail["manifest"]["market_id"], "cn_a")

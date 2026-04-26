@@ -2,127 +2,124 @@
 
 ## 本轮完成内容
 
-1. 将增强版 `output.py` 从已验证工作树移植回根仓库，使根仓库正式输出现在真实生成以下图组：
-   - `model_metrics_overview.svg`
-   - `time_regime_timeline.svg`
-   - `factor_importance_heatmap.svg`
-   - 修正后的 `model_explained_variance.svg`
-   - 修正后的 `model_rank_ic.svg`
-2. 重新运行三组 formal 实验：
-   - `formal_hs300`
-   - `formal_sz50`
-   - `formal_zz500`
-   使增强图组真正落盘到正式输出目录。
-3. 修正论文中的时间状态表述：
-   - 把原先不符合当前根仓库结果的 2024/2025 跳变说法改成基于当前正式 `time_regimes_tucker.json` 的 2026 年 3 月区间描述。
-4. 修复 LaTeX 编译错误：
-   - 将正文中直接书写的带下划线文件名改为 `\texttt{time\_regimes\_tucker.json}`，避免 XeLaTeX 把它解释成数学下标。
-5. 落地 AC1 的第一版“真实扩展输入合同”：
-   - 新增 `code/data/build_extended_factor_panel.py`
-   - 新增 `code/data/formal/factors/EXTENDED_FACTOR_CONTRACT.md`
-   - 新增三份 extended formal 配置：
-     - `formal_hs300_extended.yaml`
-     - `formal_sz50_extended.yaml`
-     - `formal_zz500_extended.yaml`
-   - 把一类真实财务 PIT 特征和一类业绩快报事件特征接入扩展版 factor panel：
-     - `pit_roe_avg`
-     - `pit_np_margin`
-     - `pit_gp_margin`
-     - `pit_eps_ttm`
-     - `perf_express_eps_chg_pct`
-     - `perf_express_roe_wa`
-     - `perf_express_gryoy`
-     - `perf_express_opyoy`
-     - `perf_express_flag`
-6. 生成并运行三组 extended 对照实验：
-   - `formal_hs300_extended_run`
-   - `formal_sz50_extended_run`
-   - `formal_zz500_extended_run`
-   并新增一份对照结果文档 `扩展特征对照实验结果.md`。
-7. 继续收口 AC1 / AC4：
-   - 重写第五章中的解释方差、Rank IC 与稳定性手工数值，使其与当前 committed formal `metrics.json` 一致。
-   - 在“扩展特征对照分析”一节中补入 baseline / extended 的样本池差异说明。
-   - 更新 `code/data/formal/factors/README.md`，把 extended panel 的字段与标准构建命令纳入正式说明。
-   - 补强 `test_extended_factor_panel.py`，新增公告日前后 `perf_express_flag` 与事件值生效边界断言。
-8. 继续推进 AC2 的组合层闭环：
-   - 在 `evaluation.py` 中新增组合层回测汇总逻辑，输出 Top-N 日收益、累计净值、回撤、换手率、行业/风格暴露。
-   - 在 `output.py` 中新增 `portfolio_metrics.*`、`group_returns_*.*`、`drawdown_*.*`、`exposure_*.*` 产物落盘。
-   - 重跑三组 baseline formal 和三组 extended formal，使这些组合层文件真实写入正式输出目录。
-   - 在第五章“选股有效性分析”中补入“排序指标与组合结果并不完全同步”的分析段落。
+1. 收口 AC1 的 formal 窗口口径：
+   - 新增统一刷新入口 `code/data/refresh_formal_factor_panels.py`。
+   - 为 `build_formal_factor_panel.py` 与 `build_extended_factor_panel.py` 增加 `max_trade_date` 截断能力。
+   - 将 6 份 formal / extended 配置的 `market.end_date` 统一改为 `2026-03-30`。
+   - 重建 6 个 baseline/extended factor panel，使最大 `trade_date` 全部收口到 `2026-03-30`。
+   - 重跑 6 组 formal 输出，使 `run_manifest.json` 中的 `requested_end_date` 与 `actual_end_date` 全部统一为 `2026-03-30`。
+2. 收口 AC1 的 extended 主构建链：
+   - 在 `code/data/formal/factors/README.md` 中将 `refresh_formal_factor_panels.py` 明确为 baseline/extended 的统一刷新入口。
+   - 在 `README.md` 与 `code/data/formal/README.md` 中补充“raw formal 数据窗口”和“提交版实验快照窗口”两层口径说明。
+   - 更新《训练输入扩展与PIT安全说明》，把旧的 `2026-04-03` vs `2026-03-30` 失配表述改为已统一口径。
+3. 推进 AC2 的组合层图形化证据链：
+   - 在 `code/stock_tensor/output.py` 中新增多模型折线 SVG 生成逻辑。
+   - 六组 baseline/extended formal 输出现在真实生成：
+     - `group_returns_overview.svg`
+     - `drawdown_overview.svg`
+   - `summary.md` 产物清单已同步纳入这两类 SVG。
+4. 扩展 AC2 的测试合同：
+   - `test_pipeline.py` 新增对组合净值、回撤、首日换手、累计收益与最大回撤一致性的断言。
+   - `test_formal_config.py` 新增对 `portfolio_metrics.json`、`group_returns_overview.svg`、`drawdown_overview.svg` 的存在性断言。
+5. 回写论文正文：
+   - 第四章实验设置改为明确说明 formal profile、factor panel 快照与输出目录统一到 `2026-03-30`。
+   - “选股有效性分析”补入基于组合净值/回撤图的 baseline 与 extended 数值比较。
+   - 局限性分析与结论部分改为：当前已具备 Top-N 组合净值、回撤与暴露基础证据，但仍缺分位数组、交易成本与超额收益闭环。
+6. 新增与补强测试：
+   - `test_formal_factor_panel.py` 新增 baseline panel 截断日期测试。
+   - `test_extended_factor_panel.py` 新增 extended panel 截断日期测试。
+   - 新增 `test_refresh_formal_factor_panels.py`，验证统一刷新入口能同时生成 baseline/extended 六个 panel，并按 `max_trade_date` 截断。
 
 ## 修改文件
 
-- `code/stock_tensor/output.py`
+- `README.md`
 - `paper_body.tex`
-- `code/data/build_extended_factor_panel.py`
-- `code/data/formal/factors/EXTENDED_FACTOR_CONTRACT.md`
+- `训练输入扩展与PIT安全说明.md`
+- `code/configs/formal_hs300.yaml`
+- `code/configs/formal_sz50.yaml`
+- `code/configs/formal_zz500.yaml`
 - `code/configs/formal_hs300_extended.yaml`
 - `code/configs/formal_sz50_extended.yaml`
 - `code/configs/formal_zz500_extended.yaml`
-- `code/tests/test_extended_factor_panel.py`
-- `code/tests/test_config_profiles.py`
-- `扩展特征对照实验结果.md`
+- `code/data/build_formal_factor_panel.py`
+- `code/data/build_extended_factor_panel.py`
+- `code/data/refresh_formal_factor_panels.py`
+- `code/data/formal/README.md`
 - `code/data/formal/factors/README.md`
-- `code/stock_tensor/evaluation.py`
+- `code/data/formal/factors/hs300_factor_panel.csv`
+- `code/data/formal/factors/hs300_factor_panel_extended.csv`
+- `code/data/formal/factors/sz50_factor_panel.csv`
+- `code/data/formal/factors/sz50_factor_panel_extended.csv`
+- `code/data/formal/factors/zz500_factor_panel.csv`
+- `code/data/formal/factors/zz500_factor_panel_extended.csv`
 - `code/stock_tensor/output.py`
-- `code/stock_tensor/pipeline.py`
+- `code/tests/test_backend.py`
+- `code/tests/test_config_profiles.py`
+- `code/tests/test_extended_factor_panel.py`
+- `code/tests/test_formal_config.py`
+- `code/tests/test_formal_factor_panel.py`
 - `code/tests/test_pipeline.py`
+- `code/tests/test_refresh_formal_factor_panels.py`
 - `code/outputs/formal_hs300_run/*`
 - `code/outputs/formal_sz50_run/*`
 - `code/outputs/formal_zz500_run/*`
 - `code/outputs/formal_hs300_extended_run/*`
 - `code/outputs/formal_sz50_extended_run/*`
 - `code/outputs/formal_zz500_extended_run/*`
+- `.humanize/rlcr/2026-04-26_14-59-46/goal-tracker.md`
 - `.humanize/rlcr/2026-04-26_14-59-46/round-4-summary.md`
 
 ## 测试与验证
 
 - 已通过：
-  - `python -m unittest discover -s code/tests -p test_pipeline.py`
-  - `python -m unittest discover -s code/tests -p test_config.py`
+  - `python -m unittest discover -s code/tests -p test_formal_factor_panel.py`
   - `python -m unittest discover -s code/tests -p test_extended_factor_panel.py`
-  - `python -m unittest discover -s code/tests -p test_config_profiles.py`
+  - `python -m unittest discover -s code/tests -p test_refresh_formal_factor_panels.py`
   - `python -m unittest discover -s code/tests -p test_pipeline.py`
+  - `python -m unittest discover -s code/tests -p test_config_profiles.py`
+  - `python -m unittest discover -s code/tests -p test_formal_config.py`
+  - `python -m unittest discover -s code/tests -p test_backend.py`
+  - `python code/data/refresh_formal_factor_panels.py --formal-root code/data/formal --max-trade-date 2026-03-30`
   - `python code/main.py --config code/configs/formal_hs300.yaml`
   - `python code/main.py --config code/configs/formal_sz50.yaml`
   - `python code/main.py --config code/configs/formal_zz500.yaml`
   - `python code/main.py --config code/configs/formal_hs300_extended.yaml`
   - `python code/main.py --config code/configs/formal_sz50_extended.yaml`
   - `python code/main.py --config code/configs/formal_zz500_extended.yaml`
-  - `latexmk -xelatex -synctex=1 -interaction=nonstopmode -file-line-error -outdir=.latex-build template.tex`
 
-- 验证结果：
-  - 三个 formal 输出目录都已包含增强图组文件。
-  - 三个 extended formal 输出目录已成功生成，可用于 baseline / extended 对照。
-  - 论文可继续编译。
-  - 时间状态描述已与当前正式 `time_regimes_tucker.json` 结果一致。
-  - 第一版扩展特征已经真实进入训练接口，而不再只停留在说明文档。
-  - PIT 边界测试已锁定“公告日前不生效、公告日及之后才生效”的核心约束。
-  - baseline 与 extended 的 formal 输出目录都已真实生成 `portfolio_metrics`、`group_returns`、`drawdown` 与 `exposure` 文件。
-  - 第五章已经开始使用组合层结果解释“Rank IC 与组合表现不完全同步”的现象。
+- 额外核实：
+  - 六个 baseline/extended factor panel 的最大 `trade_date` 均为 `2026-03-30`。
+  - 六组 formal 输出目录均已存在 `group_returns_overview.svg` 与 `drawdown_overview.svg`。
+  - 六组 formal 输出目录的 `run_manifest.json` 中，`requested_end_date` 与 `actual_end_date` 均为 `2026-03-30`。
+
+- 未完成但已定位：
+  - `latexmk -xelatex -synctex=1 -interaction=nonstopmode -file-line-error -outdir=.latex-build template.tex`
+    当前调用因 `latexmk` 的 `-outdir` 参数在此环境下被拆分为独立 token 而失败，属于命令行参数传递问题，不是 `template.tex` 本身的 XeLaTeX 语法错误；需要在下一轮改用兼容此环境的调用方式重新验证。
 
 ## 当前未完成项
 
-1. AC1：虽然扩展版 factor panel 与 extended 配置已落地，但扩展特征仍只覆盖财务 PIT 与业绩快报，宏观变量和更多事件特征尚未接入；论文正文也还未系统吸收 baseline/extended 对照结果。
-2. AC2：组合层产物已进入正式输出，但收益分组、回撤、换手与暴露结果尚未进一步扩展成完整图表和更系统的论文章节比较。
+1. AC1：扩展特征仍只覆盖财务 PIT 与业绩快报，宏观变量与更完整事件字典尚未接入。
+2. AC2：组合层已经具备净值曲线、回撤曲线和基础暴露，但严格分位数组、交易成本、超额收益和更系统的暴露比较仍未完成。
 3. AC3：全 A / 行业分层 / 市值分层实验仍未落地。
-4. AC5：参考文献最终条目规范化仍未完成。
+4. AC4：股票潜在结构图、行业聚类图和样本边界对比图仍未完成。
+5. AC5：参考文献条目级元数据补齐与最终格式统一仍未完成。
 
 ## Goal Tracker Update Request
 
 ### Requested Changes:
-- 将 “实现模式发现增强图与图文解释” 状态从 `pending` 更新为 `in_progress`，备注改为：增强图组已落地到 formal 输出目录，正文中的时间状态描述已开始按真实产物修正，但股票潜在结构图和样本边界对比图仍待继续补齐。
-- 在 Open Issues 中删除或弱化“正文对时间状态图和热力图的引用仍没有对应产物”这一项，因为增强图组已经真实写出。
-- 保留 AC4 未完成状态，因为当前只完成了增强图组中的一部分真实输出与正文收口。
-- 将 AC1 中与“扩展特征接入训练接口并生成扩展版 factor panel”相关任务状态提升为 `in_progress`，并增加备注：第一版 PIT/业绩快报扩展列已接入，三组 extended formal 配置和输出已生成，但宏观变量与更完整事件特征尚未并入。
-- 在 Open Issues 中新增：扩展特征目前仅覆盖财务 PIT 与业绩快报，baseline/extended 对照结果显示不同样本池表现差异较大，仍需进一步做特征筛选与口径扩展。
-- 将 AC2 中与“组合回测闭环”相关任务状态提升为 `in_progress`，备注改为：组合层结构化产物已落盘，但进一步的图表扩展和章节化分析仍未完成。
+- 将 `修复 formal 因子面板与正式输出实际窗口仅覆盖 2026-03 的口径错位` 标记为 `completed`。
+- 将 `将 baseline/extended 对照结果回写第三章与局限性分析` 从 `pending` 提升为 `in_progress`。
+- 将 AC2 中 `实现 Top-N/分组收益/回撤/风险暴露计算` 的备注更新为：结构化产物与净值/回撤 SVG 已落盘，但严格分位数组收益与交易成本场景仍未完成。
+- 删除 Open Issues 中“formal 因子面板与正式输出时间窗口不一致”和“组合层图形化产物仍未生成”两项旧问题。
+- 新增 Open Issue：组合层仍缺分位数组、交易成本和超额收益等更完整回测合同。
 
 ### Justification:
-本轮工作不仅将模式发现增强图从“论文声明”推进为“正式产物已落盘”，还把第一版真实扩展特征接入了训练接口，并生成了三组 extended 对照输出，同时把组合层结构化回测产物落入 formal 输出目录。Tracker 需要反映 AC1、AC2 与 AC4 的真实推进状态，但由于扩展特征范围、组合结果图表化和样本边界扩展都还没收口，因此仍不能把这些 AC 标为完成。
+本轮已经把 AC1 的窗口口径和 extended 刷新入口收口成可复现合同，并把 AC2 从“只有结构化 JSON”推进到“结构化 JSON + SVG 图形产物 + 论文数值分析”阶段。Tracker 需要准确反映这些真实进展，同时保留尚未完成的更深层组合回测和扩展特征任务。
 
 ## BitLesson Delta
 
-- Action: none
+- Action: selector attempted but infrastructure failed
 - Lesson ID(s): NONE
-- Notes: 当前 `.humanize/bitlesson.md` 仍为空知识库；本轮增强图组移植任务未匹配到既有 lesson。
+- Notes:
+  - 已按 RLCR 提示读取 `.humanize/bitlesson.md`。
+  - 两次调用 `bitlesson-select.sh` 时都因本地 selector 流式请求断开而失败，且当前知识库无任何条目，因此本轮按 `NONE` 执行；后续若知识库增加内容，可重新尝试 selector。

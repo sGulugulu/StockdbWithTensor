@@ -122,6 +122,7 @@ def build_extended_factor_panel(
     profit_data_path: Path,
     performance_express_path: Path,
     output_path: Path,
+    max_trade_date: str | None = None,
 ) -> None:
     profit_snapshots = _load_profit_snapshots(profit_data_path)
     performance_snapshots = _load_performance_express_snapshots(performance_express_path)
@@ -132,6 +133,8 @@ def build_extended_factor_panel(
 
     extended_rows: list[dict[str, str | float]] = []
     for row in rows:
+        if max_trade_date is not None and row["trade_date"] > max_trade_date:
+            continue
         stock_code = row["stock_code"]
         trade_date = row["trade_date"]
         profit_snapshot = _latest_snapshot(profit_snapshots.get(stock_code, []), trade_date)
@@ -168,6 +171,7 @@ def main() -> None:
     parser.add_argument("--profit-data-path", type=Path, required=True)
     parser.add_argument("--performance-express-path", type=Path, required=True)
     parser.add_argument("--output-path", type=Path, required=True)
+    parser.add_argument("--max-trade-date", type=str, default=None)
     args = parser.parse_args()
 
     build_extended_factor_panel(
@@ -175,6 +179,7 @@ def main() -> None:
         profit_data_path=args.profit_data_path,
         performance_express_path=args.performance_express_path,
         output_path=args.output_path,
+        max_trade_date=args.max_trade_date,
     )
 
 

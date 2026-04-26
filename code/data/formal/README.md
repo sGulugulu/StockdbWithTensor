@@ -7,6 +7,11 @@ This directory now has two responsibilities:
 
 Legacy committed files such as `hs300_history.csv` and `hs300_factor_panel.csv` are still kept here as source fixtures and migration fallbacks, while the formal profiles are moving to the structured `universes/` and `factors/` layout.
 
+需要区分两层时间口径：
+
+- canonical formal 原始数据链可以继续覆盖到 `2026-04-01`
+- 当前仓库提交、用于论文与 formal profile 复现实验的因子面板快照统一截断到 `2026-03-30`
+
 For the newer formal layout, prefer the following structure:
 
 - `code/data/formal/baostock/`
@@ -129,6 +134,14 @@ Once the structured CSV outputs are validated, you can create parquet mirrors:
 python code/data/convert_formal_csv_to_parquet.py `
   --formal-root code/data/formal `
   --overwrite
+```
+
+如果你要刷新当前提交版实验所使用的 baseline/extended 因子面板，推荐直接执行：
+
+```powershell
+python code/data/refresh_formal_factor_panels.py `
+  --formal-root code/data/formal `
+  --max-trade-date 2026-03-30
 ```
 
 ## Stage 2 Dataset-Year Runner

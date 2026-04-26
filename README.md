@@ -15,9 +15,13 @@
 - `SZ50`
 - `ZZ500`
 
-当前正式全量时间窗口固定为：
+当前 formal 原始数据主链的目标覆盖窗口为：
 
 - `2015-01-01` 到 `2026-04-01`
+
+当前仓库已提交、可直接复现实验的 formal profile 与因子面板快照统一截断到：
+
+- `2026-03-30`
 
 长期股票覆盖范围保留更广的全 A 股，不将系统长期边界写死为上述三个指数样本。
 
@@ -231,6 +235,14 @@ python code/data/fetch_baostock_data.py `
 ### Stage 3：构建 formal 市场面板与因子面板
 
 从 canonical formal root 构建或刷新日频市场面板、因子面板和实验输入。
+
+若要刷新当前提交版实验所用的 baseline/extended 因子面板快照，优先使用：
+
+```powershell
+python code/data/refresh_formal_factor_panels.py `
+  --formal-root code/data/formal `
+  --max-trade-date 2026-03-30
+```
 
 ### Stage 4：生成 Parquet
 

@@ -43,6 +43,16 @@
 
 ## 生成命令
 
+当前提交到仓库、供 formal profile 与论文正文复现使用的 factor panel 快照统一截断到 `2026-03-30`。推荐优先使用统一刷新入口，而不是分别手工运行 baseline/extended 六条命令：
+
+```powershell
+python code/data/refresh_formal_factor_panels.py `
+  --formal-root code/data/formal `
+  --max-trade-date 2026-03-30
+```
+
+如果只需单独重建某一类 panel，可继续使用下面的底层命令。
+
 ### HS300
 
 ```powershell
@@ -50,7 +60,8 @@ python code/data/build_formal_factor_panel.py `
   --kline-path code/data/formal/master/shared_kline_panel.csv `
   --industry-path code/data/formal/baostock/metadata/stock_industry.csv `
   --membership-path code/data/formal/universes/hs300_history.csv `
-  --output-path code/data/formal/factors/hs300_factor_panel.csv
+  --output-path code/data/formal/factors/hs300_factor_panel.csv `
+  --max-trade-date 2026-03-30
 ```
 
 ### SZ50
@@ -60,7 +71,8 @@ python code/data/build_formal_factor_panel.py `
   --kline-path code/data/formal/master/shared_kline_panel.csv `
   --industry-path code/data/formal/baostock/metadata/stock_industry.csv `
   --membership-path code/data/formal/universes/sz50_history.csv `
-  --output-path code/data/formal/factors/sz50_factor_panel.csv
+  --output-path code/data/formal/factors/sz50_factor_panel.csv `
+  --max-trade-date 2026-03-30
 ```
 
 ### ZZ500
@@ -70,7 +82,8 @@ python code/data/build_formal_factor_panel.py `
   --kline-path code/data/formal/master/shared_kline_panel.csv `
   --industry-path code/data/formal/baostock/metadata/stock_industry.csv `
   --membership-path code/data/formal/universes/zz500_history.csv `
-  --output-path code/data/formal/factors/zz500_factor_panel.csv
+  --output-path code/data/formal/factors/zz500_factor_panel.csv `
+  --max-trade-date 2026-03-30
 ```
 
 ## 扩展版生成命令
@@ -82,7 +95,8 @@ python code/data/build_extended_factor_panel.py `
   --base-panel-path code/data/formal/factors/hs300_factor_panel.csv `
   --profit-data-path code/data/formal/baostock/financial/profit_data.csv `
   --performance-express-path code/data/formal/baostock/reports/performance_express_report `
-  --output-path code/data/formal/factors/hs300_factor_panel_extended.csv
+  --output-path code/data/formal/factors/hs300_factor_panel_extended.csv `
+  --max-trade-date 2026-03-30
 ```
 
 ### SZ50 Extended
@@ -92,7 +106,8 @@ python code/data/build_extended_factor_panel.py `
   --base-panel-path code/data/formal/factors/sz50_factor_panel.csv `
   --profit-data-path code/data/formal/baostock/financial/profit_data.csv `
   --performance-express-path code/data/formal/baostock/reports/performance_express_report `
-  --output-path code/data/formal/factors/sz50_factor_panel_extended.csv
+  --output-path code/data/formal/factors/sz50_factor_panel_extended.csv `
+  --max-trade-date 2026-03-30
 ```
 
 ### ZZ500 Extended
@@ -102,7 +117,8 @@ python code/data/build_extended_factor_panel.py `
   --base-panel-path code/data/formal/factors/zz500_factor_panel.csv `
   --profit-data-path code/data/formal/baostock/financial/profit_data.csv `
   --performance-express-path code/data/formal/baostock/reports/performance_express_report `
-  --output-path code/data/formal/factors/zz500_factor_panel_extended.csv
+  --output-path code/data/formal/factors/zz500_factor_panel_extended.csv `
+  --max-trade-date 2026-03-30
 ```
 
 ## 注意

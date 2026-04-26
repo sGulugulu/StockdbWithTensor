@@ -63,6 +63,54 @@ class FormalFactorPanelTests(unittest.TestCase):
             self.assertIn("600000.SH", content)
             self.assertNotIn("2024-01-02", content)
 
+    def test_build_formal_factor_panel_supports_max_trade_date_cap(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            kline_path = root / "kline.csv"
+            industry_path = root / "industry.csv"
+            membership_path = root / "members.csv"
+            output_path = root / "factor_panel.csv"
+
+            kline_path.write_text(
+                "\n".join(
+                    [
+                        "date,code,open,high,low,close,preclose,volume,amount,adjustflag,turn,tradestatus,pctChg,peTTM,pbMRQ,psTTM,pcfNcfTTM,isST",
+                        "2024-01-08,sh.600000,1,1,1,14,13,100,1000,3,0.1,1,0.06,10,2,3,4,0",
+                        "2024-01-09,sh.600000,1,1,1,15,14,100,1000,3,0.1,1,0.07,10,2,3,4,0",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            industry_path.write_text(
+                "\n".join(
+                    [
+                        "updateDate,code,code_name,industry,industryClassification",
+                        "2024-01-09,sh.600000,浦发银行,J66货币金融服务,证监会行业分类",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            membership_path.write_text(
+                "\n".join(
+                    [
+                        "market_id,universe_id,stock_code,start_date,end_date",
+                        "cn_a,HS300,600000,2024-01-08,2024-01-09",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+
+            build_formal_factor_panel(
+                kline_path=kline_path,
+                industry_path=industry_path,
+                membership_path=membership_path,
+                output_path=output_path,
+                max_trade_date="2024-01-08",
+            )
+            content = output_path.read_text(encoding="utf-8")
+            self.assertIn("2024-01-08", content)
+            self.assertNotIn("2024-01-09", content)
+
 
 if __name__ == "__main__":
     unittest.main()

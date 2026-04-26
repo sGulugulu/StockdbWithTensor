@@ -38,6 +38,9 @@ class FormalConfigTests(unittest.TestCase):
         output_dir = run_experiment(ROOT / "configs" / "formal_hs300.yaml")
         self.assertTrue((output_dir / "run_manifest.json").exists())
         self.assertTrue((output_dir / "selection_candidates.json").exists())
+        self.assertTrue((output_dir / "portfolio_metrics.json").exists())
+        self.assertTrue((output_dir / "group_returns_overview.svg").exists())
+        self.assertTrue((output_dir / "drawdown_overview.svg").exists())
         self._assert_project_paths_are_relative(output_dir)
 
     def test_formal_sz50_config_runs_with_committed_local_inputs(self) -> None:
@@ -49,6 +52,9 @@ class FormalConfigTests(unittest.TestCase):
         output_dir = run_experiment(ROOT / "configs" / "formal_sz50.yaml")
         self.assertTrue((output_dir / "run_manifest.json").exists())
         self.assertTrue((output_dir / "selection_candidates.json").exists())
+        self.assertTrue((output_dir / "portfolio_metrics.json").exists())
+        self.assertTrue((output_dir / "group_returns_overview.svg").exists())
+        self.assertTrue((output_dir / "drawdown_overview.svg").exists())
         self._assert_project_paths_are_relative(output_dir)
 
     def test_formal_zz500_config_runs_with_committed_local_inputs(self) -> None:
@@ -60,6 +66,9 @@ class FormalConfigTests(unittest.TestCase):
         output_dir = run_experiment(ROOT / "configs" / "formal_zz500.yaml")
         self.assertTrue((output_dir / "run_manifest.json").exists())
         self.assertTrue((output_dir / "selection_candidates.json").exists())
+        self.assertTrue((output_dir / "portfolio_metrics.json").exists())
+        self.assertTrue((output_dir / "group_returns_overview.svg").exists())
+        self.assertTrue((output_dir / "drawdown_overview.svg").exists())
         self._assert_project_paths_are_relative(output_dir)
 
 

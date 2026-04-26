@@ -290,7 +290,7 @@ class BackendTests(unittest.TestCase):
                     )
                     self.assertEqual(submitted_config["market"]["universe_id"], "HS300")
                     self.assertEqual(str(submitted_config["market"]["start_date"]), "2015-01-01")
-                    self.assertEqual(str(submitted_config["market"]["end_date"]), "2026-04-01")
+                    self.assertEqual(str(submitted_config["market"]["end_date"]), "2026-03-30")
                     self.assertEqual(submitted_config["output"]["root_dir"], "..")
                     self.assertTrue(str(submitted_config["market"]["universe_path"]).endswith("universes/hs300_history.csv"))
                     self.assertTrue(str(submitted_config["data"]["path"]).endswith("factors/hs300_factor_panel.csv"))
@@ -353,7 +353,7 @@ class BackendTests(unittest.TestCase):
                         )
                         self.assertEqual(submitted_config["market"]["universe_id"], universe_id)
                         self.assertEqual(str(submitted_config["market"]["start_date"]), "2015-01-01")
-                        self.assertEqual(str(submitted_config["market"]["end_date"]), "2026-04-01")
+                        self.assertEqual(str(submitted_config["market"]["end_date"]), "2026-03-30")
                         self.assertEqual(submitted_config["output"]["root_dir"], "..")
                         self.assertTrue(
                             str(submitted_config["market"]["universe_path"]).endswith(

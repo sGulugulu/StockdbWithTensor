@@ -72,6 +72,7 @@ def build_formal_factor_panel(
     output_path: Path,
     symbol_column: str = "code",
     date_column: str = "date",
+    max_trade_date: str | None = None,
 ) -> None:
     industry_map = _load_industry_map(industry_path)
     membership_map = _load_membership_map(membership_path)
@@ -82,6 +83,8 @@ def build_formal_factor_panel(
         for row in reader:
             normalized_code = normalizer.normalize(row[symbol_column])
             trade_date = row[date_column]
+            if max_trade_date is not None and trade_date > max_trade_date:
+                continue
             if not any(start_date <= trade_date <= end_date for start_date, end_date in membership_map.get(normalized_code, [])):
                 continue
             grouped_rows[normalized_code].append({**row, symbol_column: normalized_code})
@@ -134,6 +137,7 @@ def main() -> None:
     parser.add_argument("--industry-path", type=Path, required=True)
     parser.add_argument("--membership-path", type=Path, required=True)
     parser.add_argument("--output-path", type=Path, required=True)
+    parser.add_argument("--max-trade-date", type=str, default=None)
     args = parser.parse_args()
 
     build_formal_factor_panel(
@@ -141,6 +145,7 @@ def main() -> None:
         industry_path=args.industry_path,
         membership_path=args.membership_path,
         output_path=args.output_path,
+        max_trade_date=args.max_trade_date,
     )
 
 

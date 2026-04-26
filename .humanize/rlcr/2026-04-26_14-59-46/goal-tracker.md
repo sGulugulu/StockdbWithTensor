@@ -35,7 +35,7 @@ Source plan: 论文不足与完善计划.md
 ## MUTABLE SECTION
 <!-- Update each round with justification for changes -->
 
-### Plan Version: 7 (Updated: Round 4)
+### Plan Version: 9 (Updated: Round 4)
 
 #### Plan Evolution Log
 <!-- Document any changes to the plan with justification -->
@@ -49,22 +49,23 @@ Source plan: 论文不足与完善计划.md
 | 3 | 部分批准 Round 3 的 tracker 更新请求：确认 formal manifest 已刷新、Top-N 与 stock/hybrid 行业元数据缺陷已修复，但新增正文失实表述修正与组合层联动分析遗漏任务 | Round 3 评审验证了局部代码修复和 formal 产物刷新，同时确认原始计划主体仍未完成，且论文继续引用不存在的图表与超窗口结论 | 防止 AC1-AC5 因局部修复而掩盖剩余主体交付 |
 | 4 | 批准将 AC1/AC4 的局部真实进展更新为 `in_progress`，并新增“baseline/extended 对照结果回写论文”任务 | Round 4 评审验证了增强图组已真实落盘、第一版 extended 配置与输出已生成，但正文图表数值和章节叙事仍未完全按当前产物收口 | 让 tracker 反映真实推进，同时避免把局部产物误记为 AC 完成 |
 | 4 | 修正 AC4 收口备注与 Open Issue，删除已失效的“手工数值仍未更新”表述 | 本轮审计核实 `paper_body.tex` 中解释方差、Rank IC 与滚动稳定性三张 PGFPlots 已与当前 committed `metrics.json` 对齐 | 防止 tracker 继续记录已解决问题，并把注意力收束到 AC4 真正剩余的图系缺口 |
+| 4 | 批准将 AC2 的组合层闭环进展提升为“结构化产物已落盘”，并补入“分组收益图/回撤图仍缺失”为开放问题 | 本轮审计核实 `evaluation.py` / `output.py` 已生成 `portfolio_metrics`、`group_returns`、`drawdown`、`exposure` 产物，且第五章已有初版 Rank IC 联动分析；但原始计划要求的图形化结果仍未完成 | 让 tracker 同时反映真实推进与未收口缺口 |
+| 4 | 新增 formal factor panel 统一刷新入口，并将 committed factor panel、formal profile 与六组正式输出统一到 `2026-03-30` | 本轮已验证 baseline/extended 六个 factor panel 最大 `trade_date` 均为 `2026-03-30`，六组 formal 输出的 `requested_end_date` 与 `actual_end_date` 也都为 `2026-03-30` | 收口 AC1 的窗口错位，并把 extended panel 纳入统一刷新入口 |
 
 #### Active Tasks
 <!-- Map each task to its target Acceptance Criterion and routing tag -->
 | Task | Target AC | Status | Tag | Owner | Notes |
 |------|-----------|--------|-----|-------|-------|
-| 建立扩展特征字典与 PIT 安全说明文档 | AC1 | pending | coding | claude | BitLesson=NONE；当前仅形成说明文档，未落地真实字典表、披露时点映射与样例 |
+| 建立扩展特征字典与 PIT 安全说明文档 | AC1 | in_progress | coding | claude | BitLesson=NONE；`EXTENDED_FACTOR_CONTRACT.md` 已覆盖第一版财务 PIT/业绩快报字段、披露时点与缺失处理，但宏观变量与更完整事件字典仍待补齐 |
 | 将训练输入边界说明回写到第三章与局限性分析 | AC1 | completed | coding | claude | BitLesson=NONE；已在数据来源与局限性部分补写 |
 | 修正《训练输入扩展与 PIT 安全说明》中对正式窗口已统一的失实表述 | AC1 | completed | coding | claude | 已改为区分数据底座窗口、formal 因子面板窗口与当前 committed formal 输出窗口 |
-| 将通过 PIT 校验的扩展特征接入统一训练接口并生成扩展版 factor panel | AC1 | in_progress | coding | claude | 第一版 PIT/业绩快报扩展列已接入，三组 extended 配置与输出已生成；但宏观变量、更完整事件特征及主构建链收口仍未完成 |
-| 将 baseline/extended 对照结果回写第三章与局限性分析 | AC1 | pending | coding | claude | 三组对照输出已生成，但正文尚未系统吸收解释方差、IR 与样本差异分析 |
-| 修复 formal 因子面板与正式输出实际窗口仅覆盖 2026-03 的口径错位 | AC1 | pending | coding | claude | 当前 formal factor panel 已延伸到 2026-04-03，但正式输出仍停留在 2026-03-30；需统一数据、产物与论文口径 |
-| 实现显式训练/验证/测试切分与 held-out 评估，并把 split 元数据写入产物 | AC2 | in_progress | coding | claude | `sample_run` 与三组 committed formal 输出已包含 split / preprocess 合同，Top-N 合同与 `stock` / `hybrid` 行业元数据缺陷已修复；但组合层评估、风险暴露与正文联动仍未实现 |
+| 将通过 PIT 校验的扩展特征接入统一训练接口并生成扩展版 factor panel | AC1 | in_progress | coding | claude | 第一版 PIT/业绩快报扩展列已接入，三组 extended 配置与输出已生成；`refresh_formal_factor_panels.py` 已把 baseline/extended panel 收口到统一刷新入口，但宏观变量与更完整事件特征仍未接入 |
+| 将 baseline/extended 对照结果回写第三章与局限性分析 | AC1 | in_progress | coding | claude | 第四章“选股有效性分析”和局限性段落已吸收累计收益、回撤与样本池差异，但第三章的数据边界说明仍可继续细化 |
+| 修复 formal 因子面板与正式输出实际窗口仅覆盖 2026-03 的口径错位 | AC1 | completed | coding | claude | 已重建六个 baseline/extended factor panel 到 `2026-03-30`，六组 formal 输出的 `requested_end_date` 与 `actual_end_date` 也都统一为 `2026-03-30` |
+| 实现显式训练/验证/测试切分与 held-out 评估，并把 split 元数据写入产物 | AC2 | in_progress | coding | claude | `sample_run` 与三组 committed formal 输出已包含 split / preprocess 合同，Top-N 合同与 `stock` / `hybrid` 行业元数据缺陷已修复；组合层基础图形化产物已落盘，但分位数组、交易成本和更完整暴露分析仍未实现 |
 | 重跑 formal HS300、SZ50、ZZ500 以刷新 split / preprocess 产物并替换旧 manifest | AC2 | completed | coding | claude | 已验证 `code/outputs/formal_*_run/run_manifest.json` 含 split / preprocess 字段，旧版简化 manifest 已被替换 |
-| 设计组合回测指标框架与产物清单 | AC2 | pending | coding | claude | BitLesson=NONE；下一轮补回测结果表与图 |
-| 实现 Top-N/分组收益/回撤/风险暴露计算 | AC2 | pending | coding | claude | BitLesson=NONE；Top-N 裁剪已进入候选池合同，但组合收益、回撤、换手与风险暴露产物仍未实现 |
-| 将组合层结果与 Rank IC 指标联动分析并回写第五章 | AC2 | pending | coding | claude | 原始计划明确要求判断排序指标与组合表现的一致性，当前 tracker 之前未单独追踪该项 |
+| 实现 Top-N/分组收益/回撤/风险暴露计算 | AC2 | in_progress | coding | claude | `portfolio_metrics`、`group_returns`、`drawdown` 与 `exposure` 已在 baseline/extended formal 输出目录落盘，并新增 `group_returns_overview.svg`、`drawdown_overview.svg`；但严格分位数组收益和交易成本情景仍未补齐 |
+| 将组合层结果与 Rank IC 指标联动分析并回写第五章 | AC2 | in_progress | coding | claude | 论文已补入 baseline/extended 下累计收益、回撤与 Rank IC 不同步的系统比较，并点名引用 formal 输出中的组合曲线/回撤图；但尚未扩展到分位数组、超额收益和更完整暴露章节 |
 | 设计全 A 股、行业分层、市值分层扩展实验路径 | AC3 | pending | coding | claude | BitLesson=NONE；先补样本边界说明，再落配置与脚本 |
 | 落地全 A 股、行业分层、市值分层配置并生成运行产物 | AC3 | pending | coding | claude | 需形成真实实验结果，而非仅保留扩展路径说明 |
 | 将样本边界扩展影响回写论文正文 | AC3 | pending | coding | claude | BitLesson=NONE；依赖扩展实验结果 |
@@ -83,6 +84,8 @@ Source plan: 论文不足与完善计划.md
 |----|------|-----------------|----------------|----------|
 | AC6 | 维护并扩展独立不足记录文档 | 0 | 1 | 已维护 `论文不足与完善计划.md` 并新增 `训练输入扩展与PIT安全说明.md`、`参考文献元数据核对清单.md` |
 | AC1 | 重跑 HS300、SZ50、ZZ500 扩展前后对比实验 | 4 | 4 | 已核实 `formal_hs300_extended_run`、`formal_sz50_extended_run`、`formal_zz500_extended_run` 均存在 `run_manifest.json` 与 `metrics.json`，并新增 `扩展特征对照实验结果.md` |
+| AC2 | 设计组合回测指标框架与产物清单 | 4 | 4 | 已核实 `output.py` 会落盘 `portfolio_metrics.*`、`group_returns_*.*`、`drawdown_*.*`、`exposure_*.*`，六个 formal / extended 输出目录均已有对应产物 |
+| AC1 | 统一 committed factor panel、formal profile 与正式输出窗口 | 4 | 4 | 已核实六个 baseline/extended factor panel 最大 `trade_date` 为 `2026-03-30`，六组 formal 输出 `run_manifest.json` 的 `requested_end_date` / `actual_end_date` 也均为 `2026-03-30` |
 
 ### Explicitly Deferred
 <!-- Items here require strong justification -->
@@ -94,8 +97,7 @@ Source plan: 论文不足与完善计划.md
 | Issue | Discovered Round | Blocking AC | Resolution Path |
 |-------|-----------------|-------------|-----------------|
 | 参考文献中若干 PDF 条目仍缺少完整出版元数据，当前只能先形成核对清单 | 0 | AC5 | 后续逐篇提取首页信息并统一重排参考文献格式 |
-| 当前回测逻辑尚未进入 `code/stock_tensor`，组合层评估仍停留在计划阶段 | 0 | AC2 | 下一轮优先下钻 evaluation 与 output 链路 |
 | 样本边界扩展尚无全 A/行业/市值分层配置与运行产物 | 0 | AC3 | 下一轮补样本派生脚本和配置 |
-| formal 因子面板与正式输出的时间窗口口径仍不一致：factor panel 已到 2026-04-03，而 formal 输出仍停留在 2026-03-30 | 1 | AC1 | 统一 factor panel、formal 产物与论文叙事中的窗口口径，并在真正扩展或收缩窗口后同步刷新证据链 |
 | 增强图组与基础图文已落盘，但股票潜在结构图、样本边界对比图和更完整的模式发现章节联动仍未完成 | 4 | AC4 | 继续补股票潜在结构/行业聚类图、样本边界对比图，并把章节叙事扩展到完整图系 |
-| 扩展特征当前仅覆盖财务 PIT 与业绩快报；baseline/extended 对照在不同样本池表现分化明显，且 `build_extended_factor_panel.py` 尚未并入 formal 主构建链 | 4 | AC1 | 继续补宏观与更完整事件特征，增加特征筛选，并把 extended panel 纳入正式数据刷新流程 |
+| 扩展特征当前仅覆盖财务 PIT 与业绩快报；baseline/extended 对照在不同样本池表现分化明显，仍需继续补宏观变量与更完整事件字典 | 4 | AC1 | 保持统一刷新入口不变，在此基础上继续扩展特征合同、筛选规则与样本池比较 |
+| 组合层虽然已生成净值曲线和回撤图，但严格分位数组收益、交易成本和更系统的暴露/超额收益分析仍未完成 | 4 | AC2 | 继续沿 `evaluation.py` / `output.py` 扩展组合层合同，并把第五章补成完整的组合回测章节 |
