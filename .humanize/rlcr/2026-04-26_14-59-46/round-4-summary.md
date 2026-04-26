@@ -39,6 +39,11 @@
    - `formal_sz50_extended_run`
    - `formal_zz500_extended_run`
    并新增一份对照结果文档 `扩展特征对照实验结果.md`。
+7. 继续收口 AC1 / AC4：
+   - 重写第五章中的解释方差、Rank IC 与稳定性手工数值，使其与当前 committed formal `metrics.json` 一致。
+   - 在“扩展特征对照分析”一节中补入 baseline / extended 的样本池差异说明。
+   - 更新 `code/data/formal/factors/README.md`，把 extended panel 的字段与标准构建命令纳入正式说明。
+   - 补强 `test_extended_factor_panel.py`，新增公告日前后 `perf_express_flag` 与事件值生效边界断言。
 
 ## 修改文件
 
@@ -52,6 +57,7 @@
 - `code/tests/test_extended_factor_panel.py`
 - `code/tests/test_config_profiles.py`
 - `扩展特征对照实验结果.md`
+- `code/data/formal/factors/README.md`
 - `code/outputs/formal_hs300_run/*`
 - `code/outputs/formal_sz50_run/*`
 - `code/outputs/formal_zz500_run/*`
@@ -67,6 +73,7 @@
   - `python -m unittest discover -s code/tests -p test_config.py`
   - `python -m unittest discover -s code/tests -p test_extended_factor_panel.py`
   - `python -m unittest discover -s code/tests -p test_config_profiles.py`
+  - `python -m unittest discover -s code/tests -p test_pipeline.py`
   - `python code/main.py --config code/configs/formal_hs300.yaml`
   - `python code/main.py --config code/configs/formal_sz50.yaml`
   - `python code/main.py --config code/configs/formal_zz500.yaml`
@@ -81,6 +88,7 @@
   - 论文可继续编译。
   - 时间状态描述已与当前正式 `time_regimes_tucker.json` 结果一致。
   - 第一版扩展特征已经真实进入训练接口，而不再只停留在说明文档。
+  - PIT 边界测试已锁定“公告日前不生效、公告日及之后才生效”的核心约束。
 
 ## 当前未完成项
 

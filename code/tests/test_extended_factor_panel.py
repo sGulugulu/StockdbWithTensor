@@ -62,6 +62,19 @@ class ExtendedFactorPanelTests(unittest.TestCase):
             self.assertIn("0.11", content)
             self.assertIn("0.55", content)
 
+            rows = output_path.read_text(encoding="utf-8").strip().splitlines()
+            first_data = rows[1].split(",")
+            second_data = rows[2].split(",")
+            header = rows[0].split(",")
+            row1 = dict(zip(header, first_data))
+            row2 = dict(zip(header, second_data))
+            self.assertEqual(row1["trade_date"], "2026-03-25")
+            self.assertEqual(float(row1["perf_express_flag"]), 0.0)
+            self.assertEqual(float(row1["perf_express_eps_chg_pct"]), 0.0)
+            self.assertEqual(row2["trade_date"], "2026-03-30")
+            self.assertEqual(float(row2["perf_express_flag"]), 1.0)
+            self.assertAlmostEqual(float(row2["perf_express_eps_chg_pct"]), 0.55, places=6)
+
 
 if __name__ == "__main__":
     unittest.main()
