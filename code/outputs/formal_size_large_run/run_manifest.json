@@ -1,0 +1,253 @@
+{
+  "market_id": "cn_a",
+  "universe_id": "SIZE_LARGE",
+  "requested_start_date": "2015-01-01",
+  "requested_end_date": "2026-03-30",
+  "actual_start_date": "2026-03-02",
+  "actual_end_date": "2026-03-30",
+  "models": [
+    "cp",
+    "tucker",
+    "pca"
+  ],
+  "candidate_pool_size": 20,
+  "selection_top_n": 5,
+  "output_dir": "code/outputs/formal_size_large_run",
+  "preprocess": {
+    "max_missing_ratio": 0.45,
+    "winsor_limits": [
+      0.05,
+      0.95
+    ],
+    "fill_strategy": "forward_backward_industry_median",
+    "standardize_method": "winsorize_zscore",
+    "initial_stock_count": 14,
+    "initial_factor_count": 4,
+    "filtered_stock_count": 14,
+    "filtered_factor_count": 4,
+    "date_count": 13,
+    "fit_scope": "train_only",
+    "applied_partition": "train"
+  },
+  "evaluation": {
+    "quantile_count": 5,
+    "transaction_cost_bps": 10.0,
+    "benchmark_path": "code/data/formal/index_daily/csi_a500_index_daily.csv"
+  },
+  "split": {
+    "strategy": "time",
+    "ratios": {
+      "train": 0.6,
+      "validation": 0.2,
+      "test": 0.2
+    },
+    "label_column": "future_return",
+    "label_role": "evaluation_only",
+    "input_tensor_excludes_labels": true,
+    "date_split": {
+      "train": {
+        "count": 13,
+        "items": [
+          "2026-03-02",
+          "2026-03-03",
+          "2026-03-04",
+          "2026-03-05",
+          "2026-03-06",
+          "2026-03-09",
+          "2026-03-10",
+          "2026-03-11",
+          "2026-03-12",
+          "2026-03-13",
+          "2026-03-16",
+          "2026-03-17",
+          "2026-03-18"
+        ]
+      },
+      "validation": {
+        "count": 4,
+        "items": [
+          "2026-03-19",
+          "2026-03-20",
+          "2026-03-23",
+          "2026-03-24"
+        ]
+      },
+      "test": {
+        "count": 4,
+        "items": [
+          "2026-03-25",
+          "2026-03-26",
+          "2026-03-27",
+          "2026-03-30"
+        ]
+      }
+    },
+    "stock_split": {
+      "train": {
+        "count": 14,
+        "items": [
+          "600000.SH",
+          "600011.SH",
+          "600016.SH",
+          "600018.SH",
+          "600019.SH",
+          "600028.SH",
+          "600030.SH",
+          "600031.SH",
+          "600036.SH",
+          "600050.SH",
+          "600089.SH",
+          "600104.SH",
+          "600111.SH",
+          "600118.SH"
+        ]
+      },
+      "validation": {
+        "count": 14,
+        "items": [
+          "600000.SH",
+          "600011.SH",
+          "600016.SH",
+          "600018.SH",
+          "600019.SH",
+          "600028.SH",
+          "600030.SH",
+          "600031.SH",
+          "600036.SH",
+          "600050.SH",
+          "600089.SH",
+          "600104.SH",
+          "600111.SH",
+          "600118.SH"
+        ]
+      },
+      "test": {
+        "count": 14,
+        "items": [
+          "600000.SH",
+          "600011.SH",
+          "600016.SH",
+          "600018.SH",
+          "600019.SH",
+          "600028.SH",
+          "600030.SH",
+          "600031.SH",
+          "600036.SH",
+          "600050.SH",
+          "600089.SH",
+          "600104.SH",
+          "600111.SH",
+          "600118.SH"
+        ]
+      }
+    },
+    "partitions": {
+      "train": {
+        "stock_count": 14,
+        "date_count": 13,
+        "tensor_shape": [
+          14,
+          4,
+          13
+        ],
+        "label_observation_count": 182,
+        "stocks": [
+          "600000.SH",
+          "600011.SH",
+          "600016.SH",
+          "600018.SH",
+          "600019.SH",
+          "600028.SH",
+          "600030.SH",
+          "600031.SH",
+          "600036.SH",
+          "600050.SH",
+          "600089.SH",
+          "600104.SH",
+          "600111.SH",
+          "600118.SH"
+        ],
+        "dates": [
+          "2026-03-02",
+          "2026-03-03",
+          "2026-03-04",
+          "2026-03-05",
+          "2026-03-06",
+          "2026-03-09",
+          "2026-03-10",
+          "2026-03-11",
+          "2026-03-12",
+          "2026-03-13",
+          "2026-03-16",
+          "2026-03-17",
+          "2026-03-18"
+        ]
+      },
+      "validation": {
+        "stock_count": 14,
+        "date_count": 4,
+        "tensor_shape": [
+          14,
+          4,
+          4
+        ],
+        "label_observation_count": 56,
+        "stocks": [
+          "600000.SH",
+          "600011.SH",
+          "600016.SH",
+          "600018.SH",
+          "600019.SH",
+          "600028.SH",
+          "600030.SH",
+          "600031.SH",
+          "600036.SH",
+          "600050.SH",
+          "600089.SH",
+          "600104.SH",
+          "600111.SH",
+          "600118.SH"
+        ],
+        "dates": [
+          "2026-03-19",
+          "2026-03-20",
+          "2026-03-23",
+          "2026-03-24"
+        ]
+      },
+      "test": {
+        "stock_count": 14,
+        "date_count": 4,
+        "tensor_shape": [
+          14,
+          4,
+          4
+        ],
+        "label_observation_count": 56,
+        "stocks": [
+          "600000.SH",
+          "600011.SH",
+          "600016.SH",
+          "600018.SH",
+          "600019.SH",
+          "600028.SH",
+          "600030.SH",
+          "600031.SH",
+          "600036.SH",
+          "600050.SH",
+          "600089.SH",
+          "600104.SH",
+          "600111.SH",
+          "600118.SH"
+        ],
+        "dates": [
+          "2026-03-25",
+          "2026-03-26",
+          "2026-03-27",
+          "2026-03-30"
+        ]
+      }
+    }
+  },
+  "status": "completed"
+}

@@ -35,7 +35,7 @@ Source plan: 论文不足与完善计划.md
 ## MUTABLE SECTION
 <!-- Update each round with justification for changes -->
 
-### Plan Version: 15 (Updated: Round 8 Review)
+### Plan Version: 16 (Updated: Round 9 Review)
 
 #### Plan Evolution Log
 <!-- Document any changes to the plan with justification -->
@@ -58,6 +58,7 @@ Source plan: 论文不足与完善计划.md
 | 6 | 接受 Round 6 的 tracker update request，并把 AC1 进展从“局部 PIT/快报接入”更新为“第一版完整扩展输入合同” | 本轮复核确认 extended panel、formal extended 配置、合同文档与对照说明已真实覆盖市场代理变量、财务 PIT、业绩快报和业绩预告四类输入；但更完整宏观变量与更广泛事件字典仍未完成 | 让 tracker 反映 AC1 的真实推进，同时保持 AC1-AC5 主体任务未完成的审计结论 |
 | 7 | 部分接受 Round 7 的 tracker update request，并把 AC2 进展更新为“分位数组/多空/成本/超额收益第一版合同已落盘” | 本轮复核确认六组 formal / extended 输出已真实新增 `quantile_returns_*`、`long_short_*`、`cost_adjusted_*`、`excess_returns_*` 与对应 SVG，`paper_body.tex` 也已吸收新证据；但同时发现 ZZ500 基准指数接错到 `000510.SH`，且 `quantile_count > pool_size` 时会生成伪造空分位并污染多空腿 | 让 tracker 记录 AC2 的真实推进，同时把新增 blocker 显式暴露出来，避免把第一版合同误记为稳定完成 |
 | 8 | 部分接受 Round 8 的 tracker update request，并把 AC2 备注更新为“ZZ500 benchmark / quantile 空桶缺陷已修复，但回归覆盖与可再生流程仍未收口” | 本轮复核确认 `formal_zz500*.yaml`、`refresh_formal_factor_panels.py`、`evaluation.py`、论文表述与当前本地 ZZ500 excess return 输出均已切回 `000905.SH` 且 long-short 不再引用补空桶；但 `formal_zz500_extended.yaml` 的 benchmark 身份、`run_manifest.evaluation` 对齐/无 benchmark 可见性，以及 `zz500_index_daily.csv` 的 tracked 生成流程仍未被测试或文档化锁住 | 让 tracker 反映真实修复进展，同时保留仍会影响 AC2 可复核性与可持续刷新的余留缺口 |
+| 9 | 接受 Round 9 的 tracker update request，并将 AC2 的 benchmark 身份 / manifest 契约 / quantile 小样本行为标记为已锁定 | 本轮复核确认 `test_config_profiles.py`、`test_formal_config.py` 与 `test_pipeline.py` 已覆盖 extended benchmark 身份、`run_manifest.evaluation.benchmark_path` 显式可见性、日期对齐与 `quantile_count > pool_size` 场景；`build_tdx_named_index_files.py` 与 `code/data/formal/README.md` 也已把 named-index 刷新流程纳入 tracked workflow | 清理 AC2 已失效 blocker，同时保留更长窗口稳健性与系统暴露比较这两个主体缺口 |
 
 #### Active Tasks
 <!-- Map each task to its target Acceptance Criterion and routing tag -->
@@ -69,10 +70,10 @@ Source plan: 论文不足与完善计划.md
 | 将通过 PIT 校验的扩展特征接入统一训练接口并生成扩展版 factor panel | AC1 | in_progress | coding | claude | 已接入市场代理变量、财务 PIT、业绩快报和业绩预告四类第一版特征，三组 extended 配置与输出已生成；`refresh_formal_factor_panels.py` 已把 baseline/extended panel 收口到统一刷新入口，但更完整宏观变量与更广泛事件字典仍未接入 |
 | 将 baseline/extended 对照结果回写第三章与局限性分析 | AC1 | in_progress | coding | claude | `paper_body.tex` 与 `扩展特征对照实验结果.md` 已按当前 committed `metrics.json` / `portfolio_metrics.json` 回填核心数值，但第三章数据边界说明和更多 extended 细节仍可继续补充 |
 | 修复 formal 因子面板与正式输出实际窗口仅覆盖 2026-03 的口径错位 | AC1 | completed | coding | claude | 已重建六个 baseline/extended factor panel 到 `2026-03-30`，六组 formal 输出的 `requested_end_date` 与 `actual_end_date` 也都统一为 `2026-03-30` |
-| 实现显式训练/验证/测试切分与 held-out 评估，并把 split 元数据写入产物 | AC2 | in_progress | coding | claude | `sample_run` 与三组 committed formal 输出已包含 split / preprocess 合同，Top-N 合同与 `stock` / `hybrid` 行业元数据缺陷已修复；分位数组、多空、成本和超额收益基础合同现已可用，但 `run_manifest.evaluation` / benchmark 缺失可见性的回归覆盖仍未补齐 |
+| 实现显式训练/验证/测试切分与 held-out 评估，并把 split 元数据写入产物 | AC2 | in_progress | coding | claude | `sample_run` 与三组 committed formal 输出已包含 split / preprocess 合同，Top-N 合同与 `stock` / `hybrid` 行业元数据缺陷已修复；`run_manifest.evaluation` 的 benchmark 可见性、日期对齐与无 benchmark 显式语义现已被测试锁定，但更长窗口稳健性与系统暴露比较仍未完成 |
 | 重跑 formal HS300、SZ50、ZZ500 以刷新 split / preprocess 产物并替换旧 manifest | AC2 | completed | coding | claude | 已验证 `code/outputs/formal_*_run/run_manifest.json` 含 split / preprocess 字段，旧版简化 manifest 已被替换 |
 | 修复 factor panel 截断后测试窗口 future_return 全为 0 的标签退化 | AC2 | completed | coding | claude | 已改为先基于股票全量 K 线计算未来收益和动量，再在输出阶段按成分历史和 `max_trade_date` 过滤；`test_formal_factor_panel.py`、`test_refresh_formal_factor_panels.py` 与 `test_formal_config.py` 已覆盖这一回归路径 |
-| 实现 Top-N/分组收益/回撤/风险暴露计算 | AC2 | in_progress | coding | claude | `portfolio_metrics`、`group_returns`、`drawdown`、`exposure` 之外，`quantile_returns_*`、`long_short_*`、`cost_adjusted_*`、`excess_returns_*` 与三张 overview SVG 也已在六组 formal / extended 输出目录落盘；ZZ500 benchmark 与 quantile 空桶缺陷已修复，但更系统暴露比较、长窗口稳健性与 tracked benchmark 刷新流程仍未收口 |
+| 实现 Top-N/分组收益/回撤/风险暴露计算 | AC2 | in_progress | coding | claude | `portfolio_metrics`、`group_returns`、`drawdown`、`exposure` 之外，`quantile_returns_*`、`long_short_*`、`cost_adjusted_*`、`excess_returns_*` 与三张 overview SVG 也已在六组 formal / extended 输出目录落盘；ZZ500 benchmark 身份、manifest 契约与 quantile 小样本行为已被测试和 tracked workflow 锁定，但更系统暴露比较与长窗口稳健性仍未收口 |
 | 将组合层结果与 Rank IC 指标联动分析并回写第五章 | AC2 | in_progress | coding | claude | 第五章已吸收基准修正后的多空、成本后净值和超额收益证据；但仍缺更长窗口稳健性检验、更系统暴露章节，以及与新增样本边界实验的统一对照 |
 | 设计全 A 股、行业分层、市值分层扩展实验路径 | AC3 | pending | coding | claude | BitLesson=NONE；先补样本边界说明，再落配置与脚本 |
 | 落地全 A 股、行业分层、市值分层配置并生成运行产物 | AC3 | pending | coding | claude | 需形成真实实验结果，而非仅保留扩展路径说明 |
@@ -109,6 +110,5 @@ Source plan: 论文不足与完善计划.md
 | 样本边界扩展尚无全 A/行业/市值分层配置与运行产物 | 0 | AC3 | 下一轮补样本派生脚本和配置 |
 | 增强图组与基础图文已落盘，但股票潜在结构图、样本边界对比图和更完整的模式发现章节联动仍未完成 | 4 | AC4 | 继续补股票潜在结构/行业聚类图、样本边界对比图，并把章节叙事扩展到完整图系 |
 | 扩展特征已扩展到市场代理变量 + 财务 PIT + 业绩快报 + 业绩预告；baseline/extended 对照在不同样本池表现分化明显，仍需继续补更完整宏观变量与更广泛事件字典 | 4 | AC1 | 保持统一刷新入口不变，在此基础上继续扩展特征合同、筛选规则与样本池比较 |
-| ZZ500 benchmark 已切回 `000905.SH`，但 `formal_zz500_extended.yaml` benchmark 身份与 `run_manifest.evaluation` / 无 benchmark 输出语义仍缺回归测试 | 8 | AC2 | 扩展 `test_config_profiles.py`、`test_formal_config.py` 与 `test_pipeline.py`，同时锁定 extended config、manifest 对齐和 benchmark 缺失时的显式可见性 |
-| `zz500_index_daily.csv` 当前可用，但其刷新路径仍依赖未跟踪脚本与过期 README；versioned workflow 仍停留在 `csi_a500` / `csi_a50` 旧命名 | 8 | AC2 | 将 named-index 导出流程纳入 tracked script，并同步更新 `code/data/formal/README.md` 与相关生成文档，确保 ZZ500 benchmark 可按仓库文档重建 |
+| AC2 的基础组合合同已通过 benchmark / manifest / quantile 回归测试锁定，但更长窗口稳健性检验与更系统的风格/行业暴露比较仍未完成 | 9 | AC2 | 扩展正式实验窗口或新增长窗口配置，补齐结构化暴露汇总与论文第五章联动分析 |
 | 仓库命令与当前环境解释器/依赖不一致：`python`=2.7，`python3` 默认环境缺 `PyYAML`，且本机无 `latexmk` / `xelatex`，Round 5 的验证命令无法直接复现 | 5 | ALL | 统一到 `python3` / `.venv` 入口，补齐依赖安装说明，并只保留可在仓库内复现的验证命令 |

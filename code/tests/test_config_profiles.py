@@ -64,6 +64,22 @@ class ConfigProfileTests(unittest.TestCase):
             self.assertGreater(len(benchmark_lines), 1)
             self.assertIn("000905.SH", benchmark_lines[1])
 
+    def test_formal_all_a_profile(self) -> None:
+        config = load_config(ROOT / "configs" / "formal_all_a.yaml")
+        self.assertEqual(config.market.universe_id, "ALL_A_ACTIVE")
+        self.assertIn("universes/segmented/all_a_active_history.csv", str(config.market.universe_path).replace("\\", "/"))
+        self.assertIn("factors/all_a_factor_panel.csv", str(config.data.path).replace("\\", "/"))
+
+    def test_formal_industry_c39_profile(self) -> None:
+        config = load_config(ROOT / "configs" / "formal_industry_c39.yaml")
+        self.assertEqual(config.market.universe_id, "INDUSTRY_C39")
+        self.assertIn("industry_c39_factor_panel.csv", str(config.data.path).replace("\\", "/"))
+
+    def test_formal_size_large_profile(self) -> None:
+        config = load_config(ROOT / "configs" / "formal_size_large.yaml")
+        self.assertEqual(config.market.universe_id, "SIZE_LARGE")
+        self.assertIn("size_large_factor_panel.csv", str(config.data.path).replace("\\", "/"))
+
 
 if __name__ == "__main__":
     unittest.main()

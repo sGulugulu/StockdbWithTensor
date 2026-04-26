@@ -141,6 +141,47 @@ python code/data/refresh_formal_factor_panels.py `
   --max-trade-date 2026-03-30
 ```
 
+如果你要刷新 AC3 的样本边界扩展资产，推荐执行：
+
+```powershell
+python code/data/refresh_segmented_formal_assets.py `
+  --formal-root code/data/formal `
+  --max-trade-date 2026-03-30
+```
+
+该脚本会同时生成：
+
+- `universes/segmented/all_a_active_history.csv`
+- `universes/segmented/industry_c39_history.csv`
+- `universes/segmented/industry_c27_history.csv`
+- `universes/segmented/industry_c35_history.csv`
+- `universes/segmented/size_small_history.csv`
+- `universes/segmented/size_mid_history.csv`
+- `universes/segmented/size_large_history.csv`
+- 以及对应的 7 份 baseline factor panel
+
+分层 run 完成后，可以生成 AC4 的模式发现扩展图组：
+
+```powershell
+python code/data/build_pattern_discovery_assets.py `
+  --anchor-output-dir code/outputs/formal_all_a_run `
+  --comparison-output-dir code/outputs/formal_hs300_run `
+  --comparison-output-dir code/outputs/formal_sz50_run `
+  --comparison-output-dir code/outputs/formal_zz500_run `
+  --comparison-output-dir code/outputs/formal_all_a_run `
+  --comparison-output-dir code/outputs/formal_industry_c27_run `
+  --comparison-output-dir code/outputs/formal_industry_c35_run `
+  --comparison-output-dir code/outputs/formal_industry_c39_run `
+  --comparison-output-dir code/outputs/formal_size_small_run `
+  --comparison-output-dir code/outputs/formal_size_mid_run `
+  --comparison-output-dir code/outputs/formal_size_large_run `
+  --output-dir code/data/formal/reports/pattern_discovery `
+  --model-name tucker `
+  --max-stocks 60
+```
+
+该命令会生成股票潜在结构图、聚类与行业交叉图、跨样本边界 Tucker 指标对比图，以及 `pattern_discovery_summary.json`。
+
 ## Stage 2 Dataset-Year Runner
 
 你现在可以用统一入口脚本按“表 + 年份”执行 Stage 2：
