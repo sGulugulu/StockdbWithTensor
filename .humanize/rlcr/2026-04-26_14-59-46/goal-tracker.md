@@ -35,7 +35,7 @@ Source plan: 论文不足与完善计划.md
 ## MUTABLE SECTION
 <!-- Update each round with justification for changes -->
 
-### Plan Version: 3 (Updated: Round 1)
+### Plan Version: 4 (Updated: Round 2)
 
 #### Plan Evolution Log
 <!-- Document any changes to the plan with justification -->
@@ -45,6 +45,7 @@ Source plan: 论文不足与完善计划.md
 | 0 | 将五类不足拆细为可执行子任务，并补充开放问题记录 | 首轮评审指出任务粒度过粗，无法约束执行 | 提高 AC1-AC5 的可验证性 |
 | 1 | 拒绝将 AC1 的“扩展特征字典”任务按完成处理，并补入 split 协议、正式窗口一致性与扩展实验遗漏任务 | Round 1 评审发现当前仅有说明性文档，且论文、代码、输出之间存在明显口径错位 | 防止 AC1-AC4 在失实前提下继续推进 |
 | 1 | 将 AC6 标记为已验证完成 | 独立不足计划文档及两份配套说明文档已存在且可核实 | AC6 达成 |
+| 2 | 确认 split / held-out 主链路已在代码与 smoke 产物中落地，但保留 formal 产物刷新、Top-N 合同生效与 stock/hybrid 修复为活动任务 | Round 2 评审验证了 `sample_run` 新 manifest 合同，同时发现 formal 输出仍是旧产物，且新实现存在配置失效与元数据丢失问题 | 防止 AC2 被过早判定为完成，并补齐后续实现边界 |
 
 #### Active Tasks
 <!-- Map each task to its target Acceptance Criterion and routing tag -->
@@ -52,12 +53,14 @@ Source plan: 论文不足与完善计划.md
 |------|-----------|--------|-----|-------|-------|
 | 建立扩展特征字典与 PIT 安全说明文档 | AC1 | pending | coding | claude | BitLesson=NONE；当前仅形成说明文档，未落地真实字典表、披露时点映射与样例 |
 | 将训练输入边界说明回写到第三章与局限性分析 | AC1 | completed | coding | claude | BitLesson=NONE；已在数据来源与局限性部分补写 |
+| 修正《训练输入扩展与 PIT 安全说明》中对正式窗口已统一的失实表述 | AC1 | pending | coding | claude | 文档仍声称训练输入已统一到 2015-01-05 至 2026-04-01，但根仓库 formal 因子面板与正式输出并不支持该结论 |
 | 将通过 PIT 校验的扩展特征接入统一训练接口并生成扩展版 factor panel | AC1 | pending | coding | claude | 需形成可运行扩展输入，而非停留在 future work 描述 |
 | 重跑 HS300、SZ50、ZZ500 扩展前后对比实验 | AC1 | pending | coding | claude | 需产出 rank、解释方差、Rank IC、IR 等对比结果 |
-| 修复 formal 因子面板与正式输出实际窗口仅覆盖 2026-03 的口径错位 | AC1 | pending | coding | claude | 需补齐 2015-2026 正式窗口，或按真实窗口同步修正论文与配置 |
-| 实现显式训练/验证/测试切分与 held-out 评估，并把 split 元数据写入产物 | AC2 | pending | coding | claude | 当前论文已写明 split 协议，但代码与输出均未实现 |
+| 修复 formal 因子面板与正式输出实际窗口仅覆盖 2026-03 的口径错位 | AC1 | pending | coding | claude | 当前 formal factor panel 已延伸到 2026-04-03，但正式输出仍停留在 2026-03-30；需统一数据、产物与论文口径 |
+| 实现显式训练/验证/测试切分与 held-out 评估，并把 split 元数据写入产物 | AC2 | in_progress | coding | claude | 代码与 `sample_run` 产物已实现 split / preprocess 合同，但 committed formal 输出尚未刷新，`stock` / `hybrid` 模式仍有行业元数据丢失问题 |
+| 重跑 formal HS300、SZ50、ZZ500 以刷新 split / preprocess 产物并替换旧 manifest | AC2 | pending | coding | claude | 当前根仓库 formal `run_manifest.json` 仍无 split / preprocess 字段，论文无法据此引用新协议 |
 | 设计组合回测指标框架与产物清单 | AC2 | pending | coding | claude | BitLesson=NONE；下一轮补回测结果表与图 |
-| 实现 Top-N/分组收益/回撤/风险暴露计算 | AC2 | pending | coding | claude | BitLesson=NONE；需改 evaluation/output |
+| 实现 Top-N/分组收益/回撤/风险暴露计算 | AC2 | pending | coding | claude | BitLesson=NONE；需改 evaluation/output，且 `runtime.selection_top_n` 目前仍未实际约束候选结果 |
 | 设计全 A 股、行业分层、市值分层扩展实验路径 | AC3 | pending | coding | claude | BitLesson=NONE；先补样本边界说明，再落配置与脚本 |
 | 落地全 A 股、行业分层、市值分层配置并生成运行产物 | AC3 | pending | coding | claude | 需形成真实实验结果，而非仅保留扩展路径说明 |
 | 将样本边界扩展影响回写论文正文 | AC3 | pending | coding | claude | BitLesson=NONE；依赖扩展实验结果 |
@@ -86,5 +89,7 @@ Source plan: 论文不足与完善计划.md
 | 参考文献中若干 PDF 条目仍缺少完整出版元数据，当前只能先形成核对清单 | 0 | AC5 | 后续逐篇提取首页信息并统一重排参考文献格式 |
 | 当前回测逻辑尚未进入 `code/stock_tensor`，组合层评估仍停留在计划阶段 | 0 | AC2 | 下一轮优先下钻 evaluation 与 output 链路 |
 | 样本边界扩展尚无全 A/行业/市值分层配置与运行产物 | 0 | AC3 | 下一轮补样本派生脚本和配置 |
-| formal 因子面板与正式输出实际只覆盖 2026-03-02 至 2026-03-30，和论文/配置声称的 2015-01-05 至 2026-04-01 不一致 | 1 | AC1 | 先补齐正式窗口数据，再重跑实验；若短期无法补齐，必须同步修正论文与配置口径 |
-| 论文正文已声明训练/验证/测试切分、held-out 评估、时间状态图和因子热力图，但当前代码与输出合同并未实现 | 1 | AC2 | 先补 split、held-out 与图形产物实现，再回写正文引用 |
+| formal 因子面板、正式输出与说明文档的时间窗口口径仍不一致：factor panel 已到 2026-04-03，formal 输出仍停留在 2026-03-30，说明文档却继续声称已统一到 2015-01-05 至 2026-04-01 | 1 | AC1 | 统一 factor panel、formal 产物、论文与说明文档中的窗口叙事，并在重跑后用新 manifest 取代旧证据 |
+| split / held-out 主链路已在代码与 `sample_run` 产物实现，但 committed formal 输出仍是旧 manifest，正文对时间状态图和热力图的引用仍没有对应产物 | 2 | AC2 | 先重跑 formal 输出刷新 manifest，再继续补图形产物并回写正文引用 |
+| `runtime.selection_top_n` 当前未实际生效：将其改为 1 后，候选池仍输出测试日全部股票 | 2 | AC2 | 在 candidate pool / 组合评估链路中真正应用 Top-N 裁剪，并为该合同补测试 |
+| `stock` / `hybrid` split 下，预处理阶段会把非训练股票的行业元数据写成 `None`，后续无法支撑行业暴露或分层分析 | 2 | AC2 | 修复 `apply_preprocess_state` 的行业映射策略，并补充 `stock` / `hybrid` 模式测试 |
