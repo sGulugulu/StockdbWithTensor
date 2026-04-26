@@ -35,29 +35,39 @@ Source plan: 论文不足与完善计划.md
 ## MUTABLE SECTION
 <!-- Update each round with justification for changes -->
 
-### Plan Version: 1 (Updated: Round 0)
+### Plan Version: 2 (Updated: Round 0)
 
 #### Plan Evolution Log
 <!-- Document any changes to the plan with justification -->
 | Round | Change | Reason | Impact on AC |
 |-------|--------|--------|--------------|
 | 0 | Initial plan | - | - |
+| 0 | 将五类不足拆细为可执行子任务，并补充开放问题记录 | 首轮评审指出任务粒度过粗，无法约束执行 | 提高 AC1-AC5 的可验证性 |
 
 #### Active Tasks
 <!-- Map each task to its target Acceptance Criterion and routing tag -->
 | Task | Target AC | Status | Tag | Owner | Notes |
 |------|-----------|--------|-----|-------|-------|
-| 补全训练输入边界不足分析与扩展计划 | AC1 | pending | coding | claude | BitLesson=NONE；后续需联动数据字典与PIT安全说明 |
-| 补全组合回测闭环不足分析与扩展计划 | AC2 | pending | coding | claude | BitLesson=NONE；后续需落到组合评估设计 |
-| 补全样本边界不足分析与扩展计划 | AC3 | pending | coding | claude | BitLesson=NONE；后续需联动多样本实验对比 |
-| 补全模式发现图表不足分析与增强计划 | AC4 | pending | coding | claude | BitLesson=NONE；后续需联动图表与章节文字 |
-| 补全参考文献元数据不足分析与规范化计划 | AC5 | in_progress | coding | claude | BitLesson=NONE；按建议执行顺序优先推进 |
-| 维护并扩展独立不足记录文档 | AC6 | completed | coding | claude | 已创建论文不足与完善计划.md，后续继续增补 |
+| 建立扩展特征字典与 PIT 安全说明文档 | AC1 | completed | coding | claude | BitLesson=NONE；已新增独立说明文档并回写正文 |
+| 将训练输入边界说明回写到第三章与局限性分析 | AC1 | completed | coding | claude | BitLesson=NONE；已在数据来源与局限性部分补写 |
+| 设计组合回测指标框架与产物清单 | AC2 | pending | coding | claude | BitLesson=NONE；下一轮补回测结果表与图 |
+| 实现 Top-N/分组收益/回撤/风险暴露计算 | AC2 | pending | coding | claude | BitLesson=NONE；需改 evaluation/output |
+| 设计全 A 股、行业分层、市值分层扩展实验路径 | AC3 | pending | coding | claude | BitLesson=NONE；先补样本边界说明，再落配置与脚本 |
+| 将样本边界扩展影响回写论文正文 | AC3 | pending | coding | claude | BitLesson=NONE；依赖扩展实验结果 |
+| 设计模式发现增强图组清单 | AC4 | pending | coding | claude | BitLesson=NONE；热力图、阶段切换图、聚类图仍待实现 |
+| 实现模式发现增强图与图文解释 | AC4 | pending | coding | claude | BitLesson=NONE；需改 output 与正文章节 |
+| 建立参考文献元数据核对清单 | AC5 | completed | coding | claude | BitLesson=NONE；已新增独立核对清单 |
+| 将参考文献规范化方案回写正文 | AC5 | completed | coding | claude | BitLesson=NONE；已在第六章不足分析中回写 |
+| 逐条补齐参考文献缺失元数据 | AC5 | pending | coding | claude | BitLesson=NONE；当前 open issue 为若干 PDF 元数据待提取 |
+| 维护并扩展独立不足记录文档 | AC6 | completed | coding | claude | 已创建并扩展《论文不足与完善计划》及两份配套文档 |
 
 ### Completed and Verified
 <!-- Only move tasks here after Codex verification -->
 | AC | Task | Completed Round | Verified Round | Evidence |
 |----|------|-----------------|----------------|----------|
+| AC1 | 补全训练输入边界不足分析与扩展计划 | 0 | pending | `paper_body.tex` 增补训练输入边界说明；新增 `训练输入扩展与PIT安全说明.md` |
+| AC5 | 补全参考文献元数据不足分析与规范化计划 | 0 | pending | `paper_body.tex` 增补参考文献规范化说明；新增 `参考文献元数据核对清单.md` |
+| AC6 | 维护并扩展独立不足记录文档 | 0 | pending | 已维护 `论文不足与完善计划.md` 并新增两份配套说明文档 |
 
 ### Explicitly Deferred
 <!-- Items here require strong justification -->
@@ -68,3 +78,6 @@ Source plan: 论文不足与完善计划.md
 <!-- Issues discovered during implementation -->
 | Issue | Discovered Round | Blocking AC | Resolution Path |
 |-------|-----------------|-------------|-----------------|
+| 参考文献中若干 PDF 条目仍缺少完整出版元数据，当前只能先形成核对清单 | 0 | AC5 | 后续逐篇提取首页信息并统一重排参考文献格式 |
+| 当前回测逻辑尚未进入 `code/stock_tensor`，组合层评估仍停留在计划阶段 | 0 | AC2 | 下一轮优先下钻 evaluation 与 output 链路 |
+| 样本边界扩展尚无全 A/行业/市值分层配置与运行产物 | 0 | AC3 | 下一轮补样本派生脚本和配置 |
