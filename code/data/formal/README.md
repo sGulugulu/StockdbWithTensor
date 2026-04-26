@@ -48,24 +48,21 @@ Each structured subdirectory now also has its own `README.md` with:
 
 Tongdaxin workflow:
 
-1. Export the full daily panel to `tdx_daily_raw.csv`.
-2. Prepare member files for:
-   - `hs300_history.csv`
-   - `csi_a500_history.csv`
-   - `csi_a50_history.csv`
-3. Build index-specific daily CSV files with:
+1. Export the full daily panel to `tdx_daily_raw.csv` when you need stock-level raw daily data.
+2. Build tracked named index daily CSV files directly from Tongdaxin `.day` sources：
 
 ```powershell
-python3 code/data/build_tdx_index_files.py `
-  --raw-daily code/data/formal/tdx_daily_raw.csv `
-  --hs300-members code/data/formal/hs300_history.csv `
-  --csi-a500-members code/data/formal/csi_a500_history.csv `
-  --csi-a50-members code/data/formal/csi_a50_history.csv `
-  --date-column trade_date `
-  --member-start-column start_date `
-  --member-end-column end_date `
-  --output-dir code/data/formal
+python code/data/build_tdx_named_index_files.py `
+  --vipdoc-root D:\stock\TongDaXin\vipdoc `
+  --output-dir code/data/formal/index_daily
 ```
+
+该脚本会生成：
+
+- `hs300_index_daily.csv` 对应 `000300.SH`
+- `000050_index_daily.csv` 对应 `000050.SH`
+- `csi_a500_index_daily.csv` 对应 `000510.SH`
+- `zz500_index_daily.csv` 对应 `000905.SH`
 
 Baostock workflow:
 

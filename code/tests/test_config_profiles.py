@@ -58,6 +58,11 @@ class ConfigProfileTests(unittest.TestCase):
         self.assertIn("factors/zz500_factor_panel_extended.csv", str(config.data.path).replace("\\", "/"))
         self.assertIn("pit_eps_ttm", config.data.factor_columns)
         self.assertIn("forecast_direction", config.data.factor_columns)
+        self.assertIn("index_daily/zz500_index_daily.csv", str(config.evaluation.benchmark_path).replace("\\", "/"))
+        if config.evaluation.benchmark_path.exists():
+            benchmark_lines = config.evaluation.benchmark_path.read_text(encoding="utf-8").splitlines()
+            self.assertGreater(len(benchmark_lines), 1)
+            self.assertIn("000905.SH", benchmark_lines[1])
 
 
 if __name__ == "__main__":

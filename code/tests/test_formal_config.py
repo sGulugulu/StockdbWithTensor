@@ -91,6 +91,27 @@ class FormalConfigTests(unittest.TestCase):
         self._assert_project_paths_are_relative(output_dir)
         self._assert_portfolio_metrics_not_flat(output_dir)
 
+    def test_formal_zz500_extended_config_runs_with_committed_local_inputs(self) -> None:
+        history_path = ROOT / "data" / "formal" / "universes" / "zz500_history.csv"
+        panel_path = ROOT / "data" / "formal" / "factors" / "zz500_factor_panel_extended.csv"
+        benchmark_path = ROOT / "data" / "formal" / "index_daily" / "zz500_index_daily.csv"
+        if not history_path.exists() or not panel_path.exists():
+            self.skipTest("committed zz500 extended formal inputs are not available")
+        if benchmark_path.exists():
+            benchmark_lines = benchmark_path.read_text(encoding="utf-8").splitlines()
+            self.assertGreater(len(benchmark_lines), 1)
+            self.assertIn("000905.SH", benchmark_lines[1])
+
+        output_dir = run_experiment(ROOT / "configs" / "formal_zz500_extended.yaml")
+        self.assertTrue((output_dir / "run_manifest.json").exists())
+        self.assertTrue((output_dir / "portfolio_metrics.json").exists())
+        manifest = json.loads((output_dir / "run_manifest.json").read_text(encoding="utf-8"))
+        self.assertEqual(manifest["evaluation"]["benchmark_path"], "code/data/formal/index_daily/zz500_index_daily.csv")
+        snapshot = yaml.safe_load((output_dir / "config_snapshot.yaml").read_text(encoding="utf-8"))
+        self.assertIn("index_daily/zz500_index_daily.csv", snapshot["evaluation"]["benchmark_path"].replace("\\", "/"))
+        self._assert_project_paths_are_relative(output_dir)
+        self._assert_portfolio_metrics_not_flat(output_dir)
+
 
 if __name__ == "__main__":
     unittest.main()

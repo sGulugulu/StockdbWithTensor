@@ -53,6 +53,9 @@ class PipelineTests(unittest.TestCase):
             self.assertEqual(manifest["split"]["strategy"], "time")
             self.assertEqual(manifest["split"]["label_role"], "evaluation_only")
             self.assertTrue(manifest["split"]["input_tensor_excludes_labels"])
+            self.assertEqual(manifest["evaluation"]["benchmark_path"], None)
+            self.assertEqual(manifest["evaluation"]["quantile_count"], 5)
+            self.assertEqual(manifest["evaluation"]["transaction_cost_bps"], 0.0)
             portfolio_metrics = yaml.safe_load((output_dir / "portfolio_metrics.json").read_text(encoding="utf-8"))
             self.assertEqual(len(portfolio_metrics), 3)
             self.assertEqual(portfolio_metrics[0]["top_n"], 20)
@@ -104,8 +107,13 @@ class PipelineTests(unittest.TestCase):
                 self.assertEqual(len(cost_adjusted_rows), len(group_returns))
                 self.assertEqual(len(excess_rows), len(group_returns))
                 self.assertTrue(all(row["short_quantile"] == 4 for row in long_short_rows))
+                self.assertEqual(
+                    [row["trade_date"] for row in excess_rows],
+                    [row["trade_date"] for row in group_returns],
+                )
                 for gross_row, cost_row in zip(group_returns, cost_adjusted_rows):
                     self.assertLessEqual(cost_row["net_return"], gross_row["daily_return"] + 1e-12)
+                self.assertTrue(all(row["benchmark_return"] == 0.0 for row in excess_rows))
 
             detail = get_run_detail(Path(temp_dir), "pipeline_test")
             self.assertEqual(detail["manifest"]["market_id"], "cn_a")
