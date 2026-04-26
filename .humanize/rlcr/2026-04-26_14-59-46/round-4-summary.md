@@ -118,7 +118,7 @@
 
 ## BitLesson Delta
 
-- Action: selector attempted but infrastructure failed
+- Action: none
 - Lesson ID(s): NONE
 - Notes:
   - 已按 RLCR 提示读取 `.humanize/bitlesson.md`。
