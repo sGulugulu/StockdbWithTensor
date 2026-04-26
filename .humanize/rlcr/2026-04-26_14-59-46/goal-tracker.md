@@ -35,7 +35,7 @@ Source plan: 论文不足与完善计划.md
 ## MUTABLE SECTION
 <!-- Update each round with justification for changes -->
 
-### Plan Version: 6 (Updated: Round 4)
+### Plan Version: 7 (Updated: Round 4)
 
 #### Plan Evolution Log
 <!-- Document any changes to the plan with justification -->
@@ -48,6 +48,7 @@ Source plan: 论文不足与完善计划.md
 | 2 | 确认 split / held-out 主链路已在代码与 smoke 产物中落地，但保留 formal 产物刷新、Top-N 合同生效与 stock/hybrid 修复为活动任务 | Round 2 评审验证了 `sample_run` 新 manifest 合同，同时发现 formal 输出仍是旧产物，且新实现存在配置失效与元数据丢失问题 | 防止 AC2 被过早判定为完成，并补齐后续实现边界 |
 | 3 | 部分批准 Round 3 的 tracker 更新请求：确认 formal manifest 已刷新、Top-N 与 stock/hybrid 行业元数据缺陷已修复，但新增正文失实表述修正与组合层联动分析遗漏任务 | Round 3 评审验证了局部代码修复和 formal 产物刷新，同时确认原始计划主体仍未完成，且论文继续引用不存在的图表与超窗口结论 | 防止 AC1-AC5 因局部修复而掩盖剩余主体交付 |
 | 4 | 批准将 AC1/AC4 的局部真实进展更新为 `in_progress`，并新增“baseline/extended 对照结果回写论文”任务 | Round 4 评审验证了增强图组已真实落盘、第一版 extended 配置与输出已生成，但正文图表数值和章节叙事仍未完全按当前产物收口 | 让 tracker 反映真实推进，同时避免把局部产物误记为 AC 完成 |
+| 4 | 修正 AC4 收口备注与 Open Issue，删除已失效的“手工数值仍未更新”表述 | 本轮审计核实 `paper_body.tex` 中解释方差、Rank IC 与滚动稳定性三张 PGFPlots 已与当前 committed `metrics.json` 对齐 | 防止 tracker 继续记录已解决问题，并把注意力收束到 AC4 真正剩余的图系缺口 |
 
 #### Active Tasks
 <!-- Map each task to its target Acceptance Criterion and routing tag -->
@@ -69,7 +70,7 @@ Source plan: 论文不足与完善计划.md
 | 将样本边界扩展影响回写论文正文 | AC3 | pending | coding | claude | BitLesson=NONE；依赖扩展实验结果 |
 | 设计模式发现增强图组清单 | AC4 | pending | coding | claude | BitLesson=NONE；热力图、阶段切换图、聚类图仍待实现 |
 | 实现模式发现增强图与图文解释 | AC4 | in_progress | coding | claude | 增强图组已落地到 formal 输出目录，时间状态描述已开始按真实产物修正；但股票潜在结构图、样本边界对比图和章节联动仍待补齐 |
-| 用真实产物重写模式发现章节，删除不存在图表与超窗口时间状态结论 | AC4 | in_progress | coding | claude | 2024/2025 跳变表述已删除，但解释方差、Rank IC 与稳定性图表仍保留旧数值，尚未完全按当前 committed outputs 收口 |
+| 用真实产物重写模式发现章节，删除不存在图表与超窗口时间状态结论 | AC4 | in_progress | coding | claude | 2024/2025 跳变表述已删除，解释方差、Rank IC 与稳定性图表数值已按当前 committed outputs 收口；但股票潜在结构图、样本边界对比图与章节联动仍未完成 |
 | 建立参考文献元数据核对清单 | AC5 | completed | coding | claude | BitLesson=NONE；已新增独立核对清单 |
 | 将参考文献规范化方案回写正文 | AC5 | completed | coding | claude | BitLesson=NONE；已在第六章不足分析中回写 |
 | 逐条补齐参考文献缺失元数据 | AC5 | pending | coding | claude | BitLesson=NONE；当前 open issue 为若干 PDF 元数据待提取 |
@@ -96,5 +97,5 @@ Source plan: 论文不足与完善计划.md
 | 当前回测逻辑尚未进入 `code/stock_tensor`，组合层评估仍停留在计划阶段 | 0 | AC2 | 下一轮优先下钻 evaluation 与 output 链路 |
 | 样本边界扩展尚无全 A/行业/市值分层配置与运行产物 | 0 | AC3 | 下一轮补样本派生脚本和配置 |
 | formal 因子面板与正式输出的时间窗口口径仍不一致：factor panel 已到 2026-04-03，而 formal 输出仍停留在 2026-03-30 | 1 | AC1 | 统一 factor panel、formal 产物与论文叙事中的窗口口径，并在真正扩展或收缩窗口后同步刷新证据链 |
-| 增强图组已落盘，但第五章解释方差、Rank IC 与稳定性图表仍保留旧口径手工数值，模式发现章节尚未完全按当前 committed outputs 收口 | 4 | AC1, AC4 | 以当前 `metrics.json`、增强 SVG 与 `time_regimes_*.json` 重写章节叙事和手工 PGFPlots 数值 |
+| 增强图组与基础图文已落盘，但股票潜在结构图、样本边界对比图和更完整的模式发现章节联动仍未完成 | 4 | AC4 | 继续补股票潜在结构/行业聚类图、样本边界对比图，并把章节叙事扩展到完整图系 |
 | 扩展特征当前仅覆盖财务 PIT 与业绩快报；baseline/extended 对照在不同样本池表现分化明显，且 `build_extended_factor_panel.py` 尚未并入 formal 主构建链 | 4 | AC1 | 继续补宏观与更完整事件特征，增加特征筛选，并把 extended panel 纳入正式数据刷新流程 |
