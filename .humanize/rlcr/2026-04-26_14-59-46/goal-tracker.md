@@ -35,7 +35,7 @@ Source plan: 论文不足与完善计划.md
 ## MUTABLE SECTION
 <!-- Update each round with justification for changes -->
 
-### Plan Version: 11 (Updated: Round 4 Recovery)
+### Plan Version: 12 (Updated: Round 5 Review)
 
 #### Plan Evolution Log
 <!-- Document any changes to the plan with justification -->
@@ -53,6 +53,8 @@ Source plan: 论文不足与完善计划.md
 | 4 | 新增 formal factor panel 统一刷新入口，并将 committed factor panel、formal profile 与六组正式输出统一到 `2026-03-30` | 本轮已验证 baseline/extended 六个 factor panel 最大 `trade_date` 均为 `2026-03-30`，六组 formal 输出的 `requested_end_date` 与 `actual_end_date` 也都为 `2026-03-30` | 收口 AC1 的窗口错位，并把 extended panel 纳入统一刷新入口 |
 | 4 | 新增 formal 标签退化与论文数值失配修复任务 | Round 4 复审发现 `build_formal_factor_panel.py` 在 `max_trade_date` 截断后再计算 `future_return`，使当前 formal 测试窗口标签全为 0；同时 `paper_body.tex` 与 `扩展特征对照实验结果.md` 仍引用旧数值 | 防止 AC1/AC2 因“产物存在”而掩盖数值失真与正文失实问题 |
 | 4 | 修复 formal 标签退化并按 committed outputs 回填正文与对照文档 | 已改为先按股票全量 K 线计算动量和未来收益，再在输出阶段按 universe history 与 `max_trade_date` 过滤；六组 formal 输出重新生成后不再是平线，论文正文与对照文档也已按新结果同步 | 恢复 AC2 组合层证据的数值有效性，并消除 AC1/AC2 的文稿失配 |
+| 5 | 接受 Round 5 的 tracker update request，但保持 AC1-AC5 主体未完成状态 | 本轮复核确认 formal 标签退化修复属实，`paper_body.tex` 与 `扩展特征对照实验结果.md` 的核心数值也已和 committed outputs 对齐；但原始计划的大部分扩展任务仍处于未完成状态 | 允许清除已解决 blocker，同时防止把局部修复误判为全计划完成 |
+| 5 | 新增验证命令契约失配 open issue | 当前仓库环境中 `python` 仍指向 2.7，`python3` 运行测试缺少 `PyYAML` 依赖，且本机无 `latexmk` / `xelatex`，导致 Round 5 Validation 无法按文档命令直接复现 | 需要在后续收口中同步修正文档和验证入口，避免 AC 进展无法复核 |
 
 #### Active Tasks
 <!-- Map each task to its target Acceptance Criterion and routing tag -->
@@ -105,3 +107,4 @@ Source plan: 论文不足与完善计划.md
 | 增强图组与基础图文已落盘，但股票潜在结构图、样本边界对比图和更完整的模式发现章节联动仍未完成 | 4 | AC4 | 继续补股票潜在结构/行业聚类图、样本边界对比图，并把章节叙事扩展到完整图系 |
 | 扩展特征当前仅覆盖财务 PIT 与业绩快报；baseline/extended 对照在不同样本池表现分化明显，仍需继续补宏观变量与更完整事件字典 | 4 | AC1 | 保持统一刷新入口不变，在此基础上继续扩展特征合同、筛选规则与样本池比较 |
 | 组合层虽然已生成净值曲线和回撤图，但严格分位数组收益、交易成本和更系统的暴露/超额收益分析仍未完成 | 4 | AC2 | 继续沿 `evaluation.py` / `output.py` 扩展组合层合同，并把第五章补成完整的组合回测章节 |
+| 仓库命令与当前环境解释器/依赖不一致：`python`=2.7，`python3` 默认环境缺 `PyYAML`，且本机无 `latexmk` / `xelatex`，Round 5 的验证命令无法直接复现 | 5 | ALL | 统一到 `python3` / `.venv` 入口，补齐依赖安装说明，并只保留可在仓库内复现的验证命令 |

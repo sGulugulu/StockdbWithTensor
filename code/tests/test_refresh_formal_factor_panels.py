@@ -18,6 +18,8 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
             (root / "baostock" / "metadata").mkdir(parents=True, exist_ok=True)
             (root / "baostock" / "financial").mkdir(parents=True, exist_ok=True)
             (root / "baostock" / "reports" / "performance_express_report").mkdir(parents=True, exist_ok=True)
+            (root / "baostock" / "reports" / "forecast_report").mkdir(parents=True, exist_ok=True)
+            (root / "index_daily").mkdir(parents=True, exist_ok=True)
 
             (root / "master" / "shared_kline_panel.csv").write_text(
                 "\n".join(
@@ -82,6 +84,33 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
                 ),
                 encoding="utf-8",
             )
+            (root / "baostock" / "reports" / "forecast_report" / "2026.csv").write_text(
+                "\n".join(
+                    [
+                        "code,profitForcastExpPubDate,profitForcastExpStatDate,profitForcastType,profitForcastAbstract,profitForcastChgPctUp,profitForcastChgPctDwn,dataset,query_year",
+                        "sh.600000,2026-03-26,2025-12-31,预增,预计增长,20,10,forecast_report,2026",
+                        "sh.600001,2026-03-26,2025-12-31,预减,预计下降,-10,-20,forecast_report,2026",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            for index_name, code in (("hs300_index_daily.csv", "000300.SH"), ("000050_index_daily.csv", "000050.SH"), ("csi_a500_index_daily.csv", "000905.SH")):
+                (root / "index_daily" / index_name).write_text(
+                    "\n".join(
+                        [
+                            "market,tdx_prefix,stock_code,trade_date,open,high,low,close,amount,volume,source_file",
+                            f"sh,sh,{code},2026-03-24,100,100,100,104,1400,100,a",
+                            f"sh,sh,{code},2026-03-25,100,100,100,105,1500,100,a",
+                            f"sh,sh,{code},2026-03-30,100,100,100,106,1600,100,a",
+                            f"sh,sh,{code},2026-03-31,100,100,100,107,1700,100,a",
+                            f"sh,sh,{code},2026-04-01,100,100,100,108,1800,100,a",
+                            f"sh,sh,{code},2026-04-02,100,100,100,109,1900,100,a",
+                            f"sh,sh,{code},2026-04-03,100,100,100,110,2000,100,a",
+                            f"sh,sh,{code},2026-04-06,100,100,100,111,2100,100,a",
+                        ]
+                    ),
+                    encoding="utf-8",
+                )
 
             outputs = refresh_formal_factor_panels(formal_root=root, max_trade_date="2026-03-30")
 
@@ -91,6 +120,9 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
                 content = output_path.read_text(encoding="utf-8")
                 self.assertIn("2026-03-30", content)
                 self.assertNotIn("2026-04-03", content)
+                if "extended" in output_path.name:
+                    self.assertIn("market_return_1d", content)
+                    self.assertIn("forecast_flag", content)
 
             baseline_rows = (
                 root / "factors" / "hs300_factor_panel.csv"

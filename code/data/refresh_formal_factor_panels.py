@@ -22,12 +22,13 @@ class UniverseSpec:
     history_filename: str
     baseline_panel_filename: str
     extended_panel_filename: str
+    market_index_filename: str
 
 
 UNIVERSE_SPECS = (
-    UniverseSpec("HS300", "hs300_history.csv", "hs300_factor_panel.csv", "hs300_factor_panel_extended.csv"),
-    UniverseSpec("SZ50", "sz50_history.csv", "sz50_factor_panel.csv", "sz50_factor_panel_extended.csv"),
-    UniverseSpec("ZZ500", "zz500_history.csv", "zz500_factor_panel.csv", "zz500_factor_panel_extended.csv"),
+    UniverseSpec("HS300", "hs300_history.csv", "hs300_factor_panel.csv", "hs300_factor_panel_extended.csv", "hs300_index_daily.csv"),
+    UniverseSpec("SZ50", "sz50_history.csv", "sz50_factor_panel.csv", "sz50_factor_panel_extended.csv", "000050_index_daily.csv"),
+    UniverseSpec("ZZ500", "zz500_history.csv", "zz500_factor_panel.csv", "zz500_factor_panel_extended.csv", "csi_a500_index_daily.csv"),
 )
 
 
@@ -38,6 +39,7 @@ def refresh_formal_factor_panels(*, formal_root: Path, max_trade_date: str = DEF
     industry_path = normalized_root / "baostock" / "metadata" / "stock_industry.csv"
     profit_data_path = normalized_root / "baostock" / "financial" / "profit_data.csv"
     performance_express_path = normalized_root / "baostock" / "reports" / "performance_express_report"
+    forecast_report_path = normalized_root / "baostock" / "reports" / "forecast_report"
 
     for spec in UNIVERSE_SPECS:
         baseline_output = normalized_root / "factors" / spec.baseline_panel_filename
@@ -55,6 +57,8 @@ def refresh_formal_factor_panels(*, formal_root: Path, max_trade_date: str = DEF
             base_panel_path=baseline_output,
             profit_data_path=profit_data_path,
             performance_express_path=performance_express_path,
+            forecast_report_path=forecast_report_path,
+            market_index_path=normalized_root / "index_daily" / spec.market_index_filename,
             output_path=extended_output,
             max_trade_date=max_trade_date,
         )

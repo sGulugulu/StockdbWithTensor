@@ -24,6 +24,10 @@ data:
     - momentum_factor
     - quality_factor
     - volatility_factor
+    - market_return_1d
+    - market_momentum_5d
+    - market_volatility_20d
+    - market_amount_change_5d
     - pit_roe_avg
     - pit_np_margin
     - pit_gp_margin
@@ -33,6 +37,10 @@ data:
     - perf_express_gryoy
     - perf_express_opyoy
     - perf_express_flag
+    - forecast_direction
+    - forecast_chg_pct_up
+    - forecast_chg_pct_dwn
+    - forecast_flag
 
 preprocess:
   max_missing_ratio: 0.45
