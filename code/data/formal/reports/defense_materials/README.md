@@ -10,19 +10,22 @@
 | 跨样本组合闭环 | `code/data/formal/reports/boundary_portfolio/README.md` | 汇总 Rank IC、Top-N、分组价差、多空、成本后收益、超额收益、回撤、换手、波动、Sharpe 和暴露 |
 | 组合闭环机器结果 | `code/data/formal/reports/boundary_portfolio/boundary_portfolio_summary.json` | 支撑答辩页数值复核和表格二次加工 |
 | 长窗口复跑入口 | `code/data/formal/reports/long_window_plan/README.md` | 提供全 A、行业分层和市值分层按年度扩展的复跑命令与派生配置 |
+| 长窗口组合汇总 | `code/data/formal/reports/long_window_portfolio/README.md` | 汇总 2015、2020、2024、2026 四个代表性窗口下的跨边界组合、Rank IC 与暴露差异 |
+| 长窗口模式发现图组 | `code/data/formal/reports/pattern_discovery_long_window_2020/README.md` | 汇总 2020 长窗口全 A 锚定样本的股票潜在结构、行业聚类关系与跨边界对比 |
 | 股票潜在结构 | `code/data/formal/reports/pattern_discovery/stock_latent_structure_formal_all_a_run_tucker.svg` | 展示全 A 样本中的股票相似关系 |
 | 行业聚类关系 | `code/data/formal/reports/pattern_discovery/cluster_vs_industry_formal_all_a_run_tucker.svg` | 展示潜在聚类与行业标签的对应关系 |
 | 样本边界对比 | `code/data/formal/reports/pattern_discovery/boundary_comparison_tucker.svg` | 展示指数、全 A、行业和市值边界下的表现差异 |
-| 时间状态切换 | `code/outputs/formal_all_a_run/time_regime_timeline.svg` | 展示短窗口内的时间状态切换；长窗口实验完成后替换为长窗口版本 |
-| 因子重要性 | `code/outputs/formal_all_a_run/factor_importance_heatmap.svg` | 展示潜在结构对应的核心因子贡献 |
+| 时间状态切换 | `code/data/formal/reports/defense_materials/long_window_assets/formal_all_a_2015_time_regime_timeline.svg`、`formal_all_a_2020_time_regime_timeline.svg`、`formal_all_a_2024_time_regime_timeline.svg`、`formal_all_a_2026_time_regime_timeline.svg` | 展示 2015、2020、2024、2026 四个代表性长窗口中的时间状态切换 |
+| 因子重要性 | `code/data/formal/reports/defense_materials/long_window_assets/formal_all_a_2015_factor_importance_heatmap.svg`、`formal_all_a_2020_factor_importance_heatmap.svg`、`formal_all_a_2024_factor_importance_heatmap.svg`、`formal_all_a_2026_factor_importance_heatmap.svg` | 展示不同市场阶段下潜在结构对应的核心因子贡献 |
 
 ## 推荐答辩页顺序
 
 1. 先展示 extended 输入合同，解释为什么所有新增特征必须有 PIT 可用时点。
 2. 再展示跨样本组合闭环表，说明排序指标如何转换为组合表现和风险暴露。
-3. 接着展示长窗口复跑入口，说明当前短窗口结论如何扩展到跨年份、跨市场阶段复核。
-4. 然后展示潜在股票结构与行业聚类关系，回答“模式发现发现了什么”。
-5. 最后展示样本边界对比，说明结论在哪些边界上稳定、在哪些边界上需要谨慎外推。
+3. 接着展示长窗口组合汇总表，说明 2015、2020、2024、2026 四个代表性窗口下最优模型会随市场阶段变化。
+4. 再展示长窗口时间状态切换和因子重要性热力图，说明不同年份下潜在结构如何迁移。
+5. 然后展示 2020 长窗口模式发现图组，回答“模式发现发现了什么”。
+6. 最后展示样本边界对比，说明结论在哪些边界上稳定、在哪些边界上需要谨慎外推。
 
 ## 复现命令
 
@@ -42,4 +45,4 @@ python3 code/data/summarize_boundary_portfolio.py `
   --exposure-limit 3
 ```
 
-当前素材包仍以仓库已提交的 `2026-03-02` 至 `2026-03-30` formal 快照为准。若后续长窗口实验落地，必须同步替换时间状态切换图、因子重要性图和跨样本组合闭环表。
+当前素材包已经同时覆盖短窗口正式快照与 2015、2020、2024、2026 四个代表性长窗口结果。若后续继续补齐其余年度 long-window run，可在不改变当前叙事结构的前提下继续替换或追加年份图表。

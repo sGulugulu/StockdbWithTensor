@@ -13,7 +13,7 @@ market:
   universe_id_column: universe_id
 
 data:
-  path: "../../../factors/all_a_factor_panel.csv"
+  path: "../../../factors/long_window/all_a_factor_panel_long_window.csv"
   format: wide
   stock_column: stock_code
   date_column: trade_date

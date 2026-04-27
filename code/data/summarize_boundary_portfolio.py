@@ -170,15 +170,16 @@ def _write_markdown(path: Path, summaries: list[dict[str, Any]]) -> None:
         "",
         "## 样本池概览",
         "",
-        "| 样本池 | 起止日期 | 候选池 | Top-N | Rank IC 最优 | 收益最优 | Sharpe 最优 |",
-        "|---|---:|---:|---:|---|---|---|",
+        "| 运行名 | 样本池 | 起止日期 | 候选池 | Top-N | Rank IC 最优 | 收益最优 | Sharpe 最优 |",
+        "|---|---|---:|---:|---:|---|---|---|",
     ]
     for summary in summaries:
         lines.append(
             (
-                "| {universe} | {start} 至 {end} | {pool} | {top_n} | "
+                "| {run_name} | {universe} | {start} 至 {end} | {pool} | {top_n} | "
                 "{rank_model} | {return_model} | {sharpe_model} |"
             ).format(
+                run_name=summary["run_name"],
                 universe=summary["universe_id"],
                 start=summary.get("actual_start_date") or "-",
                 end=summary.get("actual_end_date") or "-",
@@ -196,20 +197,21 @@ def _write_markdown(path: Path, summaries: list[dict[str, Any]]) -> None:
             "## 模型明细",
             "",
             (
-                "| 样本池 | 模型 | Rank IC | 稳定性 | Top-N收益 | 分组价差 | 多空NAV | "
+                "| 运行名 | 样本池 | 模型 | Rank IC | 稳定性 | Top-N收益 | 分组价差 | 多空NAV | "
                 "成本后NAV | 平均成本 | 超额NAV | 年化波动 | Sharpe | 最大回撤 | 平均换手 | 主要行业暴露 | 主要风格暴露 |"
             ),
-            "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|---|",
+            "|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|---|",
         ]
     )
     for summary in summaries:
         for row in summary["models"]:
             lines.append(
                 (
-                    "| {universe} | {model} | {rank_ic} | {stability} | {ret} | {spread} | "
+                    "| {run_name} | {universe} | {model} | {rank_ic} | {stability} | {ret} | {spread} | "
                     "{long_short} | {cost_nav} | {avg_cost} | {excess_nav} | {vol} | {sharpe} | "
                     "{drawdown} | {turnover} | {industry} | {style} |"
                 ).format(
+                    run_name=summary["run_name"],
                     universe=summary["universe_id"],
                     model=str(row["model"]).upper(),
                     rank_ic=_format_float(float(row["rank_ic_mean"])),

@@ -46,6 +46,14 @@ def _quote_yaml_scalar(value: str) -> str:
     return f'"{escaped}"'
 
 
+def _display_cli_path(path: Path, *, cwd: Path) -> str:
+    resolved = path.resolve()
+    try:
+        return Path(os.path.relpath(resolved, start=cwd)).as_posix()
+    except ValueError:
+        return resolved.as_posix()
+
+
 def _relocate_config_path(source_config: Path, output_config: Path, value: str) -> str:
     raw = value.strip().strip('"').strip("'")
     if not raw:
@@ -59,6 +67,21 @@ def _relocate_config_path(source_config: Path, output_config: Path, value: str) 
         return Path(os.path.relpath(target, start=output_config.parent)).as_posix()
     except ValueError:
         return target.as_posix()
+
+
+def _long_window_factor_panel_path(source_config: Path, current_value: str) -> str | None:
+    raw = current_value.strip().strip('"').strip("'")
+    if not raw:
+        return None
+    target = (source_config.parent / Path(raw)).resolve()
+    if target.suffix.lower() != ".csv":
+        return None
+    if target.parent.name != "factors":
+        return None
+    if not target.stem.endswith("_factor_panel"):
+        return None
+    long_window_target = target.parent / "long_window" / f"{target.stem}_long_window.csv"
+    return long_window_target.as_posix()
 
 
 def _write_config_variant(
@@ -78,15 +101,21 @@ def _write_config_variant(
             stripped = line.lstrip()
             if stripped.startswith(f"{key}:"):
                 current_value = stripped.split(":", 1)[1]
-                resolved_value = _quote_yaml_scalar(_relocate_config_path(source_config, output_config, current_value))
+                override_value = None
+                if key == "path":
+                    override_value = _long_window_factor_panel_path(source_config, current_value)
+                relocated_source = override_value if override_value is not None else current_value
+                resolved_value = _quote_yaml_scalar(_relocate_config_path(source_config, output_config, relocated_source))
                 lines = _replace_yaml_scalar(lines, key, resolved_value)
                 break
     output_config.parent.mkdir(parents=True, exist_ok=True)
     output_config.write_text("".join(lines), encoding="utf-8")
 
 
-def _build_command(config_path: Path) -> str:
-    return f"python3 code/main.py --config {config_path.as_posix()}"
+def _build_command(config_path: Path | str) -> str:
+    path_text = config_path.as_posix() if isinstance(config_path, Path) else str(config_path)
+    escaped = path_text.replace('"', '\\"')
+    return f'.venv/bin/python3 code/main.py --config "{escaped}"'
 
 
 def build_long_window_run_plan(
@@ -97,6 +126,7 @@ def build_long_window_run_plan(
     report_dir: Path,
 ) -> LongWindowRunPlanResult:
     report_dir.mkdir(parents=True, exist_ok=True)
+    cwd = Path.cwd().resolve()
     windows = iter_year_date_ranges(start_date, end_date)
     rows: list[dict[str, str | int]] = []
     config_dir = report_dir / "configs"
@@ -113,13 +143,13 @@ def build_long_window_run_plan(
             )
             rows.append(
                 {
-                    "config": config_path.as_posix(),
-                    "config_variant": output_config.as_posix(),
+                    "config": _display_cli_path(config_path, cwd=cwd),
+                    "config_variant": _display_cli_path(output_config, cwd=cwd),
                     "year": year,
                     "start_date": window_start,
                     "end_date": window_end,
                     "output_name": output_name,
-                    "command": _build_command(output_config),
+                    "command": _build_command(Path(_display_cli_path(output_config, cwd=cwd))),
                 }
             )
 

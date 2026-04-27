@@ -128,6 +128,7 @@ class SummarizeBoundaryPortfolioTests(unittest.TestCase):
             self.assertAlmostEqual(tucker_row["average_transaction_cost"], 0.0015, places=6)
             self.assertAlmostEqual(tucker_row["excess_cumulative_nav"], 1.03, places=6)
             markdown = result.summary_md.read_text(encoding="utf-8")
+            self.assertIn("formal_all_a_run", markdown)
             self.assertIn("ALL_A_ACTIVE", markdown)
             self.assertIn("成本后NAV", markdown)
             self.assertIn("超额NAV", markdown)
