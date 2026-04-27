@@ -1,0 +1,45 @@
+# 答辩材料素材包
+
+本文档用于收口第五章结果页和答辩展示页素材，避免图表、组合结果和训练输入说明分散在不同目录中。
+
+## 素材清单
+
+| 模块 | 文件 | 用途 |
+|------|------|------|
+| 训练输入扩展 | `code/data/formal/factors/EXTENDED_FACTOR_CONTRACT.md` | 说明 baseline 与 extended factor panel 的字段边界、PIT 规则和可用时点 |
+| 跨样本组合闭环 | `code/data/formal/reports/boundary_portfolio/README.md` | 汇总 Rank IC、Top-N、分组价差、多空、成本后收益、超额收益、回撤、换手、波动、Sharpe 和暴露 |
+| 组合闭环机器结果 | `code/data/formal/reports/boundary_portfolio/boundary_portfolio_summary.json` | 支撑答辩页数值复核和表格二次加工 |
+| 长窗口复跑入口 | `code/data/formal/reports/long_window_plan/README.md` | 提供全 A、行业分层和市值分层按年度扩展的复跑命令与派生配置 |
+| 股票潜在结构 | `code/data/formal/reports/pattern_discovery/stock_latent_structure_formal_all_a_run_tucker.svg` | 展示全 A 样本中的股票相似关系 |
+| 行业聚类关系 | `code/data/formal/reports/pattern_discovery/cluster_vs_industry_formal_all_a_run_tucker.svg` | 展示潜在聚类与行业标签的对应关系 |
+| 样本边界对比 | `code/data/formal/reports/pattern_discovery/boundary_comparison_tucker.svg` | 展示指数、全 A、行业和市值边界下的表现差异 |
+| 时间状态切换 | `code/outputs/formal_all_a_run/time_regime_timeline.svg` | 展示短窗口内的时间状态切换；长窗口实验完成后替换为长窗口版本 |
+| 因子重要性 | `code/outputs/formal_all_a_run/factor_importance_heatmap.svg` | 展示潜在结构对应的核心因子贡献 |
+
+## 推荐答辩页顺序
+
+1. 先展示 extended 输入合同，解释为什么所有新增特征必须有 PIT 可用时点。
+2. 再展示跨样本组合闭环表，说明排序指标如何转换为组合表现和风险暴露。
+3. 接着展示长窗口复跑入口，说明当前短窗口结论如何扩展到跨年份、跨市场阶段复核。
+4. 然后展示潜在股票结构与行业聚类关系，回答“模式发现发现了什么”。
+5. 最后展示样本边界对比，说明结论在哪些边界上稳定、在哪些边界上需要谨慎外推。
+
+## 复现命令
+
+```powershell
+python3 code/data/summarize_boundary_portfolio.py `
+  --output-dir code/outputs/formal_hs300_run `
+  --output-dir code/outputs/formal_sz50_run `
+  --output-dir code/outputs/formal_zz500_run `
+  --output-dir code/outputs/formal_all_a_run `
+  --output-dir code/outputs/formal_industry_c27_run `
+  --output-dir code/outputs/formal_industry_c35_run `
+  --output-dir code/outputs/formal_industry_c39_run `
+  --output-dir code/outputs/formal_size_small_run `
+  --output-dir code/outputs/formal_size_mid_run `
+  --output-dir code/outputs/formal_size_large_run `
+  --report-dir code/data/formal/reports/boundary_portfolio `
+  --exposure-limit 3
+```
+
+当前素材包仍以仓库已提交的 `2026-03-02` 至 `2026-03-30` formal 快照为准。若后续长窗口实验落地，必须同步替换时间状态切换图、因子重要性图和跨样本组合闭环表。

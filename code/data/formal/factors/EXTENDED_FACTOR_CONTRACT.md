@@ -12,8 +12,13 @@
 |--------|--------|----------|----------|--------------|----------|
 | `market_return_1d` | `index_daily/*.csv` | `close` | `trade_date` | 交易日收盘后形成，下一交易日训练样本直接使用同日已知指数收盘序列 | 无记录时填 `0.0` |
 | `market_momentum_5d` | `index_daily/*.csv` | `close` | `trade_date` | 同上，按指数 5 日滚动收益构造 | 无记录时填 `0.0` |
+| `market_momentum_20d` | `index_daily/*.csv` | `close` | `trade_date` | 同上，按指数 20 日滚动收益构造，用作月度市场状态代理 | 无记录时填 `0.0` |
 | `market_volatility_20d` | `index_daily/*.csv` | `close` | `trade_date` | 同上，按指数近 20 日收益波动率构造 | 无记录时填 `0.0` |
+| `market_drawdown_20d` | `index_daily/*.csv` | `close` | `trade_date` | 同上，按近 20 日高点回撤构造，用于刻画市场压力状态 | 无记录时填 `0.0` |
 | `market_amount_change_5d` | `index_daily/*.csv` | `amount` | `trade_date` | 同上，按指数成交额 5 日变化率构造 | 无记录时填 `0.0` |
+| `market_amount_zscore_20d` | `index_daily/*.csv` | `amount` | `trade_date` | 同上，按指数成交额近 20 日滚动 z-score 构造，用于刻画流动性冲击 | 无记录时填 `0.0` |
+| `macro_proxy_risk_score` | `index_daily/*.csv` | `close` | `trade_date` | 在外部宏观源表尚未具备 PIT 可用时点前，使用指数 20 日波动率与回撤合成市场风险代理 | 无记录时填 `0.0` |
+| `macro_proxy_liquidity_score` | `index_daily/*.csv` | `amount` | `trade_date` | 使用指数成交额变化率与成交额 z-score 合成流动性代理，作为宏观流动性层的可复核占位 | 无记录时填 `0.0` |
 
 ### 二、财务 PIT 特征
 
@@ -23,6 +28,7 @@
 | `pit_np_margin` | `financial/profit_data.csv` | `npMargin` | `pubDate` | 同上 | 无可用记录时填 `0.0` |
 | `pit_gp_margin` | `financial/profit_data.csv` | `gpMargin` | `pubDate` | 同上 | 无可用记录时填 `0.0` |
 | `pit_eps_ttm` | `financial/profit_data.csv` | `epsTTM` | `pubDate` | 同上 | 无可用记录时填 `0.0` |
+| `pit_data_age_days` | `financial/profit_data.csv` | 公告日至交易日间隔 | `pubDate` | 仅在记录达到最早可用交易日后计算，用于衡量财务 PIT 信息新鲜度 | 无可用记录时填 `0` |
 
 ### 三、事件型特征
 
@@ -32,10 +38,19 @@
 | `perf_express_roe_wa` | `reports/performance_express_report/*.csv` | `performanceExpressROEWa` | `performanceExpPubDate` | 同上 | 无可用记录时填 `0.0` |
 | `perf_express_gryoy` | `reports/performance_express_report/*.csv` | `performanceExpressGRYOY` | `performanceExpPubDate` | 同上 | 无可用记录时填 `0.0` |
 | `perf_express_opyoy` | `reports/performance_express_report/*.csv` | `performanceExpressOPYOY` | `performanceExpPubDate` | 同上 | 无可用记录时填 `0.0` |
+| `perf_express_age_days` | `reports/performance_express_report/*.csv` | 公告日至交易日间隔 | `performanceExpPubDate` | 仅在记录达到最早可用交易日后计算，表示事件新鲜度 | 无可用记录时填 `0` |
 | `perf_express_flag` | `reports/performance_express_report/*.csv` | 是否存在有效记录 | `performanceExpPubDate` | 若存在 `available_date <= trade_date` 的记录则置 `1`，否则置 `0` | 默认 `0` |
 | `forecast_direction` | `reports/forecast_report/*.csv` | `profitForcastType` | `profitForcastExpPubDate` | 公告日之后的首个交易日开始可用；将预增/略增/续盈/扭亏映射为 `1`，预减/略减/首亏/续亏映射为 `-1` | 无可用记录时填 `0.0` |
 | `forecast_chg_pct_up` | `reports/forecast_report/*.csv` | `profitForcastChgPctUp` | `profitForcastExpPubDate` | 同上 | 无可用记录时填 `0.0` |
 | `forecast_chg_pct_dwn` | `reports/forecast_report/*.csv` | `profitForcastChgPctDwn` | `profitForcastExpPubDate` | 同上 | 无可用记录时填 `0.0` |
+| `forecast_change_midpoint` | `reports/forecast_report/*.csv` | `profitForcastChgPctUp`、`profitForcastChgPctDwn` | `profitForcastExpPubDate` | 同上，取预告上下界均值刻画事件中枢 | 无可用记录时填 `0.0` |
+| `forecast_change_width` | `reports/forecast_report/*.csv` | `profitForcastChgPctUp`、`profitForcastChgPctDwn` | `profitForcastExpPubDate` | 同上，取预告区间宽度刻画不确定性 | 无可用记录时填 `0.0` |
+| `forecast_age_days` | `reports/forecast_report/*.csv` | 公告日至交易日间隔 | `profitForcastExpPubDate` | 仅在记录达到最早可用交易日后计算，表示事件新鲜度 | 无可用记录时填 `0` |
+| `event_positive_flag` | `reports/performance_express_report/*.csv`、`reports/forecast_report/*.csv` | 快报 EPS 变化率、预告方向 | 对应公告日 | 任一可用事件显示正向变化时置 `1`，用于统一事件字典的方向层 | 默认 `0` |
+| `event_negative_flag` | `reports/performance_express_report/*.csv`、`reports/forecast_report/*.csv` | 快报 EPS 变化率、预告方向 | 对应公告日 | 任一可用事件显示负向变化时置 `1`，用于统一事件字典的方向层 | 默认 `0` |
+| `event_uncertainty_score` | `reports/forecast_report/*.csv` | `profitForcastChgPctUp`、`profitForcastChgPctDwn` | `profitForcastExpPubDate` | 预告上下界宽度，仅在事件可用后生效，用于刻画公告不确定性 | 无可用记录时填 `0.0` |
+| `event_age_decay_score` | `reports/performance_express_report/*.csv`、`reports/forecast_report/*.csv` | 公告日至交易日间隔 | 对应公告日 | 对可用事件按 `1 / (1 + age_days)` 衰减求和，避免陈旧事件与新公告等权 | 无可用记录时填 `0.0` |
+| `event_intensity_score` | `reports/performance_express_report/*.csv`、`reports/forecast_report/*.csv` | 业绩快报 EPS 变化率、业绩预告区间中枢 | 对应公告日 | 同上，取可用事件强度绝对值合计，避免方向抵消 | 无可用记录时填 `0.0` |
 | `forecast_flag` | `reports/forecast_report/*.csv` | 是否存在有效记录 | `profitForcastExpPubDate` | 若存在 `available_date <= trade_date` 的记录则置 `1`，否则置 `0` | 默认 `0` |
 
 ## 约束
@@ -44,3 +59,4 @@
 2. 不允许按 `statDate` 直接前填，否则会引入未来信息泄露。
 3. 市场级代理变量只进入 extended panel，不回写 baseline panel。
 4. 扩展版 panel 作为 baseline panel 的超集存在，便于后续做 baseline/extended 对照实验。
+5. 外部利率、宏观月度指标、分红、重大事项和公告文本在当前仓库尚无可审计可用时点字段，因此本合同只允许使用指数状态代理和已披露报告事件生成训练字段。

@@ -10,7 +10,19 @@ CODE_ROOT = Path(__file__).resolve().parents[1]
 if str(CODE_ROOT) not in sys.path:
     sys.path.insert(0, str(CODE_ROOT))
 
-from stock_tensor.market import SymbolNormalizer
+
+def _normalize_cn_a_symbol(symbol: str) -> str:
+    cleaned = symbol.strip().upper()
+    if "." in cleaned:
+        left, right = cleaned.split(".", 1)
+        if left in {"SH", "SZ", "BJ"} and right.isdigit():
+            return f"{right}.{left}"
+        if right in {"SH", "SZ", "BJ"} and left.isdigit():
+            return f"{left}.{right}"
+        return cleaned
+    if cleaned.startswith(("6", "9")):
+        return f"{cleaned}.SH"
+    return f"{cleaned}.SZ"
 
 
 def _to_float(value: str | None) -> float | None:
@@ -25,9 +37,8 @@ def _to_float(value: str | None) -> float | None:
 def _load_industry_map(path: Path) -> dict[str, str]:
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
-        normalizer = SymbolNormalizer("cn_a")
         return {
-            normalizer.normalize(row["code"]): row.get("industry", "")
+            _normalize_cn_a_symbol(row["code"]): row.get("industry", "")
             for row in reader
             if row.get("code")
         }
@@ -37,9 +48,8 @@ def _load_membership_map(path: Path) -> dict[str, list[tuple[str, str]]]:
     memberships: dict[str, list[tuple[str, str]]] = defaultdict(list)
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
-        normalizer = SymbolNormalizer("cn_a")
         for row in reader:
-            memberships[normalizer.normalize(row["stock_code"])].append((row["start_date"], row["end_date"]))
+            memberships[_normalize_cn_a_symbol(row["stock_code"])].append((row["start_date"], row["end_date"]))
     return memberships
 
 
@@ -76,12 +86,11 @@ def build_formal_factor_panel(
 ) -> None:
     industry_map = _load_industry_map(industry_path)
     membership_map = _load_membership_map(membership_path)
-    normalizer = SymbolNormalizer("cn_a")
     grouped_rows: dict[str, list[dict[str, str]]] = defaultdict(list)
     with kline_path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
         for row in reader:
-            normalized_code = normalizer.normalize(row[symbol_column])
+            normalized_code = _normalize_cn_a_symbol(row[symbol_column])
             grouped_rows[normalized_code].append({**row, symbol_column: normalized_code})
 
     output_rows: list[dict[str, object]] = []

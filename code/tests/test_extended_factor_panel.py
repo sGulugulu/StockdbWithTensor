@@ -70,6 +70,8 @@ class ExtendedFactorPanelTests(unittest.TestCase):
                         "sh,sh,000300.SH,2026-03-23,100,100,100,103,1300,100,a",
                         "sh,sh,000300.SH,2026-03-24,100,100,100,104,1400,100,a",
                         "sh,sh,000300.SH,2026-03-25,100,100,100,105,1500,100,a",
+                        "sh,sh,000300.SH,2026-03-26,100,100,100,103,2000,100,a",
+                        "sh,sh,000300.SH,2026-03-27,100,100,100,102,2300,100,a",
                         "sh,sh,000300.SH,2026-03-30,100,100,100,106,1600,100,a",
                     ]
                 ),
@@ -87,10 +89,25 @@ class ExtendedFactorPanelTests(unittest.TestCase):
 
             content = output_path.read_text(encoding="utf-8")
             self.assertIn("market_return_1d", content)
+            self.assertIn("market_momentum_20d", content)
+            self.assertIn("market_drawdown_20d", content)
+            self.assertIn("market_amount_zscore_20d", content)
+            self.assertIn("macro_proxy_risk_score", content)
+            self.assertIn("macro_proxy_liquidity_score", content)
             self.assertIn("pit_roe_avg", content)
+            self.assertIn("pit_data_age_days", content)
             self.assertIn("perf_express_eps_chg_pct", content)
+            self.assertIn("perf_express_age_days", content)
             self.assertIn("perf_express_flag", content)
             self.assertIn("forecast_direction", content)
+            self.assertIn("forecast_change_midpoint", content)
+            self.assertIn("forecast_change_width", content)
+            self.assertIn("forecast_age_days", content)
+            self.assertIn("event_positive_flag", content)
+            self.assertIn("event_negative_flag", content)
+            self.assertIn("event_uncertainty_score", content)
+            self.assertIn("event_age_decay_score", content)
+            self.assertIn("event_intensity_score", content)
             self.assertIn("forecast_flag", content)
             self.assertIn("0.11", content)
             self.assertIn("0.55", content)
@@ -111,8 +128,19 @@ class ExtendedFactorPanelTests(unittest.TestCase):
             self.assertAlmostEqual(float(row2["perf_express_eps_chg_pct"]), 0.55, places=6)
             self.assertEqual(float(row2["forecast_flag"]), 1.0)
             self.assertEqual(float(row2["forecast_direction"]), 1.0)
+            self.assertEqual(float(row2["event_positive_flag"]), 1.0)
+            self.assertEqual(float(row2["event_negative_flag"]), 0.0)
             self.assertAlmostEqual(float(row2["forecast_chg_pct_up"]), 20.0, places=6)
+            self.assertAlmostEqual(float(row2["forecast_change_midpoint"]), 15.0, places=6)
+            self.assertAlmostEqual(float(row2["forecast_change_width"]), 10.0, places=6)
+            self.assertAlmostEqual(float(row2["event_uncertainty_score"]), 10.0, places=6)
+            self.assertEqual(float(row2["forecast_age_days"]), 5.0)
+            self.assertEqual(float(row2["perf_express_age_days"]), 5.0)
+            self.assertEqual(float(row2["pit_data_age_days"]), 6.0)
+            self.assertGreater(float(row2["event_age_decay_score"]), 0.0)
+            self.assertGreater(float(row2["event_intensity_score"]), 15.0)
             self.assertGreater(float(row2["market_momentum_5d"]), 0.0)
+            self.assertLessEqual(float(row2["market_drawdown_20d"]), 0.0)
 
     def test_build_extended_factor_panel_supports_max_trade_date_cap(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:

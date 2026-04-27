@@ -122,7 +122,9 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
                 self.assertNotIn("2026-04-03", content)
                 if "extended" in output_path.name:
                     self.assertIn("market_return_1d", content)
+                    self.assertIn("market_drawdown_20d", content)
                     self.assertIn("forecast_flag", content)
+                    self.assertIn("event_intensity_score", content)
 
             baseline_rows = (
                 root / "factors" / "hs300_factor_panel.csv"

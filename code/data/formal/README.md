@@ -52,7 +52,7 @@ Tongdaxin workflow:
 2. Build tracked named index daily CSV files directly from Tongdaxin `.day` sources：
 
 ```powershell
-python code/data/build_tdx_named_index_files.py `
+python3 code/data/build_tdx_named_index_files.py `
   --vipdoc-root D:\stock\TongDaXin\vipdoc `
   --output-dir code/data/formal/index_daily
 ```
@@ -78,7 +78,7 @@ Baostock workflow:
 4. Example command:
 
 ```powershell
-python code/data/fetch_baostock_data.py `
+python3 code/data/fetch_baostock_data.py `
   --output-root code/data/formal/baostock `
   --start-date 2015-01-01 `
   --end-date 2026-04-01 `
@@ -102,14 +102,14 @@ Output layout:
 After the constituent snapshots are ready, you can build member-history files and kline panels:
 
 ```powershell
-python code/data/build_baostock_member_history.py `
+python3 code/data/build_baostock_member_history.py `
   --snapshot code/data/formal/baostock/index_memberships/hs300_snapshots.csv `
   --output code/data/formal/universes/hs300_history.csv `
   --horizon-date 2026-04-01
 ```
 
 ```powershell
-python code/data/fetch_baostock_kline.py `
+python3 code/data/fetch_baostock_kline.py `
   --codes-file code/data/formal/baostock/metadata/all_a_codes.csv `
   --output-path code/data/formal/master/shared_kline_panel.csv `
   --start-date 2015-01-01 `
@@ -119,7 +119,7 @@ python code/data/fetch_baostock_kline.py `
 If `stock_basic.csv` already exists, you can build the tradable all-A-share universe history offline:
 
 ```powershell
-python code/data/build_all_a_tradable_history.py `
+python3 code/data/build_all_a_tradable_history.py `
   --stock-basic-path code/data/formal/baostock/metadata/stock_basic.csv `
   --output-path code/data/formal/universes/all_a_tradable_history.csv `
   --horizon-date 2026-04-01
@@ -128,7 +128,7 @@ python code/data/build_all_a_tradable_history.py `
 Once the structured CSV outputs are validated, you can create parquet mirrors:
 
 ```powershell
-python code/data/convert_formal_csv_to_parquet.py `
+python3 code/data/convert_formal_csv_to_parquet.py `
   --formal-root code/data/formal `
   --overwrite
 ```
@@ -136,7 +136,7 @@ python code/data/convert_formal_csv_to_parquet.py `
 如果你要刷新当前提交版实验所使用的 baseline/extended 因子面板，推荐直接执行：
 
 ```powershell
-python code/data/refresh_formal_factor_panels.py `
+python3 code/data/refresh_formal_factor_panels.py `
   --formal-root code/data/formal `
   --max-trade-date 2026-03-30
 ```
@@ -144,7 +144,7 @@ python code/data/refresh_formal_factor_panels.py `
 如果你要刷新 AC3 的样本边界扩展资产，推荐执行：
 
 ```powershell
-python code/data/refresh_segmented_formal_assets.py `
+python3 code/data/refresh_segmented_formal_assets.py `
   --formal-root code/data/formal `
   --max-trade-date 2026-03-30
 ```
@@ -163,7 +163,7 @@ python code/data/refresh_segmented_formal_assets.py `
 分层 run 完成后，可以生成 AC4 的模式发现扩展图组：
 
 ```powershell
-python code/data/build_pattern_discovery_assets.py `
+python3 code/data/build_pattern_discovery_assets.py `
   --anchor-output-dir code/outputs/formal_all_a_run `
   --comparison-output-dir code/outputs/formal_hs300_run `
   --comparison-output-dir code/outputs/formal_sz50_run `
@@ -185,7 +185,7 @@ python code/data/build_pattern_discovery_assets.py `
 如果你要刷新跨样本边界的组合表现与行业/风格暴露汇总，执行：
 
 ```powershell
-python code/data/summarize_boundary_portfolio.py `
+python3 code/data/summarize_boundary_portfolio.py `
   --output-dir code/outputs/formal_hs300_run `
   --output-dir code/outputs/formal_sz50_run `
   --output-dir code/outputs/formal_zz500_run `
@@ -200,7 +200,31 @@ python code/data/summarize_boundary_portfolio.py `
   --exposure-limit 3
 ```
 
-该命令会生成 `boundary_portfolio_summary.json` 和 Markdown 汇总表，用于把 Rank IC、稳定性、累计收益、年化波动、Sharpe、回撤、换手率和主要暴露统一到同一张表。
+该命令会生成 `boundary_portfolio_summary.json` 和 Markdown 汇总表，用于把 Rank IC、稳定性、Top-N 收益、分组价差、多空 NAV、成本后 NAV、交易成本、超额 NAV、年化波动、Sharpe、回撤、换手率和主要暴露统一到同一张表。
+
+如果你要为 AC3 / AC4 生成长窗口稳健性复跑入口，执行：
+
+```powershell
+python3 code/data/build_long_window_run_plan.py `
+  --config code/configs/formal_all_a.yaml `
+  --config code/configs/formal_industry_c27.yaml `
+  --config code/configs/formal_industry_c35.yaml `
+  --config code/configs/formal_industry_c39.yaml `
+  --config code/configs/formal_size_small.yaml `
+  --config code/configs/formal_size_mid.yaml `
+  --config code/configs/formal_size_large.yaml `
+  --start-date 2015-01-01 `
+  --end-date 2026-03-30 `
+  --report-dir code/data/formal/reports/long_window_plan
+```
+
+该命令会生成：
+
+- `long_window_run_plan.json`
+- `long_window_plan/configs/*.yaml`
+- `long_window_plan/README.md`
+
+这些派生配置按年份拆分全 A、行业分层和市值分层实验，便于在数据底座补齐后逐年复跑、逐年替换时间状态图和答辩页素材。
 
 ## Stage 2 Dataset-Year Runner
 
@@ -235,7 +259,7 @@ bash code/data/run_baostock_stage2_dataset_year.sh 2015
 先从通达信原始日线中切出某一年的原始切片：
 
 ```powershell
-python code/data/build_tdx_year_slice.py `
+python3 code/data/build_tdx_year_slice.py `
   --input-path code/data/formal/tdx_daily_raw.csv `
   --output-path code/data/formal/master/tdx_2015_raw.csv `
   --year 2015
@@ -246,7 +270,7 @@ python code/data/build_tdx_year_slice.py `
 把通达信原始切片转换成标准化价格量主表：
 
 ```powershell
-python code/data/build_tdx_full_master_base.py `
+python3 code/data/build_tdx_full_master_base.py `
   --input-path code/data/formal/master/tdx_2015_raw.csv `
   --output-path code/data/formal/master/tdx_full_master_base_2015.csv `
   --adjustflag-value 2

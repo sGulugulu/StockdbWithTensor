@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+from datetime import date
 from bisect import bisect_right
 from dataclasses import dataclass
 from collections import defaultdict
@@ -13,7 +14,19 @@ CODE_ROOT = Path(__file__).resolve().parents[1]
 if str(CODE_ROOT) not in sys.path:
     sys.path.insert(0, str(CODE_ROOT))
 
-from stock_tensor.market import SymbolNormalizer
+
+def _normalize_cn_a_symbol(symbol: str) -> str:
+    cleaned = symbol.strip().upper()
+    if "." in cleaned:
+        left, right = cleaned.split(".", 1)
+        if left in {"SH", "SZ", "BJ"} and right.isdigit():
+            return f"{right}.{left}"
+        if right in {"SH", "SZ", "BJ"} and left.isdigit():
+            return f"{left}.{right}"
+        return cleaned
+    if cleaned.startswith(("6", "9")):
+        return f"{cleaned}.SH"
+    return f"{cleaned}.SZ"
 
 
 @dataclass(slots=True)
@@ -50,8 +63,11 @@ class MarketFeatureRow:
     trade_date: str
     market_return_1d: float
     market_momentum_5d: float
+    market_momentum_20d: float
     market_volatility_20d: float
+    market_drawdown_20d: float
     market_amount_change_5d: float
+    market_amount_zscore_20d: float
 
 
 def _to_float(value: str | None) -> float | None:
@@ -95,14 +111,13 @@ def _next_trade_date_after(reference_date: str, trade_dates: list[str]) -> str |
 
 
 def _load_profit_snapshots(path: Path, trade_dates: list[str]) -> dict[str, list[ProfitSnapshot]]:
-    normalizer = SymbolNormalizer("cn_a")
     snapshots: dict[str, list[ProfitSnapshot]] = {}
     for row in _iter_partitioned_csv_rows(path):
         code = row.get("code")
         pub_date = row.get("pubDate")
         if not code or not pub_date:
             continue
-        normalized = normalizer.normalize(code)
+        normalized = _normalize_cn_a_symbol(code)
         snapshots.setdefault(normalized, []).append(
             ProfitSnapshot(
                 pub_date=pub_date,
@@ -119,14 +134,13 @@ def _load_profit_snapshots(path: Path, trade_dates: list[str]) -> dict[str, list
 
 
 def _load_performance_express_snapshots(path: Path, trade_dates: list[str]) -> dict[str, list[PerformanceExpressSnapshot]]:
-    normalizer = SymbolNormalizer("cn_a")
     snapshots: dict[str, list[PerformanceExpressSnapshot]] = {}
     for row in _iter_partitioned_csv_rows(path):
         code = row.get("code")
         pub_date = row.get("performanceExpPubDate")
         if not code or not pub_date:
             continue
-        normalized = normalizer.normalize(code)
+        normalized = _normalize_cn_a_symbol(code)
         snapshots.setdefault(normalized, []).append(
             PerformanceExpressSnapshot(
                 pub_date=pub_date,
@@ -154,14 +168,13 @@ def _forecast_direction_score(forecast_type: str | None) -> float:
 
 
 def _load_forecast_snapshots(path: Path, trade_dates: list[str]) -> dict[str, list[ForecastSnapshot]]:
-    normalizer = SymbolNormalizer("cn_a")
     snapshots: dict[str, list[ForecastSnapshot]] = defaultdict(list)
     for row in _iter_partitioned_csv_rows(path):
         code = row.get("code")
         pub_date = row.get("profitForcastExpPubDate")
         if not code or not pub_date:
             continue
-        normalized = normalizer.normalize(code)
+        normalized = _normalize_cn_a_symbol(code)
         snapshots[normalized].append(
             ForecastSnapshot(
                 pub_date=pub_date,
@@ -190,6 +203,33 @@ def _rolling_std(values: list[float], window: int) -> list[float]:
     return result
 
 
+def _rolling_drawdown(prices: list[float], window: int) -> list[float]:
+    result: list[float] = []
+    for index, price in enumerate(prices):
+        start = max(0, index - window + 1)
+        window_peak = max(prices[start : index + 1], default=0.0)
+        if window_peak == 0:
+            result.append(0.0)
+            continue
+        result.append(price / window_peak - 1.0)
+    return result
+
+
+def _rolling_zscore(values: list[float], window: int) -> list[float]:
+    result: list[float] = []
+    for index, value in enumerate(values):
+        start = max(0, index - window + 1)
+        window_slice = values[start : index + 1]
+        if len(window_slice) < 2:
+            result.append(0.0)
+            continue
+        mean_value = sum(window_slice) / len(window_slice)
+        variance = sum((item - mean_value) ** 2 for item in window_slice) / len(window_slice)
+        std_value = variance ** 0.5
+        result.append(0.0 if std_value == 0 else (value - mean_value) / std_value)
+    return result
+
+
 def _load_market_features(path: Path) -> dict[str, MarketFeatureRow]:
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         rows = list(csv.DictReader(handle))
@@ -198,15 +238,21 @@ def _load_market_features(path: Path) -> dict[str, MarketFeatureRow]:
     amounts = [_to_float(row.get("amount")) or 0.0 for row in rows]
     market_returns = _rolling_return(closes, 1)
     market_momentum_5d = _rolling_return(closes, 5)
+    market_momentum_20d = _rolling_return(closes, 20)
     market_volatility_20d = _rolling_std(market_returns, 20)
+    market_drawdown_20d = _rolling_drawdown(closes, 20)
     market_amount_change_5d = _rolling_return(amounts, 5)
+    market_amount_zscore_20d = _rolling_zscore(amounts, 20)
     return {
         row["trade_date"]: MarketFeatureRow(
             trade_date=row["trade_date"],
             market_return_1d=market_returns[index],
             market_momentum_5d=market_momentum_5d[index],
+            market_momentum_20d=market_momentum_20d[index],
             market_volatility_20d=market_volatility_20d[index],
+            market_drawdown_20d=market_drawdown_20d[index],
             market_amount_change_5d=market_amount_change_5d[index],
+            market_amount_zscore_20d=market_amount_zscore_20d[index],
         )
         for index, row in enumerate(rows)
     }
@@ -223,6 +269,70 @@ def _latest_snapshot(snapshots: list, trade_date: str):
             return candidate
         position -= 1
     return None
+
+
+def _days_since(pub_date: str | None, trade_date: str) -> int:
+    if not pub_date:
+        return 0
+    try:
+        return max((date.fromisoformat(trade_date) - date.fromisoformat(pub_date)).days, 0)
+    except ValueError:
+        return 0
+
+
+def _forecast_midpoint(snapshot: ForecastSnapshot | None) -> float:
+    if snapshot is None:
+        return 0.0
+    return (snapshot.chg_pct_up + snapshot.chg_pct_dwn) / 2.0
+
+
+def _forecast_width(snapshot: ForecastSnapshot | None) -> float:
+    if snapshot is None:
+        return 0.0
+    return abs(snapshot.chg_pct_up - snapshot.chg_pct_dwn)
+
+
+def _macro_proxy_risk_score(market_feature: MarketFeatureRow) -> float:
+    return market_feature.market_volatility_20d + abs(min(market_feature.market_drawdown_20d, 0.0))
+
+
+def _macro_proxy_liquidity_score(market_feature: MarketFeatureRow) -> float:
+    return market_feature.market_amount_zscore_20d + market_feature.market_amount_change_5d
+
+
+def _event_positive_flag(
+    performance_snapshot: PerformanceExpressSnapshot | None,
+    forecast_snapshot: ForecastSnapshot | None,
+) -> int:
+    if forecast_snapshot is not None and forecast_snapshot.forecast_direction > 0:
+        return 1
+    if performance_snapshot is not None and performance_snapshot.eps_chg_pct > 0:
+        return 1
+    return 0
+
+
+def _event_negative_flag(
+    performance_snapshot: PerformanceExpressSnapshot | None,
+    forecast_snapshot: ForecastSnapshot | None,
+) -> int:
+    if forecast_snapshot is not None and forecast_snapshot.forecast_direction < 0:
+        return 1
+    if performance_snapshot is not None and performance_snapshot.eps_chg_pct < 0:
+        return 1
+    return 0
+
+
+def _event_age_decay_score(
+    performance_snapshot: PerformanceExpressSnapshot | None,
+    forecast_snapshot: ForecastSnapshot | None,
+    trade_date: str,
+) -> float:
+    score = 0.0
+    if performance_snapshot is not None:
+        score += 1.0 / (1.0 + _days_since(performance_snapshot.pub_date, trade_date))
+    if forecast_snapshot is not None:
+        score += 1.0 / (1.0 + _days_since(forecast_snapshot.pub_date, trade_date))
+    return score
 
 
 def build_extended_factor_panel(
@@ -260,30 +370,51 @@ def build_extended_factor_panel(
                 trade_date=trade_date,
                 market_return_1d=0.0,
                 market_momentum_5d=0.0,
+                market_momentum_20d=0.0,
                 market_volatility_20d=0.0,
+                market_drawdown_20d=0.0,
                 market_amount_change_5d=0.0,
+                market_amount_zscore_20d=0.0,
             ),
         )
+        forecast_midpoint = _forecast_midpoint(forecast_snapshot)
+        forecast_width = _forecast_width(forecast_snapshot)
 
         extended_rows.append(
             {
                 **row,
                 "market_return_1d": market_feature.market_return_1d,
                 "market_momentum_5d": market_feature.market_momentum_5d,
+                "market_momentum_20d": market_feature.market_momentum_20d,
                 "market_volatility_20d": market_feature.market_volatility_20d,
+                "market_drawdown_20d": market_feature.market_drawdown_20d,
                 "market_amount_change_5d": market_feature.market_amount_change_5d,
+                "market_amount_zscore_20d": market_feature.market_amount_zscore_20d,
+                "macro_proxy_risk_score": _macro_proxy_risk_score(market_feature),
+                "macro_proxy_liquidity_score": _macro_proxy_liquidity_score(market_feature),
                 "pit_roe_avg": 0.0 if profit_snapshot is None else profit_snapshot.roe_avg,
                 "pit_np_margin": 0.0 if profit_snapshot is None else profit_snapshot.np_margin,
                 "pit_gp_margin": 0.0 if profit_snapshot is None else profit_snapshot.gp_margin,
                 "pit_eps_ttm": 0.0 if profit_snapshot is None else profit_snapshot.eps_ttm,
+                "pit_data_age_days": 0 if profit_snapshot is None else _days_since(profit_snapshot.pub_date, trade_date),
                 "perf_express_eps_chg_pct": 0.0 if performance_snapshot is None else performance_snapshot.eps_chg_pct,
                 "perf_express_roe_wa": 0.0 if performance_snapshot is None else performance_snapshot.roe_wa,
                 "perf_express_gryoy": 0.0 if performance_snapshot is None else performance_snapshot.gryoy,
                 "perf_express_opyoy": 0.0 if performance_snapshot is None else performance_snapshot.opyoy,
+                "perf_express_age_days": 0 if performance_snapshot is None else _days_since(performance_snapshot.pub_date, trade_date),
                 "perf_express_flag": 0 if performance_snapshot is None else 1,
                 "forecast_direction": 0.0 if forecast_snapshot is None else forecast_snapshot.forecast_direction,
                 "forecast_chg_pct_up": 0.0 if forecast_snapshot is None else forecast_snapshot.chg_pct_up,
                 "forecast_chg_pct_dwn": 0.0 if forecast_snapshot is None else forecast_snapshot.chg_pct_dwn,
+                "forecast_change_midpoint": forecast_midpoint,
+                "forecast_change_width": forecast_width,
+                "forecast_age_days": 0 if forecast_snapshot is None else _days_since(forecast_snapshot.pub_date, trade_date),
+                "event_positive_flag": _event_positive_flag(performance_snapshot, forecast_snapshot),
+                "event_negative_flag": _event_negative_flag(performance_snapshot, forecast_snapshot),
+                "event_uncertainty_score": forecast_width,
+                "event_age_decay_score": _event_age_decay_score(performance_snapshot, forecast_snapshot, trade_date),
+                "event_intensity_score": abs(forecast_midpoint)
+                + (0.0 if performance_snapshot is None else abs(performance_snapshot.eps_chg_pct)),
                 "forecast_flag": 0 if forecast_snapshot is None else 1,
             }
         )

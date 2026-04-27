@@ -22,14 +22,15 @@
 
 当前已经进入 extended 训练张量的第一版扩展特征包括：
 
-1. 市场级代理变量：指数日收益、5 日动量、20 日波动率、成交额变化率。
+1. 市场级代理变量：指数日收益、5 日/20 日动量、20 日波动率、20 日回撤、成交额变化率和成交额 20 日 z-score。
 2. 财务 PIT 特征：基于 `profit_data` 的盈利能力与 EPS 指标。
-3. 事件型特征：业绩快报与业绩预告的方向、变化区间和事件标记。
+3. 事件型特征：业绩快报与业绩预告的方向、变化区间、事件新鲜度、区间不确定性和事件强度标记。
+4. 宏观代理与事件字典衍生层：在外部宏观源表尚未落盘可用时点前，使用指数风险代理、指数流动性代理、事件正负方向、事件不确定性和事件时间衰减得分作为可审计的中间层。
 
 当前仍未系统进入训练张量、但已经在数据链中存在或具备扩展价值的特征包括：
 
-1. 更完整的宏观变量：如利率、存款利率、贷款利率、宏观月度指标等。
-2. 更广泛的事件字典：分红、重大事项、公告文本等更细粒度事件。
+1. 更完整的外部宏观变量：如利率、存款利率、贷款利率、宏观月度指标等；当前仓库尚未落盘这些外部表，因此本轮先用指数状态变量构造 `macro_proxy_*` 作为可复核的市场宏观代理层。
+2. 更广泛的事件字典：分红、重大事项、公告文本等更细粒度事件；当前已落地业绩快报和业绩预告两类公告事件，并显式记录事件方向、强度、新鲜度、不确定性和时间衰减。
 3. 更细粒度的市场微观结构特征：如盘口、成交明细、分钟级时序特征（当前链路尚未纳入）。
 
 ## 为什么这些特征不能直接并入训练
@@ -112,3 +113,21 @@
 2. 再把更完整宏观变量做频率对齐和发布时间校验。
 3. 然后继续扩展事件型特征的发生日与可见日映射。
 4. 最后做分层扩展实验，并把结果补回论文正文和图表。
+
+## 本轮已落地的统一训练接口字段
+
+扩展版 formal factor panel 现在以 baseline panel 为稳定主线，并在同一个 `factor_columns` 接口中追加以下通过 PIT 校验或市场状态校验的字段：
+
+1. 市场宏观代理层：`market_return_1d`、`market_momentum_5d`、`market_momentum_20d`、`market_volatility_20d`、`market_drawdown_20d`、`market_amount_change_5d`、`market_amount_zscore_20d`、`macro_proxy_risk_score`、`macro_proxy_liquidity_score`。
+2. 财务 PIT 层：`pit_roe_avg`、`pit_np_margin`、`pit_gp_margin`、`pit_eps_ttm`、`pit_data_age_days`。
+3. 公告事件层：`perf_express_eps_chg_pct`、`perf_express_roe_wa`、`perf_express_gryoy`、`perf_express_opyoy`、`perf_express_age_days`、`perf_express_flag`、`forecast_direction`、`forecast_chg_pct_up`、`forecast_chg_pct_dwn`、`forecast_change_midpoint`、`forecast_change_width`、`forecast_age_days`、`event_positive_flag`、`event_negative_flag`、`event_uncertainty_score`、`event_age_decay_score`、`event_intensity_score`、`forecast_flag`。
+
+这些字段已写入 `code/configs/formal_hs300_extended.yaml`、`code/configs/formal_sz50_extended.yaml` 和 `code/configs/formal_zz500_extended.yaml`。复现时先运行：
+
+```powershell
+python3 code/data/refresh_formal_factor_panels.py `
+  --formal-root code/data/formal `
+  --max-trade-date 2026-03-30
+```
+
+然后分别运行三份 extended 配置，与对应 baseline 配置比较 Rank IC、IR、解释方差和组合层指标。外部利率、分红、重大事项和公告文本尚未进入训练，是因为当前仓库没有完成可用时点字段落盘；在这些源表补齐前，不允许用报告期或自然日期直接前填。

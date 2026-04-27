@@ -1,0 +1,49 @@
+from pathlib import Path
+import json
+import sys
+import tempfile
+import unittest
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from data.build_long_window_run_plan import build_long_window_run_plan
+
+
+class BuildLongWindowRunPlanTests(unittest.TestCase):
+    def test_build_long_window_run_plan_writes_yearly_commands(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            report_dir = root / "report"
+            config = Path("code/configs/formal_all_a.yaml")
+
+            result = build_long_window_run_plan(
+                config_paths=[config],
+                start_date="2024-06-01",
+                end_date="2025-03-31",
+                report_dir=report_dir,
+            )
+
+            rows = json.loads(result.plan_json.read_text(encoding="utf-8"))
+            self.assertEqual(len(rows), 2)
+            self.assertEqual(rows[0]["start_date"], "2024-06-01")
+            self.assertEqual(rows[0]["end_date"], "2024-12-31")
+            self.assertEqual(rows[1]["start_date"], "2025-01-01")
+            self.assertEqual(rows[1]["end_date"], "2025-03-31")
+            self.assertIn("python3 code/main.py --config", rows[0]["command"])
+            variant = Path(rows[0]["config_variant"])
+            self.assertTrue(variant.exists())
+            variant_text = variant.read_text(encoding="utf-8")
+            self.assertIn("start_date: 2024-06-01", variant_text)
+            self.assertIn("end_date: 2024-12-31", variant_text)
+            self.assertIn("experiment_name: formal_all_a_2024_long_window_run", variant_text)
+            self.assertIn("universe_path: \"", variant_text)
+            self.assertIn("all_a_active_history.csv", variant_text)
+            self.assertIn("all_a_factor_panel.csv", variant_text)
+            self.assertIn("csi_a500_index_daily.csv", variant_text)
+            self.assertIn("root_dir: \"", variant_text)
+            self.assertIn("outputs", variant_text)
+            self.assertIn("python3 code/main.py", result.plan_md.read_text(encoding="utf-8"))
+
+
+if __name__ == "__main__":
+    unittest.main()

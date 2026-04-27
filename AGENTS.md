@@ -16,12 +16,12 @@ There is no committed build pipeline yet, so keep workflow simple and reproducib
 - `git status`: check pending changes before editing or submitting work.
 - `Get-ChildItem code`: inspect the current implementation area.
 - `rg --files`: list tracked source files quickly once code is added.
-- `python -m venv .venv`: create the local virtual environment.
-- `python -m pip install -r requirements.txt`: install runtime and API dependencies.
-- `python code/main.py --config code/configs/sample_cn_smoke.yaml`: run the smoke-test tensor-factorization experiment pipeline.
-- `python -m unittest discover -s code/tests`: run the automated test suite.
+- `python3 -m venv .venv`: create the local virtual environment.
+- `python3 -m pip install -r requirements.txt`: install runtime and API dependencies.
+- `python3 code/main.py --config code/configs/sample_cn_smoke.yaml`: run the smoke-test tensor-factorization experiment pipeline.
+- `python3 -m unittest discover -s code/tests`: run the automated test suite.
 
-If you introduce Python or another runtime, add a single documented entry point such as `python code/main.py` or `pytest code/tests`, then update this guide and the project README in the same change.
+If you introduce Python or another runtime, add a single documented entry point such as `python3 code/main.py` or `pytest code/tests`, then update this guide and the project README in the same change.
 
 ## Coding Style & Naming Conventions
 Use 4 spaces for indentation in Python and keep line length reasonable, preferably under 100 characters. Name Python files and modules in `snake_case`, classes in `PascalCase`, and functions or variables in `snake_case`. Use descriptive names tied to the finance and tensor-factorization domain, such as `factor_tensor.py` or `train_cp_model.py`. Keep notebooks exploratory; move reusable logic into `.py` files.

@@ -19,6 +19,13 @@
         "sharpe_ratio": -25.972068600790408,
         "max_drawdown": -0.08061176761832667,
         "average_turnover": 0.6000000000000001,
+        "quantile_top_bottom_nav_spread": -0.04487231708833783,
+        "long_short_cumulative_nav": 0.9555130930712483,
+        "long_short_max_drawdown": -0.04448690692875168,
+        "cost_adjusted_cumulative_nav": 0.9171365269818078,
+        "average_transaction_cost": 0.0006000000000000001,
+        "excess_cumulative_nav": 0.9098770331367931,
+        "excess_max_drawdown": -0.0910788990538548,
         "top_industry_exposures": [
           {
             "model": "cp",
@@ -63,6 +70,13 @@
         "sharpe_ratio": -4.814851920072418,
         "max_drawdown": -0.024331863254368646,
         "average_turnover": 0.4875,
+        "quantile_top_bottom_nav_spread": -0.014002801207286253,
+        "long_short_cumulative_nav": 0.9857674285300815,
+        "long_short_max_drawdown": -0.01423257146991852,
+        "cost_adjusted_cumulative_nav": 0.9831464045957709,
+        "average_transaction_cost": 0.0004875,
+        "excess_cumulative_nav": 0.9751217312682788,
+        "excess_max_drawdown": -0.03289694236789387,
         "top_industry_exposures": [
           {
             "model": "pca",
@@ -113,6 +127,13 @@
         "sharpe_ratio": -4.8154598916800735,
         "max_drawdown": -0.025300348865638367,
         "average_turnover": 0.2875,
+        "quantile_top_bottom_nav_spread": 0.014139149632506287,
+        "long_short_cumulative_nav": 1.0145445676708986,
+        "long_short_max_drawdown": 0.0,
+        "cost_adjusted_cumulative_nav": 0.9828772040000266,
+        "average_transaction_cost": 0.00028750000000000005,
+        "excess_cumulative_nav": 0.9739615522668856,
+        "excess_max_drawdown": -0.03386542797916359,
         "top_industry_exposures": [
           {
             "model": "tucker",
@@ -164,6 +185,13 @@
         "sharpe_ratio": 7.027766806458215,
         "max_drawdown": -0.004265685798306773,
         "average_turnover": 0.4125,
+        "quantile_top_bottom_nav_spread": 0.033977129531364,
+        "long_short_cumulative_nav": 1.0342870765335237,
+        "long_short_max_drawdown": 0.0,
+        "cost_adjusted_cumulative_nav": 1.0070727415607987,
+        "average_transaction_cost": 0.0004125,
+        "excess_cumulative_nav": 1.0043640915705072,
+        "excess_max_drawdown": -0.01015291234278004,
         "top_industry_exposures": [
           {
             "model": "cp",
@@ -208,6 +236,13 @@
         "sharpe_ratio": 4.602144024824736,
         "max_drawdown": -0.006992404514336026,
         "average_turnover": 0.425,
+        "quantile_top_bottom_nav_spread": 0.025361772233794655,
+        "long_short_cumulative_nav": 1.0257196655071077,
+        "long_short_max_drawdown": 0.0,
+        "cost_adjusted_cumulative_nav": 1.0056750956440053,
+        "average_transaction_cost": 0.000425,
+        "excess_cumulative_nav": 1.002982464898441,
+        "excess_max_drawdown": -0.012584773521355674,
         "top_industry_exposures": [
           {
             "model": "pca",
@@ -258,6 +293,13 @@
         "sharpe_ratio": 14.640372719038998,
         "max_drawdown": -0.0002935944879911556,
         "average_turnover": 0.275,
+        "quantile_top_bottom_nav_spread": 0.03494620890094402,
+        "long_short_cumulative_nav": 1.0349601887899742,
+        "long_short_max_drawdown": -0.0009126146803530855,
+        "cost_adjusted_cumulative_nav": 1.0199914679260003,
+        "average_transaction_cost": 0.000275,
+        "excess_cumulative_nav": 1.0167162977896091,
+        "excess_max_drawdown": -0.005931365006677014,
         "top_industry_exposures": [
           {
             "model": "tucker",
@@ -321,6 +363,13 @@
         "sharpe_ratio": 20.263991011765988,
         "max_drawdown": 0.0,
         "average_turnover": 0.25,
+        "quantile_top_bottom_nav_spread": -0.13283007716129558,
+        "long_short_cumulative_nav": 0.8854362142393667,
+        "long_short_max_drawdown": -0.11456378576063331,
+        "cost_adjusted_cumulative_nav": 1.1618852169817775,
+        "average_transaction_cost": 0.00025,
+        "excess_cumulative_nav": 1.1517266208162682,
+        "excess_max_drawdown": 0.0,
         "top_industry_exposures": [
           {
             "model": "cp",
@@ -353,6 +402,13 @@
         "sharpe_ratio": 20.595887493019625,
         "max_drawdown": 0.0,
         "average_turnover": 0.5125,
+        "quantile_top_bottom_nav_spread": -0.045259977510180516,
+        "long_short_cumulative_nav": 0.9593382512534001,
+        "long_short_max_drawdown": -0.0477272085733238,
+        "cost_adjusted_cumulative_nav": 1.2154353437768772,
+        "average_transaction_cost": 0.0005125,
+        "excess_cumulative_nav": 1.206243971635428,
+        "excess_max_drawdown": 0.0,
         "top_industry_exposures": [
           {
             "model": "pca",
@@ -391,6 +447,13 @@
         "sharpe_ratio": 22.56968812659293,
         "max_drawdown": 0.0,
         "average_turnover": 0.2875,
+        "quantile_top_bottom_nav_spread": 0.14943509398282262,
+        "long_short_cumulative_nav": 1.1408426641793166,
+        "long_short_max_drawdown": 0.0,
+        "cost_adjusted_cumulative_nav": 1.2767818041975914,
+        "average_transaction_cost": 0.0002875,
+        "excess_cumulative_nav": 1.266050194060846,
+        "excess_max_drawdown": 0.0,
         "top_industry_exposures": [
           {
             "model": "tucker",
@@ -442,6 +505,13 @@
         "sharpe_ratio": -16.594951832896918,
         "max_drawdown": -0.05158761923588673,
         "average_turnover": 0.4,
+        "quantile_top_bottom_nav_spread": -0.10030221396175665,
+        "long_short_cumulative_nav": 0.9038904566153545,
+        "long_short_max_drawdown": -0.0961095433846455,
+        "cost_adjusted_cumulative_nav": 0.9468743896256895,
+        "average_transaction_cost": 0.0004,
+        "excess_cumulative_nav": 0.9387680596184187,
+        "excess_max_drawdown": -0.06221822597299531,
         "top_industry_exposures": [
           {
             "model": "cp",
@@ -474,6 +544,13 @@
         "sharpe_ratio": 2.5708242840170343,
         "max_drawdown": -0.013583329593044535,
         "average_turnover": 0.3875,
+        "quantile_top_bottom_nav_spread": 0.11921077040711558,
+        "long_short_cumulative_nav": 1.1200601759553135,
+        "long_short_max_drawdown": 0.0,
+        "cost_adjusted_cumulative_nav": 1.004627162547771,
+        "average_transaction_cost": 0.00038749999999999993,
+        "excess_cumulative_nav": 0.9960991258492677,
+        "excess_max_drawdown": -0.022148408706569755,
         "top_industry_exposures": [
           {
             "model": "pca",
@@ -512,6 +589,13 @@
         "sharpe_ratio": 3.565142500552247,
         "max_drawdown": -0.012675837004395007,
         "average_turnover": 0.275,
+        "quantile_top_bottom_nav_spread": 0.15887220676705172,
+        "long_short_cumulative_nav": 1.1664464631921294,
+        "long_short_max_drawdown": 0.0,
+        "cost_adjusted_cumulative_nav": 1.0074601006384198,
+        "average_transaction_cost": 0.00027500000000000007,
+        "excess_cumulative_nav": 0.9985899159763966,
+        "excess_max_drawdown": -0.021240916117920228,
         "top_industry_exposures": [
           {
             "model": "tucker",
@@ -563,6 +647,13 @@
         "sharpe_ratio": -12.817022752457834,
         "max_drawdown": -0.053715134426013056,
         "average_turnover": 0.35,
+        "quantile_top_bottom_nav_spread": 0.03442295901177439,
+        "long_short_cumulative_nav": 1.0364973556161488,
+        "long_short_max_drawdown": -0.007813751821834636,
+        "cost_adjusted_cumulative_nav": 0.9449469678044066,
+        "average_transaction_cost": 0.00034999999999999994,
+        "excess_cumulative_nav": 0.9366054098696317,
+        "excess_max_drawdown": -0.06437860360540104,
         "top_industry_exposures": [
           {
             "model": "cp",
@@ -589,6 +680,13 @@
         "sharpe_ratio": -19.556078963612546,
         "max_drawdown": -0.07075465713866658,
         "average_turnover": 0.32499999999999996,
+        "quantile_top_bottom_nav_spread": -0.04176080474385613,
+        "long_short_cumulative_nav": 0.9575658752749908,
+        "long_short_max_drawdown": -0.04243412472500918,
+        "cost_adjusted_cumulative_nav": 0.9280232705652285,
+        "average_transaction_cost": 0.00032500000000000004,
+        "excess_cumulative_nav": 0.9199142004473948,
+        "excess_max_drawdown": -0.08105227696088768,
         "top_industry_exposures": [
           {
             "model": "pca",
@@ -627,6 +725,13 @@
         "sharpe_ratio": -9.825242884531834,
         "max_drawdown": -0.03275145767195986,
         "average_turnover": 0.30000000000000004,
+        "quantile_top_bottom_nav_spread": 0.0042111597099695475,
+        "long_short_cumulative_nav": 1.0044400090964238,
+        "long_short_max_drawdown": -0.009463482900714748,
+        "cost_adjusted_cumulative_nav": 0.9687219753029767,
+        "average_transaction_cost": 0.00030000000000000003,
+        "excess_cumulative_nav": 0.9601973569058815,
+        "excess_max_drawdown": -0.04081144266748171,
         "top_industry_exposures": [
           {
             "model": "tucker",
@@ -672,6 +777,13 @@
         "sharpe_ratio": -11.878996552669925,
         "max_drawdown": -0.017088665090233657,
         "average_turnover": 0.4,
+        "quantile_top_bottom_nav_spread": 0.059061322947431494,
+        "long_short_cumulative_nav": 1.0596136399851663,
+        "long_short_max_drawdown": 0.0,
+        "cost_adjusted_cumulative_nav": 0.9813292331956541,
+        "average_transaction_cost": 0.00039999999999999996,
+        "excess_cumulative_nav": 0.9729670385651402,
+        "excess_max_drawdown": -0.028055177051619973,
         "top_industry_exposures": [
           {
             "model": "cp",
@@ -722,6 +834,13 @@
         "sharpe_ratio": -8.442510063515112,
         "max_drawdown": -0.007073393246079918,
         "average_turnover": 0.39999999999999997,
+        "quantile_top_bottom_nav_spread": 0.028032089227577606,
+        "long_short_cumulative_nav": 1.0285698232774845,
+        "long_short_max_drawdown": -0.003350565112683279,
+        "cost_adjusted_cumulative_nav": 0.991654305190684,
+        "average_transaction_cost": 0.0003999999999999999,
+        "excess_cumulative_nav": 0.9833723857869912,
+        "excess_max_drawdown": -0.017660761863441676,
         "top_industry_exposures": [
           {
             "model": "pca",
@@ -772,6 +891,13 @@
         "sharpe_ratio": -8.295660994621347,
         "max_drawdown": -0.021031153371181333,
         "average_turnover": 0.4,
+        "quantile_top_bottom_nav_spread": 0.005584375026828736,
+        "long_short_cumulative_nav": 1.005611669283131,
+        "long_short_max_drawdown": -0.0014077903813859427,
+        "cost_adjusted_cumulative_nav": 0.9786103300553325,
+        "average_transaction_cost": 0.00039999999999999996,
+        "excess_cumulative_nav": 0.9702729900594781,
+        "excess_max_drawdown": -0.030746395144384597,
         "top_industry_exposures": [
           {
             "model": "tucker",
@@ -829,6 +955,13 @@
         "sharpe_ratio": 13.452968084292655,
         "max_drawdown": -0.0028764823504485726,
         "average_turnover": 0.25,
+        "quantile_top_bottom_nav_spread": 0.0007146701917315479,
+        "long_short_cumulative_nav": 1.000683018225407,
+        "long_short_max_drawdown": -0.024121705845093544,
+        "cost_adjusted_cumulative_nav": 1.032523115759739,
+        "average_transaction_cost": 0.00025,
+        "excess_cumulative_nav": 1.0233942861043663,
+        "excess_max_drawdown": -0.011441561463973682,
         "top_industry_exposures": [
           {
             "model": "cp",
@@ -873,6 +1006,13 @@
         "sharpe_ratio": 24.259832299498626,
         "max_drawdown": 0.0,
         "average_turnover": 0.39999999999999997,
+        "quantile_top_bottom_nav_spread": 0.03722713884448381,
+        "long_short_cumulative_nav": 1.0369953516062242,
+        "long_short_max_drawdown": -0.0026925640170172294,
+        "cost_adjusted_cumulative_nav": 1.0473216443672955,
+        "average_transaction_cost": 0.0003999999999999999,
+        "excess_cumulative_nav": 1.038983359717459,
+        "excess_max_drawdown": 0.0,
         "top_industry_exposures": [
           {
             "model": "pca",
@@ -923,6 +1063,13 @@
         "sharpe_ratio": -6.923294305730099,
         "max_drawdown": -0.006782382039426049,
         "average_turnover": 0.75,
+        "quantile_top_bottom_nav_spread": 0.10859722895340873,
+        "long_short_cumulative_nav": 1.1056590448955255,
+        "long_short_max_drawdown": -0.010949652110305408,
+        "cost_adjusted_cumulative_nav": 0.9910048079326383,
+        "average_transaction_cost": 0.00075,
+        "excess_cumulative_nav": 0.9840361909355945,
+        "excess_max_drawdown": -0.023154469020423396,
         "top_industry_exposures": [
           {
             "model": "tucker",
@@ -986,6 +1133,13 @@
         "sharpe_ratio": -2.2501949135375328,
         "max_drawdown": -0.017982414609931108,
         "average_turnover": 0.3,
+        "quantile_top_bottom_nav_spread": 0.10062832154191592,
+        "long_short_cumulative_nav": 1.1081544361338405,
+        "long_short_max_drawdown": 0.0,
+        "cost_adjusted_cumulative_nav": 0.9929878937976508,
+        "average_transaction_cost": 0.0003,
+        "excess_cumulative_nav": 0.9842002815723917,
+        "excess_max_drawdown": -0.026547493723456328,
         "top_industry_exposures": [
           {
             "model": "cp",
@@ -1030,6 +1184,13 @@
         "sharpe_ratio": -23.623988545699607,
         "max_drawdown": -0.07332180384137976,
         "average_turnover": 0.3,
+        "quantile_top_bottom_nav_spread": -0.06511748411908713,
+        "long_short_cumulative_nav": 0.9373030071260643,
+        "long_short_max_drawdown": -0.06269699287393571,
+        "cost_adjusted_cumulative_nav": 0.9255421717205097,
+        "average_transaction_cost": 0.0003,
+        "excess_cumulative_nav": 0.9171492305586705,
+        "excess_max_drawdown": -0.08381434192551074,
         "top_industry_exposures": [
           {
             "model": "pca",
@@ -1074,6 +1235,13 @@
         "sharpe_ratio": -19.606634898718617,
         "max_drawdown": -0.09154381405872136,
         "average_turnover": 0.39999999999999997,
+        "quantile_top_bottom_nav_spread": -0.2672375439349475,
+        "long_short_cumulative_nav": 0.7420888884601795,
+        "long_short_max_drawdown": -0.2579111115398205,
+        "cost_adjusted_cumulative_nav": 0.9069681609553363,
+        "average_transaction_cost": 0.0003999999999999999,
+        "excess_cumulative_nav": 0.8989431348974913,
+        "excess_max_drawdown": -0.1020013099548509,
         "top_industry_exposures": [
           {
             "model": "tucker",
@@ -1137,6 +1305,13 @@
         "sharpe_ratio": -10.437790894230355,
         "max_drawdown": -0.03631562711746761,
         "average_turnover": 0.7875,
+        "quantile_top_bottom_nav_spread": -0.011270130521904509,
+        "long_short_cumulative_nav": 0.9867075051771631,
+        "long_short_max_drawdown": -0.057507213486948205,
+        "cost_adjusted_cumulative_nav": 0.966947891766303,
+        "average_transaction_cost": 0.0007875,
+        "excess_cumulative_nav": 0.9700154229059937,
+        "excess_max_drawdown": -0.03631562711746761,
         "top_industry_exposures": [
           {
             "model": "cp",
@@ -1175,6 +1350,13 @@
         "sharpe_ratio": -5.532361859535061,
         "max_drawdown": -0.01155420475573199,
         "average_turnover": 0.3375,
+        "quantile_top_bottom_nav_spread": 0.01756248686136852,
+        "long_short_cumulative_nav": 1.0171642436932038,
+        "long_short_max_drawdown": -0.014164135637163011,
+        "cost_adjusted_cumulative_nav": 0.9904568271449219,
+        "average_transaction_cost": 0.0003375,
+        "excess_cumulative_nav": 0.9918065914808358,
+        "excess_max_drawdown": -0.01155420475573199,
         "top_industry_exposures": [
           {
             "model": "pca",
@@ -1225,6 +1407,13 @@
         "sharpe_ratio": -4.220117986633135,
         "max_drawdown": -0.0036756516264320194,
         "average_turnover": 0.2875,
+        "quantile_top_bottom_nav_spread": 0.08156645265203477,
+        "long_short_cumulative_nav": 1.0836474480301839,
+        "long_short_max_drawdown": 0.0,
+        "cost_adjusted_cumulative_nav": 0.9955935214581513,
+        "average_transaction_cost": 0.0002875,
+        "excess_cumulative_nav": 0.9967433033912163,
+        "excess_max_drawdown": -0.0036756516264320194,
         "top_industry_exposures": [
           {
             "model": "tucker",
@@ -1282,6 +1471,13 @@
         "sharpe_ratio": -27.110220729119938,
         "max_drawdown": -0.0846910999764442,
         "average_turnover": 0.7250000000000001,
+        "quantile_top_bottom_nav_spread": -0.03921551499020148,
+        "long_short_cumulative_nav": 0.9601607718171478,
+        "long_short_max_drawdown": -0.03983922818285224,
+        "cost_adjusted_cumulative_nav": 0.9126052512878505,
+        "average_transaction_cost": 0.0007250000000000001,
+        "excess_cumulative_nav": 0.8955342371528547,
+        "excess_max_drawdown": -0.10446576284714526,
         "top_industry_exposures": [
           {
             "model": "cp",
@@ -1326,6 +1522,13 @@
         "sharpe_ratio": -4.814851920072418,
         "max_drawdown": -0.024331863254368646,
         "average_turnover": 0.4875,
+        "quantile_top_bottom_nav_spread": -0.011977006726291983,
+        "long_short_cumulative_nav": 0.9876724943446966,
+        "long_short_max_drawdown": -0.012709071117528503,
+        "cost_adjusted_cumulative_nav": 0.9831464045957709,
+        "average_transaction_cost": 0.0004875,
+        "excess_cumulative_nav": 0.9639861934689059,
+        "excess_max_drawdown": -0.03883112781316822,
         "top_industry_exposures": [
           {
             "model": "pca",
@@ -1376,6 +1579,13 @@
         "sharpe_ratio": -3.6267184799083467,
         "max_drawdown": -0.02848933433599876,
         "average_turnover": 0.2625,
+        "quantile_top_bottom_nav_spread": 0.014901604373532717,
+        "long_short_cumulative_nav": 1.015410477500391,
+        "long_short_max_drawdown": 0.0,
+        "cost_adjusted_cumulative_nav": 0.9846840467594521,
+        "average_transaction_cost": 0.00026250000000000004,
+        "excess_cumulative_nav": 0.9644463379882021,
+        "excess_max_drawdown": -0.042979942880974176,
         "top_industry_exposures": [
           {
             "model": "tucker",

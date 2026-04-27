@@ -1,0 +1,758 @@
+[
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_all_a.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2015_long_window_run.yaml",
+    "year": 2015,
+    "start_date": "2015-01-01",
+    "end_date": "2015-12-31",
+    "output_name": "formal_all_a_2015_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2015_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_all_a.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2016_long_window_run.yaml",
+    "year": 2016,
+    "start_date": "2016-01-01",
+    "end_date": "2016-12-31",
+    "output_name": "formal_all_a_2016_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2016_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_all_a.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2017_long_window_run.yaml",
+    "year": 2017,
+    "start_date": "2017-01-01",
+    "end_date": "2017-12-31",
+    "output_name": "formal_all_a_2017_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2017_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_all_a.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2018_long_window_run.yaml",
+    "year": 2018,
+    "start_date": "2018-01-01",
+    "end_date": "2018-12-31",
+    "output_name": "formal_all_a_2018_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2018_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_all_a.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2019_long_window_run.yaml",
+    "year": 2019,
+    "start_date": "2019-01-01",
+    "end_date": "2019-12-31",
+    "output_name": "formal_all_a_2019_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2019_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_all_a.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2020_long_window_run.yaml",
+    "year": 2020,
+    "start_date": "2020-01-01",
+    "end_date": "2020-12-31",
+    "output_name": "formal_all_a_2020_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2020_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_all_a.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2021_long_window_run.yaml",
+    "year": 2021,
+    "start_date": "2021-01-01",
+    "end_date": "2021-12-31",
+    "output_name": "formal_all_a_2021_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2021_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_all_a.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2022_long_window_run.yaml",
+    "year": 2022,
+    "start_date": "2022-01-01",
+    "end_date": "2022-12-31",
+    "output_name": "formal_all_a_2022_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2022_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_all_a.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2023_long_window_run.yaml",
+    "year": 2023,
+    "start_date": "2023-01-01",
+    "end_date": "2023-12-31",
+    "output_name": "formal_all_a_2023_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2023_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_all_a.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2024_long_window_run.yaml",
+    "year": 2024,
+    "start_date": "2024-01-01",
+    "end_date": "2024-12-31",
+    "output_name": "formal_all_a_2024_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2024_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_all_a.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2025_long_window_run.yaml",
+    "year": 2025,
+    "start_date": "2025-01-01",
+    "end_date": "2025-12-31",
+    "output_name": "formal_all_a_2025_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2025_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_all_a.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2026_long_window_run.yaml",
+    "year": 2026,
+    "start_date": "2026-01-01",
+    "end_date": "2026-03-30",
+    "output_name": "formal_all_a_2026_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_all_a_2026_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c27.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2015_long_window_run.yaml",
+    "year": 2015,
+    "start_date": "2015-01-01",
+    "end_date": "2015-12-31",
+    "output_name": "formal_industry_c27_2015_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2015_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c27.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2016_long_window_run.yaml",
+    "year": 2016,
+    "start_date": "2016-01-01",
+    "end_date": "2016-12-31",
+    "output_name": "formal_industry_c27_2016_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2016_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c27.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2017_long_window_run.yaml",
+    "year": 2017,
+    "start_date": "2017-01-01",
+    "end_date": "2017-12-31",
+    "output_name": "formal_industry_c27_2017_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2017_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c27.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2018_long_window_run.yaml",
+    "year": 2018,
+    "start_date": "2018-01-01",
+    "end_date": "2018-12-31",
+    "output_name": "formal_industry_c27_2018_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2018_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c27.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2019_long_window_run.yaml",
+    "year": 2019,
+    "start_date": "2019-01-01",
+    "end_date": "2019-12-31",
+    "output_name": "formal_industry_c27_2019_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2019_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c27.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2020_long_window_run.yaml",
+    "year": 2020,
+    "start_date": "2020-01-01",
+    "end_date": "2020-12-31",
+    "output_name": "formal_industry_c27_2020_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2020_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c27.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2021_long_window_run.yaml",
+    "year": 2021,
+    "start_date": "2021-01-01",
+    "end_date": "2021-12-31",
+    "output_name": "formal_industry_c27_2021_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2021_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c27.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2022_long_window_run.yaml",
+    "year": 2022,
+    "start_date": "2022-01-01",
+    "end_date": "2022-12-31",
+    "output_name": "formal_industry_c27_2022_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2022_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c27.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2023_long_window_run.yaml",
+    "year": 2023,
+    "start_date": "2023-01-01",
+    "end_date": "2023-12-31",
+    "output_name": "formal_industry_c27_2023_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2023_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c27.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2024_long_window_run.yaml",
+    "year": 2024,
+    "start_date": "2024-01-01",
+    "end_date": "2024-12-31",
+    "output_name": "formal_industry_c27_2024_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2024_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c27.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2025_long_window_run.yaml",
+    "year": 2025,
+    "start_date": "2025-01-01",
+    "end_date": "2025-12-31",
+    "output_name": "formal_industry_c27_2025_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2025_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c27.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2026_long_window_run.yaml",
+    "year": 2026,
+    "start_date": "2026-01-01",
+    "end_date": "2026-03-30",
+    "output_name": "formal_industry_c27_2026_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c27_2026_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c35.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2015_long_window_run.yaml",
+    "year": 2015,
+    "start_date": "2015-01-01",
+    "end_date": "2015-12-31",
+    "output_name": "formal_industry_c35_2015_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2015_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c35.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2016_long_window_run.yaml",
+    "year": 2016,
+    "start_date": "2016-01-01",
+    "end_date": "2016-12-31",
+    "output_name": "formal_industry_c35_2016_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2016_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c35.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2017_long_window_run.yaml",
+    "year": 2017,
+    "start_date": "2017-01-01",
+    "end_date": "2017-12-31",
+    "output_name": "formal_industry_c35_2017_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2017_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c35.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2018_long_window_run.yaml",
+    "year": 2018,
+    "start_date": "2018-01-01",
+    "end_date": "2018-12-31",
+    "output_name": "formal_industry_c35_2018_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2018_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c35.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2019_long_window_run.yaml",
+    "year": 2019,
+    "start_date": "2019-01-01",
+    "end_date": "2019-12-31",
+    "output_name": "formal_industry_c35_2019_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2019_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c35.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2020_long_window_run.yaml",
+    "year": 2020,
+    "start_date": "2020-01-01",
+    "end_date": "2020-12-31",
+    "output_name": "formal_industry_c35_2020_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2020_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c35.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2021_long_window_run.yaml",
+    "year": 2021,
+    "start_date": "2021-01-01",
+    "end_date": "2021-12-31",
+    "output_name": "formal_industry_c35_2021_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2021_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c35.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2022_long_window_run.yaml",
+    "year": 2022,
+    "start_date": "2022-01-01",
+    "end_date": "2022-12-31",
+    "output_name": "formal_industry_c35_2022_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2022_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c35.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2023_long_window_run.yaml",
+    "year": 2023,
+    "start_date": "2023-01-01",
+    "end_date": "2023-12-31",
+    "output_name": "formal_industry_c35_2023_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2023_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c35.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2024_long_window_run.yaml",
+    "year": 2024,
+    "start_date": "2024-01-01",
+    "end_date": "2024-12-31",
+    "output_name": "formal_industry_c35_2024_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2024_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c35.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2025_long_window_run.yaml",
+    "year": 2025,
+    "start_date": "2025-01-01",
+    "end_date": "2025-12-31",
+    "output_name": "formal_industry_c35_2025_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2025_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c35.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2026_long_window_run.yaml",
+    "year": 2026,
+    "start_date": "2026-01-01",
+    "end_date": "2026-03-30",
+    "output_name": "formal_industry_c35_2026_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2026_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c39.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2015_long_window_run.yaml",
+    "year": 2015,
+    "start_date": "2015-01-01",
+    "end_date": "2015-12-31",
+    "output_name": "formal_industry_c39_2015_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2015_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c39.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2016_long_window_run.yaml",
+    "year": 2016,
+    "start_date": "2016-01-01",
+    "end_date": "2016-12-31",
+    "output_name": "formal_industry_c39_2016_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2016_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c39.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2017_long_window_run.yaml",
+    "year": 2017,
+    "start_date": "2017-01-01",
+    "end_date": "2017-12-31",
+    "output_name": "formal_industry_c39_2017_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2017_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c39.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2018_long_window_run.yaml",
+    "year": 2018,
+    "start_date": "2018-01-01",
+    "end_date": "2018-12-31",
+    "output_name": "formal_industry_c39_2018_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2018_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c39.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2019_long_window_run.yaml",
+    "year": 2019,
+    "start_date": "2019-01-01",
+    "end_date": "2019-12-31",
+    "output_name": "formal_industry_c39_2019_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2019_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c39.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2020_long_window_run.yaml",
+    "year": 2020,
+    "start_date": "2020-01-01",
+    "end_date": "2020-12-31",
+    "output_name": "formal_industry_c39_2020_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2020_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c39.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2021_long_window_run.yaml",
+    "year": 2021,
+    "start_date": "2021-01-01",
+    "end_date": "2021-12-31",
+    "output_name": "formal_industry_c39_2021_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2021_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c39.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2022_long_window_run.yaml",
+    "year": 2022,
+    "start_date": "2022-01-01",
+    "end_date": "2022-12-31",
+    "output_name": "formal_industry_c39_2022_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2022_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c39.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2023_long_window_run.yaml",
+    "year": 2023,
+    "start_date": "2023-01-01",
+    "end_date": "2023-12-31",
+    "output_name": "formal_industry_c39_2023_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2023_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c39.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2024_long_window_run.yaml",
+    "year": 2024,
+    "start_date": "2024-01-01",
+    "end_date": "2024-12-31",
+    "output_name": "formal_industry_c39_2024_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2024_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c39.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2025_long_window_run.yaml",
+    "year": 2025,
+    "start_date": "2025-01-01",
+    "end_date": "2025-12-31",
+    "output_name": "formal_industry_c39_2025_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2025_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_industry_c39.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2026_long_window_run.yaml",
+    "year": 2026,
+    "start_date": "2026-01-01",
+    "end_date": "2026-03-30",
+    "output_name": "formal_industry_c39_2026_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_industry_c39_2026_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_small.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2015_long_window_run.yaml",
+    "year": 2015,
+    "start_date": "2015-01-01",
+    "end_date": "2015-12-31",
+    "output_name": "formal_size_small_2015_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2015_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_small.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2016_long_window_run.yaml",
+    "year": 2016,
+    "start_date": "2016-01-01",
+    "end_date": "2016-12-31",
+    "output_name": "formal_size_small_2016_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2016_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_small.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2017_long_window_run.yaml",
+    "year": 2017,
+    "start_date": "2017-01-01",
+    "end_date": "2017-12-31",
+    "output_name": "formal_size_small_2017_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2017_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_small.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2018_long_window_run.yaml",
+    "year": 2018,
+    "start_date": "2018-01-01",
+    "end_date": "2018-12-31",
+    "output_name": "formal_size_small_2018_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2018_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_small.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2019_long_window_run.yaml",
+    "year": 2019,
+    "start_date": "2019-01-01",
+    "end_date": "2019-12-31",
+    "output_name": "formal_size_small_2019_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2019_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_small.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2020_long_window_run.yaml",
+    "year": 2020,
+    "start_date": "2020-01-01",
+    "end_date": "2020-12-31",
+    "output_name": "formal_size_small_2020_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2020_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_small.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2021_long_window_run.yaml",
+    "year": 2021,
+    "start_date": "2021-01-01",
+    "end_date": "2021-12-31",
+    "output_name": "formal_size_small_2021_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2021_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_small.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2022_long_window_run.yaml",
+    "year": 2022,
+    "start_date": "2022-01-01",
+    "end_date": "2022-12-31",
+    "output_name": "formal_size_small_2022_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2022_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_small.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2023_long_window_run.yaml",
+    "year": 2023,
+    "start_date": "2023-01-01",
+    "end_date": "2023-12-31",
+    "output_name": "formal_size_small_2023_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2023_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_small.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2024_long_window_run.yaml",
+    "year": 2024,
+    "start_date": "2024-01-01",
+    "end_date": "2024-12-31",
+    "output_name": "formal_size_small_2024_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2024_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_small.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2025_long_window_run.yaml",
+    "year": 2025,
+    "start_date": "2025-01-01",
+    "end_date": "2025-12-31",
+    "output_name": "formal_size_small_2025_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2025_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_small.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2026_long_window_run.yaml",
+    "year": 2026,
+    "start_date": "2026-01-01",
+    "end_date": "2026-03-30",
+    "output_name": "formal_size_small_2026_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_small_2026_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_mid.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2015_long_window_run.yaml",
+    "year": 2015,
+    "start_date": "2015-01-01",
+    "end_date": "2015-12-31",
+    "output_name": "formal_size_mid_2015_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2015_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_mid.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2016_long_window_run.yaml",
+    "year": 2016,
+    "start_date": "2016-01-01",
+    "end_date": "2016-12-31",
+    "output_name": "formal_size_mid_2016_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2016_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_mid.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2017_long_window_run.yaml",
+    "year": 2017,
+    "start_date": "2017-01-01",
+    "end_date": "2017-12-31",
+    "output_name": "formal_size_mid_2017_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2017_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_mid.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2018_long_window_run.yaml",
+    "year": 2018,
+    "start_date": "2018-01-01",
+    "end_date": "2018-12-31",
+    "output_name": "formal_size_mid_2018_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2018_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_mid.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2019_long_window_run.yaml",
+    "year": 2019,
+    "start_date": "2019-01-01",
+    "end_date": "2019-12-31",
+    "output_name": "formal_size_mid_2019_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2019_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_mid.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2020_long_window_run.yaml",
+    "year": 2020,
+    "start_date": "2020-01-01",
+    "end_date": "2020-12-31",
+    "output_name": "formal_size_mid_2020_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2020_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_mid.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2021_long_window_run.yaml",
+    "year": 2021,
+    "start_date": "2021-01-01",
+    "end_date": "2021-12-31",
+    "output_name": "formal_size_mid_2021_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2021_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_mid.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2022_long_window_run.yaml",
+    "year": 2022,
+    "start_date": "2022-01-01",
+    "end_date": "2022-12-31",
+    "output_name": "formal_size_mid_2022_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2022_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_mid.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2023_long_window_run.yaml",
+    "year": 2023,
+    "start_date": "2023-01-01",
+    "end_date": "2023-12-31",
+    "output_name": "formal_size_mid_2023_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2023_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_mid.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2024_long_window_run.yaml",
+    "year": 2024,
+    "start_date": "2024-01-01",
+    "end_date": "2024-12-31",
+    "output_name": "formal_size_mid_2024_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2024_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_mid.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2025_long_window_run.yaml",
+    "year": 2025,
+    "start_date": "2025-01-01",
+    "end_date": "2025-12-31",
+    "output_name": "formal_size_mid_2025_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2025_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_mid.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2026_long_window_run.yaml",
+    "year": 2026,
+    "start_date": "2026-01-01",
+    "end_date": "2026-03-30",
+    "output_name": "formal_size_mid_2026_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_mid_2026_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_large.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2015_long_window_run.yaml",
+    "year": 2015,
+    "start_date": "2015-01-01",
+    "end_date": "2015-12-31",
+    "output_name": "formal_size_large_2015_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2015_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_large.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2016_long_window_run.yaml",
+    "year": 2016,
+    "start_date": "2016-01-01",
+    "end_date": "2016-12-31",
+    "output_name": "formal_size_large_2016_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2016_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_large.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2017_long_window_run.yaml",
+    "year": 2017,
+    "start_date": "2017-01-01",
+    "end_date": "2017-12-31",
+    "output_name": "formal_size_large_2017_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2017_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_large.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2018_long_window_run.yaml",
+    "year": 2018,
+    "start_date": "2018-01-01",
+    "end_date": "2018-12-31",
+    "output_name": "formal_size_large_2018_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2018_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_large.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2019_long_window_run.yaml",
+    "year": 2019,
+    "start_date": "2019-01-01",
+    "end_date": "2019-12-31",
+    "output_name": "formal_size_large_2019_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2019_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_large.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2020_long_window_run.yaml",
+    "year": 2020,
+    "start_date": "2020-01-01",
+    "end_date": "2020-12-31",
+    "output_name": "formal_size_large_2020_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2020_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_large.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2021_long_window_run.yaml",
+    "year": 2021,
+    "start_date": "2021-01-01",
+    "end_date": "2021-12-31",
+    "output_name": "formal_size_large_2021_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2021_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_large.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2022_long_window_run.yaml",
+    "year": 2022,
+    "start_date": "2022-01-01",
+    "end_date": "2022-12-31",
+    "output_name": "formal_size_large_2022_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2022_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_large.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2023_long_window_run.yaml",
+    "year": 2023,
+    "start_date": "2023-01-01",
+    "end_date": "2023-12-31",
+    "output_name": "formal_size_large_2023_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2023_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_large.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2024_long_window_run.yaml",
+    "year": 2024,
+    "start_date": "2024-01-01",
+    "end_date": "2024-12-31",
+    "output_name": "formal_size_large_2024_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2024_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_large.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2025_long_window_run.yaml",
+    "year": 2025,
+    "start_date": "2025-01-01",
+    "end_date": "2025-12-31",
+    "output_name": "formal_size_large_2025_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2025_long_window_run.yaml"
+  },
+  {
+    "config": "D:/Personal folders/Desktop/StockdbWithTensor/code/configs/formal_size_large.yaml",
+    "config_variant": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2026_long_window_run.yaml",
+    "year": 2026,
+    "start_date": "2026-01-01",
+    "end_date": "2026-03-30",
+    "output_name": "formal_size_large_2026_long_window_run",
+    "command": "python3 code/main.py --config D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/long_window_plan/configs/formal_size_large_2026_long_window_run.yaml"
+  }
+]

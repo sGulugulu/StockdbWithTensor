@@ -44,6 +44,51 @@ def _best_model(rows: list[dict[str, Any]], metric_key: str, *, higher_is_better
     return str(max(rows, key=key).get("model", ""))
 
 
+def _series_final_value(output_dir: Path, model_name: str, prefix: str, key: str) -> float:
+    path = output_dir / f"{prefix}_{model_name}.json"
+    if not path.exists():
+        return 0.0
+    rows = _load_json(path)
+    if not rows:
+        return 0.0
+    return float(rows[-1].get(key, 0.0))
+
+
+def _series_mean_value(output_dir: Path, model_name: str, prefix: str, key: str) -> float:
+    path = output_dir / f"{prefix}_{model_name}.json"
+    if not path.exists():
+        return 0.0
+    rows = _load_json(path)
+    values = [float(row.get(key, 0.0)) for row in rows]
+    return sum(values) / len(values) if values else 0.0
+
+
+def _series_min_value(output_dir: Path, model_name: str, prefix: str, key: str) -> float:
+    path = output_dir / f"{prefix}_{model_name}.json"
+    if not path.exists():
+        return 0.0
+    rows = _load_json(path)
+    values = [float(row.get(key, 0.0)) for row in rows]
+    return min(values) if values else 0.0
+
+
+def _quantile_spread(output_dir: Path, model_name: str) -> float:
+    path = output_dir / f"quantile_returns_{model_name}.json"
+    if not path.exists():
+        return 0.0
+    rows = _load_json(path)
+    if not rows:
+        return 0.0
+    final_nav_by_quantile: dict[int, float] = {}
+    for row in rows:
+        final_nav_by_quantile[int(row.get("quantile", 0))] = float(row.get("cumulative_nav", 1.0))
+    if not final_nav_by_quantile:
+        return 0.0
+    low_quantile = min(final_nav_by_quantile)
+    high_quantile = max(final_nav_by_quantile)
+    return final_nav_by_quantile[low_quantile] - final_nav_by_quantile[high_quantile]
+
+
 def _summarize_run(output_dir: Path, *, exposure_limit: int) -> dict[str, Any]:
     manifest = _load_json(output_dir / "run_manifest.json")
     metrics_rows = _load_json(output_dir / "metrics.json")
@@ -66,6 +111,21 @@ def _summarize_run(output_dir: Path, *, exposure_limit: int) -> dict[str, Any]:
                 "sharpe_ratio": float(portfolio.get("sharpe_ratio", 0.0)),
                 "max_drawdown": float(portfolio.get("max_drawdown", 0.0)),
                 "average_turnover": float(portfolio.get("average_turnover", 0.0)),
+                "quantile_top_bottom_nav_spread": _quantile_spread(output_dir, model_name),
+                "long_short_cumulative_nav": _series_final_value(
+                    output_dir, model_name, "long_short", "cumulative_nav"
+                ),
+                "long_short_max_drawdown": _series_min_value(output_dir, model_name, "long_short", "drawdown"),
+                "cost_adjusted_cumulative_nav": _series_final_value(
+                    output_dir, model_name, "cost_adjusted", "cumulative_nav"
+                ),
+                "average_transaction_cost": _series_mean_value(
+                    output_dir, model_name, "cost_adjusted", "transaction_cost"
+                ),
+                "excess_cumulative_nav": _series_final_value(
+                    output_dir, model_name, "excess_returns", "cumulative_nav"
+                ),
+                "excess_max_drawdown": _series_min_value(output_dir, model_name, "excess_returns", "drawdown"),
                 "top_industry_exposures": _top_exposures(output_dir, model_name, "industry", exposure_limit),
                 "top_style_exposures": _top_exposures(output_dir, model_name, "style", exposure_limit),
             }
@@ -135,22 +195,31 @@ def _write_markdown(path: Path, summaries: list[dict[str, Any]]) -> None:
             "",
             "## 模型明细",
             "",
-            "| 样本池 | 模型 | Rank IC | 稳定性 | 累计收益 | 年化波动 | Sharpe | 最大回撤 | 平均换手 | 主要行业暴露 | 主要风格暴露 |",
-            "|---|---|---:|---:|---:|---:|---:|---:|---:|---|---|",
+            (
+                "| 样本池 | 模型 | Rank IC | 稳定性 | Top-N收益 | 分组价差 | 多空NAV | "
+                "成本后NAV | 平均成本 | 超额NAV | 年化波动 | Sharpe | 最大回撤 | 平均换手 | 主要行业暴露 | 主要风格暴露 |"
+            ),
+            "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|---|",
         ]
     )
     for summary in summaries:
         for row in summary["models"]:
             lines.append(
                 (
-                    "| {universe} | {model} | {rank_ic} | {stability} | {ret} | "
-                    "{vol} | {sharpe} | {drawdown} | {turnover} | {industry} | {style} |"
+                    "| {universe} | {model} | {rank_ic} | {stability} | {ret} | {spread} | "
+                    "{long_short} | {cost_nav} | {avg_cost} | {excess_nav} | {vol} | {sharpe} | "
+                    "{drawdown} | {turnover} | {industry} | {style} |"
                 ).format(
                     universe=summary["universe_id"],
                     model=str(row["model"]).upper(),
                     rank_ic=_format_float(float(row["rank_ic_mean"])),
                     stability=_format_float(float(row["rolling_stability"])),
                     ret=_format_percent(float(row["cumulative_return"])),
+                    spread=_format_float(float(row["quantile_top_bottom_nav_spread"])),
+                    long_short=_format_float(float(row["long_short_cumulative_nav"])),
+                    cost_nav=_format_float(float(row["cost_adjusted_cumulative_nav"])),
+                    avg_cost=_format_percent(float(row["average_transaction_cost"])),
+                    excess_nav=_format_float(float(row["excess_cumulative_nav"])),
                     vol=_format_percent(float(row["annualized_volatility"])),
                     sharpe=_format_float(float(row["sharpe_ratio"])),
                     drawdown=_format_percent(float(row["max_drawdown"])),

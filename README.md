@@ -194,8 +194,8 @@ Python 不反向覆盖 Go 持有的状态真源。
 先创建本地虚拟环境并安装依赖：
 
 ```powershell
-python -m venv .venv
-python -m pip install -r requirements.txt
+python3 -m venv .venv
+python3 -m pip install -r requirements.txt
 ```
 
 当前运行时支持：
@@ -209,7 +209,7 @@ python -m pip install -r requirements.txt
 ### Stage 1：抓取 universe-history 与 metadata
 
 ```powershell
-python code/data/fetch_baostock_data.py `
+python3 code/data/fetch_baostock_data.py `
   --output-root code/data/formal/baostock `
   --start-date 2015-01-01 `
   --end-date 2026-04-01 `
@@ -223,7 +223,7 @@ formal 日频面板默认采用 **前复权**（`adjustflag=2`）口径抓取 ba
 ### Stage 2：抓取 formal 财务与报告数据
 
 ```powershell
-python code/data/fetch_baostock_data.py `
+python3 code/data/fetch_baostock_data.py `
   --output-root code/data/formal/baostock `
   --start-date 2015-01-01 `
   --end-date 2026-04-01 `
@@ -239,7 +239,7 @@ python code/data/fetch_baostock_data.py `
 若要刷新当前提交版实验所用的 baseline/extended 因子面板快照，优先使用：
 
 ```powershell
-python code/data/refresh_formal_factor_panels.py `
+python3 code/data/refresh_formal_factor_panels.py `
   --formal-root code/data/formal `
   --max-trade-date 2026-03-30
 ```
@@ -251,7 +251,7 @@ python code/data/refresh_formal_factor_panels.py `
 ### Stage 5：注册 DuckDB catalog
 
 ```powershell
-python code/data/register_formal_duckdb_catalog.py `
+python3 code/data/register_formal_duckdb_catalog.py `
   --formal-root code/data/formal `
   --catalog-path code/data/formal/catalog.duckdb
 ```
@@ -276,13 +276,13 @@ python code/data/register_formal_duckdb_catalog.py `
 轻量联调用 smoke 配置：
 
 ```powershell
-python code/main.py --config code/configs/sample_cn_smoke.yaml
+python3 code/main.py --config code/configs/sample_cn_smoke.yaml
 ```
 
 正式实验优先使用 formal profile：
 
 ```powershell
-python code/main.py --config code/configs/formal_hs300.yaml
+python3 code/main.py --config code/configs/formal_hs300.yaml
 ```
 
 ## 测试
@@ -290,7 +290,7 @@ python code/main.py --config code/configs/formal_hs300.yaml
 Python 测试：
 
 ```powershell
-python -m unittest discover -s code/tests
+python3 -m unittest discover -s code/tests
 ```
 
 Go 后端测试：
@@ -340,7 +340,7 @@ $env:VITE_API_BASE="http://127.0.0.1:8000"
 遗留 Python scaffold 仅作兼容参考：
 
 ```powershell
-python -m uvicorn web.backend.app:create_app --factory --reload
+python3 -m uvicorn web.backend.app:create_app --factory --reload
 ```
 
 ## 输出产物
