@@ -1,0 +1,1410 @@
+[
+  {
+    "run_name": "formal_all_a_run",
+    "universe_id": "ALL_A_ACTIVE",
+    "actual_start_date": "2026-03-02",
+    "actual_end_date": "2026-03-30",
+    "candidate_pool_size": 80,
+    "selection_top_n": 20,
+    "best_rank_ic_model": "tucker",
+    "best_return_model": "pca",
+    "best_sharpe_model": "pca",
+    "models": [
+      {
+        "model": "cp",
+        "rank_ic_mean": -0.0997488212011473,
+        "rolling_stability": 0.7373374306729862,
+        "cumulative_return": -0.08061176761832667,
+        "annualized_volatility": 0.2009555976896272,
+        "sharpe_ratio": -25.972068600790408,
+        "max_drawdown": -0.08061176761832667,
+        "average_turnover": 0.6000000000000001,
+        "top_industry_exposures": [
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "C26化学原料和化学制品制造业",
+            "weight": 0.1375
+          },
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "D44电力、热力生产和供应业",
+            "weight": 0.125
+          },
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "C31黑色金属冶炼和压延加工业",
+            "weight": 0.0625
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "cp",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.7
+          },
+          {
+            "model": "cp",
+            "exposure_type": "style",
+            "name": "value_factor",
+            "weight": 0.3
+          }
+        ]
+      },
+      {
+        "model": "pca",
+        "rank_ic_mean": -0.0215625380485731,
+        "rolling_stability": 0.9608758546057202,
+        "cumulative_return": -0.014931043579585634,
+        "annualized_volatility": 0.19257067930293661,
+        "sharpe_ratio": -4.814851920072418,
+        "max_drawdown": -0.024331863254368646,
+        "average_turnover": 0.4875,
+        "top_industry_exposures": [
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "C31黑色金属冶炼和压延加工业",
+            "weight": 0.1375
+          },
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "C39计算机、通信和其他电子设备制造业",
+            "weight": 0.125
+          },
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "I65软件和信息技术服务业",
+            "weight": 0.1
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "quality_factor",
+            "weight": 0.9625
+          },
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.025
+          },
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "value_factor",
+            "weight": 0.0125
+          }
+        ]
+      },
+      {
+        "model": "tucker",
+        "rank_ic_mean": 0.05977963929786369,
+        "rolling_stability": 0.9731060287782124,
+        "cumulative_return": -0.01598984938763004,
+        "annualized_volatility": 0.2060037199698712,
+        "sharpe_ratio": -4.8154598916800735,
+        "max_drawdown": -0.025300348865638367,
+        "average_turnover": 0.2875,
+        "top_industry_exposures": [
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "C27医药制造业",
+            "weight": 0.1625
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "C31黑色金属冶炼和压延加工业",
+            "weight": 0.15
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "R87广播、电视、电影和录音制作业",
+            "weight": 0.1
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "tucker",
+            "exposure_type": "style",
+            "name": "quality_factor",
+            "weight": 1.0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "run_name": "formal_hs300_run",
+    "universe_id": "HS300",
+    "actual_start_date": "2026-03-02",
+    "actual_end_date": "2026-03-30",
+    "candidate_pool_size": 80,
+    "selection_top_n": 20,
+    "best_rank_ic_model": "cp",
+    "best_return_model": "tucker",
+    "best_sharpe_model": "tucker",
+    "models": [
+      {
+        "model": "cp",
+        "rank_ic_mean": 0.08330921602675415,
+        "rolling_stability": 0.6974238273022431,
+        "cumulative_return": 0.008731085212674738,
+        "annualized_volatility": 0.07845106844210147,
+        "sharpe_ratio": 7.027766806458215,
+        "max_drawdown": -0.004265685798306773,
+        "average_turnover": 0.4125,
+        "top_industry_exposures": [
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "J66货币金融服务",
+            "weight": 0.4
+          },
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "G56航空运输业",
+            "weight": 0.1
+          },
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "G55水上运输业",
+            "weight": 0.0625
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "cp",
+            "exposure_type": "style",
+            "name": "quality_factor",
+            "weight": 0.5
+          },
+          {
+            "model": "cp",
+            "exposure_type": "style",
+            "name": "value_factor",
+            "weight": 0.5
+          }
+        ]
+      },
+      {
+        "model": "pca",
+        "rank_ic_mean": 0.017380538941411026,
+        "rolling_stability": 0.9945791931379409,
+        "cumulative_return": 0.007383647633920409,
+        "annualized_volatility": 0.10192460943534455,
+        "sharpe_ratio": 4.602144024824736,
+        "max_drawdown": -0.006992404514336026,
+        "average_turnover": 0.425,
+        "top_industry_exposures": [
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "J66货币金融服务",
+            "weight": 0.3875
+          },
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "J68保险业",
+            "weight": 0.15
+          },
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "J67资本市场服务",
+            "weight": 0.0875
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "value_factor",
+            "weight": 0.475
+          },
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.4125
+          },
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "quality_factor",
+            "weight": 0.1125
+          }
+        ]
+      },
+      {
+        "model": "tucker",
+        "rank_ic_mean": 0.0731156344459451,
+        "rolling_stability": 0.989792280963489,
+        "cumulative_return": 0.021106387335870558,
+        "annualized_volatility": 0.09039150415760977,
+        "sharpe_ratio": 14.640372719038998,
+        "max_drawdown": -0.0002935944879911556,
+        "average_turnover": 0.275,
+        "top_industry_exposures": [
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "J66货币金融服务",
+            "weight": 0.5
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "G56航空运输业",
+            "weight": 0.1
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "G55水上运输业",
+            "weight": 0.0875
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "tucker",
+            "exposure_type": "style",
+            "name": "quality_factor",
+            "weight": 0.6125
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "style",
+            "name": "value_factor",
+            "weight": 0.225
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.1625
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "run_name": "formal_industry_c27_run",
+    "universe_id": "INDUSTRY_C27",
+    "actual_start_date": "2026-03-02",
+    "actual_end_date": "2026-03-30",
+    "candidate_pool_size": 80,
+    "selection_top_n": 20,
+    "best_rank_ic_model": "tucker",
+    "best_return_model": "tucker",
+    "best_sharpe_model": "tucker",
+    "models": [
+      {
+        "model": "cp",
+        "rank_ic_mean": -0.2626126126126126,
+        "rolling_stability": 0.6880081413047654,
+        "cumulative_return": 0.16297930826177165,
+        "annualized_volatility": 0.4839530725127238,
+        "sharpe_ratio": 20.263991011765988,
+        "max_drawdown": 0.0,
+        "average_turnover": 0.25,
+        "top_industry_exposures": [
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "C27医药制造业",
+            "weight": 1.0
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "cp",
+            "exposure_type": "style",
+            "name": "value_factor",
+            "weight": 0.625
+          },
+          {
+            "model": "cp",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.375
+          }
+        ]
+      },
+      {
+        "model": "pca",
+        "rank_ic_mean": 0.0250965250965251,
+        "rolling_stability": 0.9300957336312248,
+        "cumulative_return": 0.21779454814590404,
+        "annualized_volatility": 0.6269301325766864,
+        "sharpe_ratio": 20.595887493019625,
+        "max_drawdown": 0.0,
+        "average_turnover": 0.5125,
+        "top_industry_exposures": [
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "C27医药制造业",
+            "weight": 1.0
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.7625
+          },
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "quality_factor",
+            "weight": 0.1375
+          },
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "value_factor",
+            "weight": 0.1
+          }
+        ]
+      },
+      {
+        "model": "tucker",
+        "rank_ic_mean": 0.23635778635778637,
+        "rolling_stability": 0.957114924277578,
+        "cumulative_return": 0.2781379844796621,
+        "annualized_volatility": 0.7172669008239773,
+        "sharpe_ratio": 22.56968812659293,
+        "max_drawdown": 0.0,
+        "average_turnover": 0.2875,
+        "top_industry_exposures": [
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "C27医药制造业",
+            "weight": 1.0
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "tucker",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.6625
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "style",
+            "name": "quality_factor",
+            "weight": 0.2875
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "style",
+            "name": "value_factor",
+            "weight": 0.05
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "run_name": "formal_industry_c35_run",
+    "universe_id": "INDUSTRY_C35",
+    "actual_start_date": "2026-03-02",
+    "actual_end_date": "2026-03-30",
+    "candidate_pool_size": 80,
+    "selection_top_n": 20,
+    "best_rank_ic_model": "pca",
+    "best_return_model": "tucker",
+    "best_sharpe_model": "tucker",
+    "models": [
+      {
+        "model": "cp",
+        "rank_ic_mean": -0.10076394194041254,
+        "rolling_stability": 0.5742790805441993,
+        "cumulative_return": -0.05158761923588673,
+        "annualized_volatility": 0.1985388673492775,
+        "sharpe_ratio": -16.594951832896918,
+        "max_drawdown": -0.05158761923588673,
+        "average_turnover": 0.4,
+        "top_industry_exposures": [
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "C35专用设备制造业",
+            "weight": 1.0
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "cp",
+            "exposure_type": "style",
+            "name": "quality_factor",
+            "weight": 0.7375
+          },
+          {
+            "model": "cp",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.2625
+          }
+        ]
+      },
+      {
+        "model": "pca",
+        "rank_ic_mean": 0.1391902215431627,
+        "rolling_stability": 0.9179081945192247,
+        "cumulative_return": 0.006178187664717338,
+        "annualized_volatility": 0.15578072997401374,
+        "sharpe_ratio": 2.5708242840170343,
+        "max_drawdown": -0.013583329593044535,
+        "average_turnover": 0.3875,
+        "top_industry_exposures": [
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "C35专用设备制造业",
+            "weight": 1.0
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.4625
+          },
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "value_factor",
+            "weight": 0.3
+          },
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "quality_factor",
+            "weight": 0.2375
+          }
+        ]
+      },
+      {
+        "model": "tucker",
+        "rank_ic_mean": 0.04339190221543164,
+        "rolling_stability": 0.8738124301390988,
+        "cumulative_return": 0.008556557011381027,
+        "annualized_volatility": 0.15405351399149364,
+        "sharpe_ratio": 3.565142500552247,
+        "max_drawdown": -0.012675837004395007,
+        "average_turnover": 0.275,
+        "top_industry_exposures": [
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "C35专用设备制造业",
+            "weight": 1.0
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "tucker",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.625
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "style",
+            "name": "value_factor",
+            "weight": 0.2
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "style",
+            "name": "quality_factor",
+            "weight": 0.175
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "run_name": "formal_industry_c39_run",
+    "universe_id": "INDUSTRY_C39",
+    "actual_start_date": "2026-03-02",
+    "actual_end_date": "2026-03-30",
+    "candidate_pool_size": 80,
+    "selection_top_n": 20,
+    "best_rank_ic_model": "cp",
+    "best_return_model": "tucker",
+    "best_sharpe_model": "tucker",
+    "models": [
+      {
+        "model": "cp",
+        "rank_ic_mean": 0.05707780047667687,
+        "rolling_stability": 0.7432657139641898,
+        "cumulative_return": -0.053715134426013056,
+        "annualized_volatility": 0.266671938086268,
+        "sharpe_ratio": -12.817022752457834,
+        "max_drawdown": -0.053715134426013056,
+        "average_turnover": 0.35,
+        "top_industry_exposures": [
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "C39计算机、通信和其他电子设备制造业",
+            "weight": 1.0
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "cp",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 1.0
+          }
+        ]
+      },
+      {
+        "model": "pca",
+        "rank_ic_mean": -0.12607677902621722,
+        "rolling_stability": 0.9295099022842589,
+        "cumulative_return": -0.07075465713866658,
+        "annualized_volatility": 0.23283151352840642,
+        "sharpe_ratio": -19.556078963612546,
+        "max_drawdown": -0.07075465713866658,
+        "average_turnover": 0.32499999999999996,
+        "top_industry_exposures": [
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "C39计算机、通信和其他电子设备制造业",
+            "weight": 1.0
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "quality_factor",
+            "weight": 0.35
+          },
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "value_factor",
+            "weight": 0.3375
+          },
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.3125
+          }
+        ]
+      },
+      {
+        "model": "tucker",
+        "rank_ic_mean": -0.05787368062648961,
+        "rolling_stability": 0.879186230013147,
+        "cumulative_return": -0.030115598287524525,
+        "annualized_volatility": 0.1933892401406703,
+        "sharpe_ratio": -9.825242884531834,
+        "max_drawdown": -0.03275145767195986,
+        "average_turnover": 0.30000000000000004,
+        "top_industry_exposures": [
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "C39计算机、通信和其他电子设备制造业",
+            "weight": 1.0
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "tucker",
+            "exposure_type": "style",
+            "name": "value_factor",
+            "weight": 0.725
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.275
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "run_name": "formal_size_large_run",
+    "universe_id": "SIZE_LARGE",
+    "actual_start_date": "2026-03-02",
+    "actual_end_date": "2026-03-30",
+    "candidate_pool_size": 20,
+    "selection_top_n": 5,
+    "best_rank_ic_model": "cp",
+    "best_return_model": "pca",
+    "best_sharpe_model": "tucker",
+    "models": [
+      {
+        "model": "cp",
+        "rank_ic_mean": 0.14505494505494507,
+        "rolling_stability": 0.6330940425395966,
+        "cumulative_return": -0.017088665090233657,
+        "annualized_volatility": 0.09086683272711735,
+        "sharpe_ratio": -11.878996552669925,
+        "max_drawdown": -0.017088665090233657,
+        "average_turnover": 0.4,
+        "top_industry_exposures": [
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "C39计算机、通信和其他电子设备制造业",
+            "weight": 0.2
+          },
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "C32有色金属冶炼和压延加工业",
+            "weight": 0.2
+          },
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "D44电力、热力生产和供应业",
+            "weight": 0.2
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "cp",
+            "exposure_type": "style",
+            "name": "quality_factor",
+            "weight": 0.4
+          },
+          {
+            "model": "cp",
+            "exposure_type": "style",
+            "name": "value_factor",
+            "weight": 0.35
+          },
+          {
+            "model": "cp",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.25
+          }
+        ]
+      },
+      {
+        "model": "pca",
+        "rank_ic_mean": -0.16483516483516483,
+        "rolling_stability": 0.9693446457386018,
+        "cumulative_return": -0.00675528240501122,
+        "annualized_volatility": 0.05038677476647617,
+        "sharpe_ratio": -8.442510063515112,
+        "max_drawdown": -0.007073393246079918,
+        "average_turnover": 0.39999999999999997,
+        "top_industry_exposures": [
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "J66货币金融服务",
+            "weight": 0.5
+          },
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "I63电信、广播电视和卫星传输服务",
+            "weight": 0.2
+          },
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "C31黑色金属冶炼和压延加工业",
+            "weight": 0.15
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.5
+          },
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "quality_factor",
+            "weight": 0.3
+          },
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "value_factor",
+            "weight": 0.2
+          }
+        ]
+      },
+      {
+        "model": "tucker",
+        "rank_ic_mean": -0.22967032967032966,
+        "rolling_stability": 0.9899914179529462,
+        "cumulative_return": -0.019815939835769236,
+        "annualized_volatility": 0.15024389604074911,
+        "sharpe_ratio": -8.295660994621347,
+        "max_drawdown": -0.021031153371181333,
+        "average_turnover": 0.4,
+        "top_industry_exposures": [
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "J66货币金融服务",
+            "weight": 0.6
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "G55水上运输业",
+            "weight": 0.15
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "C31黑色金属冶炼和压延加工业",
+            "weight": 0.15
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "tucker",
+            "exposure_type": "style",
+            "name": "value_factor",
+            "weight": 0.8
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "run_name": "formal_size_mid_run",
+    "universe_id": "SIZE_MID",
+    "actual_start_date": "2026-03-02",
+    "actual_end_date": "2026-03-30",
+    "candidate_pool_size": 20,
+    "selection_top_n": 5,
+    "best_rank_ic_model": "pca",
+    "best_return_model": "pca",
+    "best_sharpe_model": "pca",
+    "models": [
+      {
+        "model": "cp",
+        "rank_ic_mean": 0.08216783216783216,
+        "rolling_stability": 0.637093201013548,
+        "cumulative_return": 0.03353771858593535,
+        "annualized_volatility": 0.1560164268383924,
+        "sharpe_ratio": 13.452968084292655,
+        "max_drawdown": -0.0028764823504485726,
+        "average_turnover": 0.25,
+        "top_industry_exposures": [
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "G56航空运输业",
+            "weight": 0.4
+          },
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "J66货币金融服务",
+            "weight": 0.2
+          },
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "K70房地产业",
+            "weight": 0.2
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "cp",
+            "exposure_type": "style",
+            "name": "value_factor",
+            "weight": 0.8
+          },
+          {
+            "model": "cp",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.2
+          }
+        ]
+      },
+      {
+        "model": "pca",
+        "rank_ic_mean": 0.14160839160839164,
+        "rolling_stability": 0.9528749272936866,
+        "cumulative_return": 0.0489739475856783,
+        "annualized_volatility": 0.12522886245223006,
+        "sharpe_ratio": 24.259832299498626,
+        "max_drawdown": 0.0,
+        "average_turnover": 0.39999999999999997,
+        "top_industry_exposures": [
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "G56航空运输业",
+            "weight": 0.5
+          },
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "K70房地产业",
+            "weight": 0.2
+          },
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "J66货币金融服务",
+            "weight": 0.2
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "value_factor",
+            "weight": 0.35
+          },
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.35
+          },
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "quality_factor",
+            "weight": 0.3
+          }
+        ]
+      },
+      {
+        "model": "tucker",
+        "rank_ic_mean": 0.052447552447552455,
+        "rolling_stability": 0.9535800005708422,
+        "cumulative_return": -0.006007593840203662,
+        "annualized_volatility": 0.05457532344310364,
+        "sharpe_ratio": -6.923294305730099,
+        "max_drawdown": -0.006782382039426049,
+        "average_turnover": 0.75,
+        "top_industry_exposures": [
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "G56航空运输业",
+            "weight": 0.35
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "D44电力、热力生产和供应业",
+            "weight": 0.2
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "C31黑色金属冶炼和压延加工业",
+            "weight": 0.15
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "tucker",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.75
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "style",
+            "name": "quality_factor",
+            "weight": 0.15
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "style",
+            "name": "value_factor",
+            "weight": 0.1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "run_name": "formal_size_small_run",
+    "universe_id": "SIZE_SMALL",
+    "actual_start_date": "2026-03-02",
+    "actual_end_date": "2026-03-30",
+    "candidate_pool_size": 20,
+    "selection_top_n": 5,
+    "best_rank_ic_model": "cp",
+    "best_return_model": "cp",
+    "best_sharpe_model": "cp",
+    "models": [
+      {
+        "model": "cp",
+        "rank_ic_mean": 0.24125874125874125,
+        "rolling_stability": 0.7635081570063319,
+        "cumulative_return": -0.005824031805136243,
+        "annualized_volatility": 0.15783849131121125,
+        "sharpe_ratio": -2.2501949135375328,
+        "max_drawdown": -0.017982414609931108,
+        "average_turnover": 0.3,
+        "top_industry_exposures": [
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "J67资本市场服务",
+            "weight": 0.2
+          },
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "C37铁路、船舶、航空航天和其他运输设备制造业",
+            "weight": 0.2
+          },
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "K70房地产业",
+            "weight": 0.2
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "cp",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.5
+          },
+          {
+            "model": "cp",
+            "exposure_type": "style",
+            "name": "quality_factor",
+            "weight": 0.5
+          }
+        ]
+      },
+      {
+        "model": "pca",
+        "rank_ic_mean": -0.1818181818181818,
+        "rolling_stability": 0.9327365727651687,
+        "cumulative_return": -0.07332180384137976,
+        "annualized_volatility": 0.20028824686990016,
+        "sharpe_ratio": -23.623988545699607,
+        "max_drawdown": -0.07332180384137976,
+        "average_turnover": 0.3,
+        "top_industry_exposures": [
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "J67资本市场服务",
+            "weight": 0.4
+          },
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "D44电力、热力生产和供应业",
+            "weight": 0.4
+          },
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "C39计算机、通信和其他电子设备制造业",
+            "weight": 0.15
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.95
+          },
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "quality_factor",
+            "weight": 0.05
+          }
+        ]
+      },
+      {
+        "model": "tucker",
+        "rank_ic_mean": -0.2325174825174825,
+        "rolling_stability": 0.9125270013298307,
+        "cumulative_return": -0.09154381405872136,
+        "annualized_volatility": 0.302418931038727,
+        "sharpe_ratio": -19.606634898718617,
+        "max_drawdown": -0.09154381405872136,
+        "average_turnover": 0.39999999999999997,
+        "top_industry_exposures": [
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "D44电力、热力生产和供应业",
+            "weight": 0.4
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "J67资本市场服务",
+            "weight": 0.4
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "D46水的生产和供应业",
+            "weight": 0.1
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "tucker",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.9
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "style",
+            "name": "value_factor",
+            "weight": 0.05
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "style",
+            "name": "quality_factor",
+            "weight": 0.05
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "run_name": "formal_sz50_run",
+    "universe_id": "SZ50",
+    "actual_start_date": "2026-03-02",
+    "actual_end_date": "2026-03-30",
+    "candidate_pool_size": 80,
+    "selection_top_n": 20,
+    "best_rank_ic_model": "tucker",
+    "best_return_model": "tucker",
+    "best_sharpe_model": "tucker",
+    "models": [
+      {
+        "model": "cp",
+        "rank_ic_mean": -0.016710684273709482,
+        "rolling_stability": 0.5320297021950994,
+        "cumulative_return": -0.02998457709400626,
+        "annualized_volatility": 0.18146079174968832,
+        "sharpe_ratio": -10.437790894230355,
+        "max_drawdown": -0.03631562711746761,
+        "average_turnover": 0.7875,
+        "top_industry_exposures": [
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "C39计算机、通信和其他电子设备制造业",
+            "weight": 0.15
+          },
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "J66货币金融服务",
+            "weight": 0.1125
+          },
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "I65软件和信息技术服务业",
+            "weight": 0.0875
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "cp",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 1.0
+          }
+        ]
+      },
+      {
+        "model": "pca",
+        "rank_ic_mean": 0.01294117647058824,
+        "rolling_stability": 0.9955746304421199,
+        "cumulative_return": -0.00819340851916417,
+        "annualized_volatility": 0.09280850956136424,
+        "sharpe_ratio": -5.532361859535061,
+        "max_drawdown": -0.01155420475573199,
+        "average_turnover": 0.3375,
+        "top_industry_exposures": [
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "J66货币金融服务",
+            "weight": 0.325
+          },
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "J68保险业",
+            "weight": 0.15
+          },
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "C38电气机械和器材制造业",
+            "weight": 0.1
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.525
+          },
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "value_factor",
+            "weight": 0.35
+          },
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "quality_factor",
+            "weight": 0.125
+          }
+        ]
+      },
+      {
+        "model": "tucker",
+        "rank_ic_mean": 0.15226890756302522,
+        "rolling_stability": 0.9922751805612019,
+        "cumulative_return": -0.0032566966087836935,
+        "annualized_volatility": 0.04839958902917248,
+        "sharpe_ratio": -4.220117986633135,
+        "max_drawdown": -0.0036756516264320194,
+        "average_turnover": 0.2875,
+        "top_industry_exposures": [
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "J66货币金融服务",
+            "weight": 0.35
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "J68保险业",
+            "weight": 0.15
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "C38电气机械和器材制造业",
+            "weight": 0.0875
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "tucker",
+            "exposure_type": "style",
+            "name": "value_factor",
+            "weight": 0.725
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.275
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "run_name": "formal_zz500_run",
+    "universe_id": "ZZ500",
+    "actual_start_date": "2026-03-02",
+    "actual_end_date": "2026-03-30",
+    "candidate_pool_size": 80,
+    "selection_top_n": 20,
+    "best_rank_ic_model": "tucker",
+    "best_return_model": "tucker",
+    "best_sharpe_model": "tucker",
+    "models": [
+      {
+        "model": "cp",
+        "rank_ic_mean": -0.07787623150492604,
+        "rolling_stability": 0.8384445983739128,
+        "cumulative_return": -0.0846910999764442,
+        "annualized_volatility": 0.20262061632405917,
+        "sharpe_ratio": -27.110220729119938,
+        "max_drawdown": -0.0846910999764442,
+        "average_turnover": 0.7250000000000001,
+        "top_industry_exposures": [
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "B09有色金属矿采选业",
+            "weight": 0.125
+          },
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "C32有色金属冶炼和压延加工业",
+            "weight": 0.1
+          },
+          {
+            "model": "cp",
+            "exposure_type": "industry",
+            "name": "C36汽车制造业",
+            "weight": 0.075
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "cp",
+            "exposure_type": "style",
+            "name": "value_factor",
+            "weight": 0.925
+          },
+          {
+            "model": "cp",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.075
+          }
+        ]
+      },
+      {
+        "model": "pca",
+        "rank_ic_mean": -0.017773295093180375,
+        "rolling_stability": 0.9574789121037437,
+        "cumulative_return": -0.014931043579585634,
+        "annualized_volatility": 0.19257067930293661,
+        "sharpe_ratio": -4.814851920072418,
+        "max_drawdown": -0.024331863254368646,
+        "average_turnover": 0.4875,
+        "top_industry_exposures": [
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "C31黑色金属冶炼和压延加工业",
+            "weight": 0.1375
+          },
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "C39计算机、通信和其他电子设备制造业",
+            "weight": 0.125
+          },
+          {
+            "model": "pca",
+            "exposure_type": "industry",
+            "name": "I65软件和信息技术服务业",
+            "weight": 0.1
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "quality_factor",
+            "weight": 0.9625
+          },
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "value_factor",
+            "weight": 0.025
+          },
+          {
+            "model": "pca",
+            "exposure_type": "style",
+            "name": "volatility_factor",
+            "weight": 0.0125
+          }
+        ]
+      },
+      {
+        "model": "tucker",
+        "rank_ic_mean": 0.057341053364213454,
+        "rolling_stability": 0.968328303524426,
+        "cumulative_return": -0.014283044045665605,
+        "annualized_volatility": 0.24132706858619152,
+        "sharpe_ratio": -3.6267184799083467,
+        "max_drawdown": -0.02848933433599876,
+        "average_turnover": 0.2625,
+        "top_industry_exposures": [
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "C27医药制造业",
+            "weight": 0.15
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "C31黑色金属冶炼和压延加工业",
+            "weight": 0.15
+          },
+          {
+            "model": "tucker",
+            "exposure_type": "industry",
+            "name": "C25石油、煤炭及其他燃料加工业",
+            "weight": 0.1
+          }
+        ],
+        "top_style_exposures": [
+          {
+            "model": "tucker",
+            "exposure_type": "style",
+            "name": "quality_factor",
+            "weight": 1.0
+          }
+        ]
+      }
+    ]
+  }
+]

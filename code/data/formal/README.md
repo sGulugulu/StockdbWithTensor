@@ -182,6 +182,26 @@ python code/data/build_pattern_discovery_assets.py `
 
 该命令会生成股票潜在结构图、聚类与行业交叉图、跨样本边界 Tucker 指标对比图，以及 `pattern_discovery_summary.json`。
 
+如果你要刷新跨样本边界的组合表现与行业/风格暴露汇总，执行：
+
+```powershell
+python code/data/summarize_boundary_portfolio.py `
+  --output-dir code/outputs/formal_hs300_run `
+  --output-dir code/outputs/formal_sz50_run `
+  --output-dir code/outputs/formal_zz500_run `
+  --output-dir code/outputs/formal_all_a_run `
+  --output-dir code/outputs/formal_industry_c27_run `
+  --output-dir code/outputs/formal_industry_c35_run `
+  --output-dir code/outputs/formal_industry_c39_run `
+  --output-dir code/outputs/formal_size_small_run `
+  --output-dir code/outputs/formal_size_mid_run `
+  --output-dir code/outputs/formal_size_large_run `
+  --report-dir code/data/formal/reports/boundary_portfolio `
+  --exposure-limit 3
+```
+
+该命令会生成 `boundary_portfolio_summary.json` 和 Markdown 汇总表，用于把 Rank IC、稳定性、累计收益、年化波动、Sharpe、回撤、换手率和主要暴露统一到同一张表。
+
 ## Stage 2 Dataset-Year Runner
 
 你现在可以用统一入口脚本按“表 + 年份”执行 Stage 2：
