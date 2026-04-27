@@ -34,7 +34,7 @@ Source plan: 论文不足与完善计划.md
 ## MUTABLE SECTION
 <!-- Update each round with justification for changes -->
 
-### Plan Version: 5 (Updated: Round 4)
+### Plan Version: 6 (Updated: Round 5)
 
 #### Plan Evolution Log
 <!-- Document any changes to the plan with justification -->
@@ -48,12 +48,15 @@ Source plan: 论文不足与完善计划.md
 | 2 | 将 AC3 / AC4 的 long-window 进度更新为“代表性窗口已完成、全年份仍未完成” | Round 2 新增 long-window 因子面板、2015/2020/2024/2026 四个代表性年份的 28 个本地 run 结果、组合汇总和长窗口素材，但未完成 2016/2017/2018/2019/2021/2022/2023/2025 的全年份复跑，也未提交被 `code/outputs/` 忽略的 run 目录 | AC3 / AC4 由入口阶段推进到代表性结果阶段，但仍不能视为 fully complete |
 | 3 | 验证全年 long-window 产物与长窗口图组已入库，但保留 AC3 为进行中 | Round 3 的 84 个 `formal_*_long_window_run` 目录、`long_window_portfolio` 汇总和 `pattern_discovery_long_window_2015-2026` 图组均已存在且进入版本控制；但 `paper_body.tex` 仍保留“只复核 2015/2020/2024/2026”与“仍受短窗口限制”的旧表述 | AC4 可视为完成，AC3 仍需完成论文正文一致性回写后才能 fully close |
 | 4 | 关闭 AC3 论文正文一致性缺口并收束 Active Tasks | Round 4 已将 `paper_body.tex` 改写为与 `2015-2026` 全年 long-window 产物一致，不再保留“仅代表年份复核”与“仍缺长窗口证据”的旧表述 | AC3 现已满足“配置、产物、对比表、论文回写”完整闭环，剩余主阻塞收敛为 AC1 |
+| 5 | 拒绝将 AC1 移入已验证，并重新打开 AC3/AC1 的论文一致性收口任务 | Round 5 虽已落盘五张 canonical source tables 并把字段接入 extended panel，但复核发现 `refresh_formal_factor_panels.py` 的 clean-rebuild 自动构建链路仍会在缺失 baseline panel 时失败，且 `paper_body.tex` 仍残留过时的 extended 组合收益数字、AC1“尚未纳入更广泛宏观/事件源”的旧表述，以及 AC3“仅四个代表年份复核”的旧口径 | AC1 仍未 fully close，AC3 的论文正文一致性也再次出现回归，当前不能视为 COMPLETE |
 
 #### Active Tasks
 <!-- Map each task to its target Acceptance Criterion and routing tag -->
 | Task | Target AC | Status | Tag | Owner | Notes |
 |------|-----------|--------|-----|-------|-------|
-| 补齐外部宏观原始源表与更广泛事件字典的 PIT 可用时点映射 | AC1 | pending | coding | claude | BitLesson=NONE；统一训练接口第一阶段已完成，但外部利率、宏观月度指标、分红、重大事项和公告文本仍未落盘为可审计 PIT 输入 |
+| 修复 extended source 自动构建链路，确保 clean rebuild 时可成功刷新 formal panels | AC1 | pending | coding | claude | BitLesson=NONE；Round 5 已落盘五张 canonical source tables 并接入训练，但 `refresh_formal_factor_panels_with_sources()` 仍在生成 baseline panel 之前调用 `build_formal_extended_sources()`，当 baseline panel 与 source tables 同时缺失时会直接失败 |
+| 修正 AC1 的论文/结果回写一致性 | AC1 | pending | coding | claude | `paper_body.tex` 仍保留过时的 extended 组合收益数字，并继续写“尚未纳入更广泛的外部宏观、分红、重大事项和公告文本源表”，与 `扩展特征对照实验结果.md`、`formal_*_extended_run` 和当前实现不一致 |
+| 修正 AC3 论文正文中残留的 long-window 旧口径 | AC3 | pending | coding | claude | `paper_body.tex` 仍写“2015、2020、2024、2026 四个代表性市场窗口做年度复核”，与已提交的 `2015-2026` 全年 long-window 产物不一致 |
 | 维护独立不足计划与 RLCR 记录 | AC6 | in_progress | coding | claude | 本轮继续维护 |
 
 ### Completed and Verified
@@ -85,3 +88,5 @@ Source plan: 论文不足与完善计划.md
 |-------|-----------------|-------------|-----------------|
 | `bitlesson-selector` 命令在当前 PowerShell 环境不可用，且 `.humanize/bitlesson.md` 暂无条目 | 0 | ALL | 本轮按 `BitLesson=NONE` 执行，并在 summary 中记录 |
 | Bash 与 Windows Git 的换行配置不一致会误报 CRLF 文件为 dirty | 0 | ALL | 已设置本地 `core.autocrlf=true`，后续验证使用同一 Git 视角 |
+| `refresh_formal_factor_panels.py` 的“缺失时自动构建 extended source tables”合同在 clean rebuild 下不成立：当 baseline panel 尚未生成且 source tables 缺失时，会先调用 `build_formal_extended_sources()` 并因缺少 `factors/hs300_factor_panel.csv` 失败 | 5 | AC1 | 先生成 baseline panel 再构建 source tables，或让 source builder 直接从 shared kline/universe 推导 trade calendar，并补回 `build_extended_source_tables=True` 的自动化测试 |
+| `paper_body.tex` 仍残留 Round 5 之前的旧结果与旧状态表述：extended 组合收益数字与 `formal_*_extended_run/portfolio_metrics.csv` 不一致，且仍写“尚未纳入更广泛宏观/事件源”和“仅四个代表年份复核” | 5 | AC1, AC3 | 以 `扩展特征对照实验结果.md`、`formal_*_extended_run/{summary,portfolio_metrics}.csv` 和 `long_window_portfolio/README.md` 为唯一证据源回写论文正文，并补充复核 |

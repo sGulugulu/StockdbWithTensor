@@ -1,4 +1,5 @@
 from pathlib import Path
+from unittest.mock import patch
 import sys
 import tempfile
 import unittest
@@ -197,6 +198,117 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
             tail_rows = [row for row in data_rows if row["trade_date"] >= "2026-03-25"]
             self.assertTrue(tail_rows)
             self.assertTrue(any(abs(float(row["future_return"])) > 0.0 for row in tail_rows))
+
+    @patch("data.refresh_formal_factor_panels.build_formal_extended_sources")
+    def test_refresh_formal_factor_panels_builds_baseline_before_extended_sources(self, mock_build_sources) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir) / "formal"
+            (root / "master").mkdir(parents=True, exist_ok=True)
+            (root / "universes").mkdir(parents=True, exist_ok=True)
+            (root / "factors").mkdir(parents=True, exist_ok=True)
+            (root / "baostock" / "metadata").mkdir(parents=True, exist_ok=True)
+            (root / "baostock" / "financial").mkdir(parents=True, exist_ok=True)
+            (root / "baostock" / "reports" / "performance_express_report").mkdir(parents=True, exist_ok=True)
+            (root / "baostock" / "reports" / "forecast_report").mkdir(parents=True, exist_ok=True)
+            (root / "index_daily").mkdir(parents=True, exist_ok=True)
+
+            (root / "master" / "shared_kline_panel.csv").write_text(
+                "\n".join(
+                    [
+                        "date,code,open,high,low,close,preclose,volume,amount,adjustflag,turn,tradestatus,pctChg,peTTM,pbMRQ,psTTM,pcfNcfTTM,isST",
+                        "2026-03-25,sh.600000,1,1,1,10,9,100,1000,3,0.1,1,0.02,10,2,3,4,0",
+                        "2026-03-30,sh.600000,1,1,1,12,10,100,1000,3,0.1,1,0.02,10,2,3,4,0",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            (root / "baostock" / "metadata" / "stock_industry.csv").write_text(
+                "updateDate,code,code_name,industry,industryClassification\n2026-03-30,sh.600000,浦发银行,J66货币金融服务,证监会行业分类\n",
+                encoding="utf-8",
+            )
+            for history_name in ("hs300_history.csv", "sz50_history.csv", "zz500_history.csv"):
+                (root / "universes" / history_name).write_text(
+                    "market_id,universe_id,stock_code,start_date,end_date\ncn_a,IDX,600000,2026-03-25,2026-03-30\n",
+                    encoding="utf-8",
+                )
+            (root / "baostock" / "financial" / "profit_data.csv").write_text(
+                "code,pubDate,statDate,roeAvg,npMargin,gpMargin,netProfit,epsTTM,MBRevenue,totalShare,liqaShare,dataset,query_year,query_quarter\nsh.600000,2026-03-24,2025-12-31,0.11,0.22,0.33,1,0.44,1,1,1,profit_data,2025,4\n",
+                encoding="utf-8",
+            )
+            (root / "baostock" / "reports" / "performance_express_report" / "2026.csv").write_text(
+                "code,performanceExpPubDate,performanceExpStatDate,performanceExpUpdateDate,performanceExpressTotalAsset,performanceExpressNetAsset,performanceExpressEPSChgPct,performanceExpressROEWa,performanceExpressEPSDiluted,performanceExpressGRYOY,performanceExpressOPYOY,dataset,query_year\nsh.600000,2026-03-26,2025-12-31,2026-03-26,1,1,0.55,6.7,1,0.66,0.77,performance_express_report,2026\n",
+                encoding="utf-8",
+            )
+            (root / "baostock" / "reports" / "forecast_report" / "2026.csv").write_text(
+                "code,profitForcastExpPubDate,profitForcastExpStatDate,profitForcastType,profitForcastAbstract,profitForcastChgPctUp,profitForcastChgPctDwn,dataset,query_year\nsh.600000,2026-03-26,2025-12-31,预增,预计增长,20,10,forecast_report,2026\n",
+                encoding="utf-8",
+            )
+            for index_name, code in (("hs300_index_daily.csv", "000300.SH"), ("000050_index_daily.csv", "000050.SH"), ("zz500_index_daily.csv", "000905.SH")):
+                (root / "index_daily" / index_name).write_text(
+                    "\n".join(
+                        [
+                            "market,tdx_prefix,stock_code,trade_date,open,high,low,close,amount,volume,source_file",
+                            f"sh,sh,{code},2026-03-24,100,100,100,104,1400,100,a",
+                            f"sh,sh,{code},2026-03-25,100,100,100,105,1500,100,a",
+                            f"sh,sh,{code},2026-03-30,100,100,100,106,1600,100,a",
+                        ]
+                    ),
+                    encoding="utf-8",
+                )
+
+            def _fake_build_sources(*, formal_root: Path, max_trade_date: str, notice_lookback_days: int = 180):
+                self.assertTrue((formal_root / "factors" / "hs300_factor_panel.csv").exists())
+                self.assertTrue((formal_root / "factors" / "sz50_factor_panel.csv").exists())
+                self.assertTrue((formal_root / "factors" / "zz500_factor_panel.csv").exists())
+                (formal_root / "external").mkdir(exist_ok=True)
+                (formal_root / "events").mkdir(exist_ok=True)
+                (formal_root / "external" / "macro_interest_rate.csv").write_text(
+                    "source_api,metric_id,metric_name,pub_date,available_date,value,expected_value,previous_value\n"
+                    "akshare,policy_rate_current,china_policy_rate,2026-03-24,2026-03-25,2.5,0.0,2.4\n",
+                    encoding="utf-8",
+                )
+                (formal_root / "external" / "macro_monthly_indicator.csv").write_text(
+                    "source_api,metric_id,metric_name,pub_date,available_date,value,expected_value,previous_value\n"
+                    "akshare,cpi_mom,china_cpi_monthly,2026-03-20,2026-03-25,0.8,0.0,0.7\n",
+                    encoding="utf-8",
+                )
+                (formal_root / "events" / "dividend_event.csv").write_text(
+                    "stock_code,report_period,dividend_type,pub_date,available_date,record_date,ex_date,pay_date,bonus_ratio,transfer_ratio,cash_ratio,plan_text,source_api\n"
+                    "600000.SH,2025年报,年度分红,2026-03-24,2026-03-25,2026-03-27,2026-03-28,2026-03-30,0,1,2.5,10派2.5元,akshare\n",
+                    encoding="utf-8",
+                )
+                (formal_root / "events" / "major_event_notice.csv").write_text(
+                    "stock_code,notice_type,pub_date,available_date,title_text,title_length,keyword_score,severity_score,url,source_api\n"
+                    "600000.SH,重大事项,2026-03-24,2026-03-25,关于重大事项停牌公告,10,1.5,2.5,https://example.com/a,akshare\n",
+                    encoding="utf-8",
+                )
+                (formal_root / "events" / "announcement_text.csv").write_text(
+                    "stock_code,notice_type,pub_date,available_date,title_text,title_length,keyword_score,url,source_api\n"
+                    "600000.SH,其他,2026-03-24,2026-03-25,关于分红预案与回购安排的公告,14,1.6,https://example.com/b,akshare\n",
+                    encoding="utf-8",
+                )
+                return type(
+                    "ExtendedSources",
+                    (),
+                    {
+                        "macro_interest_rate_path": formal_root / "external" / "macro_interest_rate.csv",
+                        "macro_monthly_path": formal_root / "external" / "macro_monthly_indicator.csv",
+                        "dividend_events_path": formal_root / "events" / "dividend_event.csv",
+                        "major_event_notice_path": formal_root / "events" / "major_event_notice.csv",
+                        "announcement_text_path": formal_root / "events" / "announcement_text.csv",
+                    },
+                )()
+
+            mock_build_sources.side_effect = _fake_build_sources
+
+            outputs = refresh_formal_factor_panels_with_sources(
+                formal_root=root,
+                max_trade_date="2026-03-30",
+                build_extended_source_tables=True,
+            )
+
+            self.assertEqual(len(outputs), 6)
+            self.assertTrue((root / "factors" / "hs300_factor_panel_extended.csv").exists())
 
 
 if __name__ == "__main__":

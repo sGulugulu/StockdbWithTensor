@@ -49,6 +49,7 @@ def refresh_formal_factor_panels_with_sources(
 ) -> list[Path]:
     normalized_root = formal_root.resolve()
     outputs: list[Path] = []
+    baseline_outputs: dict[str, Path] = {}
     shared_kline_path = normalized_root / "master" / "shared_kline_panel.csv"
     industry_path = normalized_root / "baostock" / "metadata" / "stock_industry.csv"
     profit_data_path = normalized_root / "baostock" / "financial" / "profit_data.csv"
@@ -75,14 +76,6 @@ def refresh_formal_factor_panels_with_sources(
             source_paths.announcement_text_path,
         )
     )
-    if build_extended_source_tables and not source_files_exist:
-        extended_sources = build_formal_extended_sources(
-            formal_root=normalized_root,
-            max_trade_date=max_trade_date,
-        )
-    else:
-        extended_sources = source_paths
-
     for spec in UNIVERSE_SPECS:
         baseline_output = normalized_root / "factors" / spec.baseline_panel_filename
         build_formal_factor_panel(
@@ -93,10 +86,20 @@ def refresh_formal_factor_panels_with_sources(
             max_trade_date=max_trade_date,
         )
         outputs.append(baseline_output)
+        baseline_outputs[spec.universe_id] = baseline_output
 
+    if build_extended_source_tables and not source_files_exist:
+        extended_sources = build_formal_extended_sources(
+            formal_root=normalized_root,
+            max_trade_date=max_trade_date,
+        )
+    else:
+        extended_sources = source_paths
+
+    for spec in UNIVERSE_SPECS:
         extended_output = normalized_root / "factors" / spec.extended_panel_filename
         build_extended_factor_panel(
-            base_panel_path=baseline_output,
+            base_panel_path=baseline_outputs[spec.universe_id],
             profit_data_path=profit_data_path,
             performance_express_path=performance_express_path,
             forecast_report_path=forecast_report_path,
