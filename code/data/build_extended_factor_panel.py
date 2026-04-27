@@ -70,6 +70,31 @@ class MarketFeatureRow:
     market_amount_zscore_20d: float
 
 
+@dataclass(slots=True)
+class MacroSnapshot:
+    pub_date: str
+    available_date: str | None
+    value: float
+
+
+@dataclass(slots=True)
+class DividendSnapshot:
+    pub_date: str
+    available_date: str | None
+    cash_ratio: float
+    bonus_ratio: float
+    transfer_ratio: float
+
+
+@dataclass(slots=True)
+class NoticeSnapshot:
+    pub_date: str
+    available_date: str | None
+    keyword_score: float
+    title_length: float
+    severity_score: float
+
+
 def _to_float(value: str | None) -> float | None:
     if value is None:
         return None
@@ -258,6 +283,70 @@ def _load_market_features(path: Path) -> dict[str, MarketFeatureRow]:
     }
 
 
+def _load_macro_snapshots(path: Path) -> dict[str, list[MacroSnapshot]]:
+    snapshots: dict[str, list[MacroSnapshot]] = defaultdict(list)
+    for row in _iter_partitioned_csv_rows(path):
+        metric_id = row.get("metric_id")
+        available_date = row.get("available_date")
+        pub_date = row.get("pub_date")
+        if not metric_id or not available_date or not pub_date:
+            continue
+        snapshots[metric_id].append(
+            MacroSnapshot(
+                pub_date=pub_date,
+                available_date=available_date,
+                value=_to_float(row.get("value")) or 0.0,
+            )
+        )
+    for items in snapshots.values():
+        items.sort(key=lambda item: (item.available_date or "9999-99-99", item.pub_date))
+    return snapshots
+
+
+def _load_dividend_snapshots(path: Path) -> dict[str, list[DividendSnapshot]]:
+    snapshots: dict[str, list[DividendSnapshot]] = defaultdict(list)
+    for row in _iter_partitioned_csv_rows(path):
+        stock_code = row.get("stock_code")
+        available_date = row.get("available_date")
+        pub_date = row.get("pub_date")
+        if not stock_code or not available_date or not pub_date:
+            continue
+        snapshots[_normalize_cn_a_symbol(stock_code)].append(
+            DividendSnapshot(
+                pub_date=pub_date,
+                available_date=available_date,
+                cash_ratio=_to_float(row.get("cash_ratio")) or 0.0,
+                bonus_ratio=_to_float(row.get("bonus_ratio")) or 0.0,
+                transfer_ratio=_to_float(row.get("transfer_ratio")) or 0.0,
+            )
+        )
+    for items in snapshots.values():
+        items.sort(key=lambda item: (item.available_date or "9999-99-99", item.pub_date))
+    return snapshots
+
+
+def _load_notice_snapshots(path: Path, *, major_event: bool) -> dict[str, list[NoticeSnapshot]]:
+    snapshots: dict[str, list[NoticeSnapshot]] = defaultdict(list)
+    for row in _iter_partitioned_csv_rows(path):
+        stock_code = row.get("stock_code")
+        available_date = row.get("available_date")
+        pub_date = row.get("pub_date")
+        if not stock_code or not available_date or not pub_date:
+            continue
+        snapshots[_normalize_cn_a_symbol(stock_code)].append(
+            NoticeSnapshot(
+                pub_date=pub_date,
+                available_date=available_date,
+                keyword_score=_to_float(row.get("keyword_score")) or 0.0,
+                title_length=_to_float(row.get("title_length")) or 0.0,
+                severity_score=(_to_float(row.get("severity_score")) or 0.0) if major_event else 0.0,
+            )
+        )
+    for items in snapshots.values():
+        items.sort(key=lambda item: (item.available_date or "9999-99-99", item.pub_date))
+    return snapshots
+
+
 def _latest_snapshot(snapshots: list, trade_date: str):
     if not snapshots:
         return None
@@ -269,6 +358,23 @@ def _latest_snapshot(snapshots: list, trade_date: str):
             return candidate
         position -= 1
     return None
+
+
+def _window_snapshots(snapshots: list, trade_date: str, *, window_days: int) -> list:
+    if not snapshots:
+        return []
+    result: list = []
+    trade_day = date.fromisoformat(trade_date)
+    for snapshot in snapshots:
+        if snapshot.available_date is None or snapshot.available_date > trade_date:
+            continue
+        try:
+            available_day = date.fromisoformat(snapshot.available_date)
+        except ValueError:
+            continue
+        if (trade_day - available_day).days <= window_days:
+            result.append(snapshot)
+    return result
 
 
 def _days_since(pub_date: str | None, trade_date: str) -> int:
@@ -335,6 +441,36 @@ def _event_age_decay_score(
     return score
 
 
+def _macro_metric_value(snapshots_by_metric: dict[str, list[MacroSnapshot]], metric_id: str, trade_date: str) -> float:
+    snapshot = _latest_snapshot(snapshots_by_metric.get(metric_id, []), trade_date)
+    return 0.0 if snapshot is None else snapshot.value
+
+
+def _dividend_flag(snapshot: DividendSnapshot | None) -> int:
+    if snapshot is None:
+        return 0
+    return 1 if snapshot.cash_ratio > 0 or snapshot.bonus_ratio > 0 or snapshot.transfer_ratio > 0 else 0
+
+
+def _notice_count(snapshots: list[NoticeSnapshot], trade_date: str, *, window_days: int) -> int:
+    return len(_window_snapshots(snapshots, trade_date, window_days=window_days))
+
+
+def _notice_keyword_score(snapshots: list[NoticeSnapshot], trade_date: str, *, window_days: int) -> float:
+    return sum(snapshot.keyword_score for snapshot in _window_snapshots(snapshots, trade_date, window_days=window_days))
+
+
+def _notice_title_length_mean(snapshots: list[NoticeSnapshot], trade_date: str, *, window_days: int) -> float:
+    window = _window_snapshots(snapshots, trade_date, window_days=window_days)
+    if not window:
+        return 0.0
+    return sum(snapshot.title_length for snapshot in window) / len(window)
+
+
+def _major_event_severity_score(snapshots: list[NoticeSnapshot], trade_date: str, *, window_days: int) -> float:
+    return sum(snapshot.severity_score for snapshot in _window_snapshots(snapshots, trade_date, window_days=window_days))
+
+
 def build_extended_factor_panel(
     *,
     base_panel_path: Path,
@@ -342,6 +478,11 @@ def build_extended_factor_panel(
     performance_express_path: Path,
     forecast_report_path: Path,
     market_index_path: Path,
+    macro_interest_rate_path: Path,
+    macro_monthly_path: Path,
+    dividend_event_path: Path,
+    major_event_notice_path: Path,
+    announcement_text_path: Path,
     output_path: Path,
     max_trade_date: str | None = None,
 ) -> None:
@@ -354,6 +495,11 @@ def build_extended_factor_panel(
     performance_snapshots = _load_performance_express_snapshots(performance_express_path, trade_dates)
     forecast_snapshots = _load_forecast_snapshots(forecast_report_path, trade_dates)
     market_features = _load_market_features(market_index_path)
+    macro_interest_snapshots = _load_macro_snapshots(macro_interest_rate_path)
+    macro_monthly_snapshots = _load_macro_snapshots(macro_monthly_path)
+    dividend_snapshots = _load_dividend_snapshots(dividend_event_path)
+    major_event_snapshots = _load_notice_snapshots(major_event_notice_path, major_event=True)
+    announcement_snapshots = _load_notice_snapshots(announcement_text_path, major_event=False)
 
     extended_rows: list[dict[str, str | float]] = []
     for row in rows:
@@ -364,6 +510,7 @@ def build_extended_factor_panel(
         profit_snapshot = _latest_snapshot(profit_snapshots.get(stock_code, []), trade_date)
         performance_snapshot = _latest_snapshot(performance_snapshots.get(stock_code, []), trade_date)
         forecast_snapshot = _latest_snapshot(forecast_snapshots.get(stock_code, []), trade_date)
+        dividend_snapshot = _latest_snapshot(dividend_snapshots.get(stock_code, []), trade_date)
         market_feature = market_features.get(
             trade_date,
             MarketFeatureRow(
@@ -392,11 +539,24 @@ def build_extended_factor_panel(
                 "market_amount_zscore_20d": market_feature.market_amount_zscore_20d,
                 "macro_proxy_risk_score": _macro_proxy_risk_score(market_feature),
                 "macro_proxy_liquidity_score": _macro_proxy_liquidity_score(market_feature),
+                "macro_policy_rate": _macro_metric_value(macro_interest_snapshots, "policy_rate_current", trade_date),
+                "macro_lpr_1y": _macro_metric_value(macro_interest_snapshots, "lpr_1y", trade_date),
+                "macro_lpr_5y": _macro_metric_value(macro_interest_snapshots, "lpr_5y", trade_date),
+                "macro_cpi_mom": _macro_metric_value(macro_monthly_snapshots, "cpi_mom", trade_date),
+                "macro_m2_yoy": _macro_metric_value(macro_monthly_snapshots, "m2_yoy", trade_date),
+                "macro_industrial_production_yoy": _macro_metric_value(macro_monthly_snapshots, "industrial_production_yoy", trade_date),
+                "macro_exports_yoy": _macro_metric_value(macro_monthly_snapshots, "exports_yoy", trade_date),
+                "macro_imports_yoy": _macro_metric_value(macro_monthly_snapshots, "imports_yoy", trade_date),
                 "pit_roe_avg": 0.0 if profit_snapshot is None else profit_snapshot.roe_avg,
                 "pit_np_margin": 0.0 if profit_snapshot is None else profit_snapshot.np_margin,
                 "pit_gp_margin": 0.0 if profit_snapshot is None else profit_snapshot.gp_margin,
                 "pit_eps_ttm": 0.0 if profit_snapshot is None else profit_snapshot.eps_ttm,
                 "pit_data_age_days": 0 if profit_snapshot is None else _days_since(profit_snapshot.pub_date, trade_date),
+                "dividend_cash_ratio": 0.0 if dividend_snapshot is None else dividend_snapshot.cash_ratio,
+                "dividend_bonus_ratio": 0.0 if dividend_snapshot is None else dividend_snapshot.bonus_ratio,
+                "dividend_transfer_ratio": 0.0 if dividend_snapshot is None else dividend_snapshot.transfer_ratio,
+                "dividend_age_days": 0 if dividend_snapshot is None else _days_since(dividend_snapshot.pub_date, trade_date),
+                "dividend_flag": _dividend_flag(dividend_snapshot),
                 "perf_express_eps_chg_pct": 0.0 if performance_snapshot is None else performance_snapshot.eps_chg_pct,
                 "perf_express_roe_wa": 0.0 if performance_snapshot is None else performance_snapshot.roe_wa,
                 "perf_express_gryoy": 0.0 if performance_snapshot is None else performance_snapshot.gryoy,
@@ -415,6 +575,14 @@ def build_extended_factor_panel(
                 "event_age_decay_score": _event_age_decay_score(performance_snapshot, forecast_snapshot, trade_date),
                 "event_intensity_score": abs(forecast_midpoint)
                 + (0.0 if performance_snapshot is None else abs(performance_snapshot.eps_chg_pct)),
+                "major_event_count_30d": _notice_count(major_event_snapshots.get(stock_code, []), trade_date, window_days=30),
+                "major_event_severity_score_30d": _major_event_severity_score(major_event_snapshots.get(stock_code, []), trade_date, window_days=30),
+                "major_event_age_days": 0 if not major_event_snapshots.get(stock_code) else _days_since((_latest_snapshot(major_event_snapshots.get(stock_code, []), trade_date) or NoticeSnapshot("", None, 0.0, 0.0, 0.0)).pub_date or None, trade_date),
+                "major_event_flag": 1 if _notice_count(major_event_snapshots.get(stock_code, []), trade_date, window_days=30) > 0 else 0,
+                "announcement_count_30d": _notice_count(announcement_snapshots.get(stock_code, []), trade_date, window_days=30),
+                "announcement_keyword_score_30d": _notice_keyword_score(announcement_snapshots.get(stock_code, []), trade_date, window_days=30),
+                "announcement_title_length_mean_30d": _notice_title_length_mean(announcement_snapshots.get(stock_code, []), trade_date, window_days=30),
+                "announcement_flag": 1 if _notice_count(announcement_snapshots.get(stock_code, []), trade_date, window_days=30) > 0 else 0,
                 "forecast_flag": 0 if forecast_snapshot is None else 1,
             }
         )
@@ -436,6 +604,11 @@ def main() -> None:
     parser.add_argument("--performance-express-path", type=Path, required=True)
     parser.add_argument("--forecast-report-path", type=Path, required=True)
     parser.add_argument("--market-index-path", type=Path, required=True)
+    parser.add_argument("--macro-interest-rate-path", type=Path, required=True)
+    parser.add_argument("--macro-monthly-path", type=Path, required=True)
+    parser.add_argument("--dividend-event-path", type=Path, required=True)
+    parser.add_argument("--major-event-notice-path", type=Path, required=True)
+    parser.add_argument("--announcement-text-path", type=Path, required=True)
     parser.add_argument("--output-path", type=Path, required=True)
     parser.add_argument("--max-trade-date", type=str, default=None)
     args = parser.parse_args()
@@ -446,6 +619,11 @@ def main() -> None:
         performance_express_path=args.performance_express_path,
         forecast_report_path=args.forecast_report_path,
         market_index_path=args.market_index_path,
+        macro_interest_rate_path=args.macro_interest_rate_path,
+        macro_monthly_path=args.macro_monthly_path,
+        dividend_event_path=args.dividend_event_path,
+        major_event_notice_path=args.major_event_notice_path,
+        announcement_text_path=args.announcement_text_path,
         output_path=args.output_path,
         max_trade_date=args.max_trade_date,
     )

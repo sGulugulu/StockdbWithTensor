@@ -5,7 +5,7 @@ import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from data.refresh_formal_factor_panels import refresh_formal_factor_panels
+from data.refresh_formal_factor_panels import refresh_formal_factor_panels_with_sources
 
 
 class RefreshFormalFactorPanelsTests(unittest.TestCase):
@@ -20,6 +20,8 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
             (root / "baostock" / "reports" / "performance_express_report").mkdir(parents=True, exist_ok=True)
             (root / "baostock" / "reports" / "forecast_report").mkdir(parents=True, exist_ok=True)
             (root / "index_daily").mkdir(parents=True, exist_ok=True)
+            (root / "external").mkdir(parents=True, exist_ok=True)
+            (root / "events").mkdir(parents=True, exist_ok=True)
 
             (root / "master" / "shared_kline_panel.csv").write_text(
                 "\n".join(
@@ -111,8 +113,66 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
                     ),
                     encoding="utf-8",
                 )
+            (root / "external" / "macro_interest_rate.csv").write_text(
+                "\n".join(
+                    [
+                        "source_api,metric_id,metric_name,pub_date,available_date,value,expected_value,previous_value",
+                        "akshare,policy_rate_current,china_policy_rate,2026-03-24,2026-03-25,2.5,0.0,2.4",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            (root / "external" / "macro_monthly_indicator.csv").write_text(
+                "\n".join(
+                    [
+                        "source_api,metric_id,metric_name,pub_date,available_date,value,expected_value,previous_value",
+                        "akshare,cpi_mom,china_cpi_monthly,2026-03-20,2026-03-25,0.8,0.0,0.7",
+                        "akshare,m2_yoy,china_m2_yearly,2026-03-20,2026-03-25,7.1,0.0,7.0",
+                        "akshare,industrial_production_yoy,china_industrial_production_yoy,2026-03-20,2026-03-25,5.5,0.0,5.3",
+                        "akshare,exports_yoy,china_exports_yoy,2026-03-20,2026-03-25,4.4,0.0,4.1",
+                        "akshare,imports_yoy,china_imports_yoy,2026-03-20,2026-03-25,3.3,0.0,3.1",
+                        "akshare,lpr_1y,china_lpr_1y,2026-03-24,2026-03-25,3.1,0.0,3.0",
+                        "akshare,lpr_5y,china_lpr_5y,2026-03-24,2026-03-25,3.6,0.0,3.5",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            (root / "events" / "dividend_event.csv").write_text(
+                "\n".join(
+                    [
+                        "stock_code,report_period,dividend_type,pub_date,available_date,record_date,ex_date,pay_date,bonus_ratio,transfer_ratio,cash_ratio,plan_text,source_api",
+                        "600000.SH,2025年报,年度分红,2026-03-24,2026-03-25,2026-03-27,2026-03-28,2026-03-30,0,1,2.5,10派2.5元,akshare",
+                        "600001.SH,2025年报,年度分红,2026-03-24,2026-03-25,2026-03-27,2026-03-28,2026-03-30,0,0,1.5,10派1.5元,akshare",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            (root / "events" / "major_event_notice.csv").write_text(
+                "\n".join(
+                    [
+                        "stock_code,notice_type,pub_date,available_date,title_text,title_length,keyword_score,severity_score,url,source_api",
+                        "600000.SH,重大事项,2026-03-24,2026-03-25,关于重大事项停牌公告,10,1.5,2.5,https://example.com/a,akshare",
+                        "600001.SH,重大事项,2026-03-24,2026-03-25,关于重大事项复牌公告,10,1.0,2.0,https://example.com/b,akshare",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            (root / "events" / "announcement_text.csv").write_text(
+                "\n".join(
+                    [
+                        "stock_code,notice_type,pub_date,available_date,title_text,title_length,keyword_score,url,source_api",
+                        "600000.SH,其他,2026-03-24,2026-03-25,关于分红预案与回购安排的公告,14,1.6,https://example.com/c,akshare",
+                        "600001.SH,其他,2026-03-24,2026-03-25,关于重大合同签署进展的公告,13,0.8,https://example.com/d,akshare",
+                    ]
+                ),
+                encoding="utf-8",
+            )
 
-            outputs = refresh_formal_factor_panels(formal_root=root, max_trade_date="2026-03-30")
+            outputs = refresh_formal_factor_panels_with_sources(
+                formal_root=root,
+                max_trade_date="2026-03-30",
+                build_extended_source_tables=False,
+            )
 
             self.assertEqual(len(outputs), 6)
             for output_path in outputs:
@@ -123,6 +183,9 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
                 if "extended" in output_path.name:
                     self.assertIn("market_return_1d", content)
                     self.assertIn("market_drawdown_20d", content)
+                    self.assertIn("macro_policy_rate", content)
+                    self.assertIn("dividend_cash_ratio", content)
+                    self.assertIn("major_event_count_30d", content)
                     self.assertIn("forecast_flag", content)
                     self.assertIn("event_intensity_score", content)
 

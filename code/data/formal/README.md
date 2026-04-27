@@ -26,6 +26,10 @@ For the newer formal layout, prefer the following structure:
   - transitional / final `full master` files
 - `code/data/formal/financial/`
   - table-split full-data financial exports
+- `code/data/formal/external/`
+  - PIT-safe external macro / rate tables for extended factor inputs
+- `code/data/formal/events/`
+  - PIT-safe dividend, major-event, and announcement-text tables for extended factor inputs
 - `code/data/formal/reports/`
   - table-split full-data report exports
 - `code/data/formal/parquet/`
@@ -140,6 +144,25 @@ python3 code/data/refresh_formal_factor_panels.py `
   --formal-root code/data/formal `
   --max-trade-date 2026-03-30
 ```
+
+如果你要单独重建 AC1 所需的外部宏观、分红、重大事项和公告标题文本源表，执行：
+
+```powershell
+bash -lc '.venv/bin/python3 code/data/build_formal_extended_sources.py `
+  --formal-root code/data/formal `
+  --max-trade-date 2026-03-30 `
+  --notice-lookback-days 180'
+```
+
+该命令会生成：
+
+- `code/data/formal/external/macro_interest_rate.csv`
+- `code/data/formal/external/macro_monthly_indicator.csv`
+- `code/data/formal/events/dividend_event.csv`
+- `code/data/formal/events/major_event_notice.csv`
+- `code/data/formal/events/announcement_text.csv`
+
+当前这些表以提交版实验窗口为主要服务对象，并统一带有 `pub_date` 与 `available_date` 字段，用于 `build_extended_factor_panel.py` 中的 PIT-safe 选择逻辑。
 
 如果你要刷新 AC3 的样本边界扩展资产，推荐执行：
 

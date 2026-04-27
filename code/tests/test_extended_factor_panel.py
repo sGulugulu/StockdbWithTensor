@@ -20,6 +20,15 @@ class ExtendedFactorPanelTests(unittest.TestCase):
             forecast_dir = root / "forecast_report"
             forecast_dir.mkdir(parents=True, exist_ok=True)
             forecast_data = forecast_dir / "2026.csv"
+            external_dir = root / "external"
+            external_dir.mkdir(parents=True, exist_ok=True)
+            macro_interest = external_dir / "macro_interest_rate.csv"
+            macro_monthly = external_dir / "macro_monthly_indicator.csv"
+            events_dir = root / "events"
+            events_dir.mkdir(parents=True, exist_ok=True)
+            dividend_event = events_dir / "dividend_event.csv"
+            major_event_notice = events_dir / "major_event_notice.csv"
+            announcement_text = events_dir / "announcement_text.csv"
             market_index = root / "hs300_index_daily.csv"
             output_path = root / "extended.csv"
 
@@ -60,6 +69,57 @@ class ExtendedFactorPanelTests(unittest.TestCase):
                 ),
                 encoding="utf-8",
             )
+            macro_interest.write_text(
+                "\n".join(
+                    [
+                        "source_api,metric_id,metric_name,pub_date,available_date,value,expected_value,previous_value",
+                        "akshare,policy_rate_current,china_policy_rate,2026-03-24,2026-03-25,2.5,0.0,2.4",
+                        "akshare,lpr_1y,china_lpr_1y,2026-03-24,2026-03-25,3.1,0.0,3.2",
+                        "akshare,lpr_5y,china_lpr_5y,2026-03-24,2026-03-25,3.6,0.0,3.7",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            macro_monthly.write_text(
+                "\n".join(
+                    [
+                        "source_api,metric_id,metric_name,pub_date,available_date,value,expected_value,previous_value",
+                        "akshare,cpi_mom,china_cpi_monthly,2026-03-20,2026-03-23,0.8,0.0,0.7",
+                        "akshare,m2_yoy,china_m2_yearly,2026-03-20,2026-03-23,7.1,0.0,7.0",
+                        "akshare,industrial_production_yoy,china_industrial_production_yoy,2026-03-20,2026-03-23,5.5,0.0,5.3",
+                        "akshare,exports_yoy,china_exports_yoy,2026-03-20,2026-03-23,4.4,0.0,4.1",
+                        "akshare,imports_yoy,china_imports_yoy,2026-03-20,2026-03-23,3.3,0.0,3.1",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            dividend_event.write_text(
+                "\n".join(
+                    [
+                        "stock_code,report_period,dividend_type,pub_date,available_date,record_date,ex_date,pay_date,bonus_ratio,transfer_ratio,cash_ratio,plan_text,source_api",
+                        "600000.SH,2025年报,年度分红,2026-03-24,2026-03-25,2026-03-27,2026-03-28,2026-03-30,0,1,2.5,10派2.5元,akshare",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            major_event_notice.write_text(
+                "\n".join(
+                    [
+                        "stock_code,notice_type,pub_date,available_date,title_text,title_length,keyword_score,severity_score,url,source_api",
+                        "600000.SH,重大事项,2026-03-24,2026-03-25,关于重大事项停牌公告,10,1.5,2.5,https://example.com/a,akshare",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            announcement_text.write_text(
+                "\n".join(
+                    [
+                        "stock_code,notice_type,pub_date,available_date,title_text,title_length,keyword_score,url,source_api",
+                        "600000.SH,其他,2026-03-24,2026-03-25,关于分红预案与回购安排的公告,14,1.6,https://example.com/b,akshare",
+                    ]
+                ),
+                encoding="utf-8",
+            )
             market_index.write_text(
                 "\n".join(
                     [
@@ -84,6 +144,11 @@ class ExtendedFactorPanelTests(unittest.TestCase):
                 performance_express_path=perf_dir,
                 forecast_report_path=forecast_dir,
                 market_index_path=market_index,
+                macro_interest_rate_path=macro_interest,
+                macro_monthly_path=macro_monthly,
+                dividend_event_path=dividend_event,
+                major_event_notice_path=major_event_notice,
+                announcement_text_path=announcement_text,
                 output_path=output_path,
             )
 
@@ -94,8 +159,13 @@ class ExtendedFactorPanelTests(unittest.TestCase):
             self.assertIn("market_amount_zscore_20d", content)
             self.assertIn("macro_proxy_risk_score", content)
             self.assertIn("macro_proxy_liquidity_score", content)
+            self.assertIn("macro_policy_rate", content)
+            self.assertIn("macro_lpr_1y", content)
+            self.assertIn("macro_imports_yoy", content)
             self.assertIn("pit_roe_avg", content)
             self.assertIn("pit_data_age_days", content)
+            self.assertIn("dividend_cash_ratio", content)
+            self.assertIn("dividend_flag", content)
             self.assertIn("perf_express_eps_chg_pct", content)
             self.assertIn("perf_express_age_days", content)
             self.assertIn("perf_express_flag", content)
@@ -108,6 +178,8 @@ class ExtendedFactorPanelTests(unittest.TestCase):
             self.assertIn("event_uncertainty_score", content)
             self.assertIn("event_age_decay_score", content)
             self.assertIn("event_intensity_score", content)
+            self.assertIn("major_event_count_30d", content)
+            self.assertIn("announcement_keyword_score_30d", content)
             self.assertIn("forecast_flag", content)
             self.assertIn("0.11", content)
             self.assertIn("0.55", content)
@@ -130,6 +202,11 @@ class ExtendedFactorPanelTests(unittest.TestCase):
             self.assertEqual(float(row2["forecast_direction"]), 1.0)
             self.assertEqual(float(row2["event_positive_flag"]), 1.0)
             self.assertEqual(float(row2["event_negative_flag"]), 0.0)
+            self.assertAlmostEqual(float(row2["macro_policy_rate"]), 2.5, places=6)
+            self.assertAlmostEqual(float(row2["macro_lpr_1y"]), 3.1, places=6)
+            self.assertAlmostEqual(float(row2["macro_imports_yoy"]), 3.3, places=6)
+            self.assertAlmostEqual(float(row2["dividend_cash_ratio"]), 2.5, places=6)
+            self.assertEqual(float(row2["dividend_flag"]), 1.0)
             self.assertAlmostEqual(float(row2["forecast_chg_pct_up"]), 20.0, places=6)
             self.assertAlmostEqual(float(row2["forecast_change_midpoint"]), 15.0, places=6)
             self.assertAlmostEqual(float(row2["forecast_change_width"]), 10.0, places=6)
@@ -139,6 +216,10 @@ class ExtendedFactorPanelTests(unittest.TestCase):
             self.assertEqual(float(row2["pit_data_age_days"]), 6.0)
             self.assertGreater(float(row2["event_age_decay_score"]), 0.0)
             self.assertGreater(float(row2["event_intensity_score"]), 15.0)
+            self.assertEqual(float(row2["major_event_count_30d"]), 1.0)
+            self.assertGreater(float(row2["major_event_severity_score_30d"]), 0.0)
+            self.assertEqual(float(row2["announcement_count_30d"]), 1.0)
+            self.assertGreater(float(row2["announcement_keyword_score_30d"]), 0.0)
             self.assertGreater(float(row2["market_momentum_5d"]), 0.0)
             self.assertLessEqual(float(row2["market_drawdown_20d"]), 0.0)
 
@@ -153,6 +234,15 @@ class ExtendedFactorPanelTests(unittest.TestCase):
             forecast_dir = root / "forecast_report"
             forecast_dir.mkdir(parents=True, exist_ok=True)
             forecast_data = forecast_dir / "2026.csv"
+            external_dir = root / "external"
+            external_dir.mkdir(parents=True, exist_ok=True)
+            macro_interest = external_dir / "macro_interest_rate.csv"
+            macro_monthly = external_dir / "macro_monthly_indicator.csv"
+            events_dir = root / "events"
+            events_dir.mkdir(parents=True, exist_ok=True)
+            dividend_event = events_dir / "dividend_event.csv"
+            major_event_notice = events_dir / "major_event_notice.csv"
+            announcement_text = events_dir / "announcement_text.csv"
             market_index = root / "hs300_index_daily.csv"
             output_path = root / "extended.csv"
 
@@ -193,6 +283,31 @@ class ExtendedFactorPanelTests(unittest.TestCase):
                 ),
                 encoding="utf-8",
             )
+            macro_interest.write_text(
+                "source_api,metric_id,metric_name,pub_date,available_date,value,expected_value,previous_value\n"
+                "akshare,policy_rate_current,china_policy_rate,2026-03-24,2026-03-25,2.5,0.0,2.4\n",
+                encoding="utf-8",
+            )
+            macro_monthly.write_text(
+                "source_api,metric_id,metric_name,pub_date,available_date,value,expected_value,previous_value\n"
+                "akshare,cpi_mom,china_cpi_monthly,2026-03-20,2026-03-23,0.8,0.0,0.7\n",
+                encoding="utf-8",
+            )
+            dividend_event.write_text(
+                "stock_code,report_period,dividend_type,pub_date,available_date,record_date,ex_date,pay_date,bonus_ratio,transfer_ratio,cash_ratio,plan_text,source_api\n"
+                "600000.SH,2025年报,年度分红,2026-03-24,2026-03-25,2026-03-27,2026-03-28,2026-03-30,0,1,2.5,10派2.5元,akshare\n",
+                encoding="utf-8",
+            )
+            major_event_notice.write_text(
+                "stock_code,notice_type,pub_date,available_date,title_text,title_length,keyword_score,severity_score,url,source_api\n"
+                "600000.SH,重大事项,2026-03-24,2026-03-25,关于重大事项停牌公告,10,1.5,2.5,https://example.com/a,akshare\n",
+                encoding="utf-8",
+            )
+            announcement_text.write_text(
+                "stock_code,notice_type,pub_date,available_date,title_text,title_length,keyword_score,url,source_api\n"
+                "600000.SH,其他,2026-03-24,2026-03-25,关于分红预案与回购安排的公告,14,1.6,https://example.com/b,akshare\n",
+                encoding="utf-8",
+            )
             market_index.write_text(
                 "\n".join(
                     [
@@ -211,6 +326,11 @@ class ExtendedFactorPanelTests(unittest.TestCase):
                 performance_express_path=perf_dir,
                 forecast_report_path=forecast_dir,
                 market_index_path=market_index,
+                macro_interest_rate_path=macro_interest,
+                macro_monthly_path=macro_monthly,
+                dividend_event_path=dividend_event,
+                major_event_notice_path=major_event_notice,
+                announcement_text_path=announcement_text,
                 output_path=output_path,
                 max_trade_date="2026-03-25",
             )

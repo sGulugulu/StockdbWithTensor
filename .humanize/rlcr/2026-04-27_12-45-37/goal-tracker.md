@@ -34,7 +34,7 @@ Source plan: 论文不足与完善计划.md
 ## MUTABLE SECTION
 <!-- Update each round with justification for changes -->
 
-### Plan Version: 4 (Updated: Round 3)
+### Plan Version: 5 (Updated: Round 4)
 
 #### Plan Evolution Log
 <!-- Document any changes to the plan with justification -->
@@ -47,13 +47,13 @@ Source plan: 论文不足与完善计划.md
 | 2 | 将“长窗口稳健性实验入口”移入已验证 | Round 2 已把 `build_long_window_run_plan.py`、`long_window_run_plan.json` 和 `README.md` 修正为 repo-root 可直接执行的相对路径命令，并复核通过直接复制命令 | AC3 入口合同闭环完成，可将剩余精力集中到真实 long-window 结果与图组 |
 | 2 | 将 AC3 / AC4 的 long-window 进度更新为“代表性窗口已完成、全年份仍未完成” | Round 2 新增 long-window 因子面板、2015/2020/2024/2026 四个代表性年份的 28 个本地 run 结果、组合汇总和长窗口素材，但未完成 2016/2017/2018/2019/2021/2022/2023/2025 的全年份复跑，也未提交被 `code/outputs/` 忽略的 run 目录 | AC3 / AC4 由入口阶段推进到代表性结果阶段，但仍不能视为 fully complete |
 | 3 | 验证全年 long-window 产物与长窗口图组已入库，但保留 AC3 为进行中 | Round 3 的 84 个 `formal_*_long_window_run` 目录、`long_window_portfolio` 汇总和 `pattern_discovery_long_window_2015-2026` 图组均已存在且进入版本控制；但 `paper_body.tex` 仍保留“只复核 2015/2020/2024/2026”与“仍受短窗口限制”的旧表述 | AC4 可视为完成，AC3 仍需完成论文正文一致性回写后才能 fully close |
+| 4 | 关闭 AC3 论文正文一致性缺口并收束 Active Tasks | Round 4 已将 `paper_body.tex` 改写为与 `2015-2026` 全年 long-window 产物一致，不再保留“仅代表年份复核”与“仍缺长窗口证据”的旧表述 | AC3 现已满足“配置、产物、对比表、论文回写”完整闭环，剩余主阻塞收敛为 AC1 |
 
 #### Active Tasks
 <!-- Map each task to its target Acceptance Criterion and routing tag -->
 | Task | Target AC | Status | Tag | Owner | Notes |
 |------|-----------|--------|-----|-------|-------|
 | 补齐外部宏观原始源表与更广泛事件字典的 PIT 可用时点映射 | AC1 | pending | coding | claude | BitLesson=NONE；统一训练接口第一阶段已完成，但外部利率、宏观月度指标、分红、重大事项和公告文本仍未落盘为可审计 PIT 输入 |
-| 扩展 AC3 分层实验的长窗口和更多边界复核 | AC3 | in_progress | coding | claude | 84 个全年 long-window run、`long_window_portfolio` 汇总与受版本控制输出目录已齐备；剩余缺口是 `paper_body.tex` 仍保留代表年份与短窗口限制的旧表述，尚未与 Round 3 产物对齐 |
 | 维护独立不足计划与 RLCR 记录 | AC6 | in_progress | coding | claude | 本轮继续维护 |
 
 ### Completed and Verified
@@ -70,6 +70,7 @@ Source plan: 论文不足与完善计划.md
 | AC3 | 多样本边界结果对比表 | 1 | 1 | `code/data/formal/reports/boundary_portfolio/README.md` 与 `boundary_portfolio_summary.json` 覆盖 HS300、SZ50、ZZ500、全 A、行业分层和市值分层 |
 | AC3 | 长窗口稳健性实验入口 | 2 | 2 | `code/data/build_long_window_run_plan.py` 现输出 repo-root 相对路径命令；`code/data/formal/reports/long_window_plan/README.md` / `long_window_run_plan.json` 可直接复制运行，且 `formal_all_a_2026_long_window_run.yaml` 已复核可执行 |
 | AC3 | 全年 long-window 分层复跑产物与组合汇总入库 | 3 | 3 | `find code/outputs -maxdepth 1 -type d -name 'formal_*_long_window_run' | wc -l = 84`、`git ls-files 'code/outputs/formal_*_long_window_run/*' | wc -l = 7476`、`code/data/formal/reports/long_window_portfolio/README.md` 与 `boundary_portfolio_summary.json` 已覆盖 2015-2026 全部年度与 7 个边界 |
+| AC3 | 长窗口样本边界扩展论文正文一致性回写 | 4 | 4 | `paper_body.tex` 已改写为“2015-2026 全年 long-window 复核”口径，相关段落见第 274、323、325、347 行附近；不再保留“仅 2015/2020/2024/2026”与“仍缺长窗口证据”的旧表述 |
 | AC4 | 全年 long-window 模式发现图组与答辩素材包 | 3 | 3 | `code/data/formal/reports/pattern_discovery_long_window/README.md`、`pattern_discovery_long_window_2015` 至 `pattern_discovery_long_window_2026`、`code/data/formal/reports/defense_materials/long_window_assets/README.md` 已形成受版本控制的全年图组与素材入口 |
 | AC5 | 参考文献学校格式最终校验 | 1 | 1 | `参考文献元数据核对清单.md` 最终校验结论 + `paper_body.tex` 结论章节已统一为当前学校提交口径 |
 
@@ -84,4 +85,3 @@ Source plan: 论文不足与完善计划.md
 |-------|-----------------|-------------|-----------------|
 | `bitlesson-selector` 命令在当前 PowerShell 环境不可用，且 `.humanize/bitlesson.md` 暂无条目 | 0 | ALL | 本轮按 `BitLesson=NONE` 执行，并在 summary 中记录 |
 | Bash 与 Windows Git 的换行配置不一致会误报 CRLF 文件为 dirty | 0 | ALL | 已设置本地 `core.autocrlf=true`，后续验证使用同一 Git 视角 |
-| `paper_body.tex` 仍保留“只复核 2015/2020/2024/2026 代表年份”和“仍受短窗口限制”的旧表述，与已提交的 2015-2026 全年 long-window 产物冲突 | 3 | AC2/AC3 | 依据 `code/data/formal/reports/long_window_portfolio/README.md`、84 个 long-window run 目录与全年图组，重写样本边界扩展与稳健性段落，完成论文正文一致性回写 |

@@ -10,6 +10,7 @@ if str(CODE_ROOT) not in sys.path:
     sys.path.insert(0, str(CODE_ROOT))
 
 from data.build_extended_factor_panel import build_extended_factor_panel
+from data.build_formal_extended_sources import build_formal_extended_sources
 from data.build_formal_factor_panel import build_formal_factor_panel
 
 
@@ -33,6 +34,19 @@ UNIVERSE_SPECS = (
 
 
 def refresh_formal_factor_panels(*, formal_root: Path, max_trade_date: str = DEFAULT_MAX_TRADE_DATE) -> list[Path]:
+    return refresh_formal_factor_panels_with_sources(
+        formal_root=formal_root,
+        max_trade_date=max_trade_date,
+        build_extended_source_tables=True,
+    )
+
+
+def refresh_formal_factor_panels_with_sources(
+    *,
+    formal_root: Path,
+    max_trade_date: str = DEFAULT_MAX_TRADE_DATE,
+    build_extended_source_tables: bool = True,
+) -> list[Path]:
     normalized_root = formal_root.resolve()
     outputs: list[Path] = []
     shared_kline_path = normalized_root / "master" / "shared_kline_panel.csv"
@@ -40,6 +54,34 @@ def refresh_formal_factor_panels(*, formal_root: Path, max_trade_date: str = DEF
     profit_data_path = normalized_root / "baostock" / "financial" / "profit_data.csv"
     performance_express_path = normalized_root / "baostock" / "reports" / "performance_express_report"
     forecast_report_path = normalized_root / "baostock" / "reports" / "forecast_report"
+    source_paths = type(
+        "ExtendedSources",
+        (),
+        {
+            "macro_interest_rate_path": normalized_root / "external" / "macro_interest_rate.csv",
+            "macro_monthly_path": normalized_root / "external" / "macro_monthly_indicator.csv",
+            "dividend_events_path": normalized_root / "events" / "dividend_event.csv",
+            "major_event_notice_path": normalized_root / "events" / "major_event_notice.csv",
+            "announcement_text_path": normalized_root / "events" / "announcement_text.csv",
+        },
+    )()
+    source_files_exist = all(
+        path.exists()
+        for path in (
+            source_paths.macro_interest_rate_path,
+            source_paths.macro_monthly_path,
+            source_paths.dividend_events_path,
+            source_paths.major_event_notice_path,
+            source_paths.announcement_text_path,
+        )
+    )
+    if build_extended_source_tables and not source_files_exist:
+        extended_sources = build_formal_extended_sources(
+            formal_root=normalized_root,
+            max_trade_date=max_trade_date,
+        )
+    else:
+        extended_sources = source_paths
 
     for spec in UNIVERSE_SPECS:
         baseline_output = normalized_root / "factors" / spec.baseline_panel_filename
@@ -59,6 +101,11 @@ def refresh_formal_factor_panels(*, formal_root: Path, max_trade_date: str = DEF
             performance_express_path=performance_express_path,
             forecast_report_path=forecast_report_path,
             market_index_path=normalized_root / "index_daily" / spec.market_index_filename,
+            macro_interest_rate_path=extended_sources.macro_interest_rate_path,
+            macro_monthly_path=extended_sources.macro_monthly_path,
+            dividend_event_path=extended_sources.dividend_events_path,
+            major_event_notice_path=extended_sources.major_event_notice_path,
+            announcement_text_path=extended_sources.announcement_text_path,
             output_path=extended_output,
             max_trade_date=max_trade_date,
         )

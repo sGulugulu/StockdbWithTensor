@@ -33,11 +33,24 @@ data:
     - market_amount_zscore_20d
     - macro_proxy_risk_score
     - macro_proxy_liquidity_score
+    - macro_policy_rate
+    - macro_lpr_1y
+    - macro_lpr_5y
+    - macro_cpi_mom
+    - macro_m2_yoy
+    - macro_industrial_production_yoy
+    - macro_exports_yoy
+    - macro_imports_yoy
     - pit_roe_avg
     - pit_np_margin
     - pit_gp_margin
     - pit_eps_ttm
     - pit_data_age_days
+    - dividend_cash_ratio
+    - dividend_bonus_ratio
+    - dividend_transfer_ratio
+    - dividend_age_days
+    - dividend_flag
     - perf_express_eps_chg_pct
     - perf_express_roe_wa
     - perf_express_gryoy
@@ -55,6 +68,14 @@ data:
     - event_uncertainty_score
     - event_age_decay_score
     - event_intensity_score
+    - major_event_count_30d
+    - major_event_severity_score_30d
+    - major_event_age_days
+    - major_event_flag
+    - announcement_count_30d
+    - announcement_keyword_score_30d
+    - announcement_title_length_mean_30d
+    - announcement_flag
     - forecast_flag
 
 preprocess:
