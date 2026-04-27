@@ -1,0 +1,74 @@
+[
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "J66货币金融服务",
+    "weight": 0.45
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "C31黑色金属冶炼和压延加工业",
+    "weight": 0.140625
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "B06煤炭开采和洗选业",
+    "weight": 0.10104166666666667
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "C37铁路、船舶、航空航天和其他运输设备制造业",
+    "weight": 0.05
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "K70房地产业",
+    "weight": 0.05
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "E48土木工程建筑业",
+    "weight": 0.05
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "C36汽车制造业",
+    "weight": 0.05
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "L72商务服务业",
+    "weight": 0.05
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "C18纺织服装、服饰业",
+    "weight": 0.04895833333333333
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "C39计算机、通信和其他电子设备制造业",
+    "weight": 0.009375
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "quality_factor",
+    "weight": 0.659375
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.340625
+  }
+]

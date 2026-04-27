@@ -1,0 +1,6 @@
+model,exposure_type,name,weight
+pca,industry,C39计算机、通信和其他电子设备制造业,1.0
+pca,style,momentum_factor,0.40816326530612246
+pca,style,volatility_factor,0.2510204081632653
+pca,style,quality_factor,0.2479591836734694
+pca,style,value_factor,0.09285714285714286

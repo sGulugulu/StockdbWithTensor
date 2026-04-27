@@ -1,0 +1,434 @@
+[
+  {
+    "trade_date": "2021-10-27",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.010199274335613035,
+    "cumulative_nav": 1.010199274335613,
+    "turnover": 1.0,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-10-28",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": -0.005604313653063598,
+    "cumulative_nav": 1.0045378007501389,
+    "turnover": 0.19999999999999996,
+    "drawdown": -0.005604313653063686
+  },
+  {
+    "trade_date": "2021-10-29",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": -0.034641621195636615,
+    "cumulative_nav": 0.9697389827798547,
+    "turnover": 0.15000000000000002,
+    "drawdown": -0.040051792338069325
+  },
+  {
+    "trade_date": "2021-11-01",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.034057346491242216,
+    "cumulative_nav": 1.0027657193224528,
+    "turnover": 0.4,
+    "drawdown": -0.007358503616080148
+  },
+  {
+    "trade_date": "2021-11-02",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.02823209096469793,
+    "cumulative_nav": 1.0310758923266452,
+    "turnover": 0.30000000000000004,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-03",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.040420026196096255,
+    "cumulative_nav": 1.0727520069046517,
+    "turnover": 0.25,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-04",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.018480396798604665,
+    "cumulative_nav": 1.092576889658749,
+    "turnover": 0.15000000000000002,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-05",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.03714694837614805,
+    "cumulative_nav": 1.133162786975875,
+    "turnover": 0.19999999999999996,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-08",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.008207593834173355,
+    "cumulative_nav": 1.142463326879373,
+    "turnover": 0.19999999999999996,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-09",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": -0.01722199497750787,
+    "cumulative_nav": 1.1227878292018694,
+    "turnover": 0.19999999999999996,
+    "drawdown": -0.01722199497750787
+  },
+  {
+    "trade_date": "2021-11-10",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.005432400511715352,
+    "cumulative_nav": 1.1288872623797734,
+    "turnover": 0.15000000000000002,
+    "drawdown": -0.01188315124012107
+  },
+  {
+    "trade_date": "2021-11-11",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.0539765283190113,
+    "cumulative_nav": 1.1898206776665863,
+    "turnover": 0.35,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-12",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.02130237508636988,
+    "cumulative_nav": 1.2151666840277586,
+    "turnover": 0.25,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-15",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.020988681272190973,
+    "cumulative_nav": 1.2406714302514024,
+    "turnover": 0.15000000000000002,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-16",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.02328022694907106,
+    "cumulative_nav": 1.2695545427168835,
+    "turnover": 0.15000000000000002,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-17",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.02126140162988515,
+    "cumulative_nav": 1.2965470517406323,
+    "turnover": 0.19999999999999996,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-18",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.04416992243563624,
+    "cumulative_nav": 1.353815434450169,
+    "turnover": 0.15000000000000002,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-19",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.02681185946768359,
+    "cumulative_nav": 1.390113743623828,
+    "turnover": 0.15000000000000002,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-22",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.0249773777239993,
+    "cumulative_nav": 1.4248351396776429,
+    "turnover": 0.09999999999999998,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-23",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.017290008804410135,
+    "cumulative_nav": 1.4494705517875022,
+    "turnover": 0.09999999999999998,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-24",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.0032941150973807122,
+    "cumulative_nav": 1.454245274615354,
+    "turnover": 0.25,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-25",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": -0.016956003630162253,
+    "cumulative_nav": 1.4295870864598297,
+    "turnover": 0.19999999999999996,
+    "drawdown": -0.016956003630162364
+  },
+  {
+    "trade_date": "2021-11-26",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.0012920320935078944,
+    "cumulative_nav": 1.4314341588560002,
+    "turnover": 0.19999999999999996,
+    "drawdown": -0.015685879237522182
+  },
+  {
+    "trade_date": "2021-11-29",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": -0.027765694779438427,
+    "cumulative_nav": 1.3916893949043423,
+    "turnover": 0.25,
+    "drawdown": -0.0430160446817045
+  },
+  {
+    "trade_date": "2021-11-30",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": -0.032939030834310656,
+    "cumulative_nav": 1.345848495013805,
+    "turnover": 0.09999999999999998,
+    "drawdown": -0.07453816869387442
+  },
+  {
+    "trade_date": "2021-12-01",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": -0.012480951514332522,
+    "cumulative_nav": 1.3290510252019003,
+    "turnover": 0.09999999999999998,
+    "drawdown": -0.08608881293877158
+  },
+  {
+    "trade_date": "2021-12-02",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.00807050202954745,
+    "cumulative_nav": 1.3397771341981644,
+    "turnover": 0.15000000000000002,
+    "drawdown": -0.07871309084876787
+  },
+  {
+    "trade_date": "2021-12-03",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": -0.0004469238136903697,
+    "cumulative_nav": 1.3391783558918533,
+    "turnover": 0.25,
+    "drawdown": -0.07912483590770869
+  },
+  {
+    "trade_date": "2021-12-06",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.055677435596367286,
+    "cumulative_nav": 1.413740372554071,
+    "turnover": 0.15000000000000002,
+    "drawdown": -0.02785286826666611
+  },
+  {
+    "trade_date": "2021-12-07",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.06533875671485703,
+    "cumulative_nav": 1.5061124108143529,
+    "turnover": 0.15000000000000002,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-08",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.06986398439324029,
+    "cumulative_nav": 1.6113354247779523,
+    "turnover": 0.25,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-09",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.0678152762178446,
+    "cumulative_nav": 1.720608581688867,
+    "turnover": 0.15000000000000002,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-10",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.08556509099492748,
+    "cumulative_nav": 1.867832611547728,
+    "turnover": 0.09999999999999998,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-13",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.051127341292275884,
+    "cumulative_nav": 1.9633299269551716,
+    "turnover": 0.09999999999999998,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-14",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.0621452942755222,
+    "cumulative_nav": 2.0853416430257403,
+    "turnover": 0.09999999999999998,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-15",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.03894969304717723,
+    "cumulative_nav": 2.166565059920089,
+    "turnover": 0.09999999999999998,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-16",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.04215297445010302,
+    "cumulative_nav": 2.2578922215353865,
+    "turnover": 0.19999999999999996,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-17",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.023467900893612486,
+    "cumulative_nav": 2.3108802124188377,
+    "turnover": 0.19999999999999996,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-20",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.03645237093726998,
+    "cumulative_nav": 2.395117275113526,
+    "turnover": 0.09999999999999998,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-21",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": -0.014050191392090138,
+    "cumulative_nav": 2.3614654189916795,
+    "turnover": 0.050000000000000044,
+    "drawdown": -0.014050191392090183
+  },
+  {
+    "trade_date": "2021-12-22",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": -0.026329099686566916,
+    "cumulative_nav": 2.299290160568667,
+    "turnover": 0.19999999999999996,
+    "drawdown": -0.040009362188879516
+  },
+  {
+    "trade_date": "2021-12-23",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": -0.018797426996666478,
+    "cumulative_nav": 2.256069421631224,
+    "turnover": 0.30000000000000004,
+    "drawdown": -0.0580547161206173
+  },
+  {
+    "trade_date": "2021-12-24",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": -0.00198974185772855,
+    "cumulative_nav": 2.251580425869063,
+    "turnover": 0.15000000000000002,
+    "drawdown": -0.05992894407964211
+  },
+  {
+    "trade_date": "2021-12-27",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.0,
+    "cumulative_nav": 2.251580425869063,
+    "turnover": 0.25,
+    "drawdown": -0.05992894407964211
+  },
+  {
+    "trade_date": "2021-12-28",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.0,
+    "cumulative_nav": 2.251580425869063,
+    "turnover": 0.09999999999999998,
+    "drawdown": -0.05992894407964211
+  },
+  {
+    "trade_date": "2021-12-29",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.0,
+    "cumulative_nav": 2.251580425869063,
+    "turnover": 0.19999999999999996,
+    "drawdown": -0.05992894407964211
+  },
+  {
+    "trade_date": "2021-12-30",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.0,
+    "cumulative_nav": 2.251580425869063,
+    "turnover": 0.15000000000000002,
+    "drawdown": -0.05992894407964211
+  },
+  {
+    "trade_date": "2021-12-31",
+    "model": "pca",
+    "top_n": 20,
+    "daily_return": 0.0,
+    "cumulative_nav": 2.251580425869063,
+    "turnover": 0.15000000000000002,
+    "drawdown": -0.05992894407964211
+  }
+]

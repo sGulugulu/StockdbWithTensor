@@ -1,0 +1,16 @@
+model,exposure_type,name,weight
+tucker,industry,B06煤炭开采和洗选业,0.15
+tucker,industry,C39计算机、通信和其他电子设备制造业,0.15
+tucker,industry,C37铁路、船舶、航空航天和其他运输设备制造业,0.1
+tucker,industry,C35专用设备制造业,0.1
+tucker,industry,C26化学原料和化学制品制造业,0.05
+tucker,industry,C31黑色金属冶炼和压延加工业,0.05
+tucker,industry,B11开采专业及辅助性活动,0.05
+tucker,industry,E48土木工程建筑业,0.05
+tucker,industry,J68保险业,0.05
+tucker,industry,J69其他金融业,0.05
+tucker,industry,P83教育,0.05
+tucker,industry,D44电力、热力生产和供应业,0.05
+tucker,industry,K70房地产业,0.05
+tucker,industry,A01农业,0.05
+tucker,style,quality_factor,1.0

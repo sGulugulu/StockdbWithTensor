@@ -1,0 +1,26 @@
+[
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C27医药制造业",
+    "weight": 1.0
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.5260416666666666
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.3802083333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "quality_factor",
+    "weight": 0.09375
+  }
+]

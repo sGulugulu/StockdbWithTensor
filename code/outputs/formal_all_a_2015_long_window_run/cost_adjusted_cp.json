@@ -1,0 +1,492 @@
+[
+  {
+    "trade_date": "2015-10-26",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": -0.018972881751252356,
+    "transaction_cost": 0.001,
+    "net_return": -0.019972881751252357,
+    "cumulative_nav": 0.9800271182487477,
+    "drawdown": -0.019972881751252336
+  },
+  {
+    "trade_date": "2015-10-27",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": -0.06028147412477449,
+    "transaction_cost": 9.999999999999998e-05,
+    "net_return": -0.060381474124774494,
+    "cumulative_nav": 0.9208516361666337,
+    "drawdown": -0.07914836383336632
+  },
+  {
+    "trade_date": "2015-10-28",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.002075654944501215,
+    "transaction_cost": 0.0009,
+    "net_return": 0.0011756549445012152,
+    "cumulative_nav": 0.921934239945845,
+    "drawdown": -0.078065760054155
+  },
+  {
+    "trade_date": "2015-10-29",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.03508799900227703,
+    "transaction_cost": 0.0007,
+    "net_return": 0.03438799900227703,
+    "cumulative_nav": 0.9536377136692678,
+    "drawdown": -0.04636228633073225
+  },
+  {
+    "trade_date": "2015-10-30",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.02428741121830814,
+    "transaction_cost": 0.001,
+    "net_return": 0.02328741121830814,
+    "cumulative_nav": 0.9758454672607711,
+    "drawdown": -0.02415453273922885
+  },
+  {
+    "trade_date": "2015-11-02",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.05267335012332479,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.05262335012332479,
+    "cumulative_nav": 1.0271977249506943,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2015-11-03",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.07619737450282538,
+    "transaction_cost": 0.00055,
+    "net_return": 0.07564737450282538,
+    "cumulative_nav": 1.1049025359384896,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2015-11-04",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.04468886589520884,
+    "transaction_cost": 0.0,
+    "net_return": 0.04468886589520884,
+    "cumulative_nav": 1.1542793771943212,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2015-11-05",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.049495055227841915,
+    "transaction_cost": 0.00045,
+    "net_return": 0.049045055227841916,
+    "cumulative_nav": 1.2108910729971756,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2015-11-06",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.029206355830897257,
+    "transaction_cost": 0.0004,
+    "net_return": 0.028806355830897256,
+    "cumulative_nav": 1.2457724321183892,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2015-11-09",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": -0.020334597567647585,
+    "transaction_cost": 0.001,
+    "net_return": -0.021334597567647585,
+    "cumulative_nav": 1.2191943786182737,
+    "drawdown": -0.021334597567647662
+  },
+  {
+    "trade_date": "2015-11-10",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": -0.016817209803768423,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": -0.016867209803768424,
+    "cumulative_nav": 1.1986299712425441,
+    "drawdown": -0.03784195223816367
+  },
+  {
+    "trade_date": "2015-11-11",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": -0.015989357999736175,
+    "transaction_cost": 0.00075,
+    "net_return": -0.016739357999736176,
+    "cumulative_nav": 1.1785656750447018,
+    "drawdown": -0.053947860251976176
+  },
+  {
+    "trade_date": "2015-11-12",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": -0.008264313225723385,
+    "transaction_cost": 0.0007,
+    "net_return": -0.008964313225723384,
+    "cumulative_nav": 1.168000643176515,
+    "drawdown": -0.06242856796054319
+  },
+  {
+    "trade_date": "2015-11-13",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.01674259783081713,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.016692597830817127,
+    "cumulative_nav": 1.1874976081791966,
+    "drawdown": -0.0467780651078451
+  },
+  {
+    "trade_date": "2015-11-16",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.013818994844868265,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.013768994844868265,
+    "cumulative_nav": 1.2038482566245092,
+    "drawdown": -0.03365315720029982
+  },
+  {
+    "trade_date": "2015-11-17",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.009475958428405068,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.009425958428405068,
+    "cumulative_nav": 1.21519568024556,
+    "drawdown": -0.024544412032649232
+  },
+  {
+    "trade_date": "2015-11-18",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.07796206626959301,
+    "transaction_cost": 0.0008,
+    "net_return": 0.07716206626959302,
+    "cumulative_nav": 1.3089626898551912,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2015-11-19",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.03689683506551332,
+    "transaction_cost": 0.00019999999999999996,
+    "net_return": 0.03669683506551332,
+    "cumulative_nav": 1.3569974777917178,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2015-11-20",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": -0.04538667831640384,
+    "transaction_cost": 0.0006,
+    "net_return": -0.045986678316403844,
+    "cumulative_nav": 1.2945936713043387,
+    "drawdown": -0.045986678316403795
+  },
+  {
+    "trade_date": "2015-11-23",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": -0.041575626702183406,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": -0.04162562670218341,
+    "cumulative_nav": 1.2407053984116152,
+    "drawdown": -0.08569808071371521
+  },
+  {
+    "trade_date": "2015-11-24",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": -0.03576921205616593,
+    "transaction_cost": 0.00015000000000000001,
+    "net_return": -0.035919212056165925,
+    "cumulative_nav": 1.1961402381068387,
+    "drawdown": -0.11853908523591872
+  },
+  {
+    "trade_date": "2015-11-25",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": -0.01596412777136088,
+    "transaction_cost": 0.0,
+    "net_return": -0.01596412777136088,
+    "cumulative_nav": 1.177044902513235,
+    "drawdown": -0.13261083990467315
+  },
+  {
+    "trade_date": "2015-11-26",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": -0.0008460624704659636,
+    "transaction_cost": 0.0,
+    "net_return": -0.0008460624704659636,
+    "cumulative_nav": 1.1760490489951654,
+    "drawdown": -0.13334470532031872
+  },
+  {
+    "trade_date": "2015-11-27",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.02484346437747243,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.02479346437747243,
+    "cumulative_nav": 1.2052073791975872,
+    "drawdown": -0.11185731814413025
+  },
+  {
+    "trade_date": "2015-11-30",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.019695450092061223,
+    "transaction_cost": 9.999999999999998e-05,
+    "net_return": 0.019595450092061224,
+    "cumulative_nav": 1.2288239602472375,
+    "drawdown": -0.09445376254719418
+  },
+  {
+    "trade_date": "2015-12-01",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": -0.0017034149930017339,
+    "transaction_cost": 0.0,
+    "net_return": -0.0017034149930017339,
+    "cumulative_nav": 1.2267307630895925,
+    "drawdown": -0.09599628358492762
+  },
+  {
+    "trade_date": "2015-12-02",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": -0.03946666863974776,
+    "transaction_cost": 0.00019999999999999996,
+    "net_return": -0.03966666863974776,
+    "cumulative_nav": 1.1780704403999327,
+    "drawdown": -0.13185509945306484
+  },
+  {
+    "trade_date": "2015-12-03",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": -0.04965653549923814,
+    "transaction_cost": 0.0,
+    "net_return": -0.04965653549923814,
+    "cumulative_nav": 1.1195715437556104,
+    "drawdown": -0.1749641675255562
+  },
+  {
+    "trade_date": "2015-12-04",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": -0.03226428714332984,
+    "transaction_cost": 0.0,
+    "net_return": -0.03226428714332984,
+    "cumulative_nav": 1.0834493659903783,
+    "drawdown": -0.20158336052804782
+  },
+  {
+    "trade_date": "2015-12-07",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": -0.008985073043863834,
+    "transaction_cost": 0.0,
+    "net_return": -0.008985073043863834,
+    "cumulative_nav": 1.0737144942976269,
+    "drawdown": -0.2087571923531396
+  },
+  {
+    "trade_date": "2015-12-08",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": -0.0022999932447655804,
+    "transaction_cost": 0.0,
+    "net_return": -0.0022999932447655804,
+    "cumulative_nav": 1.0712449582139354,
+    "drawdown": -0.21057704546569678
+  },
+  {
+    "trade_date": "2015-12-09",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": -0.0022551965865518333,
+    "transaction_cost": 0.0,
+    "net_return": -0.0022551965865518333,
+    "cumulative_nav": 1.0688290902408104,
+    "drawdown": -0.21235734941810824
+  },
+  {
+    "trade_date": "2015-12-10",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.02127859502647071,
+    "transaction_cost": 0.0,
+    "net_return": 0.02127859502647071,
+    "cumulative_nav": 1.0915722716045557,
+    "drawdown": -0.1955974204308002
+  },
+  {
+    "trade_date": "2015-12-11",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.029691063181451195,
+    "transaction_cost": 0.0,
+    "net_return": 0.029691063181451195,
+    "cumulative_nav": 1.1239822128878867,
+    "drawdown": -0.17171385261748884
+  },
+  {
+    "trade_date": "2015-12-14",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.03273464322960493,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.03268464322960493,
+    "cumulative_nav": 1.160719170512549,
+    "drawdown": -0.1446416153982676
+  },
+  {
+    "trade_date": "2015-12-15",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.045086468317036735,
+    "transaction_cost": 0.0,
+    "net_return": 0.045086468317036735,
+    "cumulative_nav": 1.21305189861884,
+    "drawdown": -0.10607652669120993
+  },
+  {
+    "trade_date": "2015-12-16",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.03812439931874162,
+    "transaction_cost": 0.0,
+    "net_return": 0.03812439931874162,
+    "cumulative_nav": 1.2592987735961425,
+    "drawdown": -0.07199623123438903
+  },
+  {
+    "trade_date": "2015-12-17",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.015261122983877112,
+    "transaction_cost": 0.0,
+    "net_return": 0.015261122983877112,
+    "cumulative_nav": 1.2785170870534388,
+    "drawdown": -0.057833851589755625
+  },
+  {
+    "trade_date": "2015-12-18",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.015804680377078308,
+    "transaction_cost": 0.0,
+    "net_return": 0.015804680377078308,
+    "cumulative_nav": 1.2987236409709517,
+    "drawdown": -0.04294321675202872
+  },
+  {
+    "trade_date": "2015-12-21",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": -0.03217005906935824,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": -0.032220059069358244,
+    "cumulative_nav": 1.2568786885440957,
+    "drawdown": -0.07377964284100835
+  },
+  {
+    "trade_date": "2015-12-22",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": -0.023851464124842042,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": -0.023901464124842044,
+    "cumulative_nav": 1.2268374476605803,
+    "drawdown": -0.09591766547934244
+  },
+  {
+    "trade_date": "2015-12-23",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": -0.011016446923179319,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": -0.011066446923179318,
+    "cumulative_nav": 1.2132607161626756,
+    "drawdown": -0.10592264464849943
+  },
+  {
+    "trade_date": "2015-12-24",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": -0.013506416601429478,
+    "transaction_cost": 9.999999999999998e-05,
+    "net_return": -0.013606416601429477,
+    "cumulative_nav": 1.1967525854124175,
+    "drawdown": -0.1180878336193163
+  },
+  {
+    "trade_date": "2015-12-25",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.0,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": -5.000000000000004e-05,
+    "cumulative_nav": 1.1966927477831468,
+    "drawdown": -0.11813192922763538
+  },
+  {
+    "trade_date": "2015-12-28",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.0,
+    "transaction_cost": 0.0,
+    "net_return": 0.0,
+    "cumulative_nav": 1.1966927477831468,
+    "drawdown": -0.11813192922763538
+  },
+  {
+    "trade_date": "2015-12-29",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.0,
+    "transaction_cost": 0.0,
+    "net_return": 0.0,
+    "cumulative_nav": 1.1966927477831468,
+    "drawdown": -0.11813192922763538
+  },
+  {
+    "trade_date": "2015-12-30",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.0,
+    "transaction_cost": 0.0,
+    "net_return": 0.0,
+    "cumulative_nav": 1.1966927477831468,
+    "drawdown": -0.11813192922763538
+  },
+  {
+    "trade_date": "2015-12-31",
+    "model": "cp",
+    "top_n": 20,
+    "gross_return": 0.0,
+    "transaction_cost": 0.0,
+    "net_return": 0.0,
+    "cumulative_nav": 1.1966927477831468,
+    "drawdown": -0.11813192922763538
+  }
+]

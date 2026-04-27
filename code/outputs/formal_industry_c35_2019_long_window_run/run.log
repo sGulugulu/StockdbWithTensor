@@ -1,0 +1,16 @@
+Loaded config: code/data/formal/reports/long_window_plan/configs/formal_industry_c35_2019_long_window_run.yaml
+Resolved device: requested=auto, actual=cuda
+Loaded normalized records before market filtering: 261664
+Filtered records for cn_a/INDUSTRY_C35: 21944 rows from 2019-01-02 to 2019-12-31
+Tensor shape: 24 stocks x 4 factors x 244 dates
+Split materialization: train=(22, 4, 146), validation=(24, 4, 49), test=(24, 4, 49)
+Preprocess fit scope: train_only
+cp rank=2 train_fit_mse=0.994377 validation_score_mse=1.027368
+cp rank=3 train_fit_mse=0.998307 validation_score_mse=1.014802
+tucker rank=(2, 2, 2) train_fit_mse=0.461938 validation_score_mse=0.368385
+tucker rank=(3, 2, 2) train_fit_mse=0.445154 validation_score_mse=0.330799
+pca rank=2 train_fit_mse=0.300246 validation_score_mse=0.220431
+pca rank=3 train_fit_mse=0.098540 validation_score_mse=0.092509
+Selected cp rank=3; refit_shape=(24, 4, 195); held_out_test_mse=0.983485
+Selected tucker rank=(3, 2, 2); refit_shape=(24, 4, 195); held_out_test_mse=0.393445
+Selected pca rank=3; refit_shape=(24, 4, 195); held_out_test_mse=0.079314

@@ -1,0 +1,26 @@
+[
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C35专用设备制造业",
+    "weight": 1.0
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.4772727272727273
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.32727272727272727
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "quality_factor",
+    "weight": 0.19545454545454546
+  }
+]

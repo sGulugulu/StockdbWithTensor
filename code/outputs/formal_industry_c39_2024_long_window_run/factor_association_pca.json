@@ -1,0 +1,27 @@
+[
+  {
+    "left": "momentum_factor",
+    "right": "volatility_factor",
+    "score": 0.9623402853445868
+  },
+  {
+    "left": "value_factor",
+    "right": "volatility_factor",
+    "score": 0.14786123575475388
+  },
+  {
+    "left": "quality_factor",
+    "right": "volatility_factor",
+    "score": 0.0018226143591488283
+  },
+  {
+    "left": "quality_factor",
+    "right": "value_factor",
+    "score": -0.0002396983761565586
+  },
+  {
+    "left": "momentum_factor",
+    "right": "quality_factor",
+    "score": -0.0015598302664623302
+  }
+]

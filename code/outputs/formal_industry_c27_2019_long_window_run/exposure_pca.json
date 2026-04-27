@@ -1,0 +1,32 @@
+[
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C27医药制造业",
+    "weight": 1.0
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "quality_factor",
+    "weight": 0.35612244897959183
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "volatility_factor",
+    "weight": 0.24387755102040817
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.22755102040816327
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.17244897959183675
+  }
+]

@@ -1,0 +1,74 @@
+[
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "J66货币金融服务",
+    "weight": 0.44081632653061226
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C31黑色金属冶炼和压延加工业",
+    "weight": 0.2
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "B07石油和天然气开采业",
+    "weight": 0.11428571428571428
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C38电气机械和器材制造业",
+    "weight": 0.08979591836734693
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C36汽车制造业",
+    "weight": 0.07346938775510205
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C35专用设备制造业",
+    "weight": 0.04897959183673469
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "J67资本市场服务",
+    "weight": 0.02857142857142857
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "D44电力、热力生产和供应业",
+    "weight": 0.004081632653061225
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.5142857142857142
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "volatility_factor",
+    "weight": 0.2612244897959184
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.1469387755102041
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "quality_factor",
+    "weight": 0.07755102040816327
+  }
+]

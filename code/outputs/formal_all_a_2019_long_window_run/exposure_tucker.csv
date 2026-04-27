@@ -1,0 +1,16 @@
+model,exposure_type,name,weight
+tucker,industry,J66货币金融服务,0.44081632653061226
+tucker,industry,C31黑色金属冶炼和压延加工业,0.12653061224489795
+tucker,industry,C36汽车制造业,0.08061224489795918
+tucker,industry,C39计算机、通信和其他电子设备制造业,0.05714285714285714
+tucker,industry,L72商务服务业,0.05102040816326531
+tucker,industry,B06煤炭开采和洗选业,0.05
+tucker,industry,C26化学原料和化学制品制造业,0.05
+tucker,industry,C37铁路、船舶、航空航天和其他运输设备制造业,0.05
+tucker,industry,I65软件和信息技术服务业,0.05
+tucker,industry,E48土木工程建筑业,0.02959183673469388
+tucker,industry,J68保险业,0.013265306122448979
+tucker,industry,J67资本市场服务,0.0010204081632653062
+tucker,style,value_factor,0.8071428571428572
+tucker,style,quality_factor,0.19183673469387755
+tucker,style,momentum_factor,0.0010204081632653062

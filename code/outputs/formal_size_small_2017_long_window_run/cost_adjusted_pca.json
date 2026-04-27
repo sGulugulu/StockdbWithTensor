@@ -1,0 +1,492 @@
+[
+  {
+    "trade_date": "2017-10-24",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.0029922415397988012,
+    "transaction_cost": 0.001,
+    "net_return": -0.003992241539798802,
+    "cumulative_nav": 0.9960077584602012,
+    "drawdown": -0.003992241539798824
+  },
+  {
+    "trade_date": "2017-10-25",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.004775228326982228,
+    "transaction_cost": 0.0,
+    "net_return": -0.004775228326982228,
+    "cumulative_nav": 0.991251593998108,
+    "drawdown": -0.008748406001891973
+  },
+  {
+    "trade_date": "2017-10-26",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.023835469867224603,
+    "transaction_cost": 0.0,
+    "net_return": -0.023835469867224603,
+    "cumulative_nav": 0.9676246464985278,
+    "drawdown": -0.03237535350147225
+  },
+  {
+    "trade_date": "2017-10-27",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.026119675291914234,
+    "transaction_cost": 0.0,
+    "net_return": -0.026119675291914234,
+    "cumulative_nav": 0.9423506049275329,
+    "drawdown": -0.057649395072467136
+  },
+  {
+    "trade_date": "2017-10-30",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.009311183433039804,
+    "transaction_cost": 0.00019999999999999996,
+    "net_return": -0.009511183433039805,
+    "cumulative_nav": 0.9333877354658311,
+    "drawdown": -0.06661226453416891
+  },
+  {
+    "trade_date": "2017-10-31",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -4.91366683174288e-05,
+    "transaction_cost": 0.0,
+    "net_return": -4.91366683174288e-05,
+    "cumulative_nav": 0.9333418719022619,
+    "drawdown": -0.06665812809773808
+  },
+  {
+    "trade_date": "2017-11-01",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": 0.0071856732472135535,
+    "transaction_cost": 0.0,
+    "net_return": 0.0071856732472135535,
+    "cumulative_nav": 0.9400485616216943,
+    "drawdown": -0.059951438378305744
+  },
+  {
+    "trade_date": "2017-11-02",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": 0.016399081741039944,
+    "transaction_cost": 0.0,
+    "net_return": 0.016399081741039944,
+    "cumulative_nav": 0.9554644948242755,
+    "drawdown": -0.044535505175724466
+  },
+  {
+    "trade_date": "2017-11-03",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": 0.022307861812653408,
+    "transaction_cost": 0.0,
+    "net_return": 0.022307861812653408,
+    "cumulative_nav": 0.976778864741712,
+    "drawdown": -0.02322113525828795
+  },
+  {
+    "trade_date": "2017-11-06",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": 0.030788965117872814,
+    "transaction_cost": 0.0,
+    "net_return": 0.030788965117872814,
+    "cumulative_nav": 1.00685287513612,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2017-11-07",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": 0.008784357849726554,
+    "transaction_cost": 0.0,
+    "net_return": 0.008784357849726554,
+    "cumulative_nav": 1.015697431093342,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2017-11-08",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": 0.002957128109044471,
+    "transaction_cost": 0.0,
+    "net_return": 0.002957128109044471,
+    "cumulative_nav": 1.0187009785171124,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2017-11-09",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": 0.002570700791263203,
+    "transaction_cost": 0.0,
+    "net_return": 0.002570700791263203,
+    "cumulative_nav": 1.021319753928647,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2017-11-10",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.010844903484243006,
+    "transaction_cost": 0.0,
+    "net_return": -0.010844903484243006,
+    "cumulative_nav": 1.01024363977074,
+    "drawdown": -0.010844903484243051
+  },
+  {
+    "trade_date": "2017-11-13",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.026099922110166495,
+    "transaction_cost": 0.0,
+    "net_return": -0.026099922110166495,
+    "cumulative_nav": 0.9838763594604325,
+    "drawdown": -0.03666177445817853
+  },
+  {
+    "trade_date": "2017-11-14",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.002417136332461256,
+    "transaction_cost": 0.0,
+    "net_return": -0.002417136332461256,
+    "cumulative_nav": 0.9814981961653311,
+    "drawdown": -0.03899029428358436
+  },
+  {
+    "trade_date": "2017-11-15",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.006614681817838952,
+    "transaction_cost": 0.0,
+    "net_return": -0.006614681817838952,
+    "cumulative_nav": 0.9750058978929145,
+    "drawdown": -0.045347067710753475
+  },
+  {
+    "trade_date": "2017-11-16",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.028684191465594623,
+    "transaction_cost": 0.0,
+    "net_return": -0.028684191465594623,
+    "cumulative_nav": 0.9470386420376701,
+    "drawdown": -0.07273051520372964
+  },
+  {
+    "trade_date": "2017-11-17",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.013775970779620094,
+    "transaction_cost": 0.0,
+    "net_return": -0.013775970779620094,
+    "cumulative_nav": 0.933992265377788,
+    "drawdown": -0.08550455253111644
+  },
+  {
+    "trade_date": "2017-11-20",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.019518742315315696,
+    "transaction_cost": 0.0,
+    "net_return": -0.019518742315315696,
+    "cumulative_nav": 0.915761911025381,
+    "drawdown": -0.10335435351879096
+  },
+  {
+    "trade_date": "2017-11-21",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.028129284549796553,
+    "transaction_cost": 0.0,
+    "net_return": -0.028129284549796553,
+    "cumulative_nav": 0.8900021836502825,
+    "drawdown": -0.12857635404899725
+  },
+  {
+    "trade_date": "2017-11-22",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.01600860273011071,
+    "transaction_cost": 0.0,
+    "net_return": -0.01600860273011071,
+    "cumulative_nav": 0.875754492263294,
+    "drawdown": -0.14252662900665147
+  },
+  {
+    "trade_date": "2017-11-23",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": 0.0014782948862158475,
+    "transaction_cost": 0.0,
+    "net_return": 0.0014782948862158475,
+    "cumulative_nav": 0.8770491156507874,
+    "drawdown": -0.14125903050724586
+  },
+  {
+    "trade_date": "2017-11-24",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.0007127160205580019,
+    "transaction_cost": 0.0,
+    "net_return": -0.0007127160205580019,
+    "cumulative_nav": 0.8764240286952468,
+    "drawdown": -0.14187106895371282
+  },
+  {
+    "trade_date": "2017-11-27",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.0019403063688371747,
+    "transaction_cost": 0.0,
+    "net_return": -0.0019403063688371747,
+    "cumulative_nav": 0.8747234975705676,
+    "drawdown": -0.14353610198390532
+  },
+  {
+    "trade_date": "2017-11-28",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.008708125434079238,
+    "transaction_cost": 0.0,
+    "net_return": -0.008708125434079238,
+    "cumulative_nav": 0.8671062956335865,
+    "drawdown": -0.15099429703758993
+  },
+  {
+    "trade_date": "2017-11-29",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.012986212521023143,
+    "transaction_cost": 0.0,
+    "net_return": -0.012986212521023143,
+    "cumulative_nav": 0.8558458690001717,
+    "drawdown": -0.16201966552782043
+  },
+  {
+    "trade_date": "2017-11-30",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.017464974069553052,
+    "transaction_cost": 0.0,
+    "net_return": -0.017464974069553052,
+    "cumulative_nav": 0.8408985430905496,
+    "drawdown": -0.17665497034017252
+  },
+  {
+    "trade_date": "2017-12-01",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.018701267295712844,
+    "transaction_cost": 0.0,
+    "net_return": -0.018701267295712844,
+    "cumulative_nav": 0.8251726746676377,
+    "drawdown": -0.1920525658164376
+  },
+  {
+    "trade_date": "2017-12-04",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.005024611352348773,
+    "transaction_cost": 0.0,
+    "net_return": -0.005024611352348773,
+    "cumulative_nav": 0.8210265026788547,
+    "drawdown": -0.1961121876663373
+  },
+  {
+    "trade_date": "2017-12-05",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.010486617250352825,
+    "transaction_cost": 0.0,
+    "net_return": -0.010486617250352825,
+    "cumulative_nav": 0.8124167119928658,
+    "drawdown": -0.20454225146650384
+  },
+  {
+    "trade_date": "2017-12-06",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.011378122797010115,
+    "transaction_cost": 0.0,
+    "net_return": -0.011378122797010115,
+    "cumulative_nav": 0.8031729348814678,
+    "drawdown": -0.21359306740915118
+  },
+  {
+    "trade_date": "2017-12-07",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.0065442739199664144,
+    "transaction_cost": 0.0,
+    "net_return": -0.0065442739199664144,
+    "cumulative_nav": 0.7979167511905002,
+    "drawdown": -0.21873952978858613
+  },
+  {
+    "trade_date": "2017-12-08",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.012701873908335704,
+    "transaction_cost": 0.0,
+    "net_return": -0.012701873908335704,
+    "cumulative_nav": 0.7877817132275297,
+    "drawdown": -0.22866300177077847
+  },
+  {
+    "trade_date": "2017-12-11",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.02084793203869848,
+    "transaction_cost": 0.0,
+    "net_return": -0.02084793203869848,
+    "cumulative_nav": 0.7713580936088327,
+    "drawdown": -0.24474378308879496
+  },
+  {
+    "trade_date": "2017-12-12",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.0058085463169384784,
+    "transaction_cost": 0.0,
+    "net_return": -0.0058085463169384784,
+    "cumulative_nav": 0.7668776243951604,
+    "drawdown": -0.24913072380587953
+  },
+  {
+    "trade_date": "2017-12-13",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.00579699687120887,
+    "transaction_cost": 0.0,
+    "net_return": -0.00579699687120887,
+    "cumulative_nav": 0.7624320372059415,
+    "drawdown": -0.25348351065066366
+  },
+  {
+    "trade_date": "2017-12-14",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.006495939729608291,
+    "transaction_cost": 0.0,
+    "net_return": -0.006495939729608291,
+    "cumulative_nav": 0.7574793246443293,
+    "drawdown": -0.25833283677263574
+  },
+  {
+    "trade_date": "2017-12-15",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": 7.861815830572106e-05,
+    "transaction_cost": 0.0,
+    "net_return": 7.861815830572106e-05,
+    "cumulative_nav": 0.7575388762737875,
+    "drawdown": -0.258274528266187
+  },
+  {
+    "trade_date": "2017-12-18",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.009803753847244545,
+    "transaction_cost": 0.0,
+    "net_return": -0.009803753847244545,
+    "cumulative_nav": 0.750112151601081,
+    "drawdown": -0.2655462222132966
+  },
+  {
+    "trade_date": "2017-12-19",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.005930352584556919,
+    "transaction_cost": 0.0,
+    "net_return": -0.005930352584556919,
+    "cumulative_nav": 0.745663722064126,
+    "drawdown": -0.26990179207263154
+  },
+  {
+    "trade_date": "2017-12-20",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.012560792467761716,
+    "transaction_cost": 0.0,
+    "net_return": -0.012560792467761716,
+    "cumulative_nav": 0.7362975948005397,
+    "drawdown": -0.2790724041434921
+  },
+  {
+    "trade_date": "2017-12-21",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": -0.0025234342629807615,
+    "transaction_cost": 0.0,
+    "net_return": -0.0025234342629807615,
+    "cumulative_nav": 0.7344395962220697,
+    "drawdown": -0.2808916175400048
+  },
+  {
+    "trade_date": "2017-12-22",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": 0.0004134802524914605,
+    "transaction_cost": 0.0,
+    "net_return": 0.0004134802524914605,
+    "cumulative_nav": 0.7347432724917553,
+    "drawdown": -0.28059428042445644
+  },
+  {
+    "trade_date": "2017-12-25",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": 0.0,
+    "transaction_cost": 0.0,
+    "net_return": 0.0,
+    "cumulative_nav": 0.7347432724917553,
+    "drawdown": -0.28059428042445644
+  },
+  {
+    "trade_date": "2017-12-26",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": 0.0,
+    "transaction_cost": 0.0,
+    "net_return": 0.0,
+    "cumulative_nav": 0.7347432724917553,
+    "drawdown": -0.28059428042445644
+  },
+  {
+    "trade_date": "2017-12-27",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": 0.0,
+    "transaction_cost": 0.0,
+    "net_return": 0.0,
+    "cumulative_nav": 0.7347432724917553,
+    "drawdown": -0.28059428042445644
+  },
+  {
+    "trade_date": "2017-12-28",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": 0.0,
+    "transaction_cost": 0.0,
+    "net_return": 0.0,
+    "cumulative_nav": 0.7347432724917553,
+    "drawdown": -0.28059428042445644
+  },
+  {
+    "trade_date": "2017-12-29",
+    "model": "pca",
+    "top_n": 5,
+    "gross_return": 0.0,
+    "transaction_cost": 0.0,
+    "net_return": 0.0,
+    "cumulative_nav": 0.7347432724917553,
+    "drawdown": -0.28059428042445644
+  }
+]

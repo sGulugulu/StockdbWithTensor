@@ -1,0 +1,32 @@
+[
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "J66货币金融服务",
+    "weight": 0.6
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "C36汽车制造业",
+    "weight": 0.2
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "C31黑色金属冶炼和压延加工业",
+    "weight": 0.2
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "quality_factor",
+    "weight": 0.5958333333333333
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.4041666666666667
+  }
+]

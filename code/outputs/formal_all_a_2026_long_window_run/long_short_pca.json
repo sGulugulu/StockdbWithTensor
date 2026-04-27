@@ -1,0 +1,123 @@
+[
+  {
+    "trade_date": "2026-03-16",
+    "model": "pca",
+    "long_quantile": 1,
+    "short_quantile": 5,
+    "long_return": -0.07660348300296203,
+    "short_return": -0.08660947602126606,
+    "long_short_return": 0.01000599301830403,
+    "cumulative_nav": 1.010005993018304,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2026-03-17",
+    "model": "pca",
+    "long_quantile": 1,
+    "short_quantile": 5,
+    "long_return": -0.026312701079402357,
+    "short_return": -0.05772199814568168,
+    "long_short_return": 0.03140929706627932,
+    "cumulative_nav": 1.0417295712917385,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2026-03-18",
+    "model": "pca",
+    "long_quantile": 1,
+    "short_quantile": 5,
+    "long_return": -0.009433127319028041,
+    "short_return": -0.04632451205159885,
+    "long_short_return": 0.03689138473257081,
+    "cumulative_nav": 1.0801604176935582,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2026-03-19",
+    "model": "pca",
+    "long_quantile": 1,
+    "short_quantile": 5,
+    "long_return": -0.010932702978618572,
+    "short_return": -0.03538597732145672,
+    "long_short_return": 0.02445327434283815,
+    "cumulative_nav": 1.1065738767216933,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2026-03-20",
+    "model": "pca",
+    "long_quantile": 1,
+    "short_quantile": 5,
+    "long_return": 0.003934400964119894,
+    "short_return": -0.011067887155061688,
+    "long_short_return": 0.015002288119181582,
+    "cumulative_nav": 1.1231750168454318,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2026-03-23",
+    "model": "pca",
+    "long_quantile": 1,
+    "short_quantile": 5,
+    "long_return": 0.02945889531609685,
+    "short_return": 0.036494496613651034,
+    "long_short_return": -0.007035601297554185,
+    "cumulative_nav": 1.1152728052395335,
+    "drawdown": -0.007035601297554206
+  },
+  {
+    "trade_date": "2026-03-24",
+    "model": "pca",
+    "long_quantile": 1,
+    "short_quantile": 5,
+    "long_return": -0.017788203738028828,
+    "short_return": 0.00021274318152715894,
+    "long_short_return": -0.018000946919555987,
+    "cumulative_nav": 1.0951968386715925,
+    "drawdown": -0.024909900731605705
+  },
+  {
+    "trade_date": "2026-03-25",
+    "model": "pca",
+    "long_quantile": 1,
+    "short_quantile": 5,
+    "long_return": -0.018277933769651186,
+    "short_return": 0.00037346657316735183,
+    "long_short_return": -0.01865140034281854,
+    "cumulative_nav": 1.0747698839793394,
+    "drawdown": -0.04309669654337922
+  },
+  {
+    "trade_date": "2026-03-26",
+    "model": "pca",
+    "long_quantile": 1,
+    "short_quantile": 5,
+    "long_return": -0.009044981379905604,
+    "short_return": 0.0015341080625179495,
+    "long_short_return": -0.010579089442423554,
+    "cumulative_nav": 1.0633997972466986,
+    "drawdown": -0.05321986217839747
+  },
+  {
+    "trade_date": "2026-03-27",
+    "model": "pca",
+    "long_quantile": 1,
+    "short_quantile": 5,
+    "long_return": -0.030042818961191643,
+    "short_return": -0.02413229922749449,
+    "long_short_return": -0.005910519733697151,
+    "cumulative_nav": 1.0571145517602625,
+    "drawdown": -0.05881582486646453
+  },
+  {
+    "trade_date": "2026-03-30",
+    "model": "pca",
+    "long_quantile": 1,
+    "short_quantile": 5,
+    "long_return": 0.0,
+    "short_return": 0.0,
+    "long_short_return": 0.0,
+    "cumulative_nav": 1.0571145517602625,
+    "drawdown": -0.05881582486646453
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "J66货币金融服务",
+    "weight": 0.6
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "G55水上运输业",
+    "weight": 0.2
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "D44电力、热力生产和供应业",
+    "weight": 0.2
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.509090909090909
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.4727272727272727
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "quality_factor",
+    "weight": 0.01818181818181818
+  }
+]

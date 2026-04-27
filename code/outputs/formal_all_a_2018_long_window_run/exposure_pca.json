@@ -1,0 +1,200 @@
+[
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "J66货币金融服务",
+    "weight": 0.23333333333333334
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C31黑色金属冶炼和压延加工业",
+    "weight": 0.09375
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C37铁路、船舶、航空航天和其他运输设备制造业",
+    "weight": 0.06875
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C39计算机、通信和其他电子设备制造业",
+    "weight": 0.05520833333333333
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "E48土木工程建筑业",
+    "weight": 0.05416666666666667
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "J67资本市场服务",
+    "weight": 0.052083333333333336
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C36汽车制造业",
+    "weight": 0.04791666666666667
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "K70房地产业",
+    "weight": 0.04583333333333333
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C26化学原料和化学制品制造业",
+    "weight": 0.040625
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "L72商务服务业",
+    "weight": 0.03854166666666667
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "B06煤炭开采和洗选业",
+    "weight": 0.036458333333333336
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "I65软件和信息技术服务业",
+    "weight": 0.036458333333333336
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "F51批发业",
+    "weight": 0.03125
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C18纺织服装、服饰业",
+    "weight": 0.029166666666666667
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C35专用设备制造业",
+    "weight": 0.026041666666666668
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "J68保险业",
+    "weight": 0.01875
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "I64互联网和相关服务",
+    "weight": 0.015625
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C27医药制造业",
+    "weight": 0.015625
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C30非金属矿物制品业",
+    "weight": 0.010416666666666666
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C28化学纤维制造业",
+    "weight": 0.009375
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "R86新闻和出版业",
+    "weight": 0.009375
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C22造纸和纸制品业",
+    "weight": 0.00625
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "J69其他金融业",
+    "weight": 0.005208333333333333
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "M74专业技术服务业",
+    "weight": 0.004166666666666667
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "N77生态保护和环境治理业",
+    "weight": 0.004166666666666667
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C40仪器仪表制造业",
+    "weight": 0.004166666666666667
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C34通用设备制造业",
+    "weight": 0.004166666666666667
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C29橡胶和塑料制品业",
+    "weight": 0.0020833333333333333
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C33金属制品业",
+    "weight": 0.0010416666666666667
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "quality_factor",
+    "weight": 0.8302083333333333
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "volatility_factor",
+    "weight": 0.128125
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.040625
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.0010416666666666667
+  }
+]

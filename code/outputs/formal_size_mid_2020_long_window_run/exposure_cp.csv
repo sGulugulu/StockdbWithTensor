@@ -1,0 +1,9 @@
+model,exposure_type,name,weight
+cp,industry,C27医药制造业,0.2
+cp,industry,G56航空运输业,0.2
+cp,industry,D44电力、热力生产和供应业,0.2
+cp,industry,C36汽车制造业,0.2
+cp,industry,K70房地产业,0.2
+cp,style,quality_factor,0.43333333333333335
+cp,style,value_factor,0.4083333333333333
+cp,style,volatility_factor,0.15833333333333333

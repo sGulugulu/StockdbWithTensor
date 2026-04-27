@@ -1,0 +1,26 @@
+[
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C39计算机、通信和其他电子设备制造业",
+    "weight": 1.0
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "quality_factor",
+    "weight": 0.5181818181818182
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.41363636363636364
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.06818181818181818
+  }
+]

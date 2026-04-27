@@ -1,0 +1,80 @@
+[
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "D44电力、热力生产和供应业",
+    "weight": 0.30833333333333335
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C27医药制造业",
+    "weight": 0.15416666666666667
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "K70房地产业",
+    "weight": 0.15
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "J66货币金融服务",
+    "weight": 0.14583333333333334
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "G56航空运输业",
+    "weight": 0.1375
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C36汽车制造业",
+    "weight": 0.04583333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C31黑色金属冶炼和压延加工业",
+    "weight": 0.04583333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "E48土木工程建筑业",
+    "weight": 0.008333333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "G55水上运输业",
+    "weight": 0.004166666666666667
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.43333333333333335
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "volatility_factor",
+    "weight": 0.2708333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.15416666666666667
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "quality_factor",
+    "weight": 0.14166666666666666
+  }
+]

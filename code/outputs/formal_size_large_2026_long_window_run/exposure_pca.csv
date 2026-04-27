@@ -1,0 +1,10 @@
+model,exposure_type,name,weight
+pca,industry,J66货币金融服务,0.6
+pca,industry,D44电力、热力生产和供应业,0.18181818181818182
+pca,industry,G55水上运输业,0.14545454545454545
+pca,industry,C38电气机械和器材制造业,0.05454545454545454
+pca,industry,C31黑色金属冶炼和压延加工业,0.01818181818181818
+pca,style,value_factor,0.38181818181818183
+pca,style,momentum_factor,0.23636363636363636
+pca,style,volatility_factor,0.23636363636363636
+pca,style,quality_factor,0.14545454545454545

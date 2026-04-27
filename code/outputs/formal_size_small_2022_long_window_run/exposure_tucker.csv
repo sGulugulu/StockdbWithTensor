@@ -1,0 +1,7 @@
+model,exposure_type,name,weight
+tucker,industry,D44电力、热力生产和供应业,0.4
+tucker,industry,G56航空运输业,0.2
+tucker,industry,J67资本市场服务,0.2
+tucker,industry,C39计算机、通信和其他电子设备制造业,0.2
+tucker,style,value_factor,0.6
+tucker,style,quality_factor,0.4

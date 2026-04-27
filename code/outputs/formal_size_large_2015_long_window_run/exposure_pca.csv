@@ -1,0 +1,9 @@
+model,exposure_type,name,weight
+pca,industry,J66货币金融服务,0.5428571428571428
+pca,industry,C36汽车制造业,0.2
+pca,industry,C35专用设备制造业,0.1306122448979592
+pca,industry,J67资本市场服务,0.12653061224489795
+pca,style,value_factor,0.46938775510204084
+pca,style,quality_factor,0.30612244897959184
+pca,style,volatility_factor,0.11428571428571428
+pca,style,momentum_factor,0.11020408163265306

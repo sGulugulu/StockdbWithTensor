@@ -1,0 +1,26 @@
+[
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C35专用设备制造业",
+    "weight": 1.0
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "quality_factor",
+    "weight": 0.5135416666666667
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "volatility_factor",
+    "weight": 0.30104166666666665
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.18541666666666667
+  }
+]

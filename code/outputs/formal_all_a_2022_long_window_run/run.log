@@ -1,0 +1,16 @@
+Loaded config: code/data/formal/reports/long_window_plan/configs/formal_all_a_2022_long_window_run.yaml
+Resolved device: requested=auto, actual=cuda
+Loaded normalized records before market filtering: 4534932
+Filtered records for cn_a/ALL_A_ACTIVE: 463544 rows from 2022-01-04 to 2022-12-30
+Tensor shape: 488 stocks x 4 factors x 242 dates
+Split materialization: train=(475, 4, 145), validation=(488, 4, 49), test=(488, 4, 48)
+Preprocess fit scope: train_only
+cp rank=2 train_fit_mse=1.000057 validation_score_mse=1.015852
+cp rank=3 train_fit_mse=0.995542 validation_score_mse=1.017811
+tucker rank=(2, 2, 2) train_fit_mse=0.564774 validation_score_mse=0.458705
+tucker rank=(3, 2, 2) train_fit_mse=0.534035 validation_score_mse=0.435956
+pca rank=2 train_fit_mse=0.435372 validation_score_mse=0.439634
+pca rank=3 train_fit_mse=0.191053 validation_score_mse=0.181674
+Selected cp rank=2; refit_shape=(488, 4, 194); held_out_test_mse=1.074544
+Selected tucker rank=(3, 2, 2); refit_shape=(488, 4, 194); held_out_test_mse=0.566997
+Selected pca rank=3; refit_shape=(488, 4, 194); held_out_test_mse=0.206963

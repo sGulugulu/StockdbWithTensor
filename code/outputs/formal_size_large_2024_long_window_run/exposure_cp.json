@@ -1,0 +1,86 @@
+[
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C35专用设备制造业",
+    "weight": 0.1875
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "B07石油和天然气开采业",
+    "weight": 0.17083333333333334
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "G55水上运输业",
+    "weight": 0.1625
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "J67资本市场服务",
+    "weight": 0.12916666666666668
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "J66货币金融服务",
+    "weight": 0.12083333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C32有色金属冶炼和压延加工业",
+    "weight": 0.1125
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C38电气机械和器材制造业",
+    "weight": 0.05416666666666667
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "I63电信、广播电视和卫星传输服务",
+    "weight": 0.03333333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "D44电力、热力生产和供应业",
+    "weight": 0.0125
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C31黑色金属冶炼和压延加工业",
+    "weight": 0.008333333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C36汽车制造业",
+    "weight": 0.004166666666666667
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C39计算机、通信和其他电子设备制造业",
+    "weight": 0.004166666666666667
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.725
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "volatility_factor",
+    "weight": 0.275
+  }
+]

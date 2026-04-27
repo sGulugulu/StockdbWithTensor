@@ -1,0 +1,56 @@
+[
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "D44电力、热力生产和供应业",
+    "weight": 0.2938775510204082
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "J66货币金融服务",
+    "weight": 0.2
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "K70房地产业",
+    "weight": 0.2
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "E48土木工程建筑业",
+    "weight": 0.2
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "G55水上运输业",
+    "weight": 0.09387755102040816
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "C36汽车制造业",
+    "weight": 0.012244897959183673
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "quality_factor",
+    "weight": 0.5428571428571428
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.3877551020408163
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.06938775510204082
+  }
+]

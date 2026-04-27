@@ -1,0 +1,8 @@
+model,exposure_type,name,weight
+cp,industry,G56航空运输业,0.4
+cp,industry,C36汽车制造业,0.2
+cp,industry,C31黑色金属冶炼和压延加工业,0.2
+cp,industry,C27医药制造业,0.1625
+cp,industry,G55水上运输业,0.0375
+cp,style,momentum_factor,0.8
+cp,style,value_factor,0.2

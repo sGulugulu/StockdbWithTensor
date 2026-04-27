@@ -1,0 +1,26 @@
+[
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "C27医药制造业",
+    "weight": 1.0
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.6377551020408163
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "quality_factor",
+    "weight": 0.2316326530612245
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.1306122448979592
+  }
+]

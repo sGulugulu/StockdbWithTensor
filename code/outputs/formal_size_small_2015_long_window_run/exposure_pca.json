@@ -1,0 +1,74 @@
+[
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "J67资本市场服务",
+    "weight": 0.5102040816326531
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C26化学原料和化学制品制造业",
+    "weight": 0.2
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C37铁路、船舶、航空航天和其他运输设备制造业",
+    "weight": 0.11020408163265306
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "D46水的生产和供应业",
+    "weight": 0.061224489795918366
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "K70房地产业",
+    "weight": 0.044897959183673466
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "D44电力、热力生产和供应业",
+    "weight": 0.04081632653061224
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C27医药制造业",
+    "weight": 0.0163265306122449
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C39计算机、通信和其他电子设备制造业",
+    "weight": 0.0163265306122449
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "quality_factor",
+    "weight": 0.5591836734693878
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.19183673469387755
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "volatility_factor",
+    "weight": 0.1836734693877551
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.0653061224489796
+  }
+]

@@ -1,0 +1,6 @@
+model,exposure_type,name,weight
+pca,industry,C27医药制造业,1.0
+pca,style,momentum_factor,0.425
+pca,style,quality_factor,0.30520833333333336
+pca,style,value_factor,0.22708333333333333
+pca,style,volatility_factor,0.042708333333333334

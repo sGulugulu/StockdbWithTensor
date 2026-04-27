@@ -1,0 +1,146 @@
+[
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C39计算机、通信和其他电子设备制造业",
+    "weight": 0.28229166666666666
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C27医药制造业",
+    "weight": 0.175
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "I65软件和信息技术服务业",
+    "weight": 0.134375
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C31黑色金属冶炼和压延加工业",
+    "weight": 0.06041666666666667
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "J67资本市场服务",
+    "weight": 0.052083333333333336
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C36汽车制造业",
+    "weight": 0.046875
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C35专用设备制造业",
+    "weight": 0.035416666666666666
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "P83教育",
+    "weight": 0.028125
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "A03畜牧业",
+    "weight": 0.026041666666666668
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C28化学纤维制造业",
+    "weight": 0.025
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "L72商务服务业",
+    "weight": 0.023958333333333335
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "E48土木工程建筑业",
+    "weight": 0.022916666666666665
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "G56航空运输业",
+    "weight": 0.022916666666666665
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "B06煤炭开采和洗选业",
+    "weight": 0.013541666666666667
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "G58多式联运和运输代理业",
+    "weight": 0.013541666666666667
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "R87广播、电视、电影和录音制作业",
+    "weight": 0.010416666666666666
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "F52零售业",
+    "weight": 0.010416666666666666
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C29橡胶和塑料制品业",
+    "weight": 0.005208333333333333
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C25石油、煤炭及其他燃料加工业",
+    "weight": 0.005208333333333333
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C13农副食品加工业",
+    "weight": 0.004166666666666667
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "I64互联网和相关服务",
+    "weight": 0.0010416666666666667
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C40仪器仪表制造业",
+    "weight": 0.0010416666666666667
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "quality_factor",
+    "weight": 0.9052083333333333
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.09479166666666666
+  }
+]

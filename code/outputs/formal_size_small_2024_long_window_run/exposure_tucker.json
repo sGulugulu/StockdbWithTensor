@@ -1,0 +1,44 @@
+[
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "J67资本市场服务",
+    "weight": 0.4
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "D44电力、热力生产和供应业",
+    "weight": 0.36666666666666664
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "D46水的生产和供应业",
+    "weight": 0.11666666666666667
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "C39计算机、通信和其他电子设备制造业",
+    "weight": 0.08333333333333333
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "C26化学原料和化学制品制造业",
+    "weight": 0.03333333333333333
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.65
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.35
+  }
+]

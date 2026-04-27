@@ -1,0 +1,12 @@
+model,exposure_type,name,weight
+tucker,industry,D44电力、热力生产和供应业,0.2708333333333333
+tucker,industry,E48土木工程建筑业,0.2
+tucker,industry,C31黑色金属冶炼和压延加工业,0.2
+tucker,industry,C27医药制造业,0.13333333333333333
+tucker,industry,K70房地产业,0.09583333333333334
+tucker,industry,C36汽车制造业,0.07916666666666666
+tucker,industry,G56航空运输业,0.020833333333333332
+tucker,style,volatility_factor,0.35833333333333334
+tucker,style,momentum_factor,0.3375
+tucker,style,quality_factor,0.25
+tucker,style,value_factor,0.05416666666666667

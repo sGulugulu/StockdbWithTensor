@@ -1,0 +1,38 @@
+[
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "J67资本市场服务",
+    "weight": 0.5959183673469388
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C37铁路、船舶、航空航天和其他运输设备制造业",
+    "weight": 0.2
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "D46水的生产和供应业",
+    "weight": 0.2
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C39计算机、通信和其他电子设备制造业",
+    "weight": 0.004081632653061225
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "volatility_factor",
+    "weight": 0.7714285714285715
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.22857142857142856
+  }
+]

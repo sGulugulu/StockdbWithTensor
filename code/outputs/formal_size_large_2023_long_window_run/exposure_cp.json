@@ -1,0 +1,62 @@
+[
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "J66货币金融服务",
+    "weight": 0.4
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C31黑色金属冶炼和压延加工业",
+    "weight": 0.19583333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "D44电力、热力生产和供应业",
+    "weight": 0.1875
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "B07石油和天然气开采业",
+    "weight": 0.17083333333333334
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C36汽车制造业",
+    "weight": 0.029166666666666667
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C32有色金属冶炼和压延加工业",
+    "weight": 0.008333333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "G55水上运输业",
+    "weight": 0.004166666666666667
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C39计算机、通信和其他电子设备制造业",
+    "weight": 0.004166666666666667
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.5208333333333334
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.4791666666666667
+  }
+]

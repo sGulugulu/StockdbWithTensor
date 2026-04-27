@@ -1,0 +1,92 @@
+[
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "J66货币金融服务",
+    "weight": 0.44081632653061226
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "C31黑色金属冶炼和压延加工业",
+    "weight": 0.12653061224489795
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "C36汽车制造业",
+    "weight": 0.08061224489795918
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "C39计算机、通信和其他电子设备制造业",
+    "weight": 0.05714285714285714
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "L72商务服务业",
+    "weight": 0.05102040816326531
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "B06煤炭开采和洗选业",
+    "weight": 0.05
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "C26化学原料和化学制品制造业",
+    "weight": 0.05
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "C37铁路、船舶、航空航天和其他运输设备制造业",
+    "weight": 0.05
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "I65软件和信息技术服务业",
+    "weight": 0.05
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "E48土木工程建筑业",
+    "weight": 0.02959183673469388
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "J68保险业",
+    "weight": 0.013265306122448979
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "J67资本市场服务",
+    "weight": 0.0010204081632653062
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.8071428571428572
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "quality_factor",
+    "weight": 0.19183673469387755
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.0010204081632653062
+  }
+]

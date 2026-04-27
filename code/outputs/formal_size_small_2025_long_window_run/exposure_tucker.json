@@ -1,0 +1,50 @@
+[
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "J67资本市场服务",
+    "weight": 0.4041666666666667
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "D44电力、热力生产和供应业",
+    "weight": 0.39166666666666666
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "D46水的生产和供应业",
+    "weight": 0.2
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "G56航空运输业",
+    "weight": 0.004166666666666667
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.8666666666666667
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "quality_factor",
+    "weight": 0.1
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.025
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "volatility_factor",
+    "weight": 0.008333333333333333
+  }
+]

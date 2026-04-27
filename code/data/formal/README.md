@@ -224,7 +224,7 @@ python3 code/data/build_long_window_run_plan.py `
 - `long_window_plan/configs/*.yaml`
 - `long_window_plan/README.md`
 
-这些派生配置按年份拆分全 A、行业分层和市值分层实验，并默认指向 `code/data/formal/factors/long_window/*_long_window.csv`。在当前仓库里，代表性窗口 `2015 / 2020 / 2024 / 2026` 已经完成真实复跑。
+这些派生配置按年份拆分全 A、行业分层和市值分层实验，并默认指向 `code/data/formal/factors/long_window/*_long_window.csv`。在当前仓库里，`2015-2026` 全部年度的 long-window run 都已经完成本地复跑。
 
 如果你要构建 long-window 专用因子面板，执行：
 
@@ -242,59 +242,56 @@ python3 code/data/build_long_window_factor_panels.py `
 - 将年度面板拼接为 `code/data/formal/factors/long_window/*_long_window.csv`
 - 保留 `code/data/formal/factors/long_window/yearly/<year>/` 中间产物，便于逐年排障
 
-如果你要刷新代表性长窗口的跨边界组合汇总，执行：
+如果你要刷新全年份长窗口的跨边界组合汇总，执行：
 
 ```powershell
-python3 code/data/summarize_boundary_portfolio.py `
-  --output-dir code/outputs/formal_all_a_2015_long_window_run `
-  --output-dir code/outputs/formal_industry_c27_2015_long_window_run `
-  --output-dir code/outputs/formal_industry_c35_2015_long_window_run `
-  --output-dir code/outputs/formal_industry_c39_2015_long_window_run `
-  --output-dir code/outputs/formal_size_small_2015_long_window_run `
-  --output-dir code/outputs/formal_size_mid_2015_long_window_run `
-  --output-dir code/outputs/formal_size_large_2015_long_window_run `
-  --output-dir code/outputs/formal_all_a_2020_long_window_run `
-  --output-dir code/outputs/formal_industry_c27_2020_long_window_run `
-  --output-dir code/outputs/formal_industry_c35_2020_long_window_run `
-  --output-dir code/outputs/formal_industry_c39_2020_long_window_run `
-  --output-dir code/outputs/formal_size_small_2020_long_window_run `
-  --output-dir code/outputs/formal_size_mid_2020_long_window_run `
-  --output-dir code/outputs/formal_size_large_2020_long_window_run `
-  --output-dir code/outputs/formal_all_a_2024_long_window_run `
-  --output-dir code/outputs/formal_industry_c27_2024_long_window_run `
-  --output-dir code/outputs/formal_industry_c35_2024_long_window_run `
-  --output-dir code/outputs/formal_industry_c39_2024_long_window_run `
-  --output-dir code/outputs/formal_size_small_2024_long_window_run `
-  --output-dir code/outputs/formal_size_mid_2024_long_window_run `
-  --output-dir code/outputs/formal_size_large_2024_long_window_run `
-  --output-dir code/outputs/formal_all_a_2026_long_window_run `
-  --output-dir code/outputs/formal_industry_c27_2026_long_window_run `
-  --output-dir code/outputs/formal_industry_c35_2026_long_window_run `
-  --output-dir code/outputs/formal_industry_c39_2026_long_window_run `
-  --output-dir code/outputs/formal_size_small_2026_long_window_run `
-  --output-dir code/outputs/formal_size_mid_2026_long_window_run `
-  --output-dir code/outputs/formal_size_large_2026_long_window_run `
-  --report-dir code/data/formal/reports/long_window_portfolio `
-  --exposure-limit 3
+@'
+from pathlib import Path
+import sys
+sys.path.insert(0, str(Path("code").resolve()))
+from data.summarize_boundary_portfolio import summarize_boundary_portfolio
+root = Path("code/outputs")
+output_dirs = sorted(root.glob("formal_*_long_window_run"))
+summarize_boundary_portfolio(
+  output_dirs=output_dirs,
+  report_dir=Path("code/data/formal/reports/long_window_portfolio"),
+  exposure_limit=3,
+)
+'@ | python3 -
 ```
 
 该命令会输出 `code/data/formal/reports/long_window_portfolio/README.md` 与对应 JSON 汇总。
 
-如果你要生成 2020 长窗口模式发现图组，执行：
+如果你要为全部年份生成 long-window 模式发现图组，执行：
 
 ```powershell
-bash -lc '.venv/bin/python3 code/data/build_pattern_discovery_assets.py `
-  --anchor-output-dir code/outputs/formal_all_a_2020_long_window_run `
-  --comparison-output-dir code/outputs/formal_all_a_2020_long_window_run `
-  --comparison-output-dir code/outputs/formal_industry_c27_2020_long_window_run `
-  --comparison-output-dir code/outputs/formal_industry_c35_2020_long_window_run `
-  --comparison-output-dir code/outputs/formal_industry_c39_2020_long_window_run `
-  --comparison-output-dir code/outputs/formal_size_small_2020_long_window_run `
-  --comparison-output-dir code/outputs/formal_size_mid_2020_long_window_run `
-  --comparison-output-dir code/outputs/formal_size_large_2020_long_window_run `
-  --output-dir code/data/formal/reports/pattern_discovery_long_window_2020 `
-  --model-name tucker `
-  --max-stocks 60'
+@'
+from pathlib import Path
+import sys
+sys.path.insert(0, str(Path("code").resolve()))
+from data.build_pattern_discovery_assets import build_pattern_discovery_assets
+project_root = Path(".").resolve()
+base = Path("code/outputs")
+for year in range(2015, 2027):
+    anchor = base / f"formal_all_a_{year}_long_window_run"
+    comparisons = [
+        anchor,
+        base / f"formal_industry_c27_{year}_long_window_run",
+        base / f"formal_industry_c35_{year}_long_window_run",
+        base / f"formal_industry_c39_{year}_long_window_run",
+        base / f"formal_size_small_{year}_long_window_run",
+        base / f"formal_size_mid_{year}_long_window_run",
+        base / f"formal_size_large_{year}_long_window_run",
+    ]
+    build_pattern_discovery_assets(
+        project_root=project_root,
+        anchor_output_dir=anchor,
+        comparison_output_dirs=comparisons,
+        output_dir=Path("code/data/formal/reports") / f"pattern_discovery_long_window_{year}",
+        model_name="tucker",
+        max_stocks=60,
+    )
+'@ | bash -lc '.venv/bin/python3 -'
 ```
 
 ## Stage 2 Dataset-Year Runner

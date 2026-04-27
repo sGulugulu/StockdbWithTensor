@@ -1,0 +1,122 @@
+[
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "G56航空运输业",
+    "weight": 0.19479166666666667
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "D44电力、热力生产和供应业",
+    "weight": 0.125
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C39计算机、通信和其他电子设备制造业",
+    "weight": 0.10729166666666666
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C27医药制造业",
+    "weight": 0.1
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "E48土木工程建筑业",
+    "weight": 0.09479166666666666
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "J69其他金融业",
+    "weight": 0.051041666666666666
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "G55水上运输业",
+    "weight": 0.05
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "I65软件和信息技术服务业",
+    "weight": 0.05
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "G53铁路运输业",
+    "weight": 0.04895833333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "N77生态保护和环境治理业",
+    "weight": 0.04895833333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C36汽车制造业",
+    "weight": 0.04791666666666667
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "I64互联网和相关服务",
+    "weight": 0.046875
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "B06煤炭开采和洗选业",
+    "weight": 0.023958333333333335
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "A03畜牧业",
+    "weight": 0.003125
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "L72商务服务业",
+    "weight": 0.0020833333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "J66货币金融服务",
+    "weight": 0.0020833333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "J67资本市场服务",
+    "weight": 0.0020833333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "B11开采专业及辅助性活动",
+    "weight": 0.0010416666666666667
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.96875
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.03125
+  }
+]

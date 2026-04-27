@@ -1,0 +1,13 @@
+model,exposure_type,name,weight
+pca,industry,J67资本市场服务,0.5102040816326531
+pca,industry,C26化学原料和化学制品制造业,0.2
+pca,industry,C37铁路、船舶、航空航天和其他运输设备制造业,0.11020408163265306
+pca,industry,D46水的生产和供应业,0.061224489795918366
+pca,industry,K70房地产业,0.044897959183673466
+pca,industry,D44电力、热力生产和供应业,0.04081632653061224
+pca,industry,C27医药制造业,0.0163265306122449
+pca,industry,C39计算机、通信和其他电子设备制造业,0.0163265306122449
+pca,style,quality_factor,0.5591836734693878
+pca,style,momentum_factor,0.19183673469387755
+pca,style,volatility_factor,0.1836734693877551
+pca,style,value_factor,0.0653061224489796

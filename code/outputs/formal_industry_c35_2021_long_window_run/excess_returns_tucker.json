@@ -1,0 +1,434 @@
+[
+  {
+    "trade_date": "2021-10-27",
+    "model": "tucker",
+    "portfolio_return": -0.017029035756473902,
+    "benchmark_return": -0.01040748313883233,
+    "excess_return": -0.006621552617641573,
+    "cumulative_nav": 0.9933784473823585,
+    "drawdown": -0.006621552617641524
+  },
+  {
+    "trade_date": "2021-10-28",
+    "model": "tucker",
+    "portfolio_return": 0.013735519307834893,
+    "benchmark_return": -0.00876752184215046,
+    "excess_return": 0.022503041149985352,
+    "cumulative_nav": 1.0157324834613122,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-10-29",
+    "model": "tucker",
+    "portfolio_return": -0.006158398881837296,
+    "benchmark_return": 0.012886961124305207,
+    "excess_return": -0.019045360006142504,
+    "cumulative_nav": 0.9963874926438583,
+    "drawdown": -0.019045360006142542
+  },
+  {
+    "trade_date": "2021-11-01",
+    "model": "tucker",
+    "portfolio_return": -0.008462178578828222,
+    "benchmark_return": -0.002818096215675192,
+    "excess_return": -0.00564408236315303,
+    "cumulative_nav": 0.9907637995697608,
+    "drawdown": -0.024581948788784946
+  },
+  {
+    "trade_date": "2021-11-02",
+    "model": "tucker",
+    "portfolio_return": 0.004108083262570106,
+    "benchmark_return": -0.009083886862307322,
+    "excess_return": 0.013191970124877429,
+    "cumulative_nav": 1.0038339260144953,
+    "drawdown": -0.011714262997940317
+  },
+  {
+    "trade_date": "2021-11-03",
+    "model": "tucker",
+    "portfolio_return": -0.0009649264302361404,
+    "benchmark_return": -0.004000652466925936,
+    "excess_return": 0.003035726036689795,
+    "cumulative_nav": 1.00688129080021,
+    "drawdown": -0.008714098254434033
+  },
+  {
+    "trade_date": "2021-11-04",
+    "model": "tucker",
+    "portfolio_return": 0.008372520399663509,
+    "benchmark_return": 0.010464164116708918,
+    "excess_return": -0.00209164371704541,
+    "cumulative_nav": 1.0047752538744972,
+    "drawdown": -0.010787515182615892
+  },
+  {
+    "trade_date": "2021-11-05",
+    "model": "tucker",
+    "portfolio_return": 0.0304282855505408,
+    "benchmark_return": -0.006433561661363663,
+    "excess_return": 0.03686184721190446,
+    "cumulative_nav": 1.0418131257651213,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-08",
+    "model": "tucker",
+    "portfolio_return": 0.022253490886086337,
+    "benchmark_return": 0.002649500149388695,
+    "excess_return": 0.019603990736697642,
+    "cumulative_nav": 1.0622368206319908,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-09",
+    "model": "tucker",
+    "portfolio_return": 0.012465525622986435,
+    "benchmark_return": 0.002317110137228351,
+    "excess_return": 0.010148415485758084,
+    "cumulative_nav": 1.073016841232035,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-10",
+    "model": "tucker",
+    "portfolio_return": 0.05169574765710757,
+    "benchmark_return": -0.006622584448203406,
+    "excess_return": 0.058318332105310976,
+    "cumulative_nav": 1.1355933937335965,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-11",
+    "model": "tucker",
+    "portfolio_return": 0.051216449821481116,
+    "benchmark_return": 0.014222712996694309,
+    "excess_return": 0.03699373682478681,
+    "cumulative_nav": 1.1776032368813436,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-12",
+    "model": "tucker",
+    "portfolio_return": 0.05515657267937239,
+    "benchmark_return": -0.0013482277165092205,
+    "excess_return": 0.05650480039588161,
+    "cumulative_nav": 1.244143472726868,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-15",
+    "model": "tucker",
+    "portfolio_return": 0.08162165911275222,
+    "benchmark_return": -0.0037580578329948766,
+    "excess_return": 0.0853797169457471,
+    "cumulative_nav": 1.350368090268187,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-16",
+    "model": "tucker",
+    "portfolio_return": 0.0896289876734232,
+    "benchmark_return": -0.001943220461770645,
+    "excess_return": 0.09157220813519384,
+    "cumulative_nav": 1.4740242780893493,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-17",
+    "model": "tucker",
+    "portfolio_return": 0.08175981131250996,
+    "benchmark_return": 0.003801781337796628,
+    "excess_return": 0.07795802997471334,
+    "cumulative_nav": 1.588936306944094,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-18",
+    "model": "tucker",
+    "portfolio_return": 0.07584986147832146,
+    "benchmark_return": -0.008803197326713641,
+    "excess_return": 0.0846530588050351,
+    "cumulative_nav": 1.7234446255732878,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-19",
+    "model": "tucker",
+    "portfolio_return": 0.05181837310049249,
+    "benchmark_return": 0.011178113418714108,
+    "excess_return": 0.04064025968177838,
+    "cumulative_nav": 1.7934858627037513,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-22",
+    "model": "tucker",
+    "portfolio_return": 0.03081580243071466,
+    "benchmark_return": 0.009501272325104226,
+    "excess_return": 0.021314530105610435,
+    "cumulative_nav": 1.831713171118337,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-23",
+    "model": "tucker",
+    "portfolio_return": 0.017989884556115283,
+    "benchmark_return": -0.001220832856883458,
+    "excess_return": 0.01921071741299874,
+    "cumulative_nav": 1.8669016952303592,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-24",
+    "model": "tucker",
+    "portfolio_return": 0.019973269134731398,
+    "benchmark_return": -0.0004007071302298826,
+    "excess_return": 0.02037397626496128,
+    "cumulative_nav": 1.9049379060579985,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-25",
+    "model": "tucker",
+    "portfolio_return": 0.0034458429592107765,
+    "benchmark_return": -0.003275999137628993,
+    "excess_return": 0.006721842096839769,
+    "cumulative_nav": 1.917742597866805,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-26",
+    "model": "tucker",
+    "portfolio_return": 0.018060275659744107,
+    "benchmark_return": -0.00607840585906283,
+    "excess_return": 0.024138681518806937,
+    "cumulative_nav": 1.9640343756717613,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-29",
+    "model": "tucker",
+    "portfolio_return": 0.000415546854766724,
+    "benchmark_return": 0.0010609177618714494,
+    "excess_return": -0.0006453709071047254,
+    "cumulative_nav": 1.9627668450251492,
+    "drawdown": -0.0006453709071047031
+  },
+  {
+    "trade_date": "2021-11-30",
+    "model": "tucker",
+    "portfolio_return": -0.004869395507604263,
+    "benchmark_return": -0.002372646460391814,
+    "excess_return": -0.0024967490472124487,
+    "cumulative_nav": 1.9578663087749326,
+    "drawdown": -0.00314050862511972
+  },
+  {
+    "trade_date": "2021-12-01",
+    "model": "tucker",
+    "portfolio_return": 0.0036016209676341003,
+    "benchmark_return": 0.0008137596889326026,
+    "excess_return": 0.0027878612787014976,
+    "cumulative_nav": 1.9633245684460405,
+    "drawdown": -0.0003614026488095723
+  },
+  {
+    "trade_date": "2021-12-02",
+    "model": "tucker",
+    "portfolio_return": 0.0049424788971769995,
+    "benchmark_return": 0.0006770146714862868,
+    "excess_return": 0.004265464225690713,
+    "cumulative_nav": 1.9716990591561667,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-03",
+    "model": "tucker",
+    "portfolio_return": 0.0011520342795168393,
+    "benchmark_return": 0.008788436661210097,
+    "excess_return": -0.007636402381693258,
+    "cumulative_nav": 1.9566423717648442,
+    "drawdown": -0.007636402381693275
+  },
+  {
+    "trade_date": "2021-12-06",
+    "model": "tucker",
+    "portfolio_return": 0.02154535959199267,
+    "benchmark_return": -0.005572565520193251,
+    "excess_return": 0.02711792511218592,
+    "cumulative_nav": 2.0097024530736936,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-07",
+    "model": "tucker",
+    "portfolio_return": 0.02398994025906757,
+    "benchmark_return": 0.001137026041454936,
+    "excess_return": 0.022852914217612635,
+    "cumulative_nav": 2.0556300108367123,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-08",
+    "model": "tucker",
+    "portfolio_return": 0.008958529915194807,
+    "benchmark_return": 0.015626084321952893,
+    "excess_return": -0.006667554406758086,
+    "cumulative_nav": 2.041923985899294,
+    "drawdown": -0.006667554406758036
+  },
+  {
+    "trade_date": "2021-12-09",
+    "model": "tucker",
+    "portfolio_return": 0.020911839123562696,
+    "benchmark_return": 0.012630845661698586,
+    "excess_return": 0.00828099346186411,
+    "cumulative_nav": 2.0588331450761497,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-10",
+    "model": "tucker",
+    "portfolio_return": 0.016673410115509924,
+    "benchmark_return": -0.002689189589511809,
+    "excess_return": 0.019362599705021733,
+    "cumulative_nav": 2.09869750712369,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-13",
+    "model": "tucker",
+    "portfolio_return": 0.007220266953766518,
+    "benchmark_return": 0.00672129957226586,
+    "excess_return": 0.0004989673815006587,
+    "cumulative_nav": 2.0997446887233813,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-14",
+    "model": "tucker",
+    "portfolio_return": 0.017739844663908415,
+    "benchmark_return": -0.006353504672514054,
+    "excess_return": 0.02409334933642247,
+    "cumulative_nav": 2.1503345710260913,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-15",
+    "model": "tucker",
+    "portfolio_return": 0.014403550790601627,
+    "benchmark_return": -0.007707268951022916,
+    "excess_return": 0.022110819741624543,
+    "cumulative_nav": 2.1978802311102323,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-16",
+    "model": "tucker",
+    "portfolio_return": -0.004447150553480517,
+    "benchmark_return": 0.006895989918687784,
+    "excess_return": -0.0113431404721683,
+    "cumulative_nav": 2.1729493669077473,
+    "drawdown": -0.011343140472168223
+  },
+  {
+    "trade_date": "2021-12-17",
+    "model": "tucker",
+    "portfolio_return": 0.006965451101398923,
+    "benchmark_return": -0.015379992305876056,
+    "excess_return": 0.022345443407274977,
+    "cumulative_nav": 2.2215048840128584,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-20",
+    "model": "tucker",
+    "portfolio_return": 0.01252432481253279,
+    "benchmark_return": -0.016190373980031647,
+    "excess_return": 0.028714698792564435,
+    "cumulative_nav": 2.2852947276234983,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-21",
+    "model": "tucker",
+    "portfolio_return": 0.013305385724225604,
+    "benchmark_return": 0.007922452687719517,
+    "excess_return": 0.0053829330365060876,
+    "cumulative_nav": 2.297596316110976,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-22",
+    "model": "tucker",
+    "portfolio_return": 0.006779746859833641,
+    "benchmark_return": 0.0024706807477994364,
+    "excess_return": 0.004309066112034204,
+    "cumulative_nav": 2.3074968105358646,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-23",
+    "model": "tucker",
+    "portfolio_return": 0.023798358888336563,
+    "benchmark_return": 0.006170756887698303,
+    "excess_return": 0.01762760200063826,
+    "cumulative_nav": 2.348172445929733,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-24",
+    "model": "tucker",
+    "portfolio_return": 0.03231089502559241,
+    "benchmark_return": -0.007256217579226565,
+    "excess_return": 0.039567112604818974,
+    "cumulative_nav": 2.441082849513368,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-27",
+    "model": "tucker",
+    "portfolio_return": 0.0,
+    "benchmark_return": -0.0016770079341221766,
+    "excess_return": 0.0016770079341221766,
+    "cumulative_nav": 2.4451765648198514,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-28",
+    "model": "tucker",
+    "portfolio_return": 0.0,
+    "benchmark_return": 0.006663475055529,
+    "excess_return": -0.006663475055529,
+    "cumulative_nav": 2.42888319177381,
+    "drawdown": -0.006663475055529
+  },
+  {
+    "trade_date": "2021-12-29",
+    "model": "tucker",
+    "portfolio_return": 0.0,
+    "benchmark_return": -0.012926166917616722,
+    "excess_return": 0.012926166917616722,
+    "cumulative_nav": 2.4602793413340724,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-30",
+    "model": "tucker",
+    "portfolio_return": 0.0,
+    "benchmark_return": 0.008061221015356335,
+    "excess_return": -0.008061221015356335,
+    "cumulative_nav": 2.4404464858040633,
+    "drawdown": -0.008061221015356335
+  },
+  {
+    "trade_date": "2021-12-31",
+    "model": "tucker",
+    "portfolio_return": 0.0,
+    "benchmark_return": 0.004296462680391633,
+    "excess_return": -0.004296462680391633,
+    "cumulative_nav": 2.429961198554313,
+    "drawdown": -0.012323048960497185
+  }
+]

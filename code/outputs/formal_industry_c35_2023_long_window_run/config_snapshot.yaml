@@ -1,0 +1,76 @@
+market:
+  market_id: cn_a
+  universe_id: INDUSTRY_C35
+  start_date: '2023-01-01'
+  end_date: '2023-12-31'
+  timezone: Asia/Shanghai
+  currency: CNY
+  universe_path: code/data/formal/universes/segmented/industry_c35_history.csv
+  universe_symbol_column: stock_code
+  universe_start_column: start_date
+  universe_end_column: end_date
+  universe_market_column: market_id
+  universe_id_column: universe_id
+data:
+  path: code/data/formal/factors/long_window/industry_c35_factor_panel_long_window.csv
+  format: wide
+  stock_column: stock_code
+  date_column: trade_date
+  industry_column: industry
+  return_column: future_return
+  factor_columns:
+  - value_factor
+  - momentum_factor
+  - quality_factor
+  - volatility_factor
+  factor_name_column: null
+  factor_value_column: null
+preprocess:
+  max_missing_ratio: 0.45
+  winsor_limits:
+  - 0.05
+  - 0.95
+  fill_strategy: forward_backward_industry_median
+  standardize_method: winsorize_zscore
+split:
+  strategy: time
+  train_ratio: 0.6
+  validation_ratio: 0.2
+  test_ratio: 0.2
+models:
+  seed: 7
+  cp:
+    enabled: true
+    ranks:
+    - 2
+    - 3
+    max_iter: 75
+    tol: 1.0e-06
+  tucker:
+    enabled: true
+    ranks:
+    - - 2
+      - 2
+      - 2
+    - - 3
+      - 2
+      - 2
+    max_iter: 20
+    tol: 1.0e-06
+  pca:
+    enabled: true
+    ranks:
+    - 2
+    - 3
+evaluation:
+  top_k_pairs: 5
+  rolling_window: 3
+  quantile_count: 5
+  transaction_cost_bps: 10.0
+  benchmark_path: code/data/formal/index_daily/csi_a500_index_daily.csv
+runtime:
+  selection_top_n: 20
+  device: auto
+output:
+  root_dir: code/outputs
+  experiment_name: formal_industry_c35_2023_long_window_run

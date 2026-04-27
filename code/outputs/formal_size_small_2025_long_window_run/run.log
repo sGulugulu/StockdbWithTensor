@@ -1,0 +1,16 @@
+Loaded config: code/data/formal/reports/long_window_plan/configs/formal_size_small_2025_long_window_run.yaml
+Resolved device: requested=auto, actual=cuda
+Loaded normalized records before market filtering: 130332
+Filtered records for cn_a/SIZE_SMALL: 11624 rows from 2025-01-02 to 2025-12-31
+Tensor shape: 12 stocks x 4 factors x 243 dates
+Split materialization: train=(12, 4, 146), validation=(12, 4, 49), test=(12, 4, 48)
+Preprocess fit scope: train_only
+cp rank=2 train_fit_mse=1.051777 validation_score_mse=1.159833
+cp rank=3 train_fit_mse=1.039087 validation_score_mse=1.216405
+tucker rank=(2, 2, 2) train_fit_mse=0.499274 validation_score_mse=0.721033
+tucker rank=(3, 2, 2) train_fit_mse=0.495344 validation_score_mse=0.723573
+pca rank=2 train_fit_mse=0.375615 validation_score_mse=0.421212
+pca rank=3 train_fit_mse=0.169092 validation_score_mse=0.225895
+Selected cp rank=2; refit_shape=(12, 4, 195); held_out_test_mse=0.981329
+Selected tucker rank=(2, 2, 2); refit_shape=(12, 4, 195); held_out_test_mse=0.692664
+Selected pca rank=3; refit_shape=(12, 4, 195); held_out_test_mse=0.134423

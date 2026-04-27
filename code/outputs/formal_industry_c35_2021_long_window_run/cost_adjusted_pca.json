@@ -1,0 +1,482 @@
+[
+  {
+    "trade_date": "2021-10-27",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": -0.0035881216455100505,
+    "transaction_cost": 0.001,
+    "net_return": -0.0045881216455100505,
+    "cumulative_nav": 0.99541187835449,
+    "drawdown": -0.004588121645510035
+  },
+  {
+    "trade_date": "2021-10-28",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.03180744766781022,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.03175744766781022,
+    "cumulative_nav": 1.0270236189892494,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-10-29",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": -0.005303074603468965,
+    "transaction_cost": 9.999999999999998e-05,
+    "net_return": -0.005403074603468966,
+    "cumulative_nav": 1.0214745337563258,
+    "drawdown": -0.005403074603469005
+  },
+  {
+    "trade_date": "2021-11-01",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.0010839206116057543,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.0010339206116057541,
+    "cumulative_nav": 1.0225306573310067,
+    "drawdown": -0.004374740342061978
+  },
+  {
+    "trade_date": "2021-11-02",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.002177923212981725,
+    "transaction_cost": 0.0,
+    "net_return": 0.002177923212981725,
+    "cumulative_nav": 1.0247576505855933,
+    "drawdown": -0.0022063449776220656
+  },
+  {
+    "trade_date": "2021-11-03",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.00026591899893284586,
+    "transaction_cost": 0.0,
+    "net_return": 0.00026591899893284586,
+    "cumulative_nav": 1.0250301531141859,
+    "drawdown": -0.0019410126877368317
+  },
+  {
+    "trade_date": "2021-11-04",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": -0.009368352435062038,
+    "transaction_cost": 9.999999999999998e-05,
+    "net_return": -0.009468352435062038,
+    "cumulative_nav": 1.0153248063679352,
+    "drawdown": -0.011390986930590374
+  },
+  {
+    "trade_date": "2021-11-05",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.012742552622278197,
+    "transaction_cost": 9.999999999999998e-05,
+    "net_return": 0.012642552622278197,
+    "cumulative_nav": 1.0281611036611462,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-08",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.003765364548766753,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.003715364548766753,
+    "cumulative_nav": 1.0319810969761098,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-09",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.006371554017772685,
+    "transaction_cost": 0.00015000000000000001,
+    "net_return": 0.006221554017772685,
+    "cumulative_nav": 1.038401623116267,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-10",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.031419989945931516,
+    "transaction_cost": 0.0,
+    "net_return": 0.031419989945931516,
+    "cumulative_nav": 1.071028191674419,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-11",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.029255277269192647,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.029205277269192646,
+    "cumulative_nav": 1.1023078669753925,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-12",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.05099974005383432,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.05094974005383432,
+    "cumulative_nav": 1.1584701662570853,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-15",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.07357670881133672,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.07352670881133673,
+    "cumulative_nav": 1.243648664838091,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-16",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.08072111550026036,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.08067111550026036,
+    "cumulative_nav": 1.343975189920989,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-17",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.07359716599992637,
+    "transaction_cost": 9.999999999999998e-05,
+    "net_return": 0.07349716599992637,
+    "cumulative_nav": 1.4427535575543946,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-18",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.07596004040444645,
+    "transaction_cost": 9.999999999999998e-05,
+    "net_return": 0.07586004040444645,
+    "cumulative_nav": 1.55220090072413,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-19",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.042005490710890395,
+    "transaction_cost": 0.00015000000000000001,
+    "net_return": 0.0418554907108904,
+    "cumulative_nav": 1.6171690311058244,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-22",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.02268648629791411,
+    "transaction_cost": 9.999999999999998e-05,
+    "net_return": 0.02258648629791411,
+    "cumulative_nav": 1.6536951972683072,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-23",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.002507381056084823,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.002457381056084823,
+    "cumulative_nav": 1.6577589565186128,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-24",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.005173715582277588,
+    "transaction_cost": 9.999999999999998e-05,
+    "net_return": 0.005073715582277588,
+    "cumulative_nav": 1.6661699539679615,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-25",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": -0.005349714616161716,
+    "transaction_cost": 0.00015000000000000001,
+    "net_return": -0.0054997146161617156,
+    "cumulative_nav": 1.6570064947191143,
+    "drawdown": -0.005499714616161833
+  },
+  {
+    "trade_date": "2021-11-26",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.01540744083665314,
+    "transaction_cost": 9.999999999999998e-05,
+    "net_return": 0.015307440836653141,
+    "cumulative_nav": 1.6823710236029772,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-29",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.010630336107449906,
+    "transaction_cost": 0.0,
+    "net_return": 0.010630336107449906,
+    "cumulative_nav": 1.7002551930413115,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-11-30",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.0077160216187710405,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.007666021618771041,
+    "cumulative_nav": 1.7132893861085936,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-01",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.01144251028788843,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.01139251028788843,
+    "cumulative_nav": 1.7328080530659657,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-02",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.00812300088003901,
+    "transaction_cost": 9.999999999999998e-05,
+    "net_return": 0.008023000880039011,
+    "cumulative_nav": 1.7467103736006528,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-03",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.00470838349076858,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.004658383490768581,
+    "cumulative_nav": 1.7548472203681882,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-06",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.021634732293142674,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.021584732293142672,
+    "cumulative_nav": 1.792725127835201,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-07",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.026300120360539962,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.02625012036053996,
+    "cumulative_nav": 1.8397843782142391,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-08",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.00977639511888077,
+    "transaction_cost": 9.999999999999998e-05,
+    "net_return": 0.00967639511888077,
+    "cumulative_nav": 1.8575868587913844,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-09",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.027203369754354684,
+    "transaction_cost": 0.0,
+    "net_return": 0.027203369754354684,
+    "cumulative_nav": 1.9081194809619169,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-10",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.016251548999179417,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.016201548999179416,
+    "cumulative_nav": 1.93903397222901,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-13",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.0008535695975435298,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.0008035695975435298,
+    "cumulative_nav": 1.940592120977697,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-14",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.01414162501287584,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.014091625012875841,
+    "cumulative_nav": 1.967938217449456,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-15",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.01966371848762997,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.01961371848762997,
+    "cumulative_nav": 2.006536803647558,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-16",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": -0.002773663936782261,
+    "transaction_cost": 0.00015000000000000001,
+    "net_return": -0.002923663936782261,
+    "cumulative_nav": 2.0006703643569073,
+    "drawdown": -0.002923663936782228
+  },
+  {
+    "trade_date": "2021-12-17",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.004020291514612151,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.003970291514612151,
+    "cumulative_nav": 2.0086136089280497,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-20",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.007525405419991649,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.007475405419991649,
+    "cumulative_nav": 2.0236288099868998,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-21",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.0037076243342365144,
+    "transaction_cost": 0.00015000000000000001,
+    "net_return": 0.0035576243342365144,
+    "cumulative_nav": 2.030828121084771,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-22",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.014875966677359737,
+    "transaction_cost": 9.999999999999998e-05,
+    "net_return": 0.014775966677359737,
+    "cumulative_nav": 2.0608355697293645,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-23",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.02273529835605294,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": 0.02268529835605294,
+    "cumulative_nav": 2.1075862394914417,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-24",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.03011452214120202,
+    "transaction_cost": 9.999999999999998e-05,
+    "net_return": 0.03001452214120202,
+    "cumulative_nav": 2.1708444333411503,
+    "drawdown": 0.0
+  },
+  {
+    "trade_date": "2021-12-27",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.0,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": -5.000000000000004e-05,
+    "cumulative_nav": 2.170735891119483,
+    "drawdown": -4.999999999999449e-05
+  },
+  {
+    "trade_date": "2021-12-28",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.0,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": -5.000000000000004e-05,
+    "cumulative_nav": 2.1706273543249273,
+    "drawdown": -9.999750000000418e-05
+  },
+  {
+    "trade_date": "2021-12-29",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.0,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": -5.000000000000004e-05,
+    "cumulative_nav": 2.170518822957211,
+    "drawdown": -0.00014999250012492915
+  },
+  {
+    "trade_date": "2021-12-30",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.0,
+    "transaction_cost": 0.0,
+    "net_return": 0.0,
+    "cumulative_nav": 2.170518822957211,
+    "drawdown": -0.00014999250012492915
+  },
+  {
+    "trade_date": "2021-12-31",
+    "model": "pca",
+    "top_n": 20,
+    "gross_return": 0.0,
+    "transaction_cost": 5.000000000000004e-05,
+    "net_return": -5.000000000000004e-05,
+    "cumulative_nav": 2.1704102970160633,
+    "drawdown": -0.00019998500050000256
+  }
+]

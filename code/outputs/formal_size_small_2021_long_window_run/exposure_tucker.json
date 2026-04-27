@@ -1,0 +1,56 @@
+[
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "D44电力、热力生产和供应业",
+    "weight": 0.4
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "C39计算机、通信和其他电子设备制造业",
+    "weight": 0.2
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "J67资本市场服务",
+    "weight": 0.19583333333333333
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "C27医药制造业",
+    "weight": 0.1375
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "G56航空运输业",
+    "weight": 0.0625
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "C26化学原料和化学制品制造业",
+    "weight": 0.004166666666666667
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.9833333333333333
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "quality_factor",
+    "weight": 0.0125
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "volatility_factor",
+    "weight": 0.004166666666666667
+  }
+]

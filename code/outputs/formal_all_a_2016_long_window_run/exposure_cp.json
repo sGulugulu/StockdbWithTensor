@@ -1,0 +1,194 @@
+[
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "B06煤炭开采和洗选业",
+    "weight": 0.18877551020408162
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C31黑色金属冶炼和压延加工业",
+    "weight": 0.14591836734693878
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C35专用设备制造业",
+    "weight": 0.09285714285714286
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "G55水上运输业",
+    "weight": 0.07857142857142857
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C37铁路、船舶、航空航天和其他运输设备制造业",
+    "weight": 0.07244897959183673
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "B11开采专业及辅助性活动",
+    "weight": 0.06224489795918367
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C32有色金属冶炼和压延加工业",
+    "weight": 0.05204081632653061
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C26化学原料和化学制品制造业",
+    "weight": 0.04591836734693878
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "A01农业",
+    "weight": 0.04081632653061224
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "B09有色金属矿采选业",
+    "weight": 0.03163265306122449
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C30非金属矿物制品业",
+    "weight": 0.03163265306122449
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C15酒、饮料和精制茶制造业",
+    "weight": 0.03163265306122449
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "Q84卫生",
+    "weight": 0.022448979591836733
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C27医药制造业",
+    "weight": 0.015306122448979591
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "J68保险业",
+    "weight": 0.015306122448979591
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C36汽车制造业",
+    "weight": 0.011224489795918367
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C14食品制造业",
+    "weight": 0.01020408163265306
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "D44电力、热力生产和供应业",
+    "weight": 0.00816326530612245
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "E48土木工程建筑业",
+    "weight": 0.007142857142857143
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C39计算机、通信和其他电子设备制造业",
+    "weight": 0.006122448979591836
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "N77生态保护和环境治理业",
+    "weight": 0.006122448979591836
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C13农副食品加工业",
+    "weight": 0.006122448979591836
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C38电气机械和器材制造业",
+    "weight": 0.004081632653061225
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "J69其他金融业",
+    "weight": 0.004081632653061225
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C29橡胶和塑料制品业",
+    "weight": 0.003061224489795918
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C18纺织服装、服饰业",
+    "weight": 0.0020408163265306124
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "I65软件和信息技术服务业",
+    "weight": 0.0020408163265306124
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "R88文化艺术业",
+    "weight": 0.0010204081632653062
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "I64互联网和相关服务",
+    "weight": 0.0010204081632653062
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "quality_factor",
+    "weight": 0.713265306122449
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.2785714285714286
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "volatility_factor",
+    "weight": 0.00816326530612245
+  }
+]

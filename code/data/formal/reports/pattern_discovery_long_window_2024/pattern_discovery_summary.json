@@ -1,0 +1,603 @@
+{
+  "anchor_run": "formal_all_a_2024_long_window_run",
+  "model": "tucker",
+  "stock_count": 60,
+  "comparison_run_count": 7,
+  "stock_rows": [
+    {
+      "stock_code": "002607.SZ",
+      "cluster_label": 0,
+      "industry": "P83教育",
+      "appearances": 48,
+      "avg_score": 0.3617049996917708
+    },
+    {
+      "stock_code": "688266.SH",
+      "cluster_label": 0,
+      "industry": "C27医药制造业",
+      "appearances": 48,
+      "avg_score": 0.3537032315036837
+    },
+    {
+      "stock_code": "688235.SH",
+      "cluster_label": 0,
+      "industry": "C27医药制造业",
+      "appearances": 48,
+      "avg_score": 0.3412243030938665
+    },
+    {
+      "stock_code": "688192.SH",
+      "cluster_label": 0,
+      "industry": "C27医药制造业",
+      "appearances": 48,
+      "avg_score": 0.3371949995815846
+    },
+    {
+      "stock_code": "688027.SH",
+      "cluster_label": 0,
+      "industry": "C39计算机、通信和其他电子设备制造业",
+      "appearances": 48,
+      "avg_score": 0.3149895992599425
+    },
+    {
+      "stock_code": "688525.SH",
+      "cluster_label": 0,
+      "industry": "C39计算机、通信和其他电子设备制造业",
+      "appearances": 48,
+      "avg_score": 0.3049497057585279
+    },
+    {
+      "stock_code": "688256.SH",
+      "cluster_label": 0,
+      "industry": "I65软件和信息技术服务业",
+      "appearances": 48,
+      "avg_score": 0.2973954309703377
+    },
+    {
+      "stock_code": "688702.SH",
+      "cluster_label": 0,
+      "industry": "I65软件和信息技术服务业",
+      "appearances": 48,
+      "avg_score": 0.24061533903323773
+    },
+    {
+      "stock_code": "600171.SH",
+      "cluster_label": 0,
+      "industry": "C39计算机、通信和其他电子设备制造业",
+      "appearances": 48,
+      "avg_score": 0.23711278083232035
+    },
+    {
+      "stock_code": "601127.SH",
+      "cluster_label": 0,
+      "industry": "C36汽车制造业",
+      "appearances": 48,
+      "avg_score": 0.22692286306705764
+    },
+    {
+      "stock_code": "603707.SH",
+      "cluster_label": 0,
+      "industry": "C27医药制造业",
+      "appearances": 48,
+      "avg_score": 0.17812324872122187
+    },
+    {
+      "stock_code": "002261.SZ",
+      "cluster_label": 0,
+      "industry": "I65软件和信息技术服务业",
+      "appearances": 48,
+      "avg_score": 0.15327581415022748
+    },
+    {
+      "stock_code": "601155.SH",
+      "cluster_label": 0,
+      "industry": "K70房地产业",
+      "appearances": 48,
+      "avg_score": 0.11348469249661745
+    },
+    {
+      "stock_code": "002739.SZ",
+      "cluster_label": 0,
+      "industry": "R87广播、电视、电影和录音制作业",
+      "appearances": 48,
+      "avg_score": 0.09416937966981159
+    },
+    {
+      "stock_code": "002926.SZ",
+      "cluster_label": 0,
+      "industry": "J67资本市场服务",
+      "appearances": 48,
+      "avg_score": 0.09317965933091481
+    },
+    {
+      "stock_code": "603885.SH",
+      "cluster_label": 0,
+      "industry": "G56航空运输业",
+      "appearances": 48,
+      "avg_score": 0.08144924737815072
+    },
+    {
+      "stock_code": "688234.SH",
+      "cluster_label": 0,
+      "industry": "C39计算机、通信和其他电子设备制造业",
+      "appearances": 48,
+      "avg_score": 0.07055447796455504
+    },
+    {
+      "stock_code": "603501.SH",
+      "cluster_label": 0,
+      "industry": "C39计算机、通信和其他电子设备制造业",
+      "appearances": 48,
+      "avg_score": 0.06923165611811789
+    },
+    {
+      "stock_code": "601988.SH",
+      "cluster_label": 0,
+      "industry": "J66货币金融服务",
+      "appearances": 48,
+      "avg_score": 0.06821993781818673
+    },
+    {
+      "stock_code": "600016.SH",
+      "cluster_label": 0,
+      "industry": "J66货币金融服务",
+      "appearances": 48,
+      "avg_score": 0.06523179344194589
+    },
+    {
+      "stock_code": "601398.SH",
+      "cluster_label": 0,
+      "industry": "J66货币金融服务",
+      "appearances": 48,
+      "avg_score": 0.061330868998862205
+    },
+    {
+      "stock_code": "600157.SH",
+      "cluster_label": 0,
+      "industry": "D44电力、热力生产和供应业",
+      "appearances": 48,
+      "avg_score": 0.060985409964218314
+    },
+    {
+      "stock_code": "600104.SH",
+      "cluster_label": 0,
+      "industry": "C36汽车制造业",
+      "appearances": 48,
+      "avg_score": 0.059562560278855724
+    },
+    {
+      "stock_code": "601328.SH",
+      "cluster_label": 0,
+      "industry": "J66货币金融服务",
+      "appearances": 48,
+      "avg_score": 0.054331454280294796
+    },
+    {
+      "stock_code": "002958.SZ",
+      "cluster_label": 0,
+      "industry": "J66货币金融服务",
+      "appearances": 48,
+      "avg_score": 0.054286669203090034
+    },
+    {
+      "stock_code": "600655.SH",
+      "cluster_label": 0,
+      "industry": "F52零售业",
+      "appearances": 48,
+      "avg_score": 0.053941728736653115
+    },
+    {
+      "stock_code": "600153.SH",
+      "cluster_label": 0,
+      "industry": "L72商务服务业",
+      "appearances": 48,
+      "avg_score": 0.052242281534160884
+    },
+    {
+      "stock_code": "601997.SH",
+      "cluster_label": 0,
+      "industry": "J66货币金融服务",
+      "appearances": 48,
+      "avg_score": 0.05213137305869912
+    },
+    {
+      "stock_code": "601288.SH",
+      "cluster_label": 0,
+      "industry": "J66货币金融服务",
+      "appearances": 48,
+      "avg_score": 0.051124686658851996
+    },
+    {
+      "stock_code": "600015.SH",
+      "cluster_label": 0,
+      "industry": "J66货币金融服务",
+      "appearances": 48,
+      "avg_score": 0.05058385514871918
+    },
+    {
+      "stock_code": "600739.SH",
+      "cluster_label": 0,
+      "industry": "F51批发业",
+      "appearances": 48,
+      "avg_score": 0.04733582222982364
+    },
+    {
+      "stock_code": "601658.SH",
+      "cluster_label": 0,
+      "industry": "J66货币金融服务",
+      "appearances": 48,
+      "avg_score": 0.04726060541417019
+    },
+    {
+      "stock_code": "300070.SZ",
+      "cluster_label": 0,
+      "industry": "N77生态保护和环境治理业",
+      "appearances": 48,
+      "avg_score": 0.04321983031191166
+    },
+    {
+      "stock_code": "601577.SH",
+      "cluster_label": 0,
+      "industry": "J66货币金融服务",
+      "appearances": 48,
+      "avg_score": 0.04250851268772463
+    },
+    {
+      "stock_code": "600170.SH",
+      "cluster_label": 0,
+      "industry": "E48土木工程建筑业",
+      "appearances": 48,
+      "avg_score": 0.042335512964288835
+    },
+    {
+      "stock_code": "600959.SH",
+      "cluster_label": 0,
+      "industry": "I63电信、广播电视和卫星传输服务",
+      "appearances": 48,
+      "avg_score": 0.04208398972000261
+    },
+    {
+      "stock_code": "603160.SH",
+      "cluster_label": 0,
+      "industry": "C39计算机、通信和其他电子设备制造业",
+      "appearances": 48,
+      "avg_score": 0.041458328384393124
+    },
+    {
+      "stock_code": "002966.SZ",
+      "cluster_label": 0,
+      "industry": "J66货币金融服务",
+      "appearances": 48,
+      "avg_score": 0.03993677194373454
+    },
+    {
+      "stock_code": "601166.SH",
+      "cluster_label": 0,
+      "industry": "J66货币金融服务",
+      "appearances": 48,
+      "avg_score": 0.03968341248998394
+    },
+    {
+      "stock_code": "600390.SH",
+      "cluster_label": 0,
+      "industry": "J69其他金融业",
+      "appearances": 48,
+      "avg_score": 0.039672085943672594
+    },
+    {
+      "stock_code": "601668.SH",
+      "cluster_label": 0,
+      "industry": "E48土木工程建筑业",
+      "appearances": 48,
+      "avg_score": 0.03954986405905399
+    },
+    {
+      "stock_code": "600208.SH",
+      "cluster_label": 0,
+      "industry": "K70房地产业",
+      "appearances": 48,
+      "avg_score": 0.03854814963236677
+    },
+    {
+      "stock_code": "600704.SH",
+      "cluster_label": 0,
+      "industry": "F51批发业",
+      "appearances": 48,
+      "avg_score": 0.0326490776400327
+    },
+    {
+      "stock_code": "600536.SH",
+      "cluster_label": 0,
+      "industry": "I65软件和信息技术服务业",
+      "appearances": 48,
+      "avg_score": 0.032247391747253246
+    },
+    {
+      "stock_code": "600000.SH",
+      "cluster_label": 0,
+      "industry": "J66货币金融服务",
+      "appearances": 48,
+      "avg_score": 0.03063208875322869
+    },
+    {
+      "stock_code": "600048.SH",
+      "cluster_label": 0,
+      "industry": "K70房地产业",
+      "appearances": 48,
+      "avg_score": 0.02883683995875066
+    },
+    {
+      "stock_code": "600339.SH",
+      "cluster_label": 0,
+      "industry": "B11开采专业及辅助性活动",
+      "appearances": 48,
+      "avg_score": 0.023630287790692223
+    },
+    {
+      "stock_code": "601665.SH",
+      "cluster_label": 0,
+      "industry": "J66货币金融服务",
+      "appearances": 48,
+      "avg_score": 0.023064685397654595
+    },
+    {
+      "stock_code": "600637.SH",
+      "cluster_label": 0,
+      "industry": "I63电信、广播电视和卫星传输服务",
+      "appearances": 48,
+      "avg_score": 0.022180503725687698
+    },
+    {
+      "stock_code": "600019.SH",
+      "cluster_label": 0,
+      "industry": "C31黑色金属冶炼和压延加工业",
+      "appearances": 48,
+      "avg_score": 0.01606082122488012
+    },
+    {
+      "stock_code": "600820.SH",
+      "cluster_label": 0,
+      "industry": "E48土木工程建筑业",
+      "appearances": 48,
+      "avg_score": 0.01409457053057825
+    },
+    {
+      "stock_code": "601880.SH",
+      "cluster_label": 0,
+      "industry": "G55水上运输业",
+      "appearances": 48,
+      "avg_score": 0.012739210400281758
+    },
+    {
+      "stock_code": "601211.SH",
+      "cluster_label": 0,
+      "industry": "J67资本市场服务",
+      "appearances": 48,
+      "avg_score": 0.011451946635442857
+    },
+    {
+      "stock_code": "600528.SH",
+      "cluster_label": 0,
+      "industry": "C35专用设备制造业",
+      "appearances": 48,
+      "avg_score": 0.010861444731052402
+    },
+    {
+      "stock_code": "600028.SH",
+      "cluster_label": 0,
+      "industry": "B07石油和天然气开采业",
+      "appearances": 48,
+      "avg_score": 0.009070002885558204
+    },
+    {
+      "stock_code": "001213.SZ",
+      "cluster_label": 0,
+      "industry": "G53铁路运输业",
+      "appearances": 48,
+      "avg_score": 0.005551389877012574
+    },
+    {
+      "stock_code": "600018.SH",
+      "cluster_label": 0,
+      "industry": "G55水上运输业",
+      "appearances": 48,
+      "avg_score": 0.004604363320456072
+    },
+    {
+      "stock_code": "603077.SH",
+      "cluster_label": 0,
+      "industry": "C26化学原料和化学制品制造业",
+      "appearances": 48,
+      "avg_score": 0.003200337703256017
+    },
+    {
+      "stock_code": "600352.SH",
+      "cluster_label": 0,
+      "industry": "C26化学原料和化学制品制造业",
+      "appearances": 48,
+      "avg_score": 0.0026772624883605934
+    },
+    {
+      "stock_code": "600061.SH",
+      "cluster_label": 0,
+      "industry": "J67资本市场服务",
+      "appearances": 48,
+      "avg_score": 0.0012164502110141617
+    }
+  ],
+  "boundary_rows": [
+    {
+      "run": "formal_all_a_2024_long_window_run",
+      "universe_id": "formal_all_a_2024_long_window_run",
+      "model": "cp",
+      "rank_ic_mean": 0.03288525585993071,
+      "rolling_stability": 0.7167964793189492,
+      "final_nav": 1.4755884109171407
+    },
+    {
+      "run": "formal_all_a_2024_long_window_run",
+      "universe_id": "formal_all_a_2024_long_window_run",
+      "model": "tucker",
+      "rank_ic_mean": 0.024873245738410783,
+      "rolling_stability": 0.9535288499834026,
+      "final_nav": 1.3665205789118393
+    },
+    {
+      "run": "formal_all_a_2024_long_window_run",
+      "universe_id": "formal_all_a_2024_long_window_run",
+      "model": "pca",
+      "rank_ic_mean": -0.021323267850491812,
+      "rolling_stability": 0.9616179294091037,
+      "final_nav": 1.4876421702594493
+    },
+    {
+      "run": "formal_industry_c27_2024_long_window_run",
+      "universe_id": "formal_industry_c27_2024_long_window_run",
+      "model": "cp",
+      "rank_ic_mean": -0.021574108015640275,
+      "rolling_stability": 0.6322838229795245,
+      "final_nav": 0.7812798685283714
+    },
+    {
+      "run": "formal_industry_c27_2024_long_window_run",
+      "universe_id": "formal_industry_c27_2024_long_window_run",
+      "model": "tucker",
+      "rank_ic_mean": -0.014005987292277618,
+      "rolling_stability": 0.9628318630900058,
+      "final_nav": 0.7474515859317667
+    },
+    {
+      "run": "formal_industry_c27_2024_long_window_run",
+      "universe_id": "formal_industry_c27_2024_long_window_run",
+      "model": "pca",
+      "rank_ic_mean": -0.03510661045943304,
+      "rolling_stability": 0.9541200077970614,
+      "final_nav": 0.7797765588874289
+    },
+    {
+      "run": "formal_industry_c35_2024_long_window_run",
+      "universe_id": "formal_industry_c35_2024_long_window_run",
+      "model": "cp",
+      "rank_ic_mean": 0.09151545698924733,
+      "rolling_stability": 0.6694089412944896,
+      "final_nav": 1.2839613571113526
+    },
+    {
+      "run": "formal_industry_c35_2024_long_window_run",
+      "universe_id": "formal_industry_c35_2024_long_window_run",
+      "model": "tucker",
+      "rank_ic_mean": -0.016851478494623658,
+      "rolling_stability": 0.9633824411945427,
+      "final_nav": 0.9617237349751468
+    },
+    {
+      "run": "formal_industry_c35_2024_long_window_run",
+      "universe_id": "formal_industry_c35_2024_long_window_run",
+      "model": "pca",
+      "rank_ic_mean": -0.04952116935483871,
+      "rolling_stability": 0.9718159521957551,
+      "final_nav": 0.9325412752513698
+    },
+    {
+      "run": "formal_industry_c39_2024_long_window_run",
+      "universe_id": "formal_industry_c39_2024_long_window_run",
+      "model": "cp",
+      "rank_ic_mean": -0.07742398282488618,
+      "rolling_stability": 0.7082343019949789,
+      "final_nav": 1.044930574553677
+    },
+    {
+      "run": "formal_industry_c39_2024_long_window_run",
+      "universe_id": "formal_industry_c39_2024_long_window_run",
+      "model": "tucker",
+      "rank_ic_mean": -0.06107103827898441,
+      "rolling_stability": 0.9488925432825354,
+      "final_nav": 1.4619833339696906
+    },
+    {
+      "run": "formal_industry_c39_2024_long_window_run",
+      "universe_id": "formal_industry_c39_2024_long_window_run",
+      "model": "pca",
+      "rank_ic_mean": -0.03916810709849297,
+      "rolling_stability": 0.9551240983849839,
+      "final_nav": 1.248366194452835
+    },
+    {
+      "run": "formal_size_small_2024_long_window_run",
+      "universe_id": "formal_size_small_2024_long_window_run",
+      "model": "cp",
+      "rank_ic_mean": -0.004370629370629373,
+      "rolling_stability": 0.6647641237420444,
+      "final_nav": 0.9694839305526224
+    },
+    {
+      "run": "formal_size_small_2024_long_window_run",
+      "universe_id": "formal_size_small_2024_long_window_run",
+      "model": "tucker",
+      "rank_ic_mean": 0.06016899766899767,
+      "rolling_stability": 0.9689843743571436,
+      "final_nav": 1.0002845379836192
+    },
+    {
+      "run": "formal_size_small_2024_long_window_run",
+      "universe_id": "formal_size_small_2024_long_window_run",
+      "model": "pca",
+      "rank_ic_mean": -0.02491258741258742,
+      "rolling_stability": 0.966332712371624,
+      "final_nav": 0.906323872911258
+    },
+    {
+      "run": "formal_size_mid_2024_long_window_run",
+      "universe_id": "formal_size_mid_2024_long_window_run",
+      "model": "cp",
+      "rank_ic_mean": -0.0965909090909091,
+      "rolling_stability": 0.5584205162539155,
+      "final_nav": 0.8431408860013194
+    },
+    {
+      "run": "formal_size_mid_2024_long_window_run",
+      "universe_id": "formal_size_mid_2024_long_window_run",
+      "model": "tucker",
+      "rank_ic_mean": -0.11873543123543122,
+      "rolling_stability": 0.9528898426980092,
+      "final_nav": 0.9092773380913879
+    },
+    {
+      "run": "formal_size_mid_2024_long_window_run",
+      "universe_id": "formal_size_mid_2024_long_window_run",
+      "model": "pca",
+      "rank_ic_mean": 0.04356060606060606,
+      "rolling_stability": 0.9590291626374344,
+      "final_nav": 1.2960528588815847
+    },
+    {
+      "run": "formal_size_large_2024_long_window_run",
+      "universe_id": "formal_size_large_2024_long_window_run",
+      "model": "cp",
+      "rank_ic_mean": -0.11877289377289378,
+      "rolling_stability": 0.6255312548802205,
+      "final_nav": 0.946413575538356
+    },
+    {
+      "run": "formal_size_large_2024_long_window_run",
+      "universe_id": "formal_size_large_2024_long_window_run",
+      "model": "tucker",
+      "rank_ic_mean": 0.13608058608058607,
+      "rolling_stability": 0.9639655473198332,
+      "final_nav": 1.7166607149982822
+    },
+    {
+      "run": "formal_size_large_2024_long_window_run",
+      "universe_id": "formal_size_large_2024_long_window_run",
+      "model": "pca",
+      "rank_ic_mean": 0.06053113553113553,
+      "rolling_stability": 0.9678392350985742,
+      "final_nav": 1.4413891627416338
+    }
+  ],
+  "assets": {
+    "stock_structure_svg": "code/data/formal/reports/pattern_discovery_long_window_2024/stock_latent_structure_formal_all_a_2024_long_window_run_tucker.svg",
+    "cluster_industry_svg": "code/data/formal/reports/pattern_discovery_long_window_2024/cluster_vs_industry_formal_all_a_2024_long_window_run_tucker.svg",
+    "boundary_comparison_svg": "code/data/formal/reports/pattern_discovery_long_window_2024/boundary_comparison_tucker.svg"
+  }
+}
