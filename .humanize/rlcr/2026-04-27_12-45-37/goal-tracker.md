@@ -34,7 +34,7 @@ Source plan: 论文不足与完善计划.md
 ## MUTABLE SECTION
 <!-- Update each round with justification for changes -->
 
-### Plan Version: 3 (Updated: Round 2)
+### Plan Version: 4 (Updated: Round 3)
 
 #### Plan Evolution Log
 <!-- Document any changes to the plan with justification -->
@@ -46,14 +46,14 @@ Source plan: 论文不足与完善计划.md
 | 1 | 保持“长窗口稳健性实验入口”为进行中而非完成 | 虽然派生配置和一个相对路径运行验证已落地，但 `long_window_run_plan.json` / `README.md` 生成的命令仍使用不可直接执行的 `D:/...` 绝对路径 | AC3/AC4 仍不能以当前入口产物视为 fully reproducible |
 | 2 | 将“长窗口稳健性实验入口”移入已验证 | Round 2 已把 `build_long_window_run_plan.py`、`long_window_run_plan.json` 和 `README.md` 修正为 repo-root 可直接执行的相对路径命令，并复核通过直接复制命令 | AC3 入口合同闭环完成，可将剩余精力集中到真实 long-window 结果与图组 |
 | 2 | 将 AC3 / AC4 的 long-window 进度更新为“代表性窗口已完成、全年份仍未完成” | Round 2 新增 long-window 因子面板、2015/2020/2024/2026 四个代表性年份的 28 个本地 run 结果、组合汇总和长窗口素材，但未完成 2016/2017/2018/2019/2021/2022/2023/2025 的全年份复跑，也未提交被 `code/outputs/` 忽略的 run 目录 | AC3 / AC4 由入口阶段推进到代表性结果阶段，但仍不能视为 fully complete |
+| 3 | 验证全年 long-window 产物与长窗口图组已入库，但保留 AC3 为进行中 | Round 3 的 84 个 `formal_*_long_window_run` 目录、`long_window_portfolio` 汇总和 `pattern_discovery_long_window_2015-2026` 图组均已存在且进入版本控制；但 `paper_body.tex` 仍保留“只复核 2015/2020/2024/2026”与“仍受短窗口限制”的旧表述 | AC4 可视为完成，AC3 仍需完成论文正文一致性回写后才能 fully close |
 
 #### Active Tasks
 <!-- Map each task to its target Acceptance Criterion and routing tag -->
 | Task | Target AC | Status | Tag | Owner | Notes |
 |------|-----------|--------|-----|-------|-------|
 | 补齐外部宏观原始源表与更广泛事件字典的 PIT 可用时点映射 | AC1 | pending | coding | claude | BitLesson=NONE；统一训练接口第一阶段已完成，但外部利率、宏观月度指标、分红、重大事项和公告文本仍未落盘为可审计 PIT 输入 |
-| 扩展 AC3 分层实验的长窗口和更多边界复核 | AC3 | in_progress | coding | claude | 已完成 2015/2020/2024/2026 四个代表性年份的 28 个本地 long-window run 与汇总，但 2016/2017/2018/2019/2021/2022/2023/2025 仍未复跑，且 long-window run 目录尚未提交 |
-| 将 AC4 图组整理成答辩展示页素材 | AC4 | in_progress | coding | claude | 已沉淀 `reports/defense_materials/long_window_assets/*.svg` 与 `pattern_discovery_long_window_2020/`，但其余年度 long-window 模式发现图组仍未生成，`pattern_discovery/README.md` 仍引用被忽略的 `code/outputs/...` 长窗口图来源 |
+| 扩展 AC3 分层实验的长窗口和更多边界复核 | AC3 | in_progress | coding | claude | 84 个全年 long-window run、`long_window_portfolio` 汇总与受版本控制输出目录已齐备；剩余缺口是 `paper_body.tex` 仍保留代表年份与短窗口限制的旧表述，尚未与 Round 3 产物对齐 |
 | 维护独立不足计划与 RLCR 记录 | AC6 | in_progress | coding | claude | 本轮继续维护 |
 
 ### Completed and Verified
@@ -69,6 +69,8 @@ Source plan: 论文不足与完善计划.md
 | AC2 | 跨样本边界组合与暴露汇总 | 1 | 1 | `code/data/summarize_boundary_portfolio.py` 已汇总 `metrics`、`portfolio_metrics`、`quantile_returns`、`long_short`、`cost_adjusted`、`excess_returns`、`exposure_*`，并刷新 `code/data/formal/reports/boundary_portfolio/*` 与 `paper_body.tex` |
 | AC3 | 多样本边界结果对比表 | 1 | 1 | `code/data/formal/reports/boundary_portfolio/README.md` 与 `boundary_portfolio_summary.json` 覆盖 HS300、SZ50、ZZ500、全 A、行业分层和市值分层 |
 | AC3 | 长窗口稳健性实验入口 | 2 | 2 | `code/data/build_long_window_run_plan.py` 现输出 repo-root 相对路径命令；`code/data/formal/reports/long_window_plan/README.md` / `long_window_run_plan.json` 可直接复制运行，且 `formal_all_a_2026_long_window_run.yaml` 已复核可执行 |
+| AC3 | 全年 long-window 分层复跑产物与组合汇总入库 | 3 | 3 | `find code/outputs -maxdepth 1 -type d -name 'formal_*_long_window_run' | wc -l = 84`、`git ls-files 'code/outputs/formal_*_long_window_run/*' | wc -l = 7476`、`code/data/formal/reports/long_window_portfolio/README.md` 与 `boundary_portfolio_summary.json` 已覆盖 2015-2026 全部年度与 7 个边界 |
+| AC4 | 全年 long-window 模式发现图组与答辩素材包 | 3 | 3 | `code/data/formal/reports/pattern_discovery_long_window/README.md`、`pattern_discovery_long_window_2015` 至 `pattern_discovery_long_window_2026`、`code/data/formal/reports/defense_materials/long_window_assets/README.md` 已形成受版本控制的全年图组与素材入口 |
 | AC5 | 参考文献学校格式最终校验 | 1 | 1 | `参考文献元数据核对清单.md` 最终校验结论 + `paper_body.tex` 结论章节已统一为当前学校提交口径 |
 
 ### Explicitly Deferred
@@ -82,6 +84,4 @@ Source plan: 论文不足与完善计划.md
 |-------|-----------------|-------------|-----------------|
 | `bitlesson-selector` 命令在当前 PowerShell 环境不可用，且 `.humanize/bitlesson.md` 暂无条目 | 0 | ALL | 本轮按 `BitLesson=NONE` 执行，并在 summary 中记录 |
 | Bash 与 Windows Git 的换行配置不一致会误报 CRLF 文件为 dirty | 0 | ALL | 已设置本地 `core.autocrlf=true`，后续验证使用同一 Git 视角 |
-| 当前实验多数为短窗口结果，长窗口稳定性不足 | 0 | AC2/AC3/AC4 | 新增长窗口配置或生成长窗口对比说明 |
-| 长窗口结果目前只覆盖 2015/2020/2024/2026 四个代表性年份，2016/2017/2018/2019/2021/2022/2023/2025 仍无真实复跑产物 | 2 | AC3/AC4 | 按 `long_window_run_plan` 完整执行 2015-2026 全部年度与 7 个边界，并刷新组合汇总、模式发现图组和论文回写 |
-| `code/outputs/` 被 `.gitignore` 忽略，`formal_*_long_window_run` 目录虽存在于本地但未进入版本库 | 2 | AC3/AC4 | 将 long-window run 目录所需产物纳入版本控制，至少保证 long-window 汇总与图组所依赖的运行结果不再仅存在于本地 |
+| `paper_body.tex` 仍保留“只复核 2015/2020/2024/2026 代表年份”和“仍受短窗口限制”的旧表述，与已提交的 2015-2026 全年 long-window 产物冲突 | 3 | AC2/AC3 | 依据 `code/data/formal/reports/long_window_portfolio/README.md`、84 个 long-window run 目录与全年图组，重写样本边界扩展与稳健性段落，完成论文正文一致性回写 |
