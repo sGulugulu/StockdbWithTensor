@@ -13,6 +13,34 @@ from data.refresh_formal_factor_panels import _validate_cached_source_snapshots
 
 
 class RefreshFormalFactorPanelsTests(unittest.TestCase):
+    @patch("data.refresh_formal_factor_panels.build_formal_factor_panel")
+    def test_refresh_does_not_overwrite_baselines_when_cached_sources_are_invalid(self, mock_build_panel) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir) / "formal"
+            (root / "factors").mkdir(parents=True, exist_ok=True)
+            for panel_name in ("hs300_factor_panel.csv", "sz50_factor_panel.csv", "zz500_factor_panel.csv"):
+                (root / "factors" / panel_name).write_text("old baseline\n", encoding="utf-8")
+
+            def _fake_build_panel(*, output_path: Path, **_kwargs) -> None:
+                output_path.parent.mkdir(parents=True, exist_ok=True)
+                output_path.write_text(
+                    "stock_code,trade_date,industry,value_factor,momentum_factor,quality_factor,volatility_factor,turn_factor,ps_ttm,future_return\n"
+                    "600000.SH,2026-03-30,Bank,0,0,0,0,0,1,0\n",
+                    encoding="utf-8",
+                )
+
+            mock_build_panel.side_effect = _fake_build_panel
+
+            with self.assertRaises(FileNotFoundError):
+                refresh_formal_factor_panels_with_sources(
+                    formal_root=root,
+                    max_trade_date="2026-03-30",
+                    build_extended_source_tables=False,
+                )
+
+            for panel_name in ("hs300_factor_panel.csv", "sz50_factor_panel.csv", "zz500_factor_panel.csv"):
+                self.assertEqual((root / "factors" / panel_name).read_text(encoding="utf-8"), "old baseline\n")
+
     def test_validate_cached_source_snapshots_rejects_missing_or_stale_sources(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir) / "formal"
@@ -359,10 +387,17 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
                     encoding="utf-8",
                 )
 
-            def _fake_build_sources(*, formal_root: Path, max_trade_date: str, notice_lookback_days: int = 180):
-                self.assertTrue((formal_root / "factors" / "hs300_factor_panel.csv").exists())
-                self.assertTrue((formal_root / "factors" / "sz50_factor_panel.csv").exists())
-                self.assertTrue((formal_root / "factors" / "zz500_factor_panel.csv").exists())
+            def _fake_build_sources(
+                *,
+                formal_root: Path,
+                max_trade_date: str,
+                notice_lookback_days: int = 180,
+                panel_paths=None,
+            ):
+                self.assertIsNotNone(panel_paths)
+                self.assertEqual(len(panel_paths), 3)
+                for panel_path in panel_paths:
+                    self.assertTrue(panel_path.exists())
                 (formal_root / "external").mkdir(exist_ok=True)
                 (formal_root / "events").mkdir(exist_ok=True)
                 (formal_root / "external" / "macro_interest_rate.csv").write_text(

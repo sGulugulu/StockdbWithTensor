@@ -3,6 +3,8 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import shutil
+import tempfile
 from dataclasses import dataclass
 from datetime import date, timedelta
 from pathlib import Path
@@ -141,58 +143,72 @@ def refresh_formal_factor_panels_with_sources(
     build_extended_source_tables: bool = False,
 ) -> list[Path]:
     normalized_root = formal_root.resolve()
-    outputs: list[Path] = []
-    baseline_outputs: dict[str, Path] = {}
+    final_outputs: list[Path] = []
     shared_kline_path = normalized_root / "master" / "shared_kline_panel.csv"
     industry_path = normalized_root / "baostock" / "metadata" / "stock_industry.csv"
     profit_data_path = normalized_root / "baostock" / "financial" / "profit_data.csv"
     performance_express_path = normalized_root / "baostock" / "reports" / "performance_express_report"
     forecast_report_path = normalized_root / "baostock" / "reports" / "forecast_report"
     source_paths = _cached_source_paths(normalized_root)
-    for spec in UNIVERSE_SPECS:
-        baseline_output = normalized_root / "factors" / spec.baseline_panel_filename
-        build_formal_factor_panel(
-            kline_path=shared_kline_path,
-            industry_path=industry_path,
-            membership_path=normalized_root / "universes" / spec.history_filename,
-            output_path=baseline_output,
-            max_trade_date=max_trade_date,
-        )
-        outputs.append(baseline_output)
-        baseline_outputs[spec.universe_id] = baseline_output
+    with tempfile.TemporaryDirectory() as temp_dir:
+        temp_factor_dir = Path(temp_dir) / "factors"
+        baseline_outputs: dict[str, Path] = {}
+        staged_outputs: list[tuple[Path, Path]] = []
 
-    if build_extended_source_tables:
-        # 显式重建才调用 AKShare，默认复用已提交快照以保证离线复现。
-        extended_sources = build_formal_extended_sources(
-            formal_root=normalized_root,
-            max_trade_date=max_trade_date,
-        )
-    else:
-        _validate_cached_source_snapshots(
-            source_paths,
-            max_trade_date=max_trade_date,
-            earliest_trade_date=_earliest_trade_date(list(baseline_outputs.values())),
-        )
-        extended_sources = source_paths
+        for spec in UNIVERSE_SPECS:
+            final_baseline_output = normalized_root / "factors" / spec.baseline_panel_filename
+            staged_baseline_output = temp_factor_dir / spec.baseline_panel_filename
+            build_formal_factor_panel(
+                kline_path=shared_kline_path,
+                industry_path=industry_path,
+                membership_path=normalized_root / "universes" / spec.history_filename,
+                output_path=staged_baseline_output,
+                max_trade_date=max_trade_date,
+            )
+            final_outputs.append(final_baseline_output)
+            staged_outputs.append((staged_baseline_output, final_baseline_output))
+            baseline_outputs[spec.universe_id] = staged_baseline_output
 
-    for spec in UNIVERSE_SPECS:
-        extended_output = normalized_root / "factors" / spec.extended_panel_filename
-        build_extended_factor_panel(
-            base_panel_path=baseline_outputs[spec.universe_id],
-            profit_data_path=profit_data_path,
-            performance_express_path=performance_express_path,
-            forecast_report_path=forecast_report_path,
-            market_index_path=normalized_root / "index_daily" / spec.market_index_filename,
-            macro_interest_rate_path=extended_sources.macro_interest_rate_path,
-            macro_monthly_path=extended_sources.macro_monthly_path,
-            dividend_event_path=extended_sources.dividend_events_path,
-            major_event_notice_path=extended_sources.major_event_notice_path,
-            announcement_text_path=extended_sources.announcement_text_path,
-            output_path=extended_output,
-            max_trade_date=max_trade_date,
-        )
-        outputs.append(extended_output)
-    return outputs
+        if build_extended_source_tables:
+            # 显式重建才调用 AKShare，默认复用已提交快照以保证离线复现。
+            extended_sources = build_formal_extended_sources(
+                formal_root=normalized_root,
+                max_trade_date=max_trade_date,
+                panel_paths=list(baseline_outputs.values()),
+            )
+        else:
+            _validate_cached_source_snapshots(
+                source_paths,
+                max_trade_date=max_trade_date,
+                earliest_trade_date=_earliest_trade_date(list(baseline_outputs.values())),
+            )
+            extended_sources = source_paths
+
+        for spec in UNIVERSE_SPECS:
+            final_extended_output = normalized_root / "factors" / spec.extended_panel_filename
+            staged_extended_output = temp_factor_dir / spec.extended_panel_filename
+            build_extended_factor_panel(
+                base_panel_path=baseline_outputs[spec.universe_id],
+                profit_data_path=profit_data_path,
+                performance_express_path=performance_express_path,
+                forecast_report_path=forecast_report_path,
+                market_index_path=normalized_root / "index_daily" / spec.market_index_filename,
+                macro_interest_rate_path=extended_sources.macro_interest_rate_path,
+                macro_monthly_path=extended_sources.macro_monthly_path,
+                dividend_event_path=extended_sources.dividend_events_path,
+                major_event_notice_path=extended_sources.major_event_notice_path,
+                announcement_text_path=extended_sources.announcement_text_path,
+                output_path=staged_extended_output,
+                max_trade_date=max_trade_date,
+            )
+            final_outputs.append(final_extended_output)
+            staged_outputs.append((staged_extended_output, final_extended_output))
+
+        for staged_output, final_output in staged_outputs:
+            final_output.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(staged_output, final_output)
+
+    return final_outputs
 
 
 def main() -> None:

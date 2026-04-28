@@ -365,6 +365,7 @@ def build_formal_extended_sources(
     formal_root: Path,
     max_trade_date: str,
     notice_lookback_days: int = 30,
+    panel_paths: Iterable[Path] | None = None,
 ) -> ExtendedSourceBuildResult:
     normalized_root = formal_root.resolve()
     history_paths = [
@@ -372,9 +373,9 @@ def build_formal_extended_sources(
         normalized_root / "universes" / "sz50_history.csv",
         normalized_root / "universes" / "zz500_history.csv",
     ]
-    panel_paths = [normalized_root / "factors" / filename for filename in ("hs300_factor_panel.csv", "sz50_factor_panel.csv", "zz500_factor_panel.csv")]
+    default_panel_paths = [normalized_root / "factors" / filename for filename in ("hs300_factor_panel.csv", "sz50_factor_panel.csv", "zz500_factor_panel.csv")]
     symbols = _iter_target_symbols(history_paths)
-    trade_dates = _iter_trade_dates(panel_paths, max_trade_date=max_trade_date)
+    trade_dates = _iter_trade_dates(panel_paths or default_panel_paths, max_trade_date=max_trade_date)
     if not trade_dates:
         raise ValueError("No trade dates found in baseline factor panels.")
     start_trade_date = date.fromisoformat(trade_dates[0])
