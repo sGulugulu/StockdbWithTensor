@@ -69,6 +69,37 @@ class BuildLongWindowRunPlanTests(unittest.TestCase):
             variant_text = Path(rows[0]["config_variant"]).read_text(encoding="utf-8")
             self.assertIn("factors/long_window/all_a_factor_panel_long_window.csv", variant_text)
 
+    def test_build_long_window_run_plan_commands_do_not_depend_on_caller_cwd(self) -> None:
+        repo_root = Path.cwd()
+        temp_parent = repo_root / ".tmp"
+        temp_parent.mkdir(exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=temp_parent) as temp_dir:
+            report_dir = Path(temp_dir) / "report"
+            config = (repo_root / "code" / "configs" / "formal_all_a.yaml").resolve()
+            previous_cwd = Path.cwd()
+            try:
+                os.chdir(repo_root / "code" / "data")
+                result = build_long_window_run_plan(
+                    config_paths=[config],
+                    start_date="2026-01-01",
+                    end_date="2026-03-31",
+                    report_dir=report_dir,
+                )
+            finally:
+                os.chdir(previous_cwd)
+
+            rows = json.loads(result.plan_json.read_text(encoding="utf-8"))
+            expected_variant = Path(
+                os.path.relpath(
+                    report_dir / "configs" / "formal_all_a_2026_long_window_run.yaml",
+                    start=repo_root,
+                )
+            ).as_posix()
+            self.assertEqual(rows[0]["config"], "code/configs/formal_all_a.yaml")
+            self.assertEqual(rows[0]["config_variant"], expected_variant)
+            self.assertIn(f'python3 code/main.py --config "{expected_variant}"', rows[0]["command"])
+            self.assertNotIn("../", rows[0]["command"])
+
     def test_build_long_window_run_plan_rejects_missing_extended_long_window_panel(self) -> None:
         temp_parent = Path.cwd() / ".tmp"
         temp_parent.mkdir(exist_ok=True)

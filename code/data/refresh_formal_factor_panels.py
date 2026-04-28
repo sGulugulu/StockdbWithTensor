@@ -56,27 +56,26 @@ def _cached_source_paths(formal_root: Path) -> ExtendedSourcePaths:
     )
 
 
-def _read_required_csv_rows(path: Path) -> list[dict[str, str]]:
+def _read_required_csv_rows(path: Path, *, allow_empty: bool = False) -> list[dict[str, str]]:
     if not path.exists():
         raise FileNotFoundError(f"Missing cached extended source snapshot: {path}")
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
         rows = list(reader)
-    if not rows:
+    if reader.fieldnames is None:
+        raise ValueError(f"Cached extended source snapshot has no header: {path}")
+    if not rows and not allow_empty:
         raise ValueError(f"Cached extended source snapshot has no data rows: {path}")
     return rows
 
 
 def _validate_cached_source_snapshots(source_paths: ExtendedSourcePaths, *, max_trade_date: str) -> None:
     # CSV 只证明有数据；覆盖水位由显式 metadata 记录，避免 cutoff 当天无公告时误判过期。
-    for path in (
-        source_paths.macro_interest_rate_path,
-        source_paths.macro_monthly_path,
-        source_paths.dividend_events_path,
-        source_paths.major_event_notice_path,
-        source_paths.announcement_text_path,
-    ):
-        _read_required_csv_rows(path)
+    _read_required_csv_rows(source_paths.macro_interest_rate_path)
+    _read_required_csv_rows(source_paths.macro_monthly_path)
+    _read_required_csv_rows(source_paths.dividend_events_path, allow_empty=True)
+    _read_required_csv_rows(source_paths.major_event_notice_path, allow_empty=True)
+    _read_required_csv_rows(source_paths.announcement_text_path, allow_empty=True)
     if not source_paths.snapshot_metadata_path.exists():
         raise FileNotFoundError(
             f"Missing cached extended source snapshot metadata: {source_paths.snapshot_metadata_path}"

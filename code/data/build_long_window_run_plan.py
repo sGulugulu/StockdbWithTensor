@@ -10,6 +10,7 @@ import sys
 CODE_ROOT = Path(__file__).resolve().parents[1]
 if str(CODE_ROOT) not in sys.path:
     sys.path.insert(0, str(CODE_ROOT))
+REPO_ROOT = CODE_ROOT.parent
 
 from data.year_windows import iter_year_date_ranges
 
@@ -129,7 +130,7 @@ def build_long_window_run_plan(
     report_dir: Path,
 ) -> LongWindowRunPlanResult:
     report_dir.mkdir(parents=True, exist_ok=True)
-    cwd = Path.cwd().resolve()
+    display_root = REPO_ROOT.resolve()
     windows = iter_year_date_ranges(start_date, end_date)
     rows: list[dict[str, str | int]] = []
     config_dir = report_dir / "configs"
@@ -146,13 +147,13 @@ def build_long_window_run_plan(
             )
             rows.append(
                 {
-                    "config": _display_cli_path(config_path, cwd=cwd),
-                    "config_variant": _display_cli_path(output_config, cwd=cwd),
+                    "config": _display_cli_path(config_path, cwd=display_root),
+                    "config_variant": _display_cli_path(output_config, cwd=display_root),
                     "year": year,
                     "start_date": window_start,
                     "end_date": window_end,
                     "output_name": output_name,
-                    "command": _build_command(Path(_display_cli_path(output_config, cwd=cwd))),
+                    "command": _build_command(Path(_display_cli_path(output_config, cwd=display_root))),
                 }
             )
 

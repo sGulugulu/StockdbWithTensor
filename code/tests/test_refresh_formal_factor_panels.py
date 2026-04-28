@@ -34,18 +34,15 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
                 encoding="utf-8",
             )
             source_paths.dividend_events_path.write_text(
-                "stock_code,report_period,dividend_type,pub_date,available_date,record_date,ex_date,pay_date,bonus_ratio,transfer_ratio,cash_ratio,plan_text,source_api\n"
-                "600000.SH,2025年报,年度分红,2026-03-24,2026-03-25,2026-03-27,2026-03-28,2026-03-30,0,1,2.5,10派2.5元,akshare\n",
+                "stock_code,report_period,dividend_type,pub_date,available_date,record_date,ex_date,pay_date,bonus_ratio,transfer_ratio,cash_ratio,plan_text,source_api\n",
                 encoding="utf-8",
             )
             source_paths.major_event_notice_path.write_text(
-                "stock_code,notice_type,pub_date,available_date,title_text,title_length,keyword_score,severity_score,url,source_api\n"
-                "600000.SH,重大事项,2026-03-24,2026-03-25,关于重大事项停牌公告,10,1.5,2.5,https://example.com/a,akshare\n",
+                "stock_code,notice_type,pub_date,available_date,title_text,title_length,keyword_score,severity_score,url,source_api\n",
                 encoding="utf-8",
             )
             source_paths.announcement_text_path.write_text(
-                "stock_code,notice_type,pub_date,available_date,title_text,title_length,keyword_score,url,source_api\n"
-                "600000.SH,其他,2026-03-24,2026-03-25,关于分红预案与回购安排的公告,14,1.6,https://example.com/b,akshare\n",
+                "stock_code,notice_type,pub_date,available_date,title_text,title_length,keyword_score,url,source_api\n",
                 encoding="utf-8",
             )
 
