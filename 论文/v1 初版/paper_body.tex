@@ -102,7 +102,7 @@ A\leftarrow X_{(1)}(C\odot B)\left[(C^{\top}C)\ast(B^{\top}B)\right]^{-1},
 
 从数据覆盖角度看，当前正式工作链路已经完成前复权 K 线、财务表、报告表和指数成分历史的整理，但这些原始层数据与当前根仓库中真正提交的实验产物之间仍然存在窗口差异。也就是说，数据底座具备继续向长期窗口扩展的基础，而当前已提交的 formal 因子面板与正式运行结果仍主要体现为 2026 年 3 月的短窗口实验版本。这也是本文在局限性分析中专门强调“正式窗口口径仍需进一步统一”的原因。
 
-需要强调的是，“数据已经抓取完成”与“数据已经安全进入训练输入”并不是同一概念。当前正式训练张量仍以主线因子面板为核心，但 extended 配置已经在第一阶段市场级代理变量、财务 PIT 指标、业绩快报/业绩预告事件特征之外，进一步接入了外部利率、月度宏观指标、分红、重大事项公告与公告标题文本。为了避免在训练阶段引入披露滞后和未来信息泄露，本文另外形成了《训练输入扩展与 PIT 安全说明》，并把这些扩展特征划分为市场代理、外部宏观、财务点时特征、分红公司行为和公告事件字典五层。每一层都通过 \texttt{pub\_date} 与 \texttt{available\_date} 的映射规则进入统一训练接口，该说明既是当前训练输入边界的补充解释，也是后续继续扩展更细粒度源表的执行依据。
+需要强调的是，“数据已经抓取完成”与“数据已经安全进入训练输入”并不是同一概念。当前正式训练张量仍以主线因子面板为核心，但 extended 配置已经在第一阶段市场级代理变量、财务 PIT 指标、业绩快报/业绩预告事件特征之外，进一步接入了外部利率、月度宏观指标、分红、重大事项公告与公告标题文本。为了避免在训练阶段引入披露滞后和未来信息泄露，本文另外形成了《训练输入扩展与 PIT 安全说明》，并把这些扩展特征划分为市场代理、外部宏观、财务点时特征、分红公司行为和公告事件字典五层。每一层都通过 `pub_date` 与 `available_date` 的映射规则进入统一训练接口，该说明既是当前训练输入边界的补充解释，也是后续继续扩展更细粒度源表的执行依据。
 
 在样本组织上，本文不直接把所有股票合并到同一张量中统一训练，而是分别对 HS300、SZ50 和 ZZ500 构建因子张量。这种做法的动机在于，不同指数样本池本身具有明显不同的规模特征、行业构成和风格偏向。若直接混合，潜在表示可能首先学习到“样本池差异”，而非股票因子内部的结构关系。分样本池建模则更有利于在同质性更高的截面内观察张量分解的表现。
 
@@ -120,7 +120,7 @@ A\leftarrow X_{(1)}(C\odot B)\left[(C^{\top}C)\ast(B^{\top}B)\right]^{-1},
 
 再次是时间与样本切分协议。本文没有采用“整段样本一次性拟合再解释”的简单流程，而是显式划分训练、验证和测试分区。预处理状态只在训练集上拟合，验证集用于选择 rank，测试集只用于最终 held-out 评估。这样的流程使论文中的实验结果不至于因为预处理泄露而过度乐观，也更贴近正式机器学习评估规范。
 
-最后是辅助数据与主线输入的边界控制。虽然当前 formal 数据链已经具备财务、报告、复权和更多市场级数据资产，本文在 baseline 训练输入中仍以已经稳定进入主线的因子面板为核心；而在 extended 配置中，则把已经形成 PIT 合同和可交易日规则的市场代理、外部宏观、财务 PIT、分红与公告事件特征纳入训练，其余仍未形成可审计 \texttt{available\_date} 的补充数据继续保留在查询和解释层。这样做的目的，是保证实验口径明确、建模边界清晰，避免因补充数据口径尚未完全稳定而影响主体结论。
+最后是辅助数据与主线输入的边界控制。虽然当前 formal 数据链已经具备财务、报告、复权和更多市场级数据资产，本文在 baseline 训练输入中仍以已经稳定进入主线的因子面板为核心；而在 extended 配置中，则把已经形成 PIT 合同和可交易日规则的市场代理、外部宏观、财务 PIT、分红与公告事件特征纳入训练，其余仍未形成可审计 `available_date` 的补充数据继续保留在查询和解释层。这样做的目的，是保证实验口径明确、建模边界清晰，避免因补充数据口径尚未完全稳定而影响主体结论。
 
 \section{张量表示}
 
@@ -208,68 +208,9 @@ w_j=\frac{\|b_{j:}\|_2}{\sum_{k=1}^{F}\|b_{k:}\|_2},
 
 在股票模态层面，潜在表示可用于构造股票相似关系。虽然本文不把股票相似矩阵单独作为最终评价指标，但从实验日志和相似对输出可以观察到，同一行业或相近风格股票更容易在潜在空间中表现出接近的载荷结构。这与量化投资中“因子暴露决定风格分组”的直觉是一致的。相较于简单相关系数，张量潜在表示构造的相似关系同时考虑了时间和因子两个方向，因此更容易反映结构性接近，而非仅仅是短期价格同步。
 
-进一步基于全 A 样本的 Tucker 选择结果生成了股票潜在结构图与 cluster-vs-industry 交叉图。对应产物位于 \texttt{code/data/formal/reports/pattern\_discovery/}，其中 \texttt{stock\_latent\_structure\_formal\_all\_a\_run\_tucker.svg} 将股票按潜在聚类标签展开，并用行业颜色展示聚类内部的行业构成；\texttt{cluster\_vs\_industry\_formal\_all\_a\_run\_tucker.svg} 则把聚类标签与行业分布交叉统计。该图组说明，股票潜在空间并不是简单复制行业分类，而是在行业信息之外保留了由因子暴露、时间状态和排序得分共同形成的结构相似性。
+本轮进一步基于全 A 样本的 Tucker 选择结果生成了股票潜在结构图与 cluster-vs-industry 交叉图。对应产物位于 \texttt{code/data/formal/reports/pattern\_discovery/}，其中 \texttt{stock\_latent\_structure\_formal\_all\_a\_run\_tucker.svg} 将股票按潜在聚类标签展开，并用行业颜色展示聚类内部的行业构成；\texttt{cluster\_vs\_industry\_formal\_all\_a\_run\_tucker.svg} 则把聚类标签与行业分布交叉统计。该图组说明，股票潜在空间并不是简单复制行业分类，而是在行业信息之外保留了由因子暴露、时间状态和排序得分共同形成的结构相似性。
 
-\begin{figure}[!t]
-\centering
-\begin{tikzpicture}
-\begin{groupplot}[
-  group style={group size=2 by 1, horizontal sep=1.4cm},
-  width=0.42\textwidth,
-  height=7.0cm,
-  xbar,
-  xmin=-0.26,
-  xmax=1.32,
-  yticklabel style={font=\tiny},
-  tick label style={font=\small},
-  label style={font=\small},
-  title style={font=\small},
-  nodes near coords,
-  every node near coord/.append style={font=\tiny},
-]
-\nextgroupplot[
-  title={Tucker跨边界Rank IC},
-  symbolic y coords={SIZE\_LARGE,SIZE\_SMALL,INDUSTRY\_C39,INDUSTRY\_C35,SIZE\_MID,ZZ500,ALL\_A,HS300,SZ50,INDUSTRY\_C27},
-  ytick=data,
-  xlabel={Rank IC}
-]
-\addplot[fill=blue!55] coordinates {
-(-0.2297,SIZE\_LARGE)
-(-0.2325,SIZE\_SMALL)
-(-0.0579,INDUSTRY\_C39)
-(0.0434,INDUSTRY\_C35)
-(0.0524,SIZE\_MID)
-(0.0573,ZZ500)
-(0.0598,ALL\_A)
-(0.0731,HS300)
-(0.1523,SZ50)
-(0.2364,INDUSTRY\_C27)
-};
-\nextgroupplot[
-  title={Tucker跨边界累计收益},
-  symbolic y coords={SIZE\_LARGE,SIZE\_SMALL,INDUSTRY\_C39,SIZE\_MID,ALL\_A,ZZ500,SZ50,INDUSTRY\_C35,HS300,INDUSTRY\_C27},
-  ytick=data,
-  xlabel={累计收益(\%)}
-]
-\addplot[fill=orange!70] coordinates {
-(-9.15,SIZE\_SMALL)
-(-3.01,INDUSTRY\_C39)
-(-1.98,SIZE\_LARGE)
-(-1.60,ALL\_A)
-(-1.43,ZZ500)
-(-0.60,SIZE\_MID)
-(-0.33,SZ50)
-(0.86,INDUSTRY\_C35)
-(2.11,HS300)
-(27.81,INDUSTRY\_C27)
-};
-\end{groupplot}
-\end{tikzpicture}
-\caption{短窗口样本边界扩展下 Tucker 的跨边界排序与收益分化}
-\label{fig:tucker_boundary_short}
-\end{figure}
-
-时间模态则提供了对市场状态切换的观察窗口。正式实验输出的 \texttt{time\_regimes\_tucker.json} 记录了若干显著的相邻日期结构跳变。在当前已提交的 HS300 正式结果中，最明显的跳变集中在 2026 年 3 月 25 日至 2026 年 3 月 30 日这一短区间，说明即使在较短的正式输出窗口内，潜在结构也并非静态稳定，而是在局部阶段出现明显重排。换言之，张量分解不仅用于“压缩因子”，还能够识别“市场何时发生了潜在结构变化”。
+时间模态则提供了对市场状态切换的观察窗口。正式实验输出的 \texttt{time\_regimes\_tucker.json} 记录了若干显著的相邻日期结构跳变。在当前已提交的 HS300 正式结果中，最明显的跳变集中在 2026 年 3 月 25 日至 2026 年 3 月 30 日这一短区间，说明即使在当前较短的正式输出窗口内，潜在结构也并非静态稳定，而是在局部阶段出现明显重排。换言之，张量分解不仅用于“压缩因子”，还能够识别“市场何时发生了潜在结构变化”。
 
 \begin{figure}[!t]
 \centering
@@ -316,7 +257,7 @@ w_j=\frac{\|b_{j:}\|_2}{\sum_{k=1}^{F}\|b_{k:}\|_2},
 
 在最新一轮 extended 结果中，这种差异性更加明显。HS300 上扩展特征使三类模型的组合表现同步恶化，CP、PCA 和 Tucker 的累计收益分别降至 $-0.88\%$、$-3.46\%$ 和 $-1.03\%$，对应 Rank IC 也全部转为负值；SZ50 上扩展输入并未改善排序表现，但 CP 的累计收益由 $-3.00\%$ 小幅改善到 $-2.54\%$，而 Tucker 与 PCA 仍分别回落到 $-3.26\%$ 和 $-2.90\%$。ZZ500 上，重构误差整体回落，但三类模型的累计收益分别为 $-4.34\%$、$-2.48\%$ 和 $-7.84\%$，说明更宽的宏观、分红与公告输入并未在当前短窗口内直接转化为收益优势。这表明，扩展特征不仅会改变模型的重构与排序结果，也会改变它们在组合层的收益—风险权衡，因此在评价扩展输入时，必须同时观察净值曲线、回撤、换手率和行业/风格暴露，而不能只保留单一排序指标。
 
-在进一步补充分位数组、多空组合、成本后净值和基准超额收益之后，可以更细致地判断“排序有效性是否真正能够转化为可配置收益”。例如，baseline HS300 上三类模型的 \texttt{top-bottom} 多空净值全部为正，其中 Tucker 与 CP 的多空累计净值分别达到 3.50\% 和 3.43\%，明显高于 PCA 的 2.57\%；但一旦计入交易成本，三类模型的成本后累计收益分别回落到 2.00\%、0.71\% 和 0.57\%，说明高换手模型的毛收益并不能无损落地。又如 baseline SZ50 上，Tucker 的多空组合累计净值达到 8.36\%，但相对指数基准的超额净值仍为负，说明其分位排序结构虽然存在，但在这一短窗口内尚不足以完全抵消市场基准波动。extended ZZ500 上，Tucker 与 PCA 的成本后净值分别回落到 $-2.58\%$ 和 $-7.94\%$，相对基准的超额净值也分别为 $-4.54\%$ 和 $-9.86\%$，说明更宽输入边界虽然改变了结构解释，但在当前短窗口中并未把中盘样本转化为可验证的正向配置价值。可见，加入分位数组、多空、成本和超额收益之后，组合层证据已经比单纯的 Top-N 净值曲线更接近真实投资决策场景。
+在进一步补充分位数组、多空组合、成本后净值和基准超额收益之后，可以更细致地判断“排序有效性是否真正能够转化为可配置收益”。例如，baseline HS300 上三类模型的 `top-bottom` 多空净值全部为正，其中 Tucker 与 CP 的多空累计净值分别达到 3.50\% 和 3.43\%，明显高于 PCA 的 2.57\%；但一旦计入交易成本，三类模型的成本后累计收益分别回落到 2.00\%、0.71\% 和 0.57\%，说明高换手模型的毛收益并不能无损落地。又如 baseline SZ50 上，Tucker 的多空组合累计净值达到 8.36\%，但相对指数基准的超额净值仍为负，说明其分位排序结构虽然存在，但在这一短窗口内尚不足以完全抵消市场基准波动。extended ZZ500 上，Tucker 与 PCA 的成本后净值分别回落到 $-2.58\%$ 和 $-7.94\%$，相对基准的超额净值也分别为 $-4.54\%$ 和 $-9.86\%$，说明更宽输入边界虽然改变了结构解释，但在当前短窗口中并未把中盘样本转化为可验证的正向配置价值。可见，加入分位数组、多空、成本和超额收益之后，组合层证据已经比单纯的 Top-N 净值曲线更接近真实投资决策场景。
 
 为了把组合层结果与样本边界、行业暴露和风格暴露放到同一视角下比较，本文进一步生成了 \texttt{code/data/formal/reports/boundary\_portfolio/} 汇总表。该表同时列出各样本池的 Rank IC 最优模型、累计收益最优模型、Sharpe 最优模型，以及每个模型的 Top-N 收益、分组价差、多空净值、成本后净值、平均交易成本、超额净值、年化波动、平均换手、最大回撤和主要行业/风格暴露。汇总结果显示，Tucker 在 HS300、SZ50、ZZ500 和医药行业样本中往往兼具较好的排序和收益表现，但在全 A 样本中收益最优为 PCA，在大市值样本中 Rank IC 最优为 CP 而 Sharpe 最优为 Tucker。这说明模型优劣并不是单一指标可以决定的，必须同时观察排序相关性、组合收益、换手成本、超额表现和暴露集中度。
 
@@ -324,79 +265,9 @@ w_j=\frac{\|b_{j:}\|_2}{\sum_{k=1}^{F}\|b_{k:}\|_2},
 
 为了验证扩展训练输入是否能够进入统一训练接口，本文进一步构造了 extended factor panel，并在 HS300、SZ50 与 ZZ500 三个样本池上分别运行 baseline/extended 两套 formal 配置。扩展版在原有四个主线因子之外，新加入市场级代理变量 \texttt{market\_return\_1d}、\texttt{market\_momentum\_5d}、\texttt{market\_momentum\_20d}、\texttt{market\_volatility\_20d}、\texttt{market\_drawdown\_20d}、\texttt{market\_amount\_change\_5d}、\texttt{market\_amount\_zscore\_20d}，外部宏观变量 \texttt{macro\_policy\_rate}、\texttt{macro\_lpr\_1y}、\texttt{macro\_lpr\_5y}、\texttt{macro\_cpi\_mom}、\texttt{macro\_m2\_yoy}、\texttt{macro\_industrial\_production\_yoy}、\texttt{macro\_exports\_yoy}、\texttt{macro\_imports\_yoy}，财务 PIT 变量 \texttt{pit\_roe\_avg}、\texttt{pit\_np\_margin}、\texttt{pit\_gp\_margin}、\texttt{pit\_eps\_ttm}，分红变量 \texttt{dividend\_*}，以及业绩快报/业绩预告与公告事件相关的 \texttt{perf\_express\_*}、\texttt{forecast\_*}、\texttt{major\_event\_*}、\texttt{announcement\_*} 系列特征。对照结果表明，扩展输入的影响并不呈现单边改善，而是具有明显的样本池差异。
 
-从已生成的对照结果看，HS300 上新增市场代理变量、外部宏观、分红和公告事件字典后，三类模型的 Rank IC 全部转负，CP、Tucker 与 PCA 分别回落到 $-0.0702$、$-0.1254$ 和 $-0.1277$，组合累计收益也同步转弱，其中 Tucker、PCA 与 CP 分别为 $-2.57\%$、$-2.90\%$ 和 $-1.90\%$，说明扩展输入与大盘蓝筹样本之间仍存在显著相容性差异。SZ50 上，CP 的 MSE 从 0.9898 降至 0.6583，同时 Rank IC 由 $-0.0167$ 转为 0.0602，累计收益也从 $-3.00\%$ 改善到 $-0.39\%$；但 Tucker 与 PCA 的 Rank IC 分别回落到 $-0.1467$ 和 $-0.1168$，累计收益也降至 $-3.26\%$ 和 $-2.26\%$，表明“输入扩展”并没有对所有模型产生一致收益。ZZ500 上，扩展输入的分化更明显：CP 的 Rank IC 升至 0.0608，累计收益转为 3.27\%，而 PCA 与 Tucker 的 Rank IC 仍为负，累计收益分别为 $-4.94\%$ 和 $-4.76\%$。因此，扩展输入的作用更像是重新塑造不同模型在不同样本池中的信息利用方式，而不是简单地把所有结果整体抬升。
+从已生成的对照结果看，HS300 上新增市场代理变量、外部宏观、分红和公告事件字典后，三类模型的 Rank IC 全部转负，CP、Tucker 与 PCA 分别回落到 $-0.1620$、$-0.1267$ 和 $-0.1263$，说明扩展输入与大盘蓝筹样本之间仍存在显著相容性差异。SZ50 上，CP 的 MSE 从 0.9898 降至 0.6583，累计收益也由 $-3.00\%$ 改善到 $-2.54\%$，但三类模型的 Rank IC 仍全部下降，表明“重构误差改善”并不能直接代表“排序或组合表现改善”。ZZ500 上，重构误差同样整体回落，但三类模型的 Rank IC 仍未转正，说明分红与公告事件特征在当前短窗口中更多地改变了结构解释，而未直接带来收益提升。
 
-\begin{figure}[!t]
-\centering
-\begin{tikzpicture}
-\begin{groupplot}[
-  group style={group size=3 by 1, horizontal sep=1.0cm},
-  width=0.29\textwidth,
-  height=5.8cm,
-  ybar,
-  ymin=-0.20,
-  ymax=0.10,
-  symbolic x coords={CP,Tucker,PCA},
-  xtick=data,
-  xticklabel style={font=\tiny},
-  ylabel style={font=\small},
-  title style={font=\small},
-  legend style={font=\tiny, draw=none, at={(0.5,1.08)}, anchor=south},
-  nodes near coords,
-  every node near coord/.append style={font=\tiny},
-]
-\nextgroupplot[title={HS300},ylabel={Rank IC}]
-\addplot[fill=blue!55] coordinates {(CP,0.0833) (Tucker,0.0731) (PCA,0.0174)};
-\addplot[fill=orange!70] coordinates {(CP,-0.0702) (Tucker,-0.1254) (PCA,-0.1277)};
-\legend{baseline,extended}
-\nextgroupplot[title={SZ50}]
-\addplot[fill=blue!55] coordinates {(CP,-0.0167) (Tucker,0.1523) (PCA,0.0129)};
-\addplot[fill=orange!70] coordinates {(CP,0.0602) (Tucker,-0.1467) (PCA,-0.1168)};
-\nextgroupplot[title={ZZ500}]
-\addplot[fill=blue!55] coordinates {(CP,-0.0779) (Tucker,0.0573) (PCA,-0.0178)};
-\addplot[fill=orange!70] coordinates {(CP,0.0608) (Tucker,-0.0145) (PCA,-0.0105)};
-\end{groupplot}
-\end{tikzpicture}
-\caption{三组正式样本池在 baseline 与 extended 输入下的 Rank IC 对比}
-\label{fig:extended_rankic}
-\end{figure}
-
-\begin{figure}[!t]
-\centering
-\begin{tikzpicture}
-\begin{groupplot}[
-  group style={group size=3 by 1, horizontal sep=1.0cm},
-  width=0.29\textwidth,
-  height=5.8cm,
-  ybar,
-  ymin=-10,
-  ymax=4,
-  symbolic x coords={CP,Tucker,PCA},
-  xtick=data,
-  xticklabel style={font=\tiny},
-  ylabel style={font=\small},
-  title style={font=\small},
-  legend style={font=\tiny, draw=none, at={(0.5,1.08)}, anchor=south},
-  nodes near coords,
-  every node near coord/.append style={font=\tiny},
-]
-\nextgroupplot[title={HS300},ylabel={累计收益(\%)}]
-\addplot[fill=blue!55] coordinates {(CP,0.87) (Tucker,2.11) (PCA,0.74)};
-\addplot[fill=orange!70] coordinates {(CP,-1.90) (Tucker,-2.57) (PCA,-2.90)};
-\legend{baseline,extended}
-\nextgroupplot[title={SZ50}]
-\addplot[fill=blue!55] coordinates {(CP,-3.00) (Tucker,-0.33) (PCA,-0.82)};
-\addplot[fill=orange!70] coordinates {(CP,-0.39) (Tucker,-3.26) (PCA,-2.26)};
-\nextgroupplot[title={ZZ500}]
-\addplot[fill=blue!55] coordinates {(CP,-8.47) (Tucker,-1.43) (PCA,-1.49)};
-\addplot[fill=orange!70] coordinates {(CP,3.27) (Tucker,-4.76) (PCA,-4.94)};
-\end{groupplot}
-\end{tikzpicture}
-\caption{三组正式样本池在 baseline 与 extended 输入下的组合累计收益对比}
-\label{fig:extended_return}
-\end{figure}
-
-图~\ref{fig:extended_rankic} 与图~\ref{fig:extended_return} 共同说明，扩展输入并没有形成“统一改善”或“统一恶化”的单边结论，而是显著增强了模型与样本池之间的交互异质性。也就是说，扩展训练输入已经完成“把市场代理变量、外部宏观、财务 PIT、分红与公告事件字典接入统一训练接口并形成可运行对照实验”的目标，但它还不能直接推出“扩展特征一定优于主线因子面板”的结论。更合理的解释是：更宽口径的信息确实能够改变潜在结构，但这种改变是否真正提升模型质量，仍取决于样本池风格、模型结构以及特征筛选方式。因此，本文将这组结果视为“输入边界已扩大、但有效字段仍需继续筛选”的阶段性证据。
+这一结果说明，扩展训练输入已经完成“把市场代理变量、外部宏观、财务 PIT、分红与公告事件字典接入统一训练接口并形成可运行对照实验”的目标，但它还不能直接推出“扩展特征一定优于主线因子面板”的结论。更合理的解释是：更宽口径的信息确实能够改变潜在结构，但这种改变是否真正提升模型质量，仍取决于样本池风格、模型结构以及特征筛选方式。因此，本文将这组结果视为“输入边界已扩大、但有效字段仍需继续筛选”的阶段性证据。
 
 \section{样本边界扩展探索}
 
@@ -408,92 +279,9 @@ w_j=\frac{\|b_{j:}\|_2}{\sum_{k=1}^{F}\|b_{k:}\|_2},
 
 市值分层结果进一步说明样本边界会改变排序与组合表现的对应关系。小市值样本中，CP 的 Rank IC 达到 0.2413，但组合累计收益仅为 $-0.58\%$，说明在高噪声、小样本场景下，排序相关性并不必然转化为可配置收益。中市值样本中，PCA 的 Rank IC 为 0.1416，累计收益达到 4.90\%，而 Tucker 仅取得轻微负收益，说明中盘样本更容易让二维压缩直接服务于组合层。大市值样本中，CP 的 Rank IC 最高，为 0.1451，但三类模型组合收益均为负，这再次表明“排序指标优于同业”与“组合净值最终为正”之间仍存在显著缺口。
 
-在全年 long-window 复核中，这种“最优模型随边界和年份切换”的现象依然存在。根据 \texttt{code/data/formal/reports/long\_window\_portfolio/README.md}，全 A 样本在 2015 窗口中呈现“Rank IC 最优为 CP、收益最优为 PCA”的结构；2019 年三类模型的累计收益全部转正，但最优仍由 PCA 占据；2021 年则出现 Tucker 同时在 Rank IC、收益与 Sharpe 上占优的窗口；2026 年的短年度窗口又重新回到“PCA 在 Rank IC 上领先、CP 在收益上略占优”的局面。行业与市值分层同样没有表现出跨年份恒定不变的最优模型，例如 2021--2023 年的行业 C27 与 C39 更频繁出现 Tucker 最优，而 2018、2019、2025 等窗口里 PCA 或 CP 也会重新占优。总体而言，这些新增 run 已经把“样本边界扩展”从计划推进为真实产物，并证明结论不仅依赖样本边界，也依赖市场阶段。
+在全年 long-window 复核中，这种“最优模型随边界和年份切换”的现象依然存在。根据 \texttt{code/data/formal/reports/long\_window\_portfolio/README.md}，全 A 样本在 2015 窗口中呈现“Rank IC 最优为 CP、收益最优为 PCA”的结构，2016 与 2017 两年则更偏向 Tucker，2020 窗口中收益最优转为 Tucker，2024 窗口中 Rank IC 最优再次回到 CP，2026 窗口则由 PCA 与 Tucker 分别在 Rank IC 和收益上占优。行业与市值分层同样没有表现出跨年份恒定不变的最优模型，例如 2021--2023 年的行业 C27 与 C39 更频繁出现 Tucker 最优，而 2018、2019、2025 等窗口里 PCA 或 CP 也会重新占优。总体而言，这些新增 run 已经把“样本边界扩展”从计划推进为真实产物，并证明结论不仅依赖样本边界，也依赖市场阶段。
 
-\begin{figure}[!t]
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-  width=0.82\textwidth,
-  height=7.0cm,
-  ymin=0.7,
-  ymax=2.4,
-  symbolic x coords={2015,2019,2021,2026},
-  xtick=data,
-  xlabel={代表年份},
-  ylabel={成本后累计净值},
-  legend style={font=\small, draw=none, at={(0.5,1.05)}, anchor=south, legend columns=3},
-  tick label style={font=\small},
-  label style={font=\small},
-  title style={font=\small},
-  mark size=2.2pt,
-]
-\addplot+[mark=square*, blue, thick] coordinates {(2015,0.9227) (2019,1.4269) (2021,1.8612) (2026,0.8344)};
-\addplot+[mark=triangle*, orange, thick] coordinates {(2015,1.0225) (2019,1.6774) (2021,2.2097) (2026,0.7922)};
-\addplot+[mark=*, teal!70!black, thick] coordinates {(2015,0.7381) (2019,1.3946) (2021,2.2992) (2026,0.8323)};
-\legend{CP,PCA,Tucker}
-\end{axis}
-\end{tikzpicture}
-\caption{全 A 长窗口代表年份的成本后累计净值对比}
-\label{fig:all_a_long_window_cost}
-\end{figure}
-
-图~\ref{fig:all_a_long_window_cost} 进一步给出了 2015、2019、2021 与 2026 四个代表年份下全 A 长窗口运行的成本后累计净值。该图最直接地展示了一个事实：模型优劣并不会在所有市场阶段保持不变。2015 年 PCA 尚能维持成本后正净值，而 Tucker 明显落后；2019 年三类模型全部转正，但领先者仍是 PCA；2021 年则出现 Tucker 与 PCA 同时明显跑赢 CP 的结构；到 2026 年短窗口时，三类模型又重新回落到 1 以下。换言之，long-window 复核真正补充的不是“某一模型永远最好”，而是“不同阶段的优势模型会发生切换”，这恰恰是样本边界扩展实验最重要的稳健性信息。
-
-从暴露角度看，行业分层样本的主要行业暴露自然集中在单一行业，而全 A 与指数样本更能暴露模型选择偏好。例如全 A 的 Tucker 组合主要暴露在医药制造、黑色金属和影视传媒等行业，并且风格暴露集中在质量因子；HS300 的 Tucker 组合则明显集中于货币金融服务，同时混合质量、价值和波动率因子。图~\ref{fig:tucker_boundary_short} 进一步给出了短窗口样本边界扩展下 Tucker 的跨边界排序与收益分化：医药行业样本在 Rank IC 和累计收益上同时领先，而电子行业、小市值和大市值样本虽然保留了某些结构信号，却没有把这些信号稳定转化为正向组合净值。这个结果进一步提醒，模式发现不能只看潜在聚类是否稳定，也要检查组合层是否因为样本边界变化而集中到少数行业或单一风格。
-
-\begin{figure}[!t]
-\centering
-\begin{tikzpicture}
-\begin{groupplot}[
-  group style={group size=2 by 1, horizontal sep=1.4cm},
-  width=0.42\textwidth,
-  height=6.6cm,
-  xbar,
-  xmin=-0.14,
-  xmax=1.25,
-  yticklabel style={font=\tiny},
-  tick label style={font=\small},
-  label style={font=\small},
-  title style={font=\small},
-  nodes near coords,
-  every node near coord/.append style={font=\tiny},
-]
-\nextgroupplot[
-  title={2026 long-window Tucker Rank IC},
-  symbolic y coords={INDUSTRY\_C39,ALL\_A,SIZE\_SMALL,INDUSTRY\_C35,INDUSTRY\_C27,SIZE\_MID,SIZE\_LARGE},
-  ytick=data,
-  xlabel={Rank IC}
-]
-\addplot[fill=teal!65] coordinates {
-(-0.1234,INDUSTRY\_C39)
-(-0.1010,ALL\_A)
-(-0.0903,SIZE\_SMALL)
-(-0.0316,INDUSTRY\_C35)
-(0.0038,INDUSTRY\_C27)
-(0.0553,SIZE\_MID)
-(0.1097,SIZE\_LARGE)
-};
-\nextgroupplot[
-  title={2026 long-window Tucker 期末净值},
-  symbolic y coords={INDUSTRY\_C39,SIZE\_SMALL,SIZE\_MID,INDUSTRY\_C35,ALL\_A,SIZE\_LARGE,INDUSTRY\_C27},
-  ytick=data,
-  xlabel={期末净值}
-]
-\addplot[fill=purple!45] coordinates {
-(0.7241,INDUSTRY\_C39)
-(0.7473,SIZE\_SMALL)
-(0.7883,SIZE\_MID)
-(0.8270,INDUSTRY\_C35)
-(0.8339,ALL\_A)
-(0.8694,SIZE\_LARGE)
-(1.2030,INDUSTRY\_C27)
-};
-\end{groupplot}
-\end{tikzpicture}
-\caption{2026 年 long-window 模式发现图组中的 Tucker 跨边界表现}
-\label{fig:tucker_boundary_long2026}
-\end{figure}
+从暴露角度看，行业分层样本的主要行业暴露自然集中在单一行业，而全 A 与指数样本更能暴露模型选择偏好。例如全 A 的 Tucker 组合主要暴露在医药制造、黑色金属和影视传媒等行业，并且风格暴露集中在质量因子；HS300 的 Tucker 组合则明显集中于货币金融服务，同时混合质量、价值和波动率因子。这个结果进一步提醒，模式发现不能只看潜在聚类是否稳定，也要检查组合层是否因为样本边界变化而集中到少数行业或单一风格。
 
 \section{稳健性与局限性分析}
 
@@ -532,11 +320,11 @@ w_j=\frac{\|b_{j:}\|_2}{\sum_{k=1}^{F}\|b_{k:}\|_2},
 
 当然，本文仍存在若干需要继续完善的方面。第一，在数据输入层面，当前正式训练输入已经在 extended 配置中接入市场状态代理、外部利率、宏观月度指标、财务 PIT、分红以及公告事件字典特征，并把字段字典、披露日和最早可用交易日规则写入扩展合同。但当前 committed snapshot 的外部宏观与公告文本仍以当前实验窗口为主，尚未扩展到更长历史与更完整正文全文，这意味着当前模型虽然已经验证了“更宽输入边界可被 PIT-safe 接入”，但对于更宽口径、多来源因子体系的长期适应性仍需在源表持续扩充后继续检验。
 
-第二，在效果验证层面，本文已经补齐了 Top-N 组合的累计净值、回撤、换手率和行业/风格暴露等基础结果，并进一步加入了分位数组、多空组合、成本后净值、交易成本和相对样本池指数的超额收益，且已通过跨样本边界汇总表与 \texttt{2015-2026} 全年 long-window 组合汇总统一比较。该证据链已经能够从短窗口与全年窗口两个层面回答“若将排序结果转化为真实组合规则，会得到怎样的收益—风险画像”；当前仍需继续深化的是更细粒度的交易冲击刻画和风险归因模型，而不是再停留在“是否具备长窗口证据”这一层面。
+第二，在效果验证层面，本文已经补齐了 Top-N 组合的累计净值、回撤、换手率和行业/风格暴露等基础结果，并进一步加入了分位数组、多空组合、成本后净值、交易成本和相对样本池指数的超额收益，且已通过跨样本边界汇总表与 `2015-2026` 全年 long-window 组合汇总统一比较。该证据链已经能够从短窗口与全年窗口两个层面回答“若将排序结果转化为真实组合规则，会得到怎样的收益—风险画像”；当前仍需继续深化的是更细粒度的交易冲击刻画和风险归因模型，而不是再停留在“是否具备长窗口证据”这一层面。
 
 第三，在样本边界层面，本文已经从 HS300、SZ50 与 ZZ500 三个指数样本池扩展到全 A 活跃股票、行业分层和市值分层实验，并为 2015--2026 年区间完成了按年度拆分的 long-window 真实复跑。新增结果说明，指数样本上的结论不能被机械外推：Tucker 在部分窗口和部分行业样本中表现较稳健，但电子、专用设备和不同市值分层样本的最优模型并不固定。虽然全年 long-window 结果已经补齐，但当前训练输入仍是“主线四因子 + 市场代理 + 外部宏观 + 财务 PIT + 分红 + 公告事件字典”的 committed snapshot，这批扩展实验更适合被理解为“当前可审计输入边界在不同边界与市场阶段下的稳健性检验”，而不是所有候选输入都已完备后的最终全市场结论。
 
-第四，在可视化与论证层面，本文已经补充解释方差、Rank IC、滚动稳定性、时间状态、因子热力图、股票潜在结构图、行业聚类交叉图和跨样本边界对比图，并将这些图表整理为答辩材料素材包，能够比单纯模型比较更完整地支撑模式发现叙事。进一步补充的 2015--2026 各年度全 A 长窗口时间状态切换图、因子重要性热力图，以及按年度组织的 \texttt{code/data/formal/reports/pattern\_discovery\_long\_window\_<year>/} 图组，已经把此前“长窗口图待补”的占位说明替换为真实证据。当前仍需继续完善的是把这些 long-window 图组与更宽输入边界实验联动，而不是继续停留在主线四因子输入上。
+第四，在可视化与论证层面，本文已经补充解释方差、Rank IC、滚动稳定性、时间状态、因子热力图、股票潜在结构图、行业聚类交叉图和跨样本边界对比图，并将这些图表整理为答辩材料素材包，能够比单纯模型比较更完整地支撑模式发现叙事。本轮进一步补充了 2015--2026 各年度全 A 长窗口的时间状态切换图和因子重要性热力图，并按年度生成 `code/data/formal/reports/pattern_discovery_long_window_<year>/` 图组，用于替换此前“长窗口图待补”的占位说明。当前仍需继续完善的是把这些 long-window 图组与更宽输入边界实验联动，而不是继续停留在主线四因子输入上。
 
 针对上述不足，本文给出如下完善计划。其一，在数据层面，继续按照“先补 PIT 安全、再扩特征输入”的顺序推进：已完成市场状态代理、外部宏观、财务 PIT、分红和公告事件字典的第一阶段披露时点校验与落盘合同，后续重点转向更长历史、更多宏观品种以及公告正文全文。其二，在评估层面，现有链路已经覆盖 Top-N、分组收益、多空、成本后收益、超额收益、回撤、换手、波动、Sharpe 和暴露，后续重点转向字段筛选、长窗口风险归因与交易冲击刻画。其三，在样本层面，保留指数样本池实验作为稳定基线，同时使用全 A 股、行业分层和不同市值分层实验比较不同样本边界下潜在结构、最优秩和稳定性指标的差异。其四，在结果表达层面，继续扩展长窗口图形体系，并把现有模式发现图组、组合闭环报告和训练输入合同持续维护为答辩材料素材包。
 
@@ -556,7 +344,7 @@ w_j=\frac{\|b_{j:}\|_2}{\sum_{k=1}^{F}\|b_{k:}\|_2},
 
 本文的创新主要体现在三个方面。其一，将股票因子降维、模式发现与正式数据工程链路放在统一框架下讨论，避免了“算法一套、数据一套、论文一套”的证据割裂。其二，在毕业论文层面同时比较 CP、Tucker 与 PCA 三类方法，不仅比较重构误差，还比较 Rank IC 与滚动稳定性，使结论更贴近金融研究需求。其三，将实验结果沉淀为结构化输出与图形化结果，使论文中的图表、结果表和仓库产物具有统一来源。
 
-不足之处主要包括：虽然全 A、行业和市值分层实验已经补充到 2015--2026 全部 long-window 年度，并形成了 \texttt{long\_window\_portfolio} 汇总表与按年度组织的 long-window 模式发现图组，同时当前 committed snapshot 已经把外部宏观、分红、重大事项和公告标题文本纳入训练接口，但这些源表仍以当前实验窗口为主要服务对象，尚未扩展到更长历史、更完整宏观品种和公告正文全文；当前实验已经形成 Top-N 组合净值、分位数组、多空、成本后净值、基准超额收益和跨样本边界统一汇总，但交易冲击和风险归因仍有继续细化空间；模式发现图表已经从基础指标扩展到股票潜在结构、行业聚类关系和全年 long-window 图组，但这些结果仍建立在当前 committed input snapshot 之内。参考文献元数据已经按当前学校提交口径完成最终校验，后续只有在学院模板明确要求逐条展示 DOI 时才需要统一追加。
+不足之处主要包括：虽然全 A、行业和市值分层实验已经补充到 2015--2026 全部 long-window 年度，并形成了 `long_window_portfolio` 汇总表与按年度组织的 long-window 模式发现图组，同时当前 committed snapshot 已经把外部宏观、分红、重大事项和公告标题文本纳入训练接口，但这些源表仍以当前实验窗口为主要服务对象，尚未扩展到更长历史、更完整宏观品种和公告正文全文；当前实验已经形成 Top-N 组合净值、分位数组、多空、成本后净值、基准超额收益和跨样本边界统一汇总，但交易冲击和风险归因仍有继续细化空间；模式发现图表已经从基础指标扩展到股票潜在结构、行业聚类关系和全年 long-window 图组，但这些结果仍建立在当前 committed input snapshot 之内。参考文献元数据已经按当前学校提交口径完成最终校验，后续只有在学院模板明确要求逐条展示 DOI 时才需要统一追加。
 
 \section{后续工作展望}
 
