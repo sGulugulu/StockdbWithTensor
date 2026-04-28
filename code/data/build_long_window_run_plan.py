@@ -78,7 +78,7 @@ def _long_window_factor_panel_path(source_config: Path, current_value: str) -> s
         return None
     if target.parent.name != "factors":
         return None
-    if not target.stem.endswith("_factor_panel"):
+    if not (target.stem.endswith("_factor_panel") or target.stem.endswith("_factor_panel_extended")):
         return None
     long_window_target = target.parent / "long_window" / f"{target.stem}_long_window.csv"
     return long_window_target.as_posix()

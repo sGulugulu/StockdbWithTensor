@@ -54,6 +54,7 @@ class FakeAkshare:
 
     def stock_notice_report(self, symbol, date):
         self.notice_dates.append(date)
+        pub_date = f"{date[:4]}-{date[4:6]}-{date[6:8]}"
         return FakeDataFrame(
             [
                 {
@@ -61,7 +62,7 @@ class FakeAkshare:
                     "名称": "浦发银行",
                     "公告标题": "关于重大事项停牌与分红安排的公告",
                     "公告类型": "重大事项",
-                    "公告日期": "2026-03-24",
+                    "公告日期": pub_date,
                     "网址": "https://example.com/a",
                 }
             ]
@@ -117,6 +118,7 @@ class BuildFormalExtendedSourcesTests(unittest.TestCase):
             fake_akshare = _mock_akshare.return_value
             self.assertIn("20260321", fake_akshare.notice_dates)
             self.assertIn("20260322", fake_akshare.notice_dates)
+            self.assertIn("2026-03-21,2026-03-21", notice_content)
 
 
 if __name__ == "__main__":

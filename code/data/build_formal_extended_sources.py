@@ -81,6 +81,13 @@ def _next_trade_date_after(reference_date: str, trade_dates: list[str]) -> str |
     return None
 
 
+def _source_available_date(pub_date: str, trade_dates: list[str]) -> str:
+    # 窗口前事件保留原公告日，避免历史信息被误判为首个交易日刚发生。
+    if trade_dates and pub_date < trade_dates[0]:
+        return pub_date
+    return _next_trade_date_after(pub_date, trade_dates) or ""
+
+
 def _iter_target_symbols(history_paths: Iterable[Path]) -> list[str]:
     symbols: set[str] = set()
     for path in history_paths:
@@ -117,14 +124,14 @@ def _macro_rows_from_common_table(*, source_api: str, metric_id: str, metric_nam
         pub_date = _parse_any_date(row.get("日期"))
         if not pub_date:
             continue
-        available_date = _next_trade_date_after(pub_date, trade_dates)
+        available_date = _source_available_date(pub_date, trade_dates)
         result.append(
             {
                 "source_api": source_api,
                 "metric_id": metric_id,
                 "metric_name": metric_name,
                 "pub_date": pub_date,
-                "available_date": available_date or "",
+                "available_date": available_date,
                 "value": _to_float(row.get("今值")) or 0.0,
                 "expected_value": _to_float(row.get("预测值")) or 0.0,
                 "previous_value": _to_float(row.get("前值")) or 0.0,
@@ -151,7 +158,7 @@ def build_macro_interest_rate_rows(*, trade_dates: list[str]) -> list[dict[str, 
         pub_date = _parse_any_date(row.get("TRADE_DATE"))
         if not pub_date:
             continue
-        available_date = _next_trade_date_after(pub_date, trade_dates)
+        available_date = _source_available_date(pub_date, trade_dates)
         for metric_id, metric_name, source_field in (
             ("lpr_1y", "china_lpr_1y", "LPR1Y"),
             ("lpr_5y", "china_lpr_5y", "LPR5Y"),
@@ -167,7 +174,7 @@ def build_macro_interest_rate_rows(*, trade_dates: list[str]) -> list[dict[str, 
                     "metric_id": metric_id,
                     "metric_name": metric_name,
                     "pub_date": pub_date,
-                    "available_date": available_date or "",
+                    "available_date": available_date,
                     "value": value,
                     "expected_value": 0.0,
                     "previous_value": 0.0,
@@ -214,14 +221,14 @@ def build_dividend_rows(*, symbols: list[str], trade_dates: list[str]) -> list[d
             pub_date = _parse_any_date(row.get("实施方案公告日期"))
             if not pub_date:
                 continue
-            available_date = _next_trade_date_after(pub_date, trade_dates)
+            available_date = _source_available_date(pub_date, trade_dates)
             rows.append(
                 {
                     "stock_code": symbol,
                     "report_period": _safe_text(row.get("报告时间")),
                     "dividend_type": _safe_text(row.get("分红类型")),
                     "pub_date": pub_date,
-                    "available_date": available_date or "",
+                    "available_date": available_date,
                     "record_date": _parse_any_date(row.get("股权登记日")) or "",
                     "ex_date": _parse_any_date(row.get("除权日")) or "",
                     "pay_date": _parse_any_date(row.get("派息日")) or "",
@@ -273,7 +280,7 @@ def build_notice_rows(
             pub_date = _parse_any_date(row.get("公告日期"))
             if not pub_date:
                 continue
-            available_date = _next_trade_date_after(pub_date, trade_dates)
+            available_date = _source_available_date(pub_date, trade_dates)
             title = _safe_text(row.get("公告标题"))
             notice_type = _safe_text(row.get("公告类型"))
             keyword_score = 0.0
@@ -285,7 +292,7 @@ def build_notice_rows(
                 "stock_code": _normalize_cn_a_symbol(raw_code),
                 "notice_type": notice_type,
                 "pub_date": pub_date,
-                "available_date": available_date or "",
+                "available_date": available_date,
                 "title_text": title,
                 "title_length": len(title),
                 "keyword_score": keyword_score,
