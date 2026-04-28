@@ -6,6 +6,7 @@ import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from data.refresh_formal_factor_panels import refresh_formal_factor_panels
 from data.refresh_formal_factor_panels import refresh_formal_factor_panels_with_sources
 
 
@@ -198,6 +199,14 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
             tail_rows = [row for row in data_rows if row["trade_date"] >= "2026-03-25"]
             self.assertTrue(tail_rows)
             self.assertTrue(any(abs(float(row["future_return"])) > 0.0 for row in tail_rows))
+
+            with patch("data.refresh_formal_factor_panels.build_formal_extended_sources") as mock_build:
+                default_outputs = refresh_formal_factor_panels(
+                    formal_root=root,
+                    max_trade_date="2026-03-30",
+                )
+            mock_build.assert_not_called()
+            self.assertEqual(len(default_outputs), 6)
 
     @patch("data.refresh_formal_factor_panels.build_formal_extended_sources")
     def test_refresh_formal_factor_panels_builds_baseline_before_extended_sources(self, mock_build_sources) -> None:

@@ -37,7 +37,7 @@ def refresh_formal_factor_panels(*, formal_root: Path, max_trade_date: str = DEF
     return refresh_formal_factor_panels_with_sources(
         formal_root=formal_root,
         max_trade_date=max_trade_date,
-        build_extended_source_tables=True,
+        build_extended_source_tables=False,
     )
 
 
@@ -45,7 +45,7 @@ def refresh_formal_factor_panels_with_sources(
     *,
     formal_root: Path,
     max_trade_date: str = DEFAULT_MAX_TRADE_DATE,
-    build_extended_source_tables: bool = True,
+    build_extended_source_tables: bool = False,
 ) -> list[Path]:
     normalized_root = formal_root.resolve()
     outputs: list[Path] = []
@@ -79,6 +79,7 @@ def refresh_formal_factor_panels_with_sources(
         baseline_outputs[spec.universe_id] = baseline_output
 
     if build_extended_source_tables:
+        # 显式重建才调用 AKShare，默认复用已提交快照以保证离线复现。
         extended_sources = build_formal_extended_sources(
             formal_root=normalized_root,
             max_trade_date=max_trade_date,
@@ -120,11 +121,17 @@ def main() -> None:
         default=DEFAULT_MAX_TRADE_DATE,
         help="提交版 formal factor panel 的统一截断日期",
     )
+    parser.add_argument(
+        "--rebuild-extended-sources",
+        action="store_true",
+        help="联网重建宏观、分红和公告源表；默认复用已提交的 source CSV 快照",
+    )
     args = parser.parse_args()
 
-    outputs = refresh_formal_factor_panels(
+    outputs = refresh_formal_factor_panels_with_sources(
         formal_root=args.formal_root,
         max_trade_date=args.max_trade_date,
+        build_extended_source_tables=args.rebuild_extended_sources,
     )
     for path in outputs:
         print(path.as_posix())

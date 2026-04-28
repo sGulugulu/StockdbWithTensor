@@ -51,13 +51,15 @@
 
 ## 生成命令
 
-当前提交到仓库、供 formal profile 与论文正文复现使用的 factor panel 快照统一截断到 `2026-03-30`。推荐优先使用统一刷新入口，而不是分别手工运行 baseline/extended 六条命令：
+当前提交到仓库、供 formal profile 与论文正文复现使用的 factor panel 快照统一截断到 `2026-03-30`。推荐优先使用统一刷新入口复用已提交的 extended 源表快照，而不是分别手工运行 baseline/extended 六条命令：
 
 ```powershell
 python code/data/refresh_formal_factor_panels.py `
   --formal-root code/data/formal `
   --max-trade-date 2026-03-30
 ```
+
+该入口默认不联网；如需重新抓取并覆盖 extended 源表，追加 `--rebuild-extended-sources`。
 
 如果只需单独重建某一类 panel，可继续使用下面的底层命令。
 

@@ -236,13 +236,15 @@ python3 code/data/fetch_baostock_data.py `
 
 从 canonical formal root 构建或刷新日频市场面板、因子面板和实验输入。
 
-若要刷新当前提交版实验所用的 baseline/extended 因子面板快照，优先使用：
+若要使用已提交的宏观、分红和公告源表快照刷新 baseline/extended 因子面板，优先使用：
 
 ```powershell
 python3 code/data/refresh_formal_factor_panels.py `
   --formal-root code/data/formal `
   --max-trade-date 2026-03-30
 ```
+
+如需联网重建 extended 源表，再追加 `--rebuild-extended-sources`；默认不联网，便于在 fresh checkout 和离线环境复现。
 
 ### Stage 4：生成 Parquet
 

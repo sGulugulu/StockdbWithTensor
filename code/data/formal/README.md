@@ -137,13 +137,15 @@ python3 code/data/convert_formal_csv_to_parquet.py `
   --overwrite
 ```
 
-如果你要刷新当前提交版实验所使用的 baseline/extended 因子面板，推荐直接执行：
+如果你要使用已提交的宏观、分红和公告源表快照刷新 baseline/extended 因子面板，推荐直接执行：
 
 ```powershell
 python3 code/data/refresh_formal_factor_panels.py `
   --formal-root code/data/formal `
   --max-trade-date 2026-03-30
 ```
+
+该入口默认不联网；如需重新抓取并覆盖 extended 源表，追加 `--rebuild-extended-sources`。
 
 如果你要单独重建 AC1 所需的外部宏观、分红、重大事项和公告标题文本源表，执行：
 

@@ -22,6 +22,7 @@ class FakeDataFrame:
 
 class FakeAkshare:
     def __init__(self) -> None:
+        self.notice_dates: list[str] = []
         self.macro_bank_china_interest_rate = lambda: FakeDataFrame(
             [{"商品": "中国央行决议报告", "日期": "2026-03-24", "今值": 2.5, "预测值": None, "前值": 2.4}]
         )
@@ -50,7 +51,10 @@ class FakeAkshare:
                 }
             ]
         )
-        self.stock_notice_report = lambda symbol, date: FakeDataFrame(
+
+    def stock_notice_report(self, symbol, date):
+        self.notice_dates.append(date)
+        return FakeDataFrame(
             [
                 {
                     "代码": "600000",
@@ -110,6 +114,9 @@ class BuildFormalExtendedSourcesTests(unittest.TestCase):
             self.assertIn("10派2.5元", dividend_content)
             notice_content = result.major_event_notice_path.read_text(encoding="utf-8")
             self.assertIn("重大事项", notice_content)
+            fake_akshare = _mock_akshare.return_value
+            self.assertIn("20260321", fake_akshare.notice_dates)
+            self.assertIn("20260322", fake_akshare.notice_dates)
 
 
 if __name__ == "__main__":

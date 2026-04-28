@@ -260,47 +260,46 @@ def build_notice_rows(
         "分红": 0.6,
     }
     while current_date <= end:
-        if current_date.weekday() < 5:
-            try:
-                notice_df = ak.stock_notice_report(symbol="全部", date=current_date.strftime("%Y%m%d"))
-            except Exception as exc:
-                print(f"[build_notice_rows] skip {current_date.isoformat()}: {exc}", file=sys.stderr)
-                current_date += timedelta(days=1)
+        try:
+            notice_df = ak.stock_notice_report(symbol="全部", date=current_date.strftime("%Y%m%d"))
+        except Exception as exc:
+            print(f"[build_notice_rows] skip {current_date.isoformat()}: {exc}", file=sys.stderr)
+            current_date += timedelta(days=1)
+            continue
+        for row in notice_df.to_dict("records"):
+            raw_code = _safe_text(row.get("代码"))
+            if raw_code not in allowed_codes:
                 continue
-            for row in notice_df.to_dict("records"):
-                raw_code = _safe_text(row.get("代码"))
-                if raw_code not in allowed_codes:
-                    continue
-                pub_date = _parse_any_date(row.get("公告日期"))
-                if not pub_date:
-                    continue
-                available_date = _next_trade_date_after(pub_date, trade_dates)
-                title = _safe_text(row.get("公告标题"))
-                notice_type = _safe_text(row.get("公告类型"))
-                keyword_score = 0.0
-                lowered_title = title.lower()
-                for keyword, score in keyword_scores.items():
-                    if keyword.lower() in lowered_title:
-                        keyword_score += score
-                normalized = {
-                    "stock_code": _normalize_cn_a_symbol(raw_code),
-                    "notice_type": notice_type,
-                    "pub_date": pub_date,
-                    "available_date": available_date or "",
-                    "title_text": title,
-                    "title_length": len(title),
-                    "keyword_score": keyword_score,
-                    "url": _safe_text(row.get("网址")),
-                    "source_api": "akshare.stock_notice_report",
-                }
-                all_rows.append(normalized)
-                if notice_type in major_types or keyword_score != 0.0:
-                    major_rows.append(
-                        {
-                            **normalized,
-                            "severity_score": 1.0 + abs(keyword_score),
-                        }
-                    )
+            pub_date = _parse_any_date(row.get("公告日期"))
+            if not pub_date:
+                continue
+            available_date = _next_trade_date_after(pub_date, trade_dates)
+            title = _safe_text(row.get("公告标题"))
+            notice_type = _safe_text(row.get("公告类型"))
+            keyword_score = 0.0
+            lowered_title = title.lower()
+            for keyword, score in keyword_scores.items():
+                if keyword.lower() in lowered_title:
+                    keyword_score += score
+            normalized = {
+                "stock_code": _normalize_cn_a_symbol(raw_code),
+                "notice_type": notice_type,
+                "pub_date": pub_date,
+                "available_date": available_date or "",
+                "title_text": title,
+                "title_length": len(title),
+                "keyword_score": keyword_score,
+                "url": _safe_text(row.get("网址")),
+                "source_api": "akshare.stock_notice_report",
+            }
+            all_rows.append(normalized)
+            if notice_type in major_types or keyword_score != 0.0:
+                major_rows.append(
+                    {
+                        **normalized,
+                        "severity_score": 1.0 + abs(keyword_score),
+                    }
+                )
         current_date += timedelta(days=1)
     all_rows.sort(key=lambda item: (str(item["stock_code"]), str(item["pub_date"]), str(item["notice_type"])))
     major_rows.sort(key=lambda item: (str(item["stock_code"]), str(item["pub_date"]), str(item["notice_type"])))

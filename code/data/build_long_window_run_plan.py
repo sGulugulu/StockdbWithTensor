@@ -115,7 +115,7 @@ def _write_config_variant(
 def _build_command(config_path: Path | str) -> str:
     path_text = config_path.as_posix() if isinstance(config_path, Path) else str(config_path)
     escaped = path_text.replace('"', '\\"')
-    return f'.venv/bin/python3 code/main.py --config "{escaped}"'
+    return f'python3 code/main.py --config "{escaped}"'
 
 
 def build_long_window_run_plan(
