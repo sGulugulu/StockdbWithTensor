@@ -19,7 +19,11 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
             source_paths = _cached_source_paths(root)
 
             with self.assertRaises(FileNotFoundError):
-                _validate_cached_source_snapshots(source_paths, max_trade_date="2026-03-30")
+                _validate_cached_source_snapshots(
+                    source_paths,
+                    max_trade_date="2026-03-30",
+                    earliest_trade_date="2026-03-30",
+                )
 
             (root / "external").mkdir(parents=True, exist_ok=True)
             (root / "events").mkdir(parents=True, exist_ok=True)
@@ -47,7 +51,11 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
             )
 
             with self.assertRaises(FileNotFoundError):
-                _validate_cached_source_snapshots(source_paths, max_trade_date="2026-03-30")
+                _validate_cached_source_snapshots(
+                    source_paths,
+                    max_trade_date="2026-03-30",
+                    earliest_trade_date="2026-03-30",
+                )
 
             source_paths.snapshot_metadata_path.write_text(
                 '{"max_trade_date": "2026-03-24"}\n',
@@ -55,20 +63,43 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
             )
 
             with self.assertRaisesRegex(ValueError, "before max_trade_date"):
-                _validate_cached_source_snapshots(source_paths, max_trade_date="2026-03-30")
+                _validate_cached_source_snapshots(
+                    source_paths,
+                    max_trade_date="2026-03-30",
+                    earliest_trade_date="2026-03-30",
+                )
 
             source_paths.snapshot_metadata_path.write_text(
-                '{"max_trade_date": "2026-03-30", "notice_lookback_days": 5}\n',
+                '{"max_trade_date": "2026-03-30", "notice_lookback_days": 5, "notice_start_date": "2026-02-28"}\n',
                 encoding="utf-8",
             )
             with self.assertRaisesRegex(ValueError, "notice_lookback_days"):
-                _validate_cached_source_snapshots(source_paths, max_trade_date="2026-03-30")
+                _validate_cached_source_snapshots(
+                    source_paths,
+                    max_trade_date="2026-03-30",
+                    earliest_trade_date="2026-03-30",
+                )
 
             source_paths.snapshot_metadata_path.write_text(
-                '{"max_trade_date": "2026-03-30", "notice_lookback_days": 30}\n',
+                '{"max_trade_date": "2026-03-30", "notice_lookback_days": 30, "notice_start_date": "2026-03-10"}\n',
                 encoding="utf-8",
             )
-            _validate_cached_source_snapshots(source_paths, max_trade_date="2026-03-30")
+            with self.assertRaisesRegex(ValueError, "notice_start_date"):
+                _validate_cached_source_snapshots(
+                    source_paths,
+                    max_trade_date="2026-03-30",
+                    earliest_trade_date="2026-03-30",
+                )
+
+            source_paths.snapshot_metadata_path.write_text(
+                '{"max_trade_date": "2026-03-30", "notice_lookback_days": 30, "notice_start_date": "2026-02-28"}\n',
+                encoding="utf-8",
+            )
+            _validate_cached_source_snapshots(
+                source_paths,
+                max_trade_date="2026-03-30",
+                earliest_trade_date="2026-03-30",
+            )
 
     def test_refresh_formal_factor_panels_builds_baseline_and_extended_outputs(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -229,7 +260,7 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
                 encoding="utf-8",
             )
             (root / "events" / "extended_source_snapshot.json").write_text(
-                '{"max_trade_date": "2026-03-30", "notice_lookback_days": 30}\n',
+                '{"max_trade_date": "2026-03-30", "notice_lookback_days": 30, "notice_start_date": "2026-02-23"}\n',
                 encoding="utf-8",
             )
 

@@ -4,6 +4,7 @@ import argparse
 import csv
 import json
 from dataclasses import dataclass
+from datetime import date, timedelta
 from pathlib import Path
 import sys
 
@@ -70,7 +71,29 @@ def _read_required_csv_rows(path: Path, *, allow_empty: bool = False) -> list[di
     return rows
 
 
-def _validate_cached_source_snapshots(source_paths: ExtendedSourcePaths, *, max_trade_date: str) -> None:
+def _earliest_trade_date(panel_paths: list[Path]) -> str:
+    trade_dates: list[str] = []
+    for path in panel_paths:
+        with path.open("r", encoding="utf-8-sig", newline="") as handle:
+            for row in csv.DictReader(handle):
+                trade_date = row.get("trade_date")
+                if trade_date:
+                    trade_dates.append(trade_date)
+    if not trade_dates:
+        raise ValueError("No trade dates found in baseline factor panels.")
+    return min(trade_dates)
+
+
+def _required_notice_start_date(earliest_trade_date: str) -> str:
+    return (date.fromisoformat(earliest_trade_date) - timedelta(days=NOTICE_FEATURE_WINDOW_DAYS)).isoformat()
+
+
+def _validate_cached_source_snapshots(
+    source_paths: ExtendedSourcePaths,
+    *,
+    max_trade_date: str,
+    earliest_trade_date: str,
+) -> None:
     # CSV 只证明有数据；覆盖水位由显式 metadata 记录，避免 cutoff 当天无公告时误判过期。
     _read_required_csv_rows(source_paths.macro_interest_rate_path)
     _read_required_csv_rows(source_paths.macro_monthly_path)
@@ -93,6 +116,13 @@ def _validate_cached_source_snapshots(source_paths: ExtendedSourcePaths, *, max_
         raise ValueError(
             f"Cached extended source snapshot notice_lookback_days={notice_lookback_days} "
             f"is shorter than required {NOTICE_FEATURE_WINDOW_DAYS}: {source_paths.snapshot_metadata_path}"
+        )
+    notice_start_date = str(metadata.get("notice_start_date") or "")
+    required_notice_start = _required_notice_start_date(earliest_trade_date)
+    if not notice_start_date or notice_start_date > required_notice_start:
+        raise ValueError(
+            f"Cached extended source snapshot notice_start_date={notice_start_date or 'MISSING'} "
+            f"is later than required {required_notice_start}: {source_paths.snapshot_metadata_path}"
         )
 
 
@@ -138,7 +168,11 @@ def refresh_formal_factor_panels_with_sources(
             max_trade_date=max_trade_date,
         )
     else:
-        _validate_cached_source_snapshots(source_paths, max_trade_date=max_trade_date)
+        _validate_cached_source_snapshots(
+            source_paths,
+            max_trade_date=max_trade_date,
+            earliest_trade_date=_earliest_trade_date(list(baseline_outputs.values())),
+        )
         extended_sources = source_paths
 
     for spec in UNIVERSE_SPECS:
