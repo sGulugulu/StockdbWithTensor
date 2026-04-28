@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 from dataclasses import dataclass
 from datetime import date, timedelta
 from pathlib import Path
@@ -356,13 +357,14 @@ class ExtendedSourceBuildResult:
     dividend_events_path: Path
     major_event_notice_path: Path
     announcement_text_path: Path
+    snapshot_metadata_path: Path
 
 
 def build_formal_extended_sources(
     *,
     formal_root: Path,
     max_trade_date: str,
-    notice_lookback_days: int = 3650,
+    notice_lookback_days: int = 30,
 ) -> ExtendedSourceBuildResult:
     normalized_root = formal_root.resolve()
     history_paths = [
@@ -385,6 +387,7 @@ def build_formal_extended_sources(
     dividend_events_path = events_dir / "dividend_event.csv"
     major_event_notice_path = events_dir / "major_event_notice.csv"
     announcement_text_path = events_dir / "announcement_text.csv"
+    snapshot_metadata_path = events_dir / "extended_source_snapshot.json"
 
     _write_rows(
         macro_interest_rate_path,
@@ -431,12 +434,27 @@ def build_formal_extended_sources(
         ["stock_code", "notice_type", "pub_date", "available_date", "title_text", "title_length", "keyword_score", "severity_score", "url", "source_api"],
         major_rows,
     )
+    snapshot_metadata_path.write_text(
+        json.dumps(
+            {
+                "max_trade_date": max_trade_date,
+                "notice_start_date": notice_start_date,
+                "notice_end_date": max_trade_date,
+                "notice_lookback_days": notice_lookback_days,
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
     return ExtendedSourceBuildResult(
         macro_interest_rate_path=macro_interest_rate_path,
         macro_monthly_path=macro_monthly_path,
         dividend_events_path=dividend_events_path,
         major_event_notice_path=major_event_notice_path,
         announcement_text_path=announcement_text_path,
+        snapshot_metadata_path=snapshot_metadata_path,
     )
 
 
@@ -444,7 +462,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Build normalized macro and event source tables for formal extended inputs.")
     parser.add_argument("--formal-root", type=Path, default=Path(__file__).resolve().parent / "formal")
     parser.add_argument("--max-trade-date", type=str, default="2026-03-30")
-    parser.add_argument("--notice-lookback-days", type=int, default=3650)
+    parser.add_argument("--notice-lookback-days", type=int, default=30)
     args = parser.parse_args()
 
     result = build_formal_extended_sources(

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 from dataclasses import dataclass
 from pathlib import Path
 import sys
@@ -34,6 +35,7 @@ class ExtendedSourcePaths:
     dividend_events_path: Path
     major_event_notice_path: Path
     announcement_text_path: Path
+    snapshot_metadata_path: Path
 
 
 UNIVERSE_SPECS = (
@@ -50,6 +52,7 @@ def _cached_source_paths(formal_root: Path) -> ExtendedSourcePaths:
         dividend_events_path=formal_root / "events" / "dividend_event.csv",
         major_event_notice_path=formal_root / "events" / "major_event_notice.csv",
         announcement_text_path=formal_root / "events" / "announcement_text.csv",
+        snapshot_metadata_path=formal_root / "events" / "extended_source_snapshot.json",
     )
 
 
@@ -65,7 +68,7 @@ def _read_required_csv_rows(path: Path) -> list[dict[str, str]]:
 
 
 def _validate_cached_source_snapshots(source_paths: ExtendedSourcePaths, *, max_trade_date: str) -> None:
-    # 公告全集按日抓取，必须覆盖到实验截断日；其它低频源只校验存在且非空。
+    # CSV 只证明有数据；覆盖水位由显式 metadata 记录，避免 cutoff 当天无公告时误判过期。
     for path in (
         source_paths.macro_interest_rate_path,
         source_paths.macro_monthly_path,
@@ -74,12 +77,16 @@ def _validate_cached_source_snapshots(source_paths: ExtendedSourcePaths, *, max_
         source_paths.announcement_text_path,
     ):
         _read_required_csv_rows(path)
-    announcement_rows = _read_required_csv_rows(source_paths.announcement_text_path)
-    max_notice_date = max((row.get("pub_date") or "" for row in announcement_rows), default="")
-    if max_notice_date < max_trade_date:
+    if not source_paths.snapshot_metadata_path.exists():
+        raise FileNotFoundError(
+            f"Missing cached extended source snapshot metadata: {source_paths.snapshot_metadata_path}"
+        )
+    metadata = json.loads(source_paths.snapshot_metadata_path.read_text(encoding="utf-8"))
+    snapshot_max_trade_date = str(metadata.get("max_trade_date") or "")
+    if snapshot_max_trade_date < max_trade_date:
         raise ValueError(
-            f"Cached announcement snapshot ends at {max_notice_date}, before max_trade_date {max_trade_date}: "
-            f"{source_paths.announcement_text_path}"
+            f"Cached extended source snapshot ends at {snapshot_max_trade_date}, "
+            f"before max_trade_date {max_trade_date}: {source_paths.snapshot_metadata_path}"
         )
 
 

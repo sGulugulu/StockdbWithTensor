@@ -135,6 +135,7 @@ class BuildFormalExtendedSourcesTests(unittest.TestCase):
             self.assertTrue(result.dividend_events_path.exists())
             self.assertTrue(result.major_event_notice_path.exists())
             self.assertTrue(result.announcement_text_path.exists())
+            self.assertTrue(result.snapshot_metadata_path.exists())
             macro_content = result.macro_interest_rate_path.read_text(encoding="utf-8")
             self.assertIn("policy_rate_current", macro_content)
             dividend_content = result.dividend_events_path.read_text(encoding="utf-8")

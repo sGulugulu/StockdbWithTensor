@@ -49,8 +49,22 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
+            with self.assertRaises(FileNotFoundError):
+                _validate_cached_source_snapshots(source_paths, max_trade_date="2026-03-30")
+
+            source_paths.snapshot_metadata_path.write_text(
+                '{"max_trade_date": "2026-03-24"}\n',
+                encoding="utf-8",
+            )
+
             with self.assertRaisesRegex(ValueError, "before max_trade_date"):
                 _validate_cached_source_snapshots(source_paths, max_trade_date="2026-03-30")
+
+            source_paths.snapshot_metadata_path.write_text(
+                '{"max_trade_date": "2026-03-30"}\n',
+                encoding="utf-8",
+            )
+            _validate_cached_source_snapshots(source_paths, max_trade_date="2026-03-30")
 
     def test_refresh_formal_factor_panels_builds_baseline_and_extended_outputs(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -206,9 +220,12 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
                         "stock_code,notice_type,pub_date,available_date,title_text,title_length,keyword_score,url,source_api",
                         "600000.SH,其他,2026-03-24,2026-03-25,关于分红预案与回购安排的公告,14,1.6,https://example.com/c,akshare",
                         "600001.SH,其他,2026-03-24,2026-03-25,关于重大合同签署进展的公告,13,0.8,https://example.com/d,akshare",
-                        "600001.SH,其他,2026-03-30,2026-03-30,关于经营情况的公告,9,0.0,https://example.com/e,akshare",
                     ]
                 ),
+                encoding="utf-8",
+            )
+            (root / "events" / "extended_source_snapshot.json").write_text(
+                '{"max_trade_date": "2026-03-30"}\n',
                 encoding="utf-8",
             )
 
