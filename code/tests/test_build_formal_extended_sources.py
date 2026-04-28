@@ -7,7 +7,9 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from data.build_formal_extended_sources import build_dividend_rows
 from data.build_formal_extended_sources import build_formal_extended_sources
+from data.build_formal_extended_sources import build_notice_rows
 
 
 class FakeDataFrame:
@@ -85,6 +87,14 @@ class FakeAkshare:
         )
 
 
+class FailingAkshare:
+    def stock_dividend_cninfo(self, symbol):
+        raise RuntimeError("api down")
+
+    def stock_notice_report(self, symbol, date):
+        raise RuntimeError("api down")
+
+
 class BuildFormalExtendedSourcesTests(unittest.TestCase):
     @patch("data.build_formal_extended_sources._load_akshare", return_value=FakeAkshare())
     def test_build_formal_extended_sources_writes_normalized_tables(self, _mock_akshare) -> None:
@@ -137,6 +147,21 @@ class BuildFormalExtendedSourcesTests(unittest.TestCase):
             self.assertIn("20260321", fake_akshare.notice_dates)
             self.assertIn("20260322", fake_akshare.notice_dates)
             self.assertIn("2026-03-21,2026-03-21", notice_content)
+
+    @patch("data.build_formal_extended_sources._load_akshare", return_value=FailingAkshare())
+    def test_build_dividend_rows_fails_fast_on_fetch_error(self, _mock_akshare) -> None:
+        with self.assertRaisesRegex(RuntimeError, "600000.SH"):
+            build_dividend_rows(symbols=["600000.SH"], trade_dates=["2026-03-25"])
+
+    @patch("data.build_formal_extended_sources._load_akshare", return_value=FailingAkshare())
+    def test_build_notice_rows_fails_fast_on_fetch_error(self, _mock_akshare) -> None:
+        with self.assertRaisesRegex(RuntimeError, "2026-03-24"):
+            build_notice_rows(
+                symbols=["600000.SH"],
+                trade_dates=["2026-03-25"],
+                start_date="2026-03-24",
+                end_date="2026-03-24",
+            )
 
 
 if __name__ == "__main__":

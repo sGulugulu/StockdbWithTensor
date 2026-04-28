@@ -8,9 +8,50 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from data.refresh_formal_factor_panels import refresh_formal_factor_panels
 from data.refresh_formal_factor_panels import refresh_formal_factor_panels_with_sources
+from data.refresh_formal_factor_panels import _cached_source_paths
+from data.refresh_formal_factor_panels import _validate_cached_source_snapshots
 
 
 class RefreshFormalFactorPanelsTests(unittest.TestCase):
+    def test_validate_cached_source_snapshots_rejects_missing_or_stale_sources(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir) / "formal"
+            source_paths = _cached_source_paths(root)
+
+            with self.assertRaises(FileNotFoundError):
+                _validate_cached_source_snapshots(source_paths, max_trade_date="2026-03-30")
+
+            (root / "external").mkdir(parents=True, exist_ok=True)
+            (root / "events").mkdir(parents=True, exist_ok=True)
+            source_paths.macro_interest_rate_path.write_text(
+                "source_api,metric_id,metric_name,pub_date,available_date,value,expected_value,previous_value\n"
+                "akshare,policy_rate_current,china_policy_rate,2026-03-24,2026-03-25,2.5,0.0,2.4\n",
+                encoding="utf-8",
+            )
+            source_paths.macro_monthly_path.write_text(
+                "source_api,metric_id,metric_name,pub_date,available_date,value,expected_value,previous_value\n"
+                "akshare,cpi_mom,china_cpi_monthly,2026-03-20,2026-03-25,0.8,0.0,0.7\n",
+                encoding="utf-8",
+            )
+            source_paths.dividend_events_path.write_text(
+                "stock_code,report_period,dividend_type,pub_date,available_date,record_date,ex_date,pay_date,bonus_ratio,transfer_ratio,cash_ratio,plan_text,source_api\n"
+                "600000.SH,2025年报,年度分红,2026-03-24,2026-03-25,2026-03-27,2026-03-28,2026-03-30,0,1,2.5,10派2.5元,akshare\n",
+                encoding="utf-8",
+            )
+            source_paths.major_event_notice_path.write_text(
+                "stock_code,notice_type,pub_date,available_date,title_text,title_length,keyword_score,severity_score,url,source_api\n"
+                "600000.SH,重大事项,2026-03-24,2026-03-25,关于重大事项停牌公告,10,1.5,2.5,https://example.com/a,akshare\n",
+                encoding="utf-8",
+            )
+            source_paths.announcement_text_path.write_text(
+                "stock_code,notice_type,pub_date,available_date,title_text,title_length,keyword_score,url,source_api\n"
+                "600000.SH,其他,2026-03-24,2026-03-25,关于分红预案与回购安排的公告,14,1.6,https://example.com/b,akshare\n",
+                encoding="utf-8",
+            )
+
+            with self.assertRaisesRegex(ValueError, "before max_trade_date"):
+                _validate_cached_source_snapshots(source_paths, max_trade_date="2026-03-30")
+
     def test_refresh_formal_factor_panels_builds_baseline_and_extended_outputs(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir) / "formal"
@@ -165,6 +206,7 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
                         "stock_code,notice_type,pub_date,available_date,title_text,title_length,keyword_score,url,source_api",
                         "600000.SH,其他,2026-03-24,2026-03-25,关于分红预案与回购安排的公告,14,1.6,https://example.com/c,akshare",
                         "600001.SH,其他,2026-03-24,2026-03-25,关于重大合同签署进展的公告,13,0.8,https://example.com/d,akshare",
+                        "600001.SH,其他,2026-03-30,2026-03-30,关于经营情况的公告,9,0.0,https://example.com/e,akshare",
                     ]
                 ),
                 encoding="utf-8",

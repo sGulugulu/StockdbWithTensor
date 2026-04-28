@@ -250,8 +250,7 @@ def build_dividend_rows(*, symbols: list[str], trade_dates: list[str]) -> list[d
         try:
             dividend_df = ak.stock_dividend_cninfo(symbol=query_symbol)
         except Exception as exc:
-            print(f"[build_dividend_rows] skip {symbol}: {exc}", file=sys.stderr)
-            continue
+            raise RuntimeError(f"Failed to fetch dividend rows for {symbol}") from exc
         for row in dividend_df.to_dict("records"):
             pub_date = _parse_any_date(row.get("实施方案公告日期"))
             if not pub_date:
@@ -305,9 +304,7 @@ def build_notice_rows(
         try:
             notice_df = ak.stock_notice_report(symbol="全部", date=current_date.strftime("%Y%m%d"))
         except Exception as exc:
-            print(f"[build_notice_rows] skip {current_date.isoformat()}: {exc}", file=sys.stderr)
-            current_date += timedelta(days=1)
-            continue
+            raise RuntimeError(f"Failed to fetch notice rows for {current_date.isoformat()}") from exc
         for row in notice_df.to_dict("records"):
             raw_code = _safe_text(row.get("代码"))
             if raw_code not in allowed_codes:
