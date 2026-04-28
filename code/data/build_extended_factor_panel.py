@@ -393,6 +393,12 @@ def _days_since(pub_date: str | None, trade_date: str) -> int:
         return 0
 
 
+def _snapshot_age_days(snapshot, trade_date: str) -> int:
+    if snapshot is None:
+        return 0
+    return _days_since(snapshot.available_date or snapshot.pub_date, trade_date)
+
+
 def _forecast_midpoint(snapshot: ForecastSnapshot | None) -> float:
     if snapshot is None:
         return 0.0
@@ -442,9 +448,9 @@ def _event_age_decay_score(
 ) -> float:
     score = 0.0
     if performance_snapshot is not None:
-        score += 1.0 / (1.0 + _days_since(performance_snapshot.pub_date, trade_date))
+        score += 1.0 / (1.0 + _snapshot_age_days(performance_snapshot, trade_date))
     if forecast_snapshot is not None:
-        score += 1.0 / (1.0 + _days_since(forecast_snapshot.pub_date, trade_date))
+        score += 1.0 / (1.0 + _snapshot_age_days(forecast_snapshot, trade_date))
     return score
 
 
@@ -560,24 +566,24 @@ def build_extended_factor_panel(
                 "pit_np_margin": 0.0 if profit_snapshot is None else profit_snapshot.np_margin,
                 "pit_gp_margin": 0.0 if profit_snapshot is None else profit_snapshot.gp_margin,
                 "pit_eps_ttm": 0.0 if profit_snapshot is None else profit_snapshot.eps_ttm,
-                "pit_data_age_days": 0 if profit_snapshot is None else _days_since(profit_snapshot.pub_date, trade_date),
+                "pit_data_age_days": _snapshot_age_days(profit_snapshot, trade_date),
                 "dividend_cash_ratio": 0.0 if dividend_snapshot is None else dividend_snapshot.cash_ratio,
                 "dividend_bonus_ratio": 0.0 if dividend_snapshot is None else dividend_snapshot.bonus_ratio,
                 "dividend_transfer_ratio": 0.0 if dividend_snapshot is None else dividend_snapshot.transfer_ratio,
-                "dividend_age_days": 0 if dividend_snapshot is None else _days_since(dividend_snapshot.pub_date, trade_date),
+                "dividend_age_days": _snapshot_age_days(dividend_snapshot, trade_date),
                 "dividend_flag": _dividend_flag(dividend_snapshot),
                 "perf_express_eps_chg_pct": 0.0 if performance_snapshot is None else performance_snapshot.eps_chg_pct,
                 "perf_express_roe_wa": 0.0 if performance_snapshot is None else performance_snapshot.roe_wa,
                 "perf_express_gryoy": 0.0 if performance_snapshot is None else performance_snapshot.gryoy,
                 "perf_express_opyoy": 0.0 if performance_snapshot is None else performance_snapshot.opyoy,
-                "perf_express_age_days": 0 if performance_snapshot is None else _days_since(performance_snapshot.pub_date, trade_date),
+                "perf_express_age_days": _snapshot_age_days(performance_snapshot, trade_date),
                 "perf_express_flag": 0 if performance_snapshot is None else 1,
                 "forecast_direction": 0.0 if forecast_snapshot is None else forecast_snapshot.forecast_direction,
                 "forecast_chg_pct_up": 0.0 if forecast_snapshot is None else forecast_snapshot.chg_pct_up,
                 "forecast_chg_pct_dwn": 0.0 if forecast_snapshot is None else forecast_snapshot.chg_pct_dwn,
                 "forecast_change_midpoint": forecast_midpoint,
                 "forecast_change_width": forecast_width,
-                "forecast_age_days": 0 if forecast_snapshot is None else _days_since(forecast_snapshot.pub_date, trade_date),
+                "forecast_age_days": _snapshot_age_days(forecast_snapshot, trade_date),
                 "event_positive_flag": _event_positive_flag(performance_snapshot, forecast_snapshot),
                 "event_negative_flag": _event_negative_flag(performance_snapshot, forecast_snapshot),
                 "event_uncertainty_score": forecast_width,
@@ -586,7 +592,7 @@ def build_extended_factor_panel(
                 + (0.0 if performance_snapshot is None else abs(performance_snapshot.eps_chg_pct)),
                 "major_event_count_30d": _notice_count(stock_major_events, trade_date, window_days=30),
                 "major_event_severity_score_30d": _major_event_severity_score(stock_major_events, trade_date, window_days=30),
-                "major_event_age_days": 0 if recent_major_event is None else _days_since(recent_major_event.pub_date, trade_date),
+                "major_event_age_days": _snapshot_age_days(recent_major_event, trade_date),
                 "major_event_flag": 1 if _notice_count(stock_major_events, trade_date, window_days=30) > 0 else 0,
                 "announcement_count_30d": _notice_count(announcement_snapshots.get(stock_code, []), trade_date, window_days=30),
                 "announcement_keyword_score_30d": _notice_keyword_score(announcement_snapshots.get(stock_code, []), trade_date, window_days=30),

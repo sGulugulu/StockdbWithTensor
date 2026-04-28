@@ -17,6 +17,7 @@ from data.build_formal_factor_panel import build_formal_factor_panel
 
 
 DEFAULT_MAX_TRADE_DATE = "2026-03-30"
+NOTICE_FEATURE_WINDOW_DAYS = 30
 
 
 @dataclass(frozen=True, slots=True)
@@ -86,6 +87,12 @@ def _validate_cached_source_snapshots(source_paths: ExtendedSourcePaths, *, max_
         raise ValueError(
             f"Cached extended source snapshot ends at {snapshot_max_trade_date}, "
             f"before max_trade_date {max_trade_date}: {source_paths.snapshot_metadata_path}"
+        )
+    notice_lookback_days = int(metadata.get("notice_lookback_days") or 0)
+    if notice_lookback_days < NOTICE_FEATURE_WINDOW_DAYS:
+        raise ValueError(
+            f"Cached extended source snapshot notice_lookback_days={notice_lookback_days} "
+            f"is shorter than required {NOTICE_FEATURE_WINDOW_DAYS}: {source_paths.snapshot_metadata_path}"
         )
 
 

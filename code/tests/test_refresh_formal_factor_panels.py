@@ -58,7 +58,14 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
                 _validate_cached_source_snapshots(source_paths, max_trade_date="2026-03-30")
 
             source_paths.snapshot_metadata_path.write_text(
-                '{"max_trade_date": "2026-03-30"}\n',
+                '{"max_trade_date": "2026-03-30", "notice_lookback_days": 5}\n',
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(ValueError, "notice_lookback_days"):
+                _validate_cached_source_snapshots(source_paths, max_trade_date="2026-03-30")
+
+            source_paths.snapshot_metadata_path.write_text(
+                '{"max_trade_date": "2026-03-30", "notice_lookback_days": 30}\n',
                 encoding="utf-8",
             )
             _validate_cached_source_snapshots(source_paths, max_trade_date="2026-03-30")
@@ -222,7 +229,7 @@ class RefreshFormalFactorPanelsTests(unittest.TestCase):
                 encoding="utf-8",
             )
             (root / "events" / "extended_source_snapshot.json").write_text(
-                '{"max_trade_date": "2026-03-30"}\n',
+                '{"max_trade_date": "2026-03-30", "notice_lookback_days": 30}\n',
                 encoding="utf-8",
             )
 
