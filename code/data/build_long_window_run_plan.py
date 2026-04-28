@@ -81,6 +81,9 @@ def _long_window_factor_panel_path(source_config: Path, current_value: str) -> s
     if not (target.stem.endswith("_factor_panel") or target.stem.endswith("_factor_panel_extended")):
         return None
     long_window_target = target.parent / "long_window" / f"{target.stem}_long_window.csv"
+    # 计划文件必须只引用已生成的数据，避免把缺失面板延迟到实验运行阶段才失败。
+    if not long_window_target.exists():
+        raise FileNotFoundError(f"missing long-window factor panel: {long_window_target}")
     return long_window_target.as_posix()
 
 

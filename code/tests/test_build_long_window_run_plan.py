@@ -69,26 +69,23 @@ class BuildLongWindowRunPlanTests(unittest.TestCase):
             variant_text = Path(rows[0]["config_variant"]).read_text(encoding="utf-8")
             self.assertIn("factors/long_window/all_a_factor_panel_long_window.csv", variant_text)
 
-    def test_build_long_window_run_plan_rewrites_extended_factor_panel_paths(self) -> None:
+    def test_build_long_window_run_plan_rejects_missing_extended_long_window_panel(self) -> None:
         temp_parent = Path.cwd() / ".tmp"
         temp_parent.mkdir(exist_ok=True)
         with tempfile.TemporaryDirectory(dir=temp_parent) as temp_dir:
             report_dir = Path(temp_dir) / "report"
             config = Path("code/configs/formal_hs300_extended.yaml")
 
-            result = build_long_window_run_plan(
-                config_paths=[config],
-                start_date="2026-01-01",
-                end_date="2026-03-31",
-                report_dir=report_dir,
-            )
-
-            rows = json.loads(result.plan_json.read_text(encoding="utf-8"))
-            variant_text = Path(rows[0]["config_variant"]).read_text(encoding="utf-8")
-            self.assertIn(
-                "factors/long_window/hs300_factor_panel_extended_long_window.csv",
-                variant_text,
-            )
+            with self.assertRaisesRegex(
+                FileNotFoundError,
+                "hs300_factor_panel_extended_long_window.csv",
+            ):
+                build_long_window_run_plan(
+                    config_paths=[config],
+                    start_date="2026-01-01",
+                    end_date="2026-03-31",
+                    report_dir=report_dir,
+                )
 
 
 if __name__ == "__main__":
