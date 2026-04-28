@@ -3,7 +3,7 @@
     "model": "pca",
     "exposure_type": "industry",
     "name": "D44电力、热力生产和供应业",
-    "weight": 0.3875
+    "weight": 0.4
   },
   {
     "model": "pca",
@@ -15,13 +15,13 @@
     "model": "pca",
     "exposure_type": "industry",
     "name": "C26化学原料和化学制品制造业",
-    "weight": 0.15
+    "weight": 0.12916666666666668
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "D46水的生产和供应业",
-    "weight": 0.08333333333333333
+    "weight": 0.09166666666666666
   },
   {
     "model": "pca",
@@ -39,24 +39,24 @@
     "model": "pca",
     "exposure_type": "style",
     "name": "momentum_factor",
-    "weight": 0.32916666666666666
+    "weight": 0.3458333333333333
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "volatility_factor",
-    "weight": 0.32083333333333336
+    "weight": 0.24583333333333332
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "quality_factor",
-    "weight": 0.2
+    "weight": 0.23333333333333334
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "value_factor",
-    "weight": 0.15
+    "weight": 0.175
   }
 ]

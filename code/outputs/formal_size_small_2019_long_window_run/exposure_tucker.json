@@ -9,7 +9,7 @@
     "model": "tucker",
     "exposure_type": "industry",
     "name": "J67资本市场服务",
-    "weight": 0.4
+    "weight": 0.39591836734693875
   },
   {
     "model": "tucker",
@@ -19,14 +19,20 @@
   },
   {
     "model": "tucker",
+    "exposure_type": "industry",
+    "name": "C27医药制造业",
+    "weight": 0.004081632653061225
+  },
+  {
+    "model": "tucker",
     "exposure_type": "style",
     "name": "value_factor",
-    "weight": 0.7836734693877551
+    "weight": 0.689795918367347
   },
   {
     "model": "tucker",
     "exposure_type": "style",
     "name": "quality_factor",
-    "weight": 0.2163265306122449
+    "weight": 0.31020408163265306
   }
 ]

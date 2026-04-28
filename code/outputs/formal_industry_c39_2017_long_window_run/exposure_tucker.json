@@ -9,18 +9,18 @@
     "model": "tucker",
     "exposure_type": "style",
     "name": "value_factor",
-    "weight": 0.6387755102040816
+    "weight": 0.6755102040816326
   },
   {
     "model": "tucker",
     "exposure_type": "style",
     "name": "quality_factor",
-    "weight": 0.2510204081632653
+    "weight": 0.29285714285714287
   },
   {
     "model": "tucker",
     "exposure_type": "style",
     "name": "momentum_factor",
-    "weight": 0.11020408163265306
+    "weight": 0.03163265306122449
   }
 ]

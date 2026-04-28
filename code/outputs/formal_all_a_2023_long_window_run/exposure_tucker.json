@@ -3,7 +3,7 @@
     "model": "tucker",
     "exposure_type": "industry",
     "name": "C27医药制造业",
-    "weight": 0.10416666666666667
+    "weight": 0.103125
   },
   {
     "model": "tucker",
@@ -56,19 +56,13 @@
   {
     "model": "tucker",
     "exposure_type": "industry",
-    "name": "I65软件和信息技术服务业",
-    "weight": 0.05
-  },
-  {
-    "model": "tucker",
-    "exposure_type": "industry",
     "name": "J69其他金融业",
     "weight": 0.05
   },
   {
     "model": "tucker",
     "exposure_type": "industry",
-    "name": "E48土木工程建筑业",
+    "name": "I65软件和信息技术服务业",
     "weight": 0.05
   },
   {
@@ -80,19 +74,25 @@
   {
     "model": "tucker",
     "exposure_type": "industry",
+    "name": "E48土木工程建筑业",
+    "weight": 0.05
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
     "name": "G56航空运输业",
-    "weight": 0.04583333333333333
+    "weight": 0.046875
   },
   {
     "model": "tucker",
     "exposure_type": "style",
     "name": "quality_factor",
-    "weight": 0.95
+    "weight": 0.915625
   },
   {
     "model": "tucker",
     "exposure_type": "style",
     "name": "value_factor",
-    "weight": 0.05
+    "weight": 0.084375
   }
 ]

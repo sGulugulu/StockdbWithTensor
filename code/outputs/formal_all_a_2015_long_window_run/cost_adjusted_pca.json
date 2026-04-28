@@ -443,50 +443,50 @@
     "trade_date": "2015-12-25",
     "model": "pca",
     "top_n": 20,
-    "gross_return": 0.0,
+    "gross_return": -0.11894698454579648,
     "transaction_cost": 5.000000000000004e-05,
-    "net_return": -5.000000000000004e-05,
-    "cumulative_nav": 2.0259523780919695,
-    "drawdown": -0.06251243718640886
+    "net_return": -0.11899698454579648,
+    "cumulative_nav": 1.7849594022357516,
+    "drawdown": -0.17402933167699808
   },
   {
     "trade_date": "2015-12-28",
     "model": "pca",
     "top_n": 20,
-    "gross_return": 0.0,
+    "gross_return": -0.10637069208046021,
     "transaction_cost": 5.000000000000004e-05,
-    "net_return": -5.000000000000004e-05,
-    "cumulative_nav": 2.025851080473065,
-    "drawdown": -0.06255931156454952
+    "net_return": -0.1064206920804602,
+    "cumulative_nav": 1.5950027873142982,
+    "drawdown": -0.26192970183809217
   },
   {
     "trade_date": "2015-12-29",
     "model": "pca",
     "top_n": 20,
-    "gross_return": 0.0,
+    "gross_return": -0.09065006050242277,
     "transaction_cost": 0.0,
-    "net_return": 0.0,
-    "cumulative_nav": 2.025851080473065,
-    "drawdown": -0.06255931156454952
+    "net_return": -0.09065006050242277,
+    "cumulative_nav": 1.4504156881427241,
+    "drawdown": -0.3288358190215104
   },
   {
     "trade_date": "2015-12-30",
     "model": "pca",
     "top_n": 20,
-    "gross_return": 0.0,
+    "gross_return": -0.17225019879077236,
     "transaction_cost": 0.0,
-    "net_return": 0.0,
-    "cumulative_nav": 2.025851080473065,
-    "drawdown": -0.06255931156454952
+    "net_return": -0.17225019879077236,
+    "cumulative_nav": 1.2005812975308852,
+    "drawdown": -0.444443982616301
   },
   {
     "trade_date": "2015-12-31",
     "model": "pca",
     "top_n": 20,
-    "gross_return": 0.0,
+    "gross_return": -0.14836084595872123,
     "transaction_cost": 0.0,
-    "net_return": 0.0,
-    "cumulative_nav": 2.025851080473065,
-    "drawdown": -0.06255931156454952
+    "net_return": -0.14836084595872123,
+    "cumulative_nav": 1.0224620405869838,
+    "drawdown": -0.5268667433328047
   }
 ]

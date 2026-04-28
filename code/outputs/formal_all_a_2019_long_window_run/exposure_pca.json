@@ -3,7 +3,7 @@
     "model": "pca",
     "exposure_type": "industry",
     "name": "J66货币金融服务",
-    "weight": 0.30306122448979594
+    "weight": 0.3020408163265306
   },
   {
     "model": "pca",
@@ -21,7 +21,7 @@
     "model": "pca",
     "exposure_type": "industry",
     "name": "C39计算机、通信和其他电子设备制造业",
-    "weight": 0.08163265306122448
+    "weight": 0.0826530612244898
   },
   {
     "model": "pca",
@@ -33,13 +33,13 @@
     "model": "pca",
     "exposure_type": "industry",
     "name": "B06煤炭开采和洗选业",
-    "weight": 0.05918367346938776
+    "weight": 0.06020408163265306
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "K70房地产业",
-    "weight": 0.05612244897959184
+    "weight": 0.058163265306122446
   },
   {
     "model": "pca",
@@ -57,13 +57,13 @@
     "model": "pca",
     "exposure_type": "industry",
     "name": "I64互联网和相关服务",
-    "weight": 0.0326530612244898
+    "weight": 0.03469387755102041
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "J67资本市场服务",
-    "weight": 0.024489795918367346
+    "weight": 0.02346938775510204
   },
   {
     "model": "pca",
@@ -80,13 +80,13 @@
   {
     "model": "pca",
     "exposure_type": "industry",
-    "name": "C35专用设备制造业",
-    "weight": 0.01020408163265306
+    "name": "I65软件和信息技术服务业",
+    "weight": 0.009183673469387756
   },
   {
     "model": "pca",
     "exposure_type": "industry",
-    "name": "I65软件和信息技术服务业",
+    "name": "C35专用设备制造业",
     "weight": 0.009183673469387756
   },
   {
@@ -105,7 +105,7 @@
     "model": "pca",
     "exposure_type": "industry",
     "name": "B09有色金属矿采选业",
-    "weight": 0.00816326530612245
+    "weight": 0.00510204081632653
   },
   {
     "model": "pca",
@@ -147,7 +147,7 @@
     "model": "pca",
     "exposure_type": "style",
     "name": "quality_factor",
-    "weight": 0.8285714285714286
+    "weight": 0.8112244897959183
   },
   {
     "model": "pca",
@@ -159,12 +159,12 @@
     "model": "pca",
     "exposure_type": "style",
     "name": "momentum_factor",
-    "weight": 0.06428571428571428
+    "weight": 0.05918367346938776
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "value_factor",
-    "weight": 0.012244897959183673
+    "weight": 0.03469387755102041
   }
 ]

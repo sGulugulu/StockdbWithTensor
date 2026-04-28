@@ -8,31 +8,31 @@
   {
     "model": "cp",
     "exposure_type": "industry",
-    "name": "D44电力、热力生产和供应业",
-    "weight": 0.3224489795918367
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
     "name": "C27医药制造业",
     "weight": 0.2
   },
   {
     "model": "cp",
     "exposure_type": "industry",
+    "name": "D44电力、热力生产和供应业",
+    "weight": 0.2
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
     "name": "C36汽车制造业",
-    "weight": 0.07755102040816327
+    "weight": 0.2
   },
   {
     "model": "cp",
     "exposure_type": "style",
     "name": "quality_factor",
-    "weight": 0.8367346938775511
+    "weight": 0.7387755102040816
   },
   {
     "model": "cp",
     "exposure_type": "style",
-    "name": "momentum_factor",
-    "weight": 0.16326530612244897
+    "name": "volatility_factor",
+    "weight": 0.2612244897959184
   }
 ]

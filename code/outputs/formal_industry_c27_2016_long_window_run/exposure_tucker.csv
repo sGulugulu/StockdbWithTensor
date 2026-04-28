@@ -1,4 +1,5 @@
 model,exposure_type,name,weight
 tucker,industry,C27医药制造业,1.0
-tucker,style,value_factor,0.8989795918367347
-tucker,style,quality_factor,0.10102040816326531
+tucker,style,momentum_factor,0.5173469387755102
+tucker,style,quality_factor,0.3336734693877551
+tucker,style,volatility_factor,0.1489795918367347

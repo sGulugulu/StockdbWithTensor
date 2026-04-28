@@ -1,7 +1,10 @@
 model,exposure_type,name,weight
-cp,industry,J66货币金融服务,0.5291666666666667
-cp,industry,C38电气机械和器材制造业,0.2
-cp,industry,B07石油和天然气开采业,0.19583333333333333
-cp,industry,C31黑色金属冶炼和压延加工业,0.07083333333333333
-cp,industry,C35专用设备制造业,0.004166666666666667
-cp,style,value_factor,1.0
+cp,industry,J66货币金融服务,0.26666666666666666
+cp,industry,C38电气机械和器材制造业,0.19583333333333333
+cp,industry,C31黑色金属冶炼和压延加工业,0.1875
+cp,industry,C35专用设备制造业,0.17916666666666667
+cp,industry,C32有色金属冶炼和压延加工业,0.13333333333333333
+cp,industry,D44电力、热力生产和供应业,0.03333333333333333
+cp,industry,B07石油和天然气开采业,0.004166666666666667
+cp,style,volatility_factor,0.5458333333333333
+cp,style,momentum_factor,0.45416666666666666

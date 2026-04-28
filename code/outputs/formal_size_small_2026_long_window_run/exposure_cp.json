@@ -8,25 +8,31 @@
   {
     "model": "cp",
     "exposure_type": "industry",
-    "name": "J67资本市场服务",
-    "weight": 0.4
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
     "name": "D46水的生产和供应业",
     "weight": 0.2
   },
   {
     "model": "cp",
-    "exposure_type": "style",
-    "name": "volatility_factor",
-    "weight": 0.7454545454545455
+    "exposure_type": "industry",
+    "name": "C27医药制造业",
+    "weight": 0.2
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "J67资本市场服务",
+    "weight": 0.2
   },
   {
     "model": "cp",
     "exposure_type": "style",
     "name": "value_factor",
-    "weight": 0.2545454545454545
+    "weight": 0.8363636363636363
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "volatility_factor",
+    "weight": 0.16363636363636364
   }
 ]

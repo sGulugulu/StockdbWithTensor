@@ -1,5 +1,5 @@
 model,exposure_type,name,weight
-tucker,industry,C27医药制造业,0.10416666666666667
+tucker,industry,C27医药制造业,0.103125
 tucker,industry,C31黑色金属冶炼和压延加工业,0.1
 tucker,industry,C28化学纤维制造业,0.1
 tucker,industry,C39计算机、通信和其他电子设备制造业,0.1
@@ -8,10 +8,10 @@ tucker,industry,D44电力、热力生产和供应业,0.1
 tucker,industry,A03畜牧业,0.05
 tucker,industry,G53铁路运输业,0.05
 tucker,industry,C25石油、煤炭及其他燃料加工业,0.05
-tucker,industry,I65软件和信息技术服务业,0.05
 tucker,industry,J69其他金融业,0.05
-tucker,industry,E48土木工程建筑业,0.05
+tucker,industry,I65软件和信息技术服务业,0.05
 tucker,industry,C32有色金属冶炼和压延加工业,0.05
-tucker,industry,G56航空运输业,0.04583333333333333
-tucker,style,quality_factor,0.95
-tucker,style,value_factor,0.05
+tucker,industry,E48土木工程建筑业,0.05
+tucker,industry,G56航空运输业,0.046875
+tucker,style,quality_factor,0.915625
+tucker,style,value_factor,0.084375

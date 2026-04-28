@@ -3,37 +3,37 @@
     "model": "pca",
     "exposure_type": "industry",
     "name": "C39计算机、通信和其他电子设备制造业",
-    "weight": 0.16354166666666667
+    "weight": 0.159375
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "C27医药制造业",
-    "weight": 0.14583333333333334
+    "weight": 0.14479166666666668
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "G56航空运输业",
-    "weight": 0.10104166666666667
+    "weight": 0.1
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "I65软件和信息技术服务业",
-    "weight": 0.08333333333333333
+    "weight": 0.08020833333333334
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "R87广播、电视、电影和录音制作业",
-    "weight": 0.07916666666666666
+    "weight": 0.078125
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "D44电力、热力生产和供应业",
-    "weight": 0.06770833333333333
+    "weight": 0.07395833333333333
   },
   {
     "model": "pca",
@@ -44,20 +44,26 @@
   {
     "model": "pca",
     "exposure_type": "industry",
+    "name": "Q84卫生",
+    "weight": 0.03333333333333333
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
     "name": "C26化学原料和化学制品制造业",
-    "weight": 0.03229166666666667
+    "weight": 0.03125
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C31黑色金属冶炼和压延加工业",
+    "weight": 0.03125
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "P83教育",
-    "weight": 0.03229166666666667
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "Q84卫生",
-    "weight": 0.03229166666666667
+    "weight": 0.030208333333333334
   },
   {
     "model": "pca",
@@ -68,38 +74,26 @@
   {
     "model": "pca",
     "exposure_type": "industry",
-    "name": "C31黑色金属冶炼和压延加工业",
-    "weight": 0.028125
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "C35专用设备制造业",
-    "weight": 0.026041666666666668
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
     "name": "G53铁路运输业",
-    "weight": 0.026041666666666668
+    "weight": 0.029166666666666667
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "A03畜牧业",
+    "weight": 0.026041666666666668
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C35专用设备制造业",
     "weight": 0.025
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "N77生态保护和环境治理业",
-    "weight": 0.020833333333333332
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "C34通用设备制造业",
-    "weight": 0.016666666666666666
+    "weight": 0.019791666666666666
   },
   {
     "model": "pca",
@@ -117,13 +111,19 @@
     "model": "pca",
     "exposure_type": "industry",
     "name": "J69其他金融业",
-    "weight": 0.010416666666666666
+    "weight": 0.013541666666666667
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C34通用设备制造业",
+    "weight": 0.0125
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "C25石油、煤炭及其他燃料加工业",
-    "weight": 0.009375
+    "weight": 0.010416666666666666
   },
   {
     "model": "pca",
@@ -135,6 +135,12 @@
     "model": "pca",
     "exposure_type": "industry",
     "name": "G55水上运输业",
+    "weight": 0.0010416666666666667
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C32有色金属冶炼和压延加工业",
     "weight": 0.0010416666666666667
   },
   {

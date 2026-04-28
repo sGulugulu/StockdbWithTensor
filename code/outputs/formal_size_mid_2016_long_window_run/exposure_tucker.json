@@ -8,43 +8,55 @@
   {
     "model": "tucker",
     "exposure_type": "industry",
-    "name": "J66货币金融服务",
+    "name": "C27医药制造业",
     "weight": 0.2
   },
   {
     "model": "tucker",
     "exposure_type": "industry",
-    "name": "G55水上运输业",
-    "weight": 0.2
+    "name": "C36汽车制造业",
+    "weight": 0.19183673469387755
   },
   {
     "model": "tucker",
     "exposure_type": "industry",
     "name": "D44电力、热力生产和供应业",
-    "weight": 0.2
-  },
-  {
-    "model": "tucker",
-    "exposure_type": "industry",
-    "name": "K70房地产业",
-    "weight": 0.12653061224489795
+    "weight": 0.17551020408163265
   },
   {
     "model": "tucker",
     "exposure_type": "industry",
     "name": "E48土木工程建筑业",
-    "weight": 0.07346938775510205
+    "weight": 0.1469387755102041
   },
   {
     "model": "tucker",
-    "exposure_type": "style",
-    "name": "value_factor",
-    "weight": 0.7510204081632653
+    "exposure_type": "industry",
+    "name": "G56航空运输业",
+    "weight": 0.07755102040816327
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "G55水上运输业",
+    "weight": 0.00816326530612245
   },
   {
     "model": "tucker",
     "exposure_type": "style",
     "name": "quality_factor",
-    "weight": 0.24897959183673468
+    "weight": 0.4897959183673469
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.46938775510204084
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.04081632653061224
   }
 ]

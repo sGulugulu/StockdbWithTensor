@@ -1,18 +1,18 @@
 [
   {
-    "factor_name": "volatility_factor",
-    "importance": 0.5654487907886505
-  },
-  {
-    "factor_name": "quality_factor",
-    "importance": 0.4268229231238365
-  },
-  {
     "factor_name": "value_factor",
-    "importance": 0.417525015771389
+    "importance": 0.8213639259338379
+  },
+  {
+    "factor_name": "volatility_factor",
+    "importance": 0.31057822704315186
   },
   {
     "factor_name": "momentum_factor",
-    "importance": 0.39492179453372955
+    "importance": 0.2830679329733054
+  },
+  {
+    "factor_name": "quality_factor",
+    "importance": 0.2661083887020747
   }
 ]

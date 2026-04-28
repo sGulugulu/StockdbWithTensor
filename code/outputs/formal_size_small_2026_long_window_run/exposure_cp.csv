@@ -1,6 +1,7 @@
 model,exposure_type,name,weight
 cp,industry,D44电力、热力生产和供应业,0.4
-cp,industry,J67资本市场服务,0.4
 cp,industry,D46水的生产和供应业,0.2
-cp,style,volatility_factor,0.7454545454545455
-cp,style,value_factor,0.2545454545454545
+cp,industry,C27医药制造业,0.2
+cp,industry,J67资本市场服务,0.2
+cp,style,value_factor,0.8363636363636363
+cp,style,volatility_factor,0.16363636363636364

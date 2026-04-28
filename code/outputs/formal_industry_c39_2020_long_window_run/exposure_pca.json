@@ -9,24 +9,24 @@
     "model": "pca",
     "exposure_type": "style",
     "name": "volatility_factor",
-    "weight": 0.28125
-  },
-  {
-    "model": "pca",
-    "exposure_type": "style",
-    "name": "momentum_factor",
-    "weight": 0.25833333333333336
-  },
-  {
-    "model": "pca",
-    "exposure_type": "style",
-    "name": "value_factor",
-    "weight": 0.2552083333333333
+    "weight": 0.290625
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "quality_factor",
-    "weight": 0.20520833333333333
+    "weight": 0.24270833333333333
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.23541666666666666
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.23125
   }
 ]

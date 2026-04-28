@@ -3,114 +3,132 @@
     "model": "cp",
     "exposure_type": "industry",
     "name": "C27医药制造业",
-    "weight": 0.221875
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C39计算机、通信和其他电子设备制造业",
-    "weight": 0.1125
+    "weight": 0.23958333333333334
   },
   {
     "model": "cp",
     "exposure_type": "industry",
     "name": "I65软件和信息技术服务业",
-    "weight": 0.1
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C32有色金属冶炼和压延加工业",
-    "weight": 0.08958333333333333
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "I64互联网和相关服务",
-    "weight": 0.08125
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C36汽车制造业",
-    "weight": 0.06666666666666667
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C33金属制品业",
-    "weight": 0.05
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "Q84卫生",
-    "weight": 0.04791666666666667
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "A01农业",
-    "weight": 0.04791666666666667
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C14食品制造业",
-    "weight": 0.04375
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C38电气机械和器材制造业",
-    "weight": 0.04375
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "N77生态保护和环境治理业",
-    "weight": 0.035416666666666666
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C26化学原料和化学制品制造业",
-    "weight": 0.026041666666666668
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "J69其他金融业",
-    "weight": 0.014583333333333334
+    "weight": 0.14375
   },
   {
     "model": "cp",
     "exposure_type": "industry",
     "name": "G56航空运输业",
-    "weight": 0.0125
+    "weight": 0.1
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C39计算机、通信和其他电子设备制造业",
+    "weight": 0.09791666666666667
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "R87广播、电视、电影和录音制作业",
+    "weight": 0.09583333333333334
   },
   {
     "model": "cp",
     "exposure_type": "industry",
     "name": "C37铁路、船舶、航空航天和其他运输设备制造业",
+    "weight": 0.09166666666666666
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "J67资本市场服务",
+    "weight": 0.052083333333333336
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C36汽车制造业",
+    "weight": 0.04791666666666667
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "I64互联网和相关服务",
+    "weight": 0.04791666666666667
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C26化学原料和化学制品制造业",
+    "weight": 0.04583333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "D44电力、热力生产和供应业",
+    "weight": 0.008333333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C31黑色金属冶炼和压延加工业",
+    "weight": 0.00625
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "B06煤炭开采和洗选业",
+    "weight": 0.00625
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "B07石油和天然气开采业",
     "weight": 0.004166666666666667
   },
   {
     "model": "cp",
     "exposure_type": "industry",
-    "name": "C30非金属矿物制品业",
+    "name": "C35专用设备制造业",
+    "weight": 0.0020833333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C40仪器仪表制造业",
+    "weight": 0.0020833333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "F51批发业",
+    "weight": 0.0020833333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "G55水上运输业",
+    "weight": 0.0020833333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "B11开采专业及辅助性活动",
+    "weight": 0.0020833333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "E48土木工程建筑业",
     "weight": 0.0020833333333333333
   },
   {
     "model": "cp",
     "exposure_type": "style",
     "name": "value_factor",
-    "weight": 0.95625
+    "weight": 0.853125
   },
   {
     "model": "cp",
     "exposure_type": "style",
-    "name": "momentum_factor",
-    "weight": 0.04375
+    "name": "quality_factor",
+    "weight": 0.146875
   }
 ]

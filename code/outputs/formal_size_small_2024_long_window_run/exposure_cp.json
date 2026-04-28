@@ -2,55 +2,67 @@
   {
     "model": "cp",
     "exposure_type": "industry",
-    "name": "D44电力、热力生产和供应业",
-    "weight": 0.3541666666666667
+    "name": "J67资本市场服务",
+    "weight": 0.35
   },
   {
     "model": "cp",
     "exposure_type": "industry",
-    "name": "J67资本市场服务",
-    "weight": 0.3375
+    "name": "D44电力、热力生产和供应业",
+    "weight": 0.3
   },
   {
     "model": "cp",
     "exposure_type": "industry",
     "name": "D46水的生产和供应业",
-    "weight": 0.11666666666666667
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "G56航空运输业",
-    "weight": 0.08333333333333333
+    "weight": 0.15
   },
   {
     "model": "cp",
     "exposure_type": "industry",
     "name": "C39计算机、通信和其他电子设备制造业",
-    "weight": 0.0625
+    "weight": 0.05
   },
   {
     "model": "cp",
     "exposure_type": "industry",
     "name": "C27医药制造业",
-    "weight": 0.0375
+    "weight": 0.05
   },
   {
     "model": "cp",
     "exposure_type": "industry",
-    "name": "C26化学原料和化学制品制造业",
-    "weight": 0.008333333333333333
+    "name": "K70房地产业",
+    "weight": 0.05
   },
   {
     "model": "cp",
-    "exposure_type": "style",
-    "name": "volatility_factor",
-    "weight": 0.6708333333333333
+    "exposure_type": "industry",
+    "name": "C37铁路、船舶、航空航天和其他运输设备制造业",
+    "weight": 0.04583333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "G56航空运输业",
+    "weight": 0.004166666666666667
   },
   {
     "model": "cp",
     "exposure_type": "style",
     "name": "quality_factor",
-    "weight": 0.32916666666666666
+    "weight": 0.5166666666666667
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "volatility_factor",
+    "weight": 0.3875
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.09583333333333334
   }
 ]

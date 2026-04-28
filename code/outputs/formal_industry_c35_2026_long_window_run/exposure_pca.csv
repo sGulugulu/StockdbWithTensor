@@ -1,5 +1,6 @@
 model,exposure_type,name,weight
 pca,industry,C35专用设备制造业,1.0
-pca,style,momentum_factor,0.4772727272727273
-pca,style,value_factor,0.32727272727272727
-pca,style,quality_factor,0.19545454545454546
+pca,style,momentum_factor,0.5363636363636364
+pca,style,value_factor,0.30454545454545456
+pca,style,quality_factor,0.15454545454545454
+pca,style,volatility_factor,0.004545454545454545

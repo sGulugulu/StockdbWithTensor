@@ -2,26 +2,26 @@
   {
     "left": "quality_factor",
     "right": "value_factor",
-    "score": 0.9071182345163049
+    "score": 0.9159120780338089
   },
   {
     "left": "momentum_factor",
     "right": "quality_factor",
-    "score": 0.19602085582303178
+    "score": 0.20305034903802496
+  },
+  {
+    "left": "momentum_factor",
+    "right": "volatility_factor",
+    "score": 0.1663637598747266
   },
   {
     "left": "momentum_factor",
     "right": "value_factor",
-    "score": -0.2348966828689689
+    "score": -0.20704128082648898
   },
   {
-    "left": "momentum_factor",
+    "left": "quality_factor",
     "right": "volatility_factor",
-    "score": -0.6138294614669937
-  },
-  {
-    "left": "value_factor",
-    "right": "volatility_factor",
-    "score": -0.623163929711355
+    "score": -0.9317428296122464
   }
 ]

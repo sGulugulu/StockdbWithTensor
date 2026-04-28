@@ -2,50 +2,32 @@
   {
     "model": "cp",
     "exposure_type": "industry",
+    "name": "J66货币金融服务",
+    "weight": 0.23636363636363636
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C38电气机械和器材制造业",
+    "weight": 0.2
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
     "name": "C39计算机、通信和其他电子设备制造业",
     "weight": 0.2
   },
   {
     "model": "cp",
     "exposure_type": "industry",
-    "name": "D44电力、热力生产和供应业",
+    "name": "C32有色金属冶炼和压延加工业",
     "weight": 0.2
   },
   {
     "model": "cp",
     "exposure_type": "industry",
-    "name": "J66货币金融服务",
-    "weight": 0.18181818181818182
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C38电气机械和器材制造业",
-    "weight": 0.14545454545454545
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C36汽车制造业",
-    "weight": 0.12727272727272726
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "I63电信、广播电视和卫星传输服务",
-    "weight": 0.05454545454545454
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
     "name": "B07石油和天然气开采业",
-    "weight": 0.03636363636363636
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C32有色金属冶炼和压延加工业",
-    "weight": 0.01818181818181818
+    "weight": 0.14545454545454545
   },
   {
     "model": "cp",
@@ -55,20 +37,8 @@
   },
   {
     "model": "cp",
-    "exposure_type": "industry",
-    "name": "J67资本市场服务",
-    "weight": 0.01818181818181818
-  },
-  {
-    "model": "cp",
     "exposure_type": "style",
-    "name": "quality_factor",
-    "weight": 0.5636363636363636
-  },
-  {
-    "model": "cp",
-    "exposure_type": "style",
-    "name": "volatility_factor",
-    "weight": 0.43636363636363634
+    "name": "momentum_factor",
+    "weight": 1.0
   }
 ]

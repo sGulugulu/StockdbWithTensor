@@ -9,24 +9,24 @@
     "model": "pca",
     "exposure_type": "style",
     "name": "momentum_factor",
-    "weight": 0.40816326530612246
+    "weight": 0.39285714285714285
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "volatility_factor",
-    "weight": 0.2510204081632653
+    "weight": 0.2673469387755102
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "quality_factor",
-    "weight": 0.2479591836734694
+    "weight": 0.2642857142857143
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "value_factor",
-    "weight": 0.09285714285714286
+    "weight": 0.07551020408163266
   }
 ]

@@ -8,43 +8,43 @@
   {
     "model": "tucker",
     "exposure_type": "industry",
+    "name": "C26化学原料和化学制品制造业",
+    "weight": 0.2
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
     "name": "D46水的生产和供应业",
     "weight": 0.2
   },
   {
     "model": "tucker",
     "exposure_type": "industry",
-    "name": "C26化学原料和化学制品制造业",
+    "name": "J67资本市场服务",
     "weight": 0.18181818181818182
   },
   {
     "model": "tucker",
     "exposure_type": "industry",
-    "name": "K70房地产业",
-    "weight": 0.10909090909090909
-  },
-  {
-    "model": "tucker",
-    "exposure_type": "industry",
-    "name": "J67资本市场服务",
-    "weight": 0.10909090909090909
-  },
-  {
-    "model": "tucker",
-    "exposure_type": "style",
-    "name": "momentum_factor",
-    "weight": 0.7818181818181819
-  },
-  {
-    "model": "tucker",
-    "exposure_type": "style",
-    "name": "value_factor",
-    "weight": 0.16363636363636364
+    "name": "C39计算机、通信和其他电子设备制造业",
+    "weight": 0.01818181818181818
   },
   {
     "model": "tucker",
     "exposure_type": "style",
     "name": "quality_factor",
-    "weight": 0.05454545454545454
+    "weight": 0.38181818181818183
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.38181818181818183
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.23636363636363636
   }
 ]

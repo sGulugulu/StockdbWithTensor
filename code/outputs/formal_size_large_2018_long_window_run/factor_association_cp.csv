@@ -1,6 +1,6 @@
 left,right,score
-value_factor,volatility_factor,0.9998519344039232
-momentum_factor,value_factor,0.9956136728593513
-momentum_factor,volatility_factor,0.9938562979883505
-quality_factor,volatility_factor,-0.9919881694717518
-quality_factor,value_factor,-0.9940151685924284
+quality_factor,value_factor,0.9991201041627856
+value_factor,volatility_factor,0.5219808194100781
+quality_factor,volatility_factor,0.48574795706647683
+momentum_factor,quality_factor,-0.7327538260837633
+momentum_factor,value_factor,-0.7606494265139573

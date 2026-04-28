@@ -3,13 +3,19 @@
     "model": "cp",
     "exposure_type": "industry",
     "name": "J66货币金融服务",
-    "weight": 0.2791666666666667
+    "weight": 0.21666666666666667
   },
   {
     "model": "cp",
     "exposure_type": "industry",
     "name": "C39计算机、通信和其他电子设备制造业",
-    "weight": 0.10833333333333334
+    "weight": 0.14166666666666666
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "J67资本市场服务",
+    "weight": 0.1125
   },
   {
     "model": "cp",
@@ -20,61 +26,73 @@
   {
     "model": "cp",
     "exposure_type": "industry",
-    "name": "J67资本市场服务",
+    "name": "I63电信、广播电视和卫星传输服务",
     "weight": 0.10416666666666667
   },
   {
     "model": "cp",
     "exposure_type": "industry",
-    "name": "C31黑色金属冶炼和压延加工业",
-    "weight": 0.09583333333333334
+    "name": "C32有色金属冶炼和压延加工业",
+    "weight": 0.0875
   },
   {
     "model": "cp",
     "exposure_type": "industry",
     "name": "C38电气机械和器材制造业",
-    "weight": 0.07916666666666666
+    "weight": 0.075
   },
   {
     "model": "cp",
     "exposure_type": "industry",
-    "name": "B07石油和天然气开采业",
-    "weight": 0.07916666666666666
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C32有色金属冶炼和压延加工业",
-    "weight": 0.07083333333333333
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "I63电信、广播电视和卫星传输服务",
-    "weight": 0.05
+    "name": "D44电力、热力生产和供应业",
+    "weight": 0.05416666666666667
   },
   {
     "model": "cp",
     "exposure_type": "industry",
     "name": "C36汽车制造业",
-    "weight": 0.025
+    "weight": 0.0375
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C31黑色金属冶炼和压延加工业",
+    "weight": 0.03333333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "B07石油和天然气开采业",
+    "weight": 0.016666666666666666
   },
   {
     "model": "cp",
     "exposure_type": "industry",
     "name": "G55水上运输业",
-    "weight": 0.004166666666666667
+    "weight": 0.016666666666666666
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "value_factor",
+    "weight": 0.5375
   },
   {
     "model": "cp",
     "exposure_type": "style",
     "name": "momentum_factor",
-    "weight": 0.5458333333333333
+    "weight": 0.25416666666666665
   },
   {
     "model": "cp",
     "exposure_type": "style",
     "name": "quality_factor",
-    "weight": 0.45416666666666666
+    "weight": 0.1125
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "volatility_factor",
+    "weight": 0.09583333333333334
   }
 ]

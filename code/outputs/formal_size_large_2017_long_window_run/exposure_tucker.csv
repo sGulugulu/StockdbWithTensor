@@ -1,8 +1,9 @@
 model,exposure_type,name,weight
 tucker,industry,J66货币金融服务,0.6
-tucker,industry,C31黑色金属冶炼和压延加工业,0.14285714285714285
-tucker,industry,C36汽车制造业,0.1346938775510204
-tucker,industry,B07石油和天然气开采业,0.12244897959183673
-tucker,style,quality_factor,0.6122448979591837
-tucker,style,momentum_factor,0.2
-tucker,style,value_factor,0.18775510204081633
+tucker,industry,B07石油和天然气开采业,0.19591836734693877
+tucker,industry,C31黑色金属冶炼和压延加工业,0.15510204081632653
+tucker,industry,C36汽车制造业,0.044897959183673466
+tucker,industry,C35专用设备制造业,0.004081632653061225
+tucker,style,quality_factor,0.6489795918367347
+tucker,style,value_factor,0.1836734693877551
+tucker,style,momentum_factor,0.1673469387755102

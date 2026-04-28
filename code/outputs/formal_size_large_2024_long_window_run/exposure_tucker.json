@@ -9,30 +9,36 @@
     "model": "tucker",
     "exposure_type": "industry",
     "name": "C36汽车制造业",
-    "weight": 0.2
+    "weight": 0.19583333333333333
   },
   {
     "model": "tucker",
     "exposure_type": "industry",
     "name": "C38电气机械和器材制造业",
-    "weight": 0.14166666666666666
+    "weight": 0.12916666666666668
   },
   {
     "model": "tucker",
     "exposure_type": "industry",
     "name": "C31黑色金属冶炼和压延加工业",
-    "weight": 0.058333333333333334
+    "weight": 0.07083333333333333
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "G55水上运输业",
+    "weight": 0.004166666666666667
   },
   {
     "model": "tucker",
     "exposure_type": "style",
     "name": "value_factor",
-    "weight": 0.6916666666666667
+    "weight": 0.7
   },
   {
     "model": "tucker",
     "exposure_type": "style",
     "name": "momentum_factor",
-    "weight": 0.30833333333333335
+    "weight": 0.3
   }
 ]

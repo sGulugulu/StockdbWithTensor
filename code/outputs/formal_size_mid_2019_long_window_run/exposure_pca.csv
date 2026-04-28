@@ -1,10 +1,10 @@
 model,exposure_type,name,weight
-pca,industry,D44电力、热力生产和供应业,0.33877551020408164
+pca,industry,D44电力、热力生产和供应业,0.3346938775510204
 pca,industry,J66货币金融服务,0.2
 pca,industry,E48土木工程建筑业,0.2
-pca,industry,K70房地产业,0.17551020408163265
-pca,industry,G55水上运输业,0.08571428571428572
-pca,style,quality_factor,0.563265306122449
-pca,style,momentum_factor,0.22448979591836735
+pca,industry,K70房地产业,0.17142857142857143
+pca,industry,G55水上运输业,0.09387755102040816
+pca,style,quality_factor,0.5591836734693878
+pca,style,momentum_factor,0.20816326530612245
 pca,style,volatility_factor,0.12653061224489795
-pca,style,value_factor,0.08571428571428572
+pca,style,value_factor,0.10612244897959183

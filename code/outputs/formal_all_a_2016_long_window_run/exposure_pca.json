@@ -3,121 +3,79 @@
     "model": "pca",
     "exposure_type": "industry",
     "name": "B06煤炭开采和洗选业",
-    "weight": 0.186734693877551
+    "weight": 0.29183673469387755
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "C31黑色金属冶炼和压延加工业",
-    "weight": 0.1469387755102041
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "C37铁路、船舶、航空航天和其他运输设备制造业",
-    "weight": 0.11020408163265306
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "B11开采专业及辅助性活动",
-    "weight": 0.06428571428571428
+    "weight": 0.2
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "C35专用设备制造业",
-    "weight": 0.061224489795918366
+    "weight": 0.11224489795918367
   },
   {
     "model": "pca",
     "exposure_type": "industry",
-    "name": "C39计算机、通信和其他电子设备制造业",
-    "weight": 0.05408163265306123
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "G55水上运输业",
-    "weight": 0.04897959183673469
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "A01农业",
-    "weight": 0.04387755102040816
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "D44电力、热力生产和供应业",
-    "weight": 0.03877551020408163
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "C26化学原料和化学制品制造业",
-    "weight": 0.036734693877551024
+    "name": "B11开采专业及辅助性活动",
+    "weight": 0.053061224489795916
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "F51批发业",
-    "weight": 0.02959183673469388
+    "weight": 0.05
   },
   {
     "model": "pca",
     "exposure_type": "industry",
-    "name": "C28化学纤维制造业",
-    "weight": 0.02959183673469388
+    "name": "C37铁路、船舶、航空航天和其他运输设备制造业",
+    "weight": 0.05
   },
   {
     "model": "pca",
     "exposure_type": "industry",
-    "name": "C36汽车制造业",
-    "weight": 0.027551020408163266
+    "name": "C26化学原料和化学制品制造业",
+    "weight": 0.05
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "B09有色金属矿采选业",
-    "weight": 0.024489795918367346
+    "weight": 0.05
   },
   {
     "model": "pca",
     "exposure_type": "industry",
-    "name": "C32有色金属冶炼和压延加工业",
-    "weight": 0.024489795918367346
+    "name": "D44电力、热力生产和供应业",
+    "weight": 0.05
   },
   {
     "model": "pca",
     "exposure_type": "industry",
-    "name": "C27医药制造业",
-    "weight": 0.022448979591836733
+    "name": "C28化学纤维制造业",
+    "weight": 0.044897959183673466
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "G55水上运输业",
+    "weight": 0.025510204081632654
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "J68保险业",
-    "weight": 0.0163265306122449
+    "weight": 0.012244897959183673
   },
   {
     "model": "pca",
     "exposure_type": "industry",
-    "name": "J69其他金融业",
-    "weight": 0.015306122448979591
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "C15酒、饮料和精制茶制造业",
-    "weight": 0.013265306122448979
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "I64互联网和相关服务",
-    "weight": 0.00510204081632653
+    "name": "A01农业",
+    "weight": 0.01020408163265306
   },
   {
     "model": "pca",

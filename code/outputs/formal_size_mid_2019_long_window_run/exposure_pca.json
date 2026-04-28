@@ -3,7 +3,7 @@
     "model": "pca",
     "exposure_type": "industry",
     "name": "D44电力、热力生产和供应业",
-    "weight": 0.33877551020408164
+    "weight": 0.3346938775510204
   },
   {
     "model": "pca",
@@ -21,25 +21,25 @@
     "model": "pca",
     "exposure_type": "industry",
     "name": "K70房地产业",
-    "weight": 0.17551020408163265
+    "weight": 0.17142857142857143
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "G55水上运输业",
-    "weight": 0.08571428571428572
+    "weight": 0.09387755102040816
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "quality_factor",
-    "weight": 0.563265306122449
+    "weight": 0.5591836734693878
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "momentum_factor",
-    "weight": 0.22448979591836735
+    "weight": 0.20816326530612245
   },
   {
     "model": "pca",
@@ -51,6 +51,6 @@
     "model": "pca",
     "exposure_type": "style",
     "name": "value_factor",
-    "weight": 0.08571428571428572
+    "weight": 0.10612244897959183
   }
 ]

@@ -1,10 +1,10 @@
 model,exposure_type,name,weight
-pca,industry,D44电力、热力生产和供应业,0.3877551020408163
+pca,industry,D44电力、热力生产和供应业,0.3795918367346939
 pca,industry,C39计算机、通信和其他电子设备制造业,0.2
+pca,industry,C27医药制造业,0.19183673469387755
 pca,industry,J67资本市场服务,0.19183673469387755
-pca,industry,C27医药制造业,0.1836734693877551
 pca,industry,K70房地产业,0.036734693877551024
-pca,style,value_factor,0.5469387755102041
-pca,style,quality_factor,0.2653061224489796
-pca,style,volatility_factor,0.10612244897959183
-pca,style,momentum_factor,0.08163265306122448
+pca,style,value_factor,0.37551020408163266
+pca,style,quality_factor,0.30612244897959184
+pca,style,volatility_factor,0.19591836734693877
+pca,style,momentum_factor,0.12244897959183673

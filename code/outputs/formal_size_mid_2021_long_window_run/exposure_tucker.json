@@ -26,14 +26,14 @@
   {
     "model": "tucker",
     "exposure_type": "industry",
-    "name": "K70房地产业",
-    "weight": 0.09583333333333334
+    "name": "C36汽车制造业",
+    "weight": 0.09166666666666666
   },
   {
     "model": "tucker",
     "exposure_type": "industry",
-    "name": "C36汽车制造业",
-    "weight": 0.07916666666666666
+    "name": "K70房地产业",
+    "weight": 0.08333333333333333
   },
   {
     "model": "tucker",
@@ -44,25 +44,25 @@
   {
     "model": "tucker",
     "exposure_type": "style",
-    "name": "volatility_factor",
-    "weight": 0.35833333333333334
+    "name": "momentum_factor",
+    "weight": 0.31666666666666665
   },
   {
     "model": "tucker",
     "exposure_type": "style",
-    "name": "momentum_factor",
-    "weight": 0.3375
+    "name": "volatility_factor",
+    "weight": 0.30833333333333335
   },
   {
     "model": "tucker",
     "exposure_type": "style",
     "name": "quality_factor",
-    "weight": 0.25
+    "weight": 0.25833333333333336
   },
   {
     "model": "tucker",
     "exposure_type": "style",
     "name": "value_factor",
-    "weight": 0.05416666666666667
+    "weight": 0.11666666666666667
   }
 ]

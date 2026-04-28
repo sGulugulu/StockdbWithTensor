@@ -2,67 +2,67 @@
   {
     "model": "cp",
     "exposure_type": "industry",
-    "name": "C26化学原料和化学制品制造业",
-    "weight": 0.2
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "D46水的生产和供应业",
-    "weight": 0.16326530612244897
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "G56航空运输业",
-    "weight": 0.1469387755102041
+    "name": "J67资本市场服务",
+    "weight": 0.32653061224489793
   },
   {
     "model": "cp",
     "exposure_type": "industry",
     "name": "D44电力、热力生产和供应业",
-    "weight": 0.11020408163265306
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C37铁路、船舶、航空航天和其他运输设备制造业",
-    "weight": 0.10612244897959183
+    "weight": 0.22857142857142856
   },
   {
     "model": "cp",
     "exposure_type": "industry",
     "name": "C39计算机、通信和其他电子设备制造业",
+    "weight": 0.10612244897959183
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C37铁路、船舶、航空航天和其他运输设备制造业",
     "weight": 0.09387755102040816
   },
   {
     "model": "cp",
     "exposure_type": "industry",
-    "name": "C27医药制造业",
-    "weight": 0.06938775510204082
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "J67资本市场服务",
-    "weight": 0.05714285714285714
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
     "name": "K70房地产业",
-    "weight": 0.053061224489795916
+    "weight": 0.08979591836734693
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C26化学原料和化学制品制造业",
+    "weight": 0.07755102040816327
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "D46水的生产和供应业",
+    "weight": 0.07755102040816327
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "volatility_factor",
+    "weight": 0.43673469387755104
   },
   {
     "model": "cp",
     "exposure_type": "style",
     "name": "value_factor",
-    "weight": 0.6326530612244898
+    "weight": 0.3183673469387755
   },
   {
     "model": "cp",
     "exposure_type": "style",
     "name": "momentum_factor",
-    "weight": 0.3673469387755102
+    "weight": 0.22857142857142856
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "quality_factor",
+    "weight": 0.0163265306122449
   }
 ]

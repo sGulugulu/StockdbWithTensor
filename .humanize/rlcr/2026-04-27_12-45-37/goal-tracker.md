@@ -34,7 +34,7 @@ Source plan: 论文不足与完善计划.md
 ## MUTABLE SECTION
 <!-- Update each round with justification for changes -->
 
-### Plan Version: 7 (Updated: Round 6)
+### Plan Version: 8 (Updated: Round 7)
 
 #### Plan Evolution Log
 <!-- Document any changes to the plan with justification -->
@@ -50,13 +50,13 @@ Source plan: 论文不足与完善计划.md
 | 4 | 关闭 AC3 论文正文一致性缺口并收束 Active Tasks | Round 4 已将 `paper_body.tex` 改写为与 `2015-2026` 全年 long-window 产物一致，不再保留“仅代表年份复核”与“仍缺长窗口证据”的旧表述 | AC3 现已满足“配置、产物、对比表、论文回写”完整闭环，剩余主阻塞收敛为 AC1 |
 | 5 | 拒绝将 AC1 移入已验证，并重新打开 AC3/AC1 的论文一致性收口任务 | Round 5 虽已落盘五张 canonical source tables 并把字段接入 extended panel，但复核发现 `refresh_formal_factor_panels.py` 的 clean-rebuild 自动构建链路仍会在缺失 baseline panel 时失败，且 `paper_body.tex` 仍残留过时的 extended 组合收益数字、AC1“尚未纳入更广泛宏观/事件源”的旧表述，以及 AC3“仅四个代表年份复核”的旧口径 | AC1 仍未 fully close，AC3 的论文正文一致性也再次出现回归，当前不能视为 COMPLETE |
 | 6 | 部分接受 Round 6 的 tracker 更新请求：关闭 AC1 clean-rebuild 问题并验证 AC3/AC1 口径修复，但重新打开 AC2 论文正文一致性任务 | Round 6 复核确认 `refresh_formal_factor_panels.py` 已先生成 baseline panel 再触发 `build_formal_extended_sources()`，新增回归测试也已覆盖该顺序；`paper_body.tex` 中 AC1/AC3 的训练输入与 `2015-2026` long-window 口径已同步。但同一章的组合层段落仍把 extended ZZ500 的成本后净值和超额净值写成正收益，和 committed CSV 不一致 | AC1 与 AC3 可视为完成；AC2 的论文证据链出现残留不一致，当前仍不能视为 COMPLETE |
+| 7 | 接受 Round 7 的 tracker 更新请求并关闭 AC2 最后一处论文证据链不一致 | Round 7 提交已将 `paper_body.tex` 组合层段落中的 extended ZZ500 成本后净值与相对基准超额净值改写为 committed CSV 对应的负收益口径；本轮复核确认 `-2.58%`、`-7.94%`、`-4.54%`、`-9.86%` 与 `formal_zz500_extended_run/{cost_adjusted,excess_returns}_*.csv` 一致，且 Round 6 点名的旧数字 `5.99%`、`5.98%`、`3.86%` 已从正文消失 | AC2 最后一个正文/产物一致性缺口关闭，原始计划六项 AC 已全部达到可验证完成状态 |
 
 #### Active Tasks
 <!-- Map each task to its target Acceptance Criterion and routing tag -->
 | Task | Target AC | Status | Tag | Owner | Notes |
 |------|-----------|--------|-----|-------|-------|
-| 修正 AC2 论文正文中残留的组合层旧数字 | AC2 | pending | coding | claude | `paper_body.tex` 第 260 行仍把 extended ZZ500 的成本后净值和相对基准超额净值写成正收益，但 `formal_zz500_extended_run/cost_adjusted_{tucker,pca}.csv` 与 `excess_returns_{tucker,pca}.csv` 的最终 `cumulative_nav` 均低于 `1.0` |
-| 维护独立不足计划与 RLCR 记录 | AC6 | in_progress | coding | claude | 本轮继续维护 |
+| （无） | - | - | - | - | 原始计划任务已全部完成，Round 7 由 Codex 完成最终复核与 tracker 收口 |
 
 ### Completed and Verified
 <!-- Only move tasks here after Codex verification -->
@@ -71,6 +71,7 @@ Source plan: 论文不足与完善计划.md
 | AC1 | 修复 extended source clean-rebuild 自动构建合同 | 6 | 6 | `code/data/refresh_formal_factor_panels.py` 现先生成三份 baseline panel 再按需调用 `build_formal_extended_sources()`；`code/tests/test_refresh_formal_factor_panels.py` 新增 `build_extended_source_tables=True` 顺序回归测试；Round 6 复核下 targeted unittest 与 temp-root clean rebuild 调用均通过 |
 | AC1 | 训练输入边界旧口径收口到当前 committed snapshot | 6 | 6 | `paper_body.tex` 已改写为“外部宏观、分红、重大事项和公告标题文本已接入训练接口；剩余缺口为更长历史、更完整宏观品种与公告正文全文”，与 `EXTENDED_FACTOR_CONTRACT.md` 和 `训练输入扩展与PIT安全说明.md` 一致 |
 | AC2 | 跨样本边界组合与暴露汇总 | 1 | 1 | `code/data/summarize_boundary_portfolio.py` 已汇总 `metrics`、`portfolio_metrics`、`quantile_returns`、`long_short`、`cost_adjusted`、`excess_returns`、`exposure_*`，并刷新 `code/data/formal/reports/boundary_portfolio/*` 与 `paper_body.tex` |
+| AC2 | 修正组合层段落中残留的 extended ZZ500 旧数字 | 7 | 7 | `paper_body.tex` 第 260 行现已写为 `-2.58%` / `-7.94%` 的成本后净值和 `-4.54%` / `-9.86%` 的相对基准超额净值；本轮复核对应 `formal_zz500_extended_run/{cost_adjusted,excess_returns}_{tucker,pca}.csv` 末行 `cumulative_nav` 均一致，且 `rg -n "5\\.99|5\\.98|3\\.86" paper_body.tex` 无命中 |
 | AC3 | 多样本边界结果对比表 | 1 | 1 | `code/data/formal/reports/boundary_portfolio/README.md` 与 `boundary_portfolio_summary.json` 覆盖 HS300、SZ50、ZZ500、全 A、行业分层和市值分层 |
 | AC3 | 长窗口稳健性实验入口 | 2 | 2 | `code/data/build_long_window_run_plan.py` 现输出 repo-root 相对路径命令；`code/data/formal/reports/long_window_plan/README.md` / `long_window_run_plan.json` 可直接复制运行，且 `formal_all_a_2026_long_window_run.yaml` 已复核可执行 |
 | AC3 | 全年 long-window 分层复跑产物与组合汇总入库 | 3 | 3 | `find code/outputs -maxdepth 1 -type d -name 'formal_*_long_window_run' | wc -l = 84`、`git ls-files 'code/outputs/formal_*_long_window_run/*' | wc -l = 7476`、`code/data/formal/reports/long_window_portfolio/README.md` 与 `boundary_portfolio_summary.json` 已覆盖 2015-2026 全部年度与 7 个边界 |
@@ -88,6 +89,5 @@ Source plan: 论文不足与完善计划.md
 <!-- Issues discovered during implementation -->
 | Issue | Discovered Round | Blocking AC | Resolution Path |
 |-------|-----------------|-------------|-----------------|
-| `bitlesson-selector` 命令在当前 PowerShell 环境不可用，且 `.humanize/bitlesson.md` 暂无条目 | 0 | ALL | 本轮按 `BitLesson=NONE` 执行，并在 summary 中记录 |
-| Bash 与 Windows Git 的换行配置不一致会误报 CRLF 文件为 dirty | 0 | ALL | 已设置本地 `core.autocrlf=true`，后续验证使用同一 Git 视角 |
-| `paper_body.tex` 仍残留组合层旧结果表述：第 260 行把 extended ZZ500 的成本后净值与相对基准超额净值写成正收益，但 `formal_zz500_extended_run/cost_adjusted_{tucker,pca}.csv` 与 `excess_returns_{tucker,pca}.csv` 的最终 `cumulative_nav` 均低于 `1.0` | 6 | AC2 | 以 `formal_zz500_extended_run/{cost_adjusted,excess_returns}_*.csv` 为唯一证据源重写该句，并顺手复核同段所有 baseline/extended 组合层数字，避免继续混用旧实验口径 |
+| `bitlesson-selector` 命令在当前 PowerShell 环境不可用，且 `.humanize/bitlesson.md` 暂无条目 | 0 | - | 作为环境说明保留；本轮按 `BitLesson=NONE` 执行，并在 summary 中记录 |
+| Bash 与 Windows Git 的换行配置不一致会误报 CRLF 文件为 dirty | 0 | - | 作为环境说明保留；后续验证统一使用同一 Git 视角 |

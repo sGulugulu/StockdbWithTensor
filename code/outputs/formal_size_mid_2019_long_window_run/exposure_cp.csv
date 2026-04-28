@@ -1,8 +1,10 @@
 model,exposure_type,name,weight
-cp,industry,G56航空运输业,0.44081632653061226
-cp,industry,D44电力、热力生产和供应业,0.23673469387755103
-cp,industry,C31黑色金属冶炼和压延加工业,0.17959183673469387
-cp,industry,C27医药制造业,0.12653061224489795
-cp,industry,E48土木工程建筑业,0.0163265306122449
-cp,style,quality_factor,0.5224489795918368
-cp,style,value_factor,0.4775510204081633
+cp,industry,G56航空运输业,0.4530612244897959
+cp,industry,C27医药制造业,0.2
+cp,industry,C31黑色金属冶炼和压延加工业,0.1836734693877551
+cp,industry,E48土木工程建筑业,0.11428571428571428
+cp,industry,C36汽车制造业,0.0326530612244898
+cp,industry,K70房地产业,0.0163265306122449
+cp,style,momentum_factor,0.8367346938775511
+cp,style,volatility_factor,0.15510204081632653
+cp,style,value_factor,0.00816326530612245

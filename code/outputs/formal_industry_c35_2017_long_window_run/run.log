@@ -5,12 +5,12 @@ Filtered records for cn_a/INDUSTRY_C35: 17140 rows from 2017-01-03 to 2017-12-29
 Tensor shape: 19 stocks x 4 factors x 244 dates
 Split materialization: train=(16, 4, 146), validation=(19, 4, 49), test=(19, 4, 49)
 Preprocess fit scope: train_only
-cp rank=2 train_fit_mse=1.063763 validation_score_mse=1.094345
-cp rank=3 train_fit_mse=0.949589 validation_score_mse=1.150087
-tucker rank=(2, 2, 2) train_fit_mse=0.525032 validation_score_mse=0.551216
-tucker rank=(3, 2, 2) train_fit_mse=0.506174 validation_score_mse=0.557057
-pca rank=2 train_fit_mse=0.391329 validation_score_mse=0.411121
-pca rank=3 train_fit_mse=0.151318 validation_score_mse=0.188653
-Selected cp rank=2; refit_shape=(19, 4, 195); held_out_test_mse=1.056836
-Selected tucker rank=(2, 2, 2); refit_shape=(19, 4, 195); held_out_test_mse=0.729314
-Selected pca rank=3; refit_shape=(19, 4, 195); held_out_test_mse=0.210939
+cp rank=2 train_fit_mse=1.049455 validation_score_mse=1.014036
+cp rank=3 train_fit_mse=0.993138 validation_score_mse=0.958581
+tucker rank=(2, 2, 2) train_fit_mse=0.524387 validation_score_mse=0.526754
+tucker rank=(3, 2, 2) train_fit_mse=0.505201 validation_score_mse=0.531802
+pca rank=2 train_fit_mse=0.394917 validation_score_mse=0.402052
+pca rank=3 train_fit_mse=0.150704 validation_score_mse=0.187637
+Selected cp rank=3; refit_shape=(19, 4, 195); held_out_test_mse=1.185763
+Selected tucker rank=(2, 2, 2); refit_shape=(19, 4, 195); held_out_test_mse=0.691615
+Selected pca rank=3; refit_shape=(19, 4, 195); held_out_test_mse=0.214101

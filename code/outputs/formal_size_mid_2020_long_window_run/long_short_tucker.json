@@ -477,33 +477,33 @@
     "model": "tucker",
     "long_quantile": 1,
     "short_quantile": 5,
-    "long_return": 0.0,
-    "short_return": 0.0,
-    "long_short_return": 0.0,
-    "cumulative_nav": 0.9409204171572407,
-    "drawdown": -0.06552923223667784
+    "long_return": 0.004366812227074246,
+    "short_return": 0.009677538528492319,
+    "long_short_return": -0.005310726301418073,
+    "cumulative_nav": 0.9359234463503026,
+    "drawdown": -0.07049195072094472
   },
   {
     "trade_date": "2020-12-28",
     "model": "tucker",
     "long_quantile": 1,
     "short_quantile": 5,
-    "long_return": 0.0,
-    "short_return": 0.0,
-    "long_short_return": 0.0,
-    "cumulative_nav": 0.9409204171572407,
-    "drawdown": -0.06552923223667784
+    "long_return": 0.015659955257270708,
+    "short_return": 0.01783000227600051,
+    "long_short_return": -0.0021700470187298038,
+    "cumulative_nav": 0.9338924484657908,
+    "drawdown": -0.0725090268921681
   },
   {
     "trade_date": "2020-12-29",
     "model": "tucker",
     "long_quantile": 1,
     "short_quantile": 5,
-    "long_return": 0.0,
-    "short_return": 0.0,
-    "long_short_return": 0.0,
-    "cumulative_nav": 0.9409204171572407,
-    "drawdown": -0.06552923223667784
+    "long_return": 0.014266097039975612,
+    "short_return": 0.007870633360977042,
+    "long_short_return": 0.00639546367899857,
+    "cumulative_nav": 0.9398651237000449,
+    "drawdown": -0.06657729206105778
   },
   {
     "trade_date": "2020-12-30",
@@ -511,20 +511,20 @@
     "long_quantile": 1,
     "short_quantile": 5,
     "long_return": 0.0,
-    "short_return": 0.0,
-    "long_short_return": 0.0,
-    "cumulative_nav": 0.9409204171572407,
-    "drawdown": -0.06552923223667784
+    "short_return": -0.009324677467607734,
+    "long_short_return": 0.009324677467607734,
+    "cumulative_nav": 0.9486290628416011,
+    "drawdown": -0.05787342636858617
   },
   {
     "trade_date": "2020-12-31",
     "model": "tucker",
     "long_quantile": 1,
     "short_quantile": 5,
-    "long_return": 0.0,
-    "short_return": 0.0,
-    "long_short_return": 0.0,
-    "cumulative_nav": 0.9409204171572407,
-    "drawdown": -0.06552923223667784
+    "long_return": -0.009615384615384581,
+    "short_return": -0.02281373895586264,
+    "long_short_return": 0.013198354340478058,
+    "cumulative_nav": 0.9611494053506602,
+    "drawdown": -0.04543890601621825
   }
 ]

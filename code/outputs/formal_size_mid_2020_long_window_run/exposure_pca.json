@@ -3,7 +3,7 @@
     "model": "pca",
     "exposure_type": "industry",
     "name": "G56航空运输业",
-    "weight": 0.5166666666666667
+    "weight": 0.5083333333333333
   },
   {
     "model": "pca",
@@ -45,30 +45,30 @@
     "model": "pca",
     "exposure_type": "industry",
     "name": "G55水上运输业",
-    "weight": 0.004166666666666667
+    "weight": 0.0125
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "quality_factor",
-    "weight": 0.65
+    "weight": 0.6291666666666667
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "momentum_factor",
-    "weight": 0.1625
+    "weight": 0.2125
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "value_factor",
-    "weight": 0.15833333333333333
+    "weight": 0.125
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "volatility_factor",
-    "weight": 0.029166666666666667
+    "weight": 0.03333333333333333
   }
 ]

@@ -1,9 +1,10 @@
 model,exposure_type,name,weight
-cp,industry,G56航空运输业,0.38181818181818183
-cp,industry,K70房地产业,0.2
-cp,industry,J66货币金融服务,0.2
+cp,industry,G56航空运输业,0.21818181818181817
 cp,industry,D44电力、热力生产和供应业,0.2
-cp,industry,E48土木工程建筑业,0.01818181818181818
-cp,style,quality_factor,0.6
-cp,style,volatility_factor,0.2545454545454545
-cp,style,value_factor,0.14545454545454545
+cp,industry,C36汽车制造业,0.18181818181818182
+cp,industry,C27医药制造业,0.18181818181818182
+cp,industry,J66货币金融服务,0.12727272727272726
+cp,industry,E48土木工程建筑业,0.07272727272727272
+cp,industry,K70房地产业,0.01818181818181818
+cp,style,volatility_factor,0.6
+cp,style,momentum_factor,0.4

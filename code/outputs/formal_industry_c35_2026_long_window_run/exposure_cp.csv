@@ -1,4 +1,6 @@
 model,exposure_type,name,weight
 cp,industry,C35专用设备制造业,1.0
-cp,style,value_factor,0.6181818181818182
-cp,style,volatility_factor,0.38181818181818183
+cp,style,momentum_factor,0.5363636363636364
+cp,style,quality_factor,0.33181818181818185
+cp,style,value_factor,0.11818181818181818
+cp,style,volatility_factor,0.013636363636363636

@@ -4,10 +4,10 @@
     "model": "pca",
     "long_quantile": 1,
     "short_quantile": 5,
-    "long_return": -0.06295709141267565,
-    "short_return": -0.08181518908541219,
-    "long_short_return": 0.018858097672736537,
-    "cumulative_nav": 1.0188580976727366,
+    "long_return": -0.06837342658521138,
+    "short_return": -0.06996461216100414,
+    "long_short_return": 0.0015911855757927557,
+    "cumulative_nav": 1.0015911855757929,
     "drawdown": 0.0
   },
   {
@@ -15,10 +15,10 @@
     "model": "pca",
     "long_quantile": 1,
     "short_quantile": 5,
-    "long_return": -0.020259005359534583,
-    "short_return": -0.030890516803773065,
-    "long_short_return": 0.010631511444238483,
-    "cumulative_nav": 1.0296900991981994,
+    "long_return": -0.019091263352482624,
+    "short_return": -0.029794075067520902,
+    "long_short_return": 0.010702811715038278,
+    "cumulative_nav": 1.0123110274504525,
     "drawdown": 0.0
   },
   {
@@ -26,10 +26,10 @@
     "model": "pca",
     "long_quantile": 1,
     "short_quantile": 5,
-    "long_return": -0.018394822541464944,
-    "short_return": -0.03782658736318313,
-    "long_short_return": 0.019431764821718187,
-    "cumulative_nav": 1.0496987950450705,
+    "long_return": -0.023455383033991528,
+    "short_return": -0.035506828594095645,
+    "long_short_return": 0.012051445560104117,
+    "cumulative_nav": 1.024510838687665,
     "drawdown": 0.0
   },
   {
@@ -38,31 +38,31 @@
     "long_quantile": 1,
     "short_quantile": 5,
     "long_return": -0.039478578608641866,
-    "short_return": -0.03507110223779719,
-    "long_short_return": -0.004407476370844675,
-    "cumulative_nav": 1.0450722724094053,
-    "drawdown": -0.0044074763708445985
+    "short_return": -0.01917318170708306,
+    "long_short_return": -0.020305396901558807,
+    "cumulative_nav": 1.0037077394781628,
+    "drawdown": -0.02030539690155897
   },
   {
     "trade_date": "2026-03-20",
     "model": "pca",
     "long_quantile": 1,
     "short_quantile": 5,
-    "long_return": 0.015625283798990548,
-    "short_return": -0.004186867783913402,
-    "long_short_return": 0.019812151582903947,
-    "cumulative_nav": 1.0657774026854703,
-    "drawdown": 0.0
+    "long_return": -0.004639360730596527,
+    "short_return": 0.007495586176200576,
+    "long_short_return": -0.012134946906797103,
+    "cumulative_nav": 0.9915277993496541,
+    "drawdown": -0.03219393889503408
   },
   {
     "trade_date": "2026-03-23",
     "model": "pca",
     "long_quantile": 1,
     "short_quantile": 5,
-    "long_return": 0.08611095435223108,
+    "long_return": 0.09478082564501726,
     "short_return": 0.046968870728033005,
-    "long_short_return": 0.039142083624198076,
-    "cumulative_nav": 1.1074941509061655,
+    "long_short_return": 0.047811954916984256,
+    "cumulative_nav": 1.0389346817910963,
     "drawdown": 0.0
   },
   {
@@ -70,10 +70,10 @@
     "model": "pca",
     "long_quantile": 1,
     "short_quantile": 5,
-    "long_return": 0.04460251810048186,
-    "short_return": -0.01861048584982353,
-    "long_short_return": 0.0632130039503054,
-    "cumulative_nav": 1.1775021830423371,
+    "long_return": 0.07849237900799448,
+    "short_return": -0.00623074883462322,
+    "long_short_return": 0.08472312784261771,
+    "cumulative_nav": 1.1269564776566128,
     "drawdown": 0.0
   },
   {
@@ -81,10 +81,10 @@
     "model": "pca",
     "long_quantile": 1,
     "short_quantile": 5,
-    "long_return": 0.021010000327155887,
-    "short_return": -0.014929163062888797,
-    "long_short_return": 0.03593916339004469,
-    "cumulative_nav": 1.21982062639083,
+    "long_return": 0.06860849139390897,
+    "short_return": -0.012235458462404496,
+    "long_short_return": 0.08084394985631346,
+    "cumulative_nav": 1.2180640906265314,
     "drawdown": 0.0
   },
   {
@@ -92,10 +92,10 @@
     "model": "pca",
     "long_quantile": 1,
     "short_quantile": 5,
-    "long_return": 0.013807708410361422,
-    "short_return": -0.01623160641041586,
-    "long_short_return": 0.030039314820777284,
-    "cumulative_nav": 1.256463202211862,
+    "long_return": 0.0668726756728316,
+    "short_return": -0.022086978194593203,
+    "long_short_return": 0.0889596538674248,
+    "cumulative_nav": 1.3264226505170074,
     "drawdown": 0.0
   },
   {
@@ -104,9 +104,9 @@
     "long_quantile": 1,
     "short_quantile": 5,
     "long_return": 0.03452929836516513,
-    "short_return": -0.0674563680758044,
-    "long_short_return": 0.10198566644096951,
-    "cumulative_nav": 1.3846044392479935,
+    "short_return": -0.07226423820939822,
+    "long_short_return": 0.10679353657456334,
+    "cumulative_nav": 1.4680760163583246,
     "drawdown": 0.0
   },
   {
@@ -117,7 +117,7 @@
     "long_return": 0.0,
     "short_return": 0.0,
     "long_short_return": 0.0,
-    "cumulative_nav": 1.3846044392479935,
+    "cumulative_nav": 1.4680760163583246,
     "drawdown": 0.0
   }
 ]

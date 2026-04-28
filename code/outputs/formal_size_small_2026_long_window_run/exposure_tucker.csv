@@ -1,9 +1,9 @@
 model,exposure_type,name,weight
 tucker,industry,D44电力、热力生产和供应业,0.4
+tucker,industry,C26化学原料和化学制品制造业,0.2
 tucker,industry,D46水的生产和供应业,0.2
-tucker,industry,C26化学原料和化学制品制造业,0.18181818181818182
-tucker,industry,K70房地产业,0.10909090909090909
-tucker,industry,J67资本市场服务,0.10909090909090909
-tucker,style,momentum_factor,0.7818181818181819
-tucker,style,value_factor,0.16363636363636364
-tucker,style,quality_factor,0.05454545454545454
+tucker,industry,J67资本市场服务,0.18181818181818182
+tucker,industry,C39计算机、通信和其他电子设备制造业,0.01818181818181818
+tucker,style,quality_factor,0.38181818181818183
+tucker,style,momentum_factor,0.38181818181818183
+tucker,style,value_factor,0.23636363636363636

@@ -1,4 +1,6 @@
 model,exposure_type,name,weight
 cp,industry,C27医药制造业,1.0
-cp,style,volatility_factor,0.676530612244898
-cp,style,momentum_factor,0.32346938775510203
+cp,style,volatility_factor,0.7928571428571428
+cp,style,value_factor,0.16428571428571428
+cp,style,quality_factor,0.03163265306122449
+cp,style,momentum_factor,0.011224489795918367

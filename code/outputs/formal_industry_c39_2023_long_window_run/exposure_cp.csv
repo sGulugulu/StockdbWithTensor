@@ -1,5 +1,6 @@
 model,exposure_type,name,weight
 cp,industry,C39计算机、通信和其他电子设备制造业,1.0
-cp,style,quality_factor,0.4739583333333333
-cp,style,volatility_factor,0.340625
-cp,style,momentum_factor,0.18541666666666667
+cp,style,volatility_factor,0.6
+cp,style,value_factor,0.21979166666666666
+cp,style,momentum_factor,0.16354166666666667
+cp,style,quality_factor,0.016666666666666666

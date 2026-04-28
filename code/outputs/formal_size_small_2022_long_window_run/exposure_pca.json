@@ -3,7 +3,7 @@
     "model": "pca",
     "exposure_type": "industry",
     "name": "J67资本市场服务",
-    "weight": 0.26666666666666666
+    "weight": 0.2875
   },
   {
     "model": "pca",
@@ -20,20 +20,20 @@
   {
     "model": "pca",
     "exposure_type": "industry",
-    "name": "C27医药制造业",
-    "weight": 0.10416666666666667
+    "name": "C39计算机、通信和其他电子设备制造业",
+    "weight": 0.09583333333333334
   },
   {
     "model": "pca",
     "exposure_type": "industry",
-    "name": "C39计算机、通信和其他电子设备制造业",
-    "weight": 0.09166666666666666
+    "name": "C27医药制造业",
+    "weight": 0.0875
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "K70房地产业",
-    "weight": 0.06666666666666667
+    "weight": 0.0625
   },
   {
     "model": "pca",
@@ -45,36 +45,36 @@
     "model": "pca",
     "exposure_type": "industry",
     "name": "C37铁路、船舶、航空航天和其他运输设备制造业",
-    "weight": 0.025
+    "weight": 0.016666666666666666
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "D46水的生产和供应业",
-    "weight": 0.004166666666666667
+    "weight": 0.008333333333333333
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "quality_factor",
-    "weight": 0.5833333333333334
+    "weight": 0.5916666666666667
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "momentum_factor",
-    "weight": 0.30833333333333335
+    "weight": 0.2916666666666667
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "value_factor",
-    "weight": 0.075
+    "weight": 0.0875
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "volatility_factor",
-    "weight": 0.03333333333333333
+    "weight": 0.029166666666666667
   }
 ]

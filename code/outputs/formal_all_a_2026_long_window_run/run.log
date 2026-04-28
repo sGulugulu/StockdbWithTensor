@@ -1,16 +1,16 @@
 Loaded config: code/data/formal/reports/long_window_plan/configs/formal_all_a_2026_long_window_run.yaml
-Resolved device: requested=auto, actual=cpu
+Resolved device: requested=auto, actual=cuda
 Loaded normalized records before market filtering: 4534932
 Filtered records for cn_a/ALL_A_ACTIVE: 110884 rows from 2026-01-05 to 2026-03-30
 Tensor shape: 505 stocks x 4 factors x 55 dates
 Split materialization: train=(505, 4, 33), validation=(505, 4, 11), test=(505, 4, 11)
 Preprocess fit scope: train_only
-cp rank=2 train_fit_mse=0.985705 validation_score_mse=1.406199
-cp rank=3 train_fit_mse=1.008613 validation_score_mse=1.407021
-tucker rank=(2, 2, 2) train_fit_mse=0.513309 validation_score_mse=1.040402
-tucker rank=(3, 2, 2) train_fit_mse=0.469974 validation_score_mse=0.998811
-pca rank=2 train_fit_mse=0.396973 validation_score_mse=0.519555
-pca rank=3 train_fit_mse=0.166137 validation_score_mse=0.225320
-Selected cp rank=2; refit_shape=(505, 4, 44); held_out_test_mse=1.615159
-Selected tucker rank=(3, 2, 2); refit_shape=(505, 4, 44); held_out_test_mse=1.134394
-Selected pca rank=3; refit_shape=(505, 4, 44); held_out_test_mse=0.310130
+cp rank=2 train_fit_mse=1.021684 validation_score_mse=0.884484
+cp rank=3 train_fit_mse=1.019473 validation_score_mse=0.878073
+tucker rank=(2, 2, 2) train_fit_mse=0.393393 validation_score_mse=0.560455
+tucker rank=(3, 2, 2) train_fit_mse=0.336693 validation_score_mse=0.539495
+pca rank=2 train_fit_mse=0.268480 validation_score_mse=0.326952
+pca rank=3 train_fit_mse=0.070915 validation_score_mse=0.093517
+Selected cp rank=3; refit_shape=(505, 4, 44); held_out_test_mse=0.976528
+Selected tucker rank=(3, 2, 2); refit_shape=(505, 4, 44); held_out_test_mse=0.605551
+Selected pca rank=3; refit_shape=(505, 4, 44); held_out_test_mse=0.177754

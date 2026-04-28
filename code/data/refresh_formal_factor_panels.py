@@ -66,16 +66,6 @@ def refresh_formal_factor_panels_with_sources(
             "announcement_text_path": normalized_root / "events" / "announcement_text.csv",
         },
     )()
-    source_files_exist = all(
-        path.exists()
-        for path in (
-            source_paths.macro_interest_rate_path,
-            source_paths.macro_monthly_path,
-            source_paths.dividend_events_path,
-            source_paths.major_event_notice_path,
-            source_paths.announcement_text_path,
-        )
-    )
     for spec in UNIVERSE_SPECS:
         baseline_output = normalized_root / "factors" / spec.baseline_panel_filename
         build_formal_factor_panel(
@@ -88,7 +78,7 @@ def refresh_formal_factor_panels_with_sources(
         outputs.append(baseline_output)
         baseline_outputs[spec.universe_id] = baseline_output
 
-    if build_extended_source_tables and not source_files_exist:
+    if build_extended_source_tables:
         extended_sources = build_formal_extended_sources(
             formal_root=normalized_root,
             max_trade_date=max_trade_date,

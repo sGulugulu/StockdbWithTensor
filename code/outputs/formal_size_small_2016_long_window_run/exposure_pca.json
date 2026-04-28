@@ -2,8 +2,8 @@
   {
     "model": "pca",
     "exposure_type": "industry",
-    "name": "J67资本市场服务",
-    "weight": 0.3183673469387755
+    "name": "D44电力、热力生产和供应业",
+    "weight": 0.3142857142857143
   },
   {
     "model": "pca",
@@ -14,67 +14,49 @@
   {
     "model": "pca",
     "exposure_type": "industry",
-    "name": "K70房地产业",
-    "weight": 0.17959183673469387
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "D46水的生产和供应业",
-    "weight": 0.10612244897959183
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "C37铁路、船舶、航空航天和其他运输设备制造业",
-    "weight": 0.08571428571428572
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "C27医药制造业",
-    "weight": 0.06938775510204082
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "D44电力、热力生产和供应业",
-    "weight": 0.02040816326530612
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
     "name": "G56航空运输业",
-    "weight": 0.012244897959183673
+    "weight": 0.2
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "C39计算机、通信和其他电子设备制造业",
-    "weight": 0.00816326530612245
+    "weight": 0.2
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "J67资本市场服务",
+    "weight": 0.08163265306122448
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C27医药制造业",
+    "weight": 0.004081632653061225
   },
   {
     "model": "pca",
     "exposure_type": "style",
-    "name": "momentum_factor",
+    "name": "value_factor",
+    "weight": 0.46122448979591835
+  },
+  {
+    "model": "pca",
+    "exposure_type": "style",
+    "name": "volatility_factor",
     "weight": 0.2653061224489796
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "quality_factor",
-    "weight": 0.2530612244897959
+    "weight": 0.24489795918367346
   },
   {
     "model": "pca",
     "exposure_type": "style",
-    "name": "value_factor",
-    "weight": 0.24081632653061225
-  },
-  {
-    "model": "pca",
-    "exposure_type": "style",
-    "name": "volatility_factor",
-    "weight": 0.24081632653061225
+    "name": "momentum_factor",
+    "weight": 0.02857142857142857
   }
 ]

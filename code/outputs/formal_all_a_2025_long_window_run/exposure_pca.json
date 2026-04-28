@@ -3,55 +3,55 @@
     "model": "pca",
     "exposure_type": "industry",
     "name": "C39计算机、通信和其他电子设备制造业",
-    "weight": 0.24583333333333332
+    "weight": 0.25729166666666664
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "C35专用设备制造业",
-    "weight": 0.08229166666666667
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "C38电气机械和器材制造业",
-    "weight": 0.07083333333333333
+    "weight": 0.075
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "G56航空运输业",
-    "weight": 0.06041666666666667
+    "weight": 0.07083333333333333
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C38电气机械和器材制造业",
+    "weight": 0.06354166666666666
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "C27医药制造业",
-    "weight": 0.057291666666666664
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "C26化学原料和化学制品制造业",
-    "weight": 0.04791666666666667
+    "weight": 0.06354166666666666
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "E48土木工程建筑业",
-    "weight": 0.041666666666666664
+    "weight": 0.04791666666666667
   },
   {
     "model": "pca",
     "exposure_type": "industry",
-    "name": "C30非金属矿物制品业",
-    "weight": 0.036458333333333336
+    "name": "C26化学原料和化学制品制造业",
+    "weight": 0.04375
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "I65软件和信息技术服务业",
-    "weight": 0.036458333333333336
+    "weight": 0.03958333333333333
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C30非金属矿物制品业",
+    "weight": 0.03854166666666667
   },
   {
     "model": "pca",
@@ -63,67 +63,73 @@
     "model": "pca",
     "exposure_type": "industry",
     "name": "K70房地产业",
-    "weight": 0.029166666666666667
+    "weight": 0.03229166666666667
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "R87广播、电视、电影和录音制作业",
-    "weight": 0.027083333333333334
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "C37铁路、船舶、航空航天和其他运输设备制造业",
-    "weight": 0.025
+    "weight": 0.030208333333333334
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "F52零售业",
-    "weight": 0.023958333333333335
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "C32有色金属冶炼和压延加工业",
-    "weight": 0.020833333333333332
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "J66货币金融服务",
-    "weight": 0.01875
+    "weight": 0.029166666666666667
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "C31黑色金属冶炼和压延加工业",
-    "weight": 0.01875
+    "weight": 0.022916666666666665
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "A03畜牧业",
-    "weight": 0.017708333333333333
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "J68保险业",
-    "weight": 0.017708333333333333
+    "weight": 0.019791666666666666
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "C40仪器仪表制造业",
+    "weight": 0.016666666666666666
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C37铁路、船舶、航空航天和其他运输设备制造业",
     "weight": 0.015625
   },
   {
     "model": "pca",
     "exposure_type": "industry",
-    "name": "C28化学纤维制造业",
+    "name": "J66货币金融服务",
+    "weight": 0.014583333333333334
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "J68保险业",
+    "weight": 0.014583333333333334
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C32有色金属冶炼和压延加工业",
+    "weight": 0.013541666666666667
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C25石油、煤炭及其他燃料加工业",
     "weight": 0.0125
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C28化学纤维制造业",
+    "weight": 0.009375
   },
   {
     "model": "pca",
@@ -134,85 +140,67 @@
   {
     "model": "pca",
     "exposure_type": "industry",
-    "name": "B07石油和天然气开采业",
-    "weight": 0.007291666666666667
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
     "name": "D44电力、热力生产和供应业",
-    "weight": 0.00625
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "H61住宿业",
-    "weight": 0.00625
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "C33金属制品业",
-    "weight": 0.00625
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "B06煤炭开采和洗选业",
     "weight": 0.005208333333333333
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "C25石油、煤炭及其他燃料加工业",
-    "weight": 0.005208333333333333
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "C29橡胶和塑料制品业",
-    "weight": 0.004166666666666667
-  },
-  {
-    "model": "pca",
-    "exposure_type": "industry",
-    "name": "C13农副食品加工业",
-    "weight": 0.004166666666666667
   },
   {
     "model": "pca",
     "exposure_type": "industry",
     "name": "I64互联网和相关服务",
+    "weight": 0.005208333333333333
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "B06煤炭开采和洗选业",
     "weight": 0.004166666666666667
   },
   {
     "model": "pca",
     "exposure_type": "industry",
-    "name": "J67资本市场服务",
-    "weight": 0.0020833333333333333
+    "name": "H61住宿业",
+    "weight": 0.004166666666666667
   },
   {
     "model": "pca",
     "exposure_type": "industry",
-    "name": "R86新闻和出版业",
+    "name": "B07石油和天然气开采业",
+    "weight": 0.003125
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C33金属制品业",
+    "weight": 0.003125
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C13农副食品加工业",
+    "weight": 0.0010416666666666667
+  },
+  {
+    "model": "pca",
+    "exposure_type": "industry",
+    "name": "C29橡胶和塑料制品业",
     "weight": 0.0010416666666666667
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "quality_factor",
-    "weight": 0.7125
+    "weight": 0.8104166666666667
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "momentum_factor",
-    "weight": 0.28125
+    "weight": 0.1875
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "value_factor",
-    "weight": 0.00625
+    "weight": 0.0020833333333333333
   }
 ]

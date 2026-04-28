@@ -3,210 +3,186 @@
     "model": "cp",
     "exposure_type": "industry",
     "name": "C39计算机、通信和其他电子设备制造业",
-    "weight": 0.140625
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C13农副食品加工业",
-    "weight": 0.084375
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "D44电力、热力生产和供应业",
-    "weight": 0.06770833333333333
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C32有色金属冶炼和压延加工业",
-    "weight": 0.0625
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C34通用设备制造业",
-    "weight": 0.05625
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C27医药制造业",
-    "weight": 0.052083333333333336
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "I65软件和信息技术服务业",
-    "weight": 0.051041666666666666
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C17纺织业",
-    "weight": 0.04583333333333333
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "P83教育",
-    "weight": 0.04479166666666667
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "J67资本市场服务",
-    "weight": 0.041666666666666664
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "G60邮政业",
-    "weight": 0.036458333333333336
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "K70房地产业",
-    "weight": 0.035416666666666666
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C30非金属矿物制品业",
-    "weight": 0.034375
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "L72商务服务业",
-    "weight": 0.03333333333333333
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C31黑色金属冶炼和压延加工业",
-    "weight": 0.030208333333333334
+    "weight": 0.15833333333333333
   },
   {
     "model": "cp",
     "exposure_type": "industry",
     "name": "J66货币金融服务",
-    "weight": 0.028125
+    "weight": 0.15520833333333334
   },
   {
     "model": "cp",
     "exposure_type": "industry",
-    "name": "C26化学原料和化学制品制造业",
-    "weight": 0.027083333333333334
+    "name": "I65软件和信息技术服务业",
+    "weight": 0.078125
   },
   {
     "model": "cp",
     "exposure_type": "industry",
-    "name": "G56航空运输业",
-    "weight": 0.021875
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C38电气机械和器材制造业",
-    "weight": 0.020833333333333332
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "A03畜牧业",
-    "weight": 0.019791666666666666
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C35专用设备制造业",
-    "weight": 0.015625
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "B09有色金属矿采选业",
-    "weight": 0.013541666666666667
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "F52零售业",
-    "weight": 0.008333333333333333
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C15酒、饮料和精制茶制造业",
-    "weight": 0.007291666666666667
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "M75科技推广和应用服务业",
-    "weight": 0.00625
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C33金属制品业",
-    "weight": 0.004166666666666667
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "D46水的生产和供应业",
-    "weight": 0.003125
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "I64互联网和相关服务",
-    "weight": 0.0020833333333333333
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C37铁路、船舶、航空航天和其他运输设备制造业",
-    "weight": 0.0010416666666666667
+    "name": "F51批发业",
+    "weight": 0.057291666666666664
   },
   {
     "model": "cp",
     "exposure_type": "industry",
     "name": "C36汽车制造业",
-    "weight": 0.0010416666666666667
+    "weight": 0.05520833333333333
   },
   {
     "model": "cp",
     "exposure_type": "industry",
-    "name": "D45燃气生产和供应业",
-    "weight": 0.0010416666666666667
+    "name": "C15酒、饮料和精制茶制造业",
+    "weight": 0.05
   },
   {
     "model": "cp",
     "exposure_type": "industry",
-    "name": "G55水上运输业",
-    "weight": 0.0010416666666666667
+    "name": "C27医药制造业",
+    "weight": 0.04895833333333333
   },
   {
     "model": "cp",
     "exposure_type": "industry",
-    "name": "C25石油、煤炭及其他燃料加工业",
+    "name": "C35专用设备制造业",
+    "weight": 0.04479166666666667
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C28化学纤维制造业",
+    "weight": 0.041666666666666664
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C30非金属矿物制品业",
+    "weight": 0.0375
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "K70房地产业",
+    "weight": 0.036458333333333336
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "J69其他金融业",
+    "weight": 0.030208333333333334
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "B06煤炭开采和洗选业",
+    "weight": 0.028125
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C37铁路、船舶、航空航天和其他运输设备制造业",
+    "weight": 0.028125
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C29橡胶和塑料制品业",
+    "weight": 0.019791666666666666
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "I64互联网和相关服务",
+    "weight": 0.017708333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "B11开采专业及辅助性活动",
+    "weight": 0.014583333333333334
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C38电气机械和器材制造业",
+    "weight": 0.014583333333333334
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C34通用设备制造业",
+    "weight": 0.013541666666666667
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C31黑色金属冶炼和压延加工业",
+    "weight": 0.0125
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C26化学原料和化学制品制造业",
+    "weight": 0.0125
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C32有色金属冶炼和压延加工业",
+    "weight": 0.011458333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "F52零售业",
+    "weight": 0.011458333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "Q84卫生",
+    "weight": 0.011458333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "E48土木工程建筑业",
+    "weight": 0.007291666666666667
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C14食品制造业",
+    "weight": 0.0020833333333333333
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "J67资本市场服务",
     "weight": 0.0010416666666666667
   },
   {
     "model": "cp",
     "exposure_type": "style",
     "name": "value_factor",
-    "weight": 0.9302083333333333
+    "weight": 0.45416666666666666
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.3802083333333333
   },
   {
     "model": "cp",
     "exposure_type": "style",
     "name": "quality_factor",
-    "weight": 0.06979166666666667
+    "weight": 0.153125
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "volatility_factor",
+    "weight": 0.0125
   }
 ]

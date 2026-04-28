@@ -1,9 +1,9 @@
 # Experiment Summary
 
 ## Models
-- cp: rank=2, mse=1.003093, explained_variance=-0.0173, rank_ic_mean=-0.0322
-- tucker: rank=(3, 2, 2), mse=0.571108, explained_variance=0.4208, rank_ic_mean=0.0217
-- pca: rank=3, mse=0.181398, explained_variance=0.8160, rank_ic_mean=-0.2394
+- cp: rank=3, mse=0.994678, explained_variance=-0.0376, rank_ic_mean=0.0213
+- tucker: rank=(3, 2, 2), mse=0.546266, explained_variance=0.4301, rank_ic_mean=0.0673
+- pca: rank=3, mse=0.179562, explained_variance=0.8127, rank_ic_mean=-0.1931
 
 ## Output Files
 - `metrics.csv` / `metrics.json`: model comparison table

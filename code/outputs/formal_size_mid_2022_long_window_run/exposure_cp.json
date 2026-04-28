@@ -2,8 +2,32 @@
   {
     "model": "cp",
     "exposure_type": "industry",
+    "name": "E48土木工程建筑业",
+    "weight": 0.1875
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C36汽车制造业",
+    "weight": 0.17083333333333334
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
     "name": "G56航空运输业",
-    "weight": 0.2
+    "weight": 0.1625
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C27医药制造业",
+    "weight": 0.15
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C31黑色金属冶炼和压延加工业",
+    "weight": 0.14583333333333334
   },
   {
     "model": "cp",
@@ -14,55 +38,37 @@
   {
     "model": "cp",
     "exposure_type": "industry",
-    "name": "E48土木工程建筑业",
-    "weight": 0.13333333333333333
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C36汽车制造业",
-    "weight": 0.13333333333333333
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C31黑色金属冶炼和压延加工业",
-    "weight": 0.13333333333333333
+    "name": "D44电力、热力生产和供应业",
+    "weight": 0.029166666666666667
   },
   {
     "model": "cp",
     "exposure_type": "industry",
     "name": "J66货币金融服务",
-    "weight": 0.12916666666666668
+    "weight": 0.020833333333333332
   },
   {
     "model": "cp",
-    "exposure_type": "industry",
-    "name": "D44电力、热力生产和供应业",
-    "weight": 0.06666666666666667
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "G55水上运输业",
-    "weight": 0.0625
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C27医药制造业",
-    "weight": 0.008333333333333333
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.7083333333333334
   },
   {
     "model": "cp",
     "exposure_type": "style",
     "name": "volatility_factor",
-    "weight": 0.6583333333333333
+    "weight": 0.15833333333333333
   },
   {
     "model": "cp",
     "exposure_type": "style",
     "name": "value_factor",
-    "weight": 0.3416666666666667
+    "weight": 0.0875
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "quality_factor",
+    "weight": 0.04583333333333333
   }
 ]

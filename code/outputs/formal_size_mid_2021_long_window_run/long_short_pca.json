@@ -258,21 +258,21 @@
     "long_quantile": 1,
     "short_quantile": 5,
     "long_return": 0.02294992940154228,
-    "short_return": 0.05836103493809791,
-    "long_short_return": -0.03541110553655563,
-    "cumulative_nav": 0.538654780253509,
-    "drawdown": -0.5974948796259772
+    "short_return": 0.09994420127076326,
+    "long_short_return": -0.07699427186922098,
+    "cumulative_nav": 0.5154335183752801,
+    "drawdown": -0.614846766493359
   },
   {
     "trade_date": "2021-11-30",
     "model": "pca",
     "long_quantile": 1,
     "short_quantile": 5,
-    "long_return": 0.07040613718411548,
+    "long_return": 0.02267771078817643,
     "short_return": 0.107175909631608,
-    "long_short_return": -0.03676977244749252,
-    "cumulative_nav": 0.5188485665558334,
-    "drawdown": -0.6122949013110806
+    "long_short_return": -0.08449819884343157,
+    "cumulative_nav": 0.4718803144490361,
+    "drawdown": -0.6473915210033938
   },
   {
     "trade_date": "2021-12-01",
@@ -282,8 +282,8 @@
     "long_return": 0.0044832669105203116,
     "short_return": 0.07267044772818682,
     "long_short_return": -0.0681871808176665,
-    "cumulative_nav": 0.4834697455311038,
-    "drawdown": -0.6387314189793132
+    "cumulative_nav": 0.4397041261234024,
+    "drawdown": -0.6714348991185777
   },
   {
     "trade_date": "2021-12-02",
@@ -293,8 +293,8 @@
     "long_return": -0.0033320617249456563,
     "short_return": 0.10661648837492349,
     "long_short_return": -0.10994855009986915,
-    "cumulative_nav": 0.4303129479928062,
-    "drawdown": -0.6784523756591747
+    "cumulative_nav": 0.39135929498320426,
+    "drawdown": -0.7075601555739073
   },
   {
     "trade_date": "2021-12-03",
@@ -304,8 +304,8 @@
     "long_return": 0.0234813421016552,
     "short_return": 0.001419738408012572,
     "long_short_return": 0.02206160369364263,
-    "cumulative_nav": 0.4398063417156665,
-    "drawdown": -0.6713585194023353
+    "cumulative_nav": 0.39999330865094707,
+    "drawdown": -0.7011084636219485
   },
   {
     "trade_date": "2021-12-06",
@@ -315,8 +315,8 @@
     "long_return": 0.05743863035829183,
     "short_return": 0.008673951708520033,
     "long_short_return": 0.0487646786497718,
-    "cumulative_nav": 0.4612533566375627,
-    "drawdown": -0.655332423210005
+    "cumulative_nav": 0.41949885380936947,
+    "drawdown": -0.6865331138993361
   },
   {
     "trade_date": "2021-12-07",
@@ -326,8 +326,8 @@
     "long_return": 0.04047670784958923,
     "short_return": -0.023234455867347792,
     "long_short_return": 0.06371116371693702,
-    "cumulative_nav": 0.49064034475728513,
-    "drawdown": -0.6333732507972176
+    "cumulative_nav": 0.4462256139634856,
+    "drawdown": -0.6665617737991383
   },
   {
     "trade_date": "2021-12-08",
@@ -337,8 +337,8 @@
     "long_return": 0.08811170264459572,
     "short_return": -0.03680668715714655,
     "long_short_return": 0.12491838980174227,
-    "cumulative_nav": 0.5519303465961369,
-    "drawdown": -0.5875748276285588
+    "cumulative_nav": 0.5019673991480981,
+    "drawdown": -0.6249092074837775
   },
   {
     "trade_date": "2021-12-09",
@@ -348,8 +348,8 @@
     "long_return": 0.08714979192771433,
     "short_return": -0.03427318806734683,
     "long_short_return": 0.12142297999506116,
-    "cumulative_nav": 0.6189473740295469,
-    "drawdown": -0.5374969341742417
+    "cumulative_nav": 0.5629177766130306,
+    "drawdown": -0.5793645656877486
   },
   {
     "trade_date": "2021-12-10",
@@ -359,8 +359,8 @@
     "long_return": 0.11751327430510294,
     "short_return": -0.035994794051109696,
     "long_short_return": 0.15350806835621264,
-    "cumulative_nav": 0.7139607898309729,
-    "drawdown": -0.4664989819305032
+    "cumulative_nav": 0.6493301971442709,
+    "drawdown": -0.5147936326842983
   },
   {
     "trade_date": "2021-12-13",
@@ -370,8 +370,8 @@
     "long_return": 0.04257191431265883,
     "short_return": -0.02894069135490318,
     "long_short_return": 0.07151260566756201,
-    "cumulative_nav": 0.7650179862562565,
-    "drawdown": -0.42834693400205637
+    "cumulative_nav": 0.6957654914806894,
+    "drawdown": -0.48009526107106026
   },
   {
     "trade_date": "2021-12-14",
@@ -379,10 +379,10 @@
     "long_quantile": 1,
     "short_quantile": 5,
     "long_return": 0.06883150372062186,
-    "short_return": 0.019739698915977655,
-    "long_short_return": 0.0490918048046442,
-    "cumulative_nav": 0.8025740999095907,
-    "drawdown": -0.40028345327010884
+    "short_return": 0.026636408037821607,
+    "long_short_return": 0.04219509568280025,
+    "cumulative_nav": 0.7251233829665077,
+    "drawdown": -0.45815783086601236
   },
   {
     "trade_date": "2021-12-15",
@@ -392,8 +392,8 @@
     "long_return": -0.02799570785251909,
     "short_return": 0.0033226116728424515,
     "long_short_return": -0.03131831952536154,
-    "cumulative_nav": 0.7774388278058427,
-    "drawdown": -0.41906556770524195
+    "cumulative_nav": 0.7024137371634515,
+    "drawdown": -0.4751274170512656
   },
   {
     "trade_date": "2021-12-16",
@@ -403,8 +403,8 @@
     "long_return": 0.026821804537705773,
     "short_return": -0.0032557363475891887,
     "long_short_return": 0.030077540885294962,
-    "cumulative_nav": 0.8008222759349887,
-    "drawdown": -0.4015924885662209
+    "cumulative_nav": 0.723540615061378,
+    "drawdown": -0.4593405404780546
   },
   {
     "trade_date": "2021-12-17",
@@ -414,8 +414,8 @@
     "long_return": 0.03003246753246752,
     "short_return": 0.027256043941158714,
     "long_short_return": 0.0027764235913088076,
-    "cumulative_nav": 0.8030456977943402,
-    "drawdown": -0.3999310558342597
+    "cumulative_nav": 0.7255494702943045,
+    "drawdown": -0.4578394407997737
   },
   {
     "trade_date": "2021-12-20",
@@ -425,8 +425,8 @@
     "long_return": 0.1030378431953235,
     "short_return": 0.03413617588773682,
     "long_short_return": 0.06890166730758668,
-    "cumulative_nav": 0.8583768852965545,
-    "drawdown": -0.35858530508173714
+    "cumulative_nav": 0.7755410385117184,
+    "drawdown": -0.4204836743224645
   },
   {
     "trade_date": "2021-12-21",
@@ -436,8 +436,8 @@
     "long_return": 0.013102159468438568,
     "short_return": 0.02504521344805266,
     "long_short_return": -0.011943053979614093,
-    "cumulative_nav": 0.8481252438206047,
-    "drawdown": -0.36624575540646365
+    "cumulative_nav": 0.766278710025367,
+    "drawdown": -0.42740486908209896
   },
   {
     "trade_date": "2021-12-22",
@@ -447,8 +447,8 @@
     "long_return": -0.020481950435333907,
     "short_return": 0.039555514509541256,
     "long_short_return": -0.06003746494487516,
-    "cumulative_nav": 0.7972059542258615,
-    "drawdown": -0.40429475364991396
+    "cumulative_nav": 0.7202732788342149,
+    "drawdown": -0.4617820291821886
   },
   {
     "trade_date": "2021-12-23",
@@ -458,8 +458,8 @@
     "long_return": -0.06486978334112081,
     "short_return": 0.04265714730190823,
     "long_short_return": -0.10752693064302904,
-    "cumulative_nav": 0.7114848448776074,
-    "drawdown": -0.4683491103578882
+    "cumulative_nav": 0.6428245039369811,
+    "drawdown": -0.5196549556011473
   },
   {
     "trade_date": "2021-12-24",
@@ -469,62 +469,62 @@
     "long_return": -0.08791172124505453,
     "short_return": 0.018717968443715205,
     "long_short_return": -0.10662968968876974,
-    "cumulative_nav": 0.6356194366500457,
-    "drawdown": -0.5250388797431849
+    "cumulative_nav": 0.5742803265578434,
+    "drawdown": -0.5708739986289353
   },
   {
     "trade_date": "2021-12-27",
     "model": "pca",
     "long_quantile": 1,
     "short_quantile": 5,
-    "long_return": 0.0,
-    "short_return": 0.0,
-    "long_short_return": 0.0,
-    "cumulative_nav": 0.6356194366500457,
-    "drawdown": -0.5250388797431849
+    "long_return": -0.11707281268349973,
+    "short_return": 0.01335831807676896,
+    "long_short_return": -0.1304311307602687,
+    "cumulative_nav": 0.49937629419152757,
+    "drawdown": -0.6268453882263958
   },
   {
     "trade_date": "2021-12-28",
     "model": "pca",
     "long_quantile": 1,
     "short_quantile": 5,
-    "long_return": 0.0,
-    "short_return": 0.0,
-    "long_short_return": 0.0,
-    "cumulative_nav": 0.6356194366500457,
-    "drawdown": -0.5250388797431849
+    "long_return": -0.09975790257805423,
+    "short_return": 0.014074155714978887,
+    "long_short_return": -0.11383205829303311,
+    "cumulative_nav": 0.4425312627609588,
+    "drawdown": -0.6693223457461228
   },
   {
     "trade_date": "2021-12-29",
     "model": "pca",
     "long_quantile": 1,
     "short_quantile": 5,
-    "long_return": 0.0,
-    "short_return": 0.0,
-    "long_short_return": 0.0,
-    "cumulative_nav": 0.6356194366500457,
-    "drawdown": -0.5250388797431849
+    "long_return": -0.05725186214167871,
+    "short_return": -0.006980865775259554,
+    "long_short_return": -0.05027099636641916,
+    "cumulative_nav": 0.42028477525867575,
+    "drawdown": -0.6859458409015755
   },
   {
     "trade_date": "2021-12-30",
     "model": "pca",
     "long_quantile": 1,
     "short_quantile": 5,
-    "long_return": 0.0,
-    "short_return": 0.0,
-    "long_short_return": 0.0,
-    "cumulative_nav": 0.6356194366500457,
-    "drawdown": -0.5250388797431849
+    "long_return": -0.10424038287062237,
+    "short_return": 0.0009463559623366369,
+    "long_short_return": -0.10518673883295901,
+    "cumulative_nav": 0.37607639036807256,
+    "drawdown": -0.7189801737140661
   },
   {
     "trade_date": "2021-12-31",
     "model": "pca",
     "long_quantile": 1,
     "short_quantile": 5,
-    "long_return": 0.0,
-    "short_return": 0.0,
-    "long_short_return": 0.0,
-    "cumulative_nav": 0.6356194366500457,
-    "drawdown": -0.5250388797431849
+    "long_return": -0.017745166075888275,
+    "short_return": 0.004197015867699605,
+    "long_short_return": -0.02194218194358788,
+    "cumulative_nav": 0.36782445378592854,
+    "drawdown": -0.7251463618721874
   }
 ]

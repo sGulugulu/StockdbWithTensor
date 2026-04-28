@@ -8,19 +8,19 @@
   {
     "model": "cp",
     "exposure_type": "style",
-    "name": "value_factor",
-    "weight": 0.5260416666666666
-  },
-  {
-    "model": "cp",
-    "exposure_type": "style",
     "name": "momentum_factor",
-    "weight": 0.3802083333333333
+    "weight": 0.4041666666666667
   },
   {
     "model": "cp",
     "exposure_type": "style",
-    "name": "quality_factor",
-    "weight": 0.09375
+    "name": "value_factor",
+    "weight": 0.37083333333333335
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "volatility_factor",
+    "weight": 0.225
   }
 ]

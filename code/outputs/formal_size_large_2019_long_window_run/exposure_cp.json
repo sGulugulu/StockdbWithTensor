@@ -3,48 +3,60 @@
     "model": "cp",
     "exposure_type": "industry",
     "name": "J66货币金融服务",
-    "weight": 0.4
+    "weight": 0.5673469387755102
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C35专用设备制造业",
+    "weight": 0.2
   },
   {
     "model": "cp",
     "exposure_type": "industry",
     "name": "J67资本市场服务",
-    "weight": 0.2
+    "weight": 0.09795918367346938
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C36汽车制造业",
+    "weight": 0.06938775510204082
+  },
+  {
+    "model": "cp",
+    "exposure_type": "industry",
+    "name": "C32有色金属冶炼和压延加工业",
+    "weight": 0.0326530612244898
   },
   {
     "model": "cp",
     "exposure_type": "industry",
     "name": "C31黑色金属冶炼和压延加工业",
-    "weight": 0.2
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "C38电气机械和器材制造业",
-    "weight": 0.17959183673469387
-  },
-  {
-    "model": "cp",
-    "exposure_type": "industry",
-    "name": "G55水上运输业",
-    "weight": 0.02040816326530612
-  },
-  {
-    "model": "cp",
-    "exposure_type": "style",
-    "name": "volatility_factor",
-    "weight": 0.8448979591836735
+    "weight": 0.0326530612244898
   },
   {
     "model": "cp",
     "exposure_type": "style",
     "name": "quality_factor",
-    "weight": 0.08571428571428572
+    "weight": 0.746938775510204
   },
   {
     "model": "cp",
     "exposure_type": "style",
     "name": "value_factor",
-    "weight": 0.06938775510204082
+    "weight": 0.20816326530612245
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "volatility_factor",
+    "weight": 0.036734693877551024
+  },
+  {
+    "model": "cp",
+    "exposure_type": "style",
+    "name": "momentum_factor",
+    "weight": 0.00816326530612245
   }
 ]

@@ -21,18 +21,18 @@
     "model": "tucker",
     "exposure_type": "industry",
     "name": "C35专用设备制造业",
-    "weight": 0.07142857142857142
-  },
-  {
-    "model": "tucker",
-    "exposure_type": "industry",
-    "name": "B09有色金属矿采选业",
-    "weight": 0.05
+    "weight": 0.07244897959183673
   },
   {
     "model": "tucker",
     "exposure_type": "industry",
     "name": "C30非金属矿物制品业",
+    "weight": 0.05
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
+    "name": "B09有色金属矿采选业",
     "weight": 0.05
   },
   {
@@ -56,31 +56,31 @@
   {
     "model": "tucker",
     "exposure_type": "industry",
-    "name": "C32有色金属冶炼和压延加工业",
-    "weight": 0.05
-  },
-  {
-    "model": "tucker",
-    "exposure_type": "industry",
     "name": "J68保险业",
     "weight": 0.05
   },
   {
     "model": "tucker",
     "exposure_type": "industry",
+    "name": "C32有色金属冶炼和压延加工业",
+    "weight": 0.05
+  },
+  {
+    "model": "tucker",
+    "exposure_type": "industry",
     "name": "B11开采专业及辅助性活动",
-    "weight": 0.02857142857142857
+    "weight": 0.027551020408163266
   },
   {
     "model": "tucker",
     "exposure_type": "style",
     "name": "quality_factor",
-    "weight": 0.9551020408163265
+    "weight": 0.95
   },
   {
     "model": "tucker",
     "exposure_type": "style",
     "name": "value_factor",
-    "weight": 0.044897959183673466
+    "weight": 0.05
   }
 ]

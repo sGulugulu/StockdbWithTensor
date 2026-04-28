@@ -3,19 +3,19 @@
     "model": "tucker",
     "exposure_type": "industry",
     "name": "J66货币金融服务",
-    "weight": 0.44081632653061226
+    "weight": 0.43673469387755104
   },
   {
     "model": "tucker",
     "exposure_type": "industry",
     "name": "C31黑色金属冶炼和压延加工业",
-    "weight": 0.12653061224489795
+    "weight": 0.13673469387755102
   },
   {
     "model": "tucker",
     "exposure_type": "industry",
     "name": "C36汽车制造业",
-    "weight": 0.08061224489795918
+    "weight": 0.07040816326530612
   },
   {
     "model": "tucker",
@@ -27,7 +27,7 @@
     "model": "tucker",
     "exposure_type": "industry",
     "name": "L72商务服务业",
-    "weight": 0.05102040816326531
+    "weight": 0.05
   },
   {
     "model": "tucker",
@@ -69,24 +69,18 @@
     "model": "tucker",
     "exposure_type": "industry",
     "name": "J67资本市场服务",
-    "weight": 0.0010204081632653062
+    "weight": 0.006122448979591836
   },
   {
     "model": "tucker",
     "exposure_type": "style",
     "name": "value_factor",
-    "weight": 0.8071428571428572
+    "weight": 0.7989795918367347
   },
   {
     "model": "tucker",
     "exposure_type": "style",
     "name": "quality_factor",
-    "weight": 0.19183673469387755
-  },
-  {
-    "model": "tucker",
-    "exposure_type": "style",
-    "name": "momentum_factor",
-    "weight": 0.0010204081632653062
+    "weight": 0.2010204081632653
   }
 ]

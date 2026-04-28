@@ -443,50 +443,50 @@
     "trade_date": "2015-12-25",
     "model": "pca",
     "top_n": 5,
-    "gross_return": 0.0,
+    "gross_return": -0.07350214754637016,
     "transaction_cost": 0.00019999999999999996,
-    "net_return": -0.00019999999999999996,
-    "cumulative_nav": 1.3576791791197815,
-    "drawdown": -0.08693006772012224
+    "net_return": -0.07370214754637017,
+    "cumulative_nav": 1.257866881315924,
+    "drawdown": -0.1540560938079295
   },
   {
     "trade_date": "2015-12-28",
     "model": "pca",
     "top_n": 5,
-    "gross_return": 0.0,
+    "gross_return": -0.06906836890869801,
     "transaction_cost": 0.00019999999999999996,
-    "net_return": -0.00019999999999999996,
-    "cumulative_nav": 1.3574076432839577,
-    "drawdown": -0.08711268170657815
+    "net_return": -0.06926836890869802,
+    "cumulative_nav": 1.170736494142899,
+    "drawdown": -0.21265324837810695
   },
   {
     "trade_date": "2015-12-29",
     "model": "pca",
     "top_n": 5,
-    "gross_return": 0.0,
+    "gross_return": -0.08109979970827544,
     "transaction_cost": 0.0004,
-    "net_return": -0.0004,
-    "cumulative_nav": 1.3568646802266442,
-    "drawdown": -0.08747783663389552
+    "net_return": -0.08149979970827544,
+    "cumulative_nav": 1.0753217043590841,
+    "drawdown": -0.27682185093625256
   },
   {
     "trade_date": "2015-12-30",
     "model": "pca",
     "top_n": 5,
-    "gross_return": 0.0,
+    "gross_return": -0.14096368740776052,
     "transaction_cost": 0.00019999999999999996,
-    "net_return": -0.00019999999999999996,
-    "cumulative_nav": 1.356593307290599,
-    "drawdown": -0.08766034106656861
+    "net_return": -0.14116368740776053,
+    "cumulative_nav": 0.9235253274221581,
+    "drawdown": -0.3789083451108103
   },
   {
     "trade_date": "2015-12-31",
     "model": "pca",
     "top_n": 5,
-    "gross_return": 0.0,
+    "gross_return": -0.11754040804057397,
     "transaction_cost": 0.0,
-    "net_return": 0.0,
-    "cumulative_nav": 1.356593307290599,
-    "drawdown": -0.08766034106656861
+    "net_return": -0.11754040804057397,
+    "cumulative_nav": 0.8149737836011529,
+    "drawdown": -0.451911711657081
   }
 ]

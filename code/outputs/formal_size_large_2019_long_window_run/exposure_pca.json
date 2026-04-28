@@ -21,7 +21,7 @@
     "model": "pca",
     "exposure_type": "industry",
     "name": "C38电气机械和器材制造业",
-    "weight": 0.08979591836734693
+    "weight": 0.09387755102040816
   },
   {
     "model": "pca",
@@ -43,32 +43,26 @@
   },
   {
     "model": "pca",
-    "exposure_type": "industry",
-    "name": "D44电力、热力生产和供应业",
-    "weight": 0.004081632653061225
-  },
-  {
-    "model": "pca",
     "exposure_type": "style",
     "name": "value_factor",
-    "weight": 0.5142857142857142
+    "weight": 0.5061224489795918
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "volatility_factor",
-    "weight": 0.2612244897959184
+    "weight": 0.2857142857142857
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "momentum_factor",
-    "weight": 0.1469387755102041
+    "weight": 0.1346938775510204
   },
   {
     "model": "pca",
     "exposure_type": "style",
     "name": "quality_factor",
-    "weight": 0.07755102040816327
+    "weight": 0.07346938775510205
   }
 ]

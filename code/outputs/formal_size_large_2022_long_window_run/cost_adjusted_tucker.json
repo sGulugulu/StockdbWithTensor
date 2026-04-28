@@ -23,20 +23,20 @@
     "trade_date": "2022-10-28",
     "model": "tucker",
     "top_n": 5,
-    "gross_return": 0.027066853009719095,
-    "transaction_cost": 0.00019999999999999996,
-    "net_return": 0.026866853009719097,
-    "cumulative_nav": 0.9858684018597825,
-    "drawdown": -0.014131598140217472
+    "gross_return": 0.008503978758222064,
+    "transaction_cost": 0.0,
+    "net_return": 0.008503978758222064,
+    "cumulative_nav": 0.9682386795264392,
+    "drawdown": -0.03176132047356084
   },
   {
     "trade_date": "2022-10-31",
     "model": "tucker",
     "top_n": 5,
     "gross_return": 0.04247159054747618,
-    "transaction_cost": 0.0,
-    "net_return": 0.04247159054747618,
-    "cumulative_nav": 1.027739800957266,
+    "transaction_cost": 0.00019999999999999996,
+    "net_return": 0.04227159054747618,
+    "cumulative_nav": 1.0091676685396098,
     "drawdown": 0.0
   },
   {
@@ -46,7 +46,7 @@
     "gross_return": 0.03187736286855758,
     "transaction_cost": 0.0,
     "net_return": 0.03187736286855758,
-    "cumulative_nav": 1.0605014355268398,
+    "cumulative_nav": 1.0413372725048633,
     "drawdown": 0.0
   },
   {
@@ -56,7 +56,7 @@
     "gross_return": 0.003956562442629319,
     "transaction_cost": 0.0,
     "net_return": 0.003956562442629319,
-    "cumulative_nav": 1.064697375677,
+    "cumulative_nav": 1.0454573884473661,
     "drawdown": 0.0
   },
   {
@@ -66,7 +66,7 @@
     "gross_return": 0.0032182306311479445,
     "transaction_cost": 0.0,
     "net_return": 0.0032182306311479445,
-    "cumulative_nav": 1.0681238173843064,
+    "cumulative_nav": 1.0488219114384274,
     "drawdown": 0.0
   },
   {
@@ -76,7 +76,7 @@
     "gross_return": 0.005457232651712806,
     "transaction_cost": 0.0,
     "net_return": 0.005457232651712806,
-    "cumulative_nav": 1.0739528175566082,
+    "cumulative_nav": 1.054545576619361,
     "drawdown": 0.0
   },
   {
@@ -86,7 +86,7 @@
     "gross_return": 0.009361824308834078,
     "transaction_cost": 0.0,
     "net_return": 0.009361824308834078,
-    "cumulative_nav": 1.0840069751505506,
+    "cumulative_nav": 1.0644180470333295,
     "drawdown": 0.0
   },
   {
@@ -96,7 +96,7 @@
     "gross_return": 0.013177324836786042,
     "transaction_cost": 0.0,
     "net_return": 0.013177324836786042,
-    "cumulative_nav": 1.0982912871874513,
+    "cumulative_nav": 1.0784442294012253,
     "drawdown": 0.0
   },
   {
@@ -106,27 +106,27 @@
     "gross_return": 0.027066971324848275,
     "transaction_cost": 0.0,
     "net_return": 0.027066971324848275,
-    "cumulative_nav": 1.128018705964085,
+    "cumulative_nav": 1.1076344484338765,
     "drawdown": 0.0
   },
   {
     "trade_date": "2022-11-10",
     "model": "tucker",
     "top_n": 5,
-    "gross_return": 0.02659835329563389,
-    "transaction_cost": 0.0,
-    "net_return": 0.02659835329563389,
-    "cumulative_nav": 1.1580221460294016,
+    "gross_return": 0.02342819433609633,
+    "transaction_cost": 0.00019999999999999996,
+    "net_return": 0.023228194336096332,
+    "cumulative_nav": 1.1333627966554534,
     "drawdown": 0.0
   },
   {
     "trade_date": "2022-11-11",
     "model": "tucker",
     "top_n": 5,
-    "gross_return": 0.019469918833882893,
+    "gross_return": 0.004655918789885316,
     "transaction_cost": 0.0,
-    "net_return": 0.019469918833882893,
-    "cumulative_nav": 1.180568743220433,
+    "net_return": 0.004655918789885316,
+    "cumulative_nav": 1.1386396417961586,
     "drawdown": 0.0
   },
   {
@@ -134,9 +134,9 @@
     "model": "tucker",
     "top_n": 5,
     "gross_return": 0.002378729423533521,
-    "transaction_cost": 0.00019999999999999996,
-    "net_return": 0.002178729423533521,
-    "cumulative_nav": 1.1831408830777914,
+    "transaction_cost": 0.0,
+    "net_return": 0.002378729423533521,
+    "cumulative_nav": 1.141348157414901,
     "drawdown": 0.0
   },
   {
@@ -146,7 +146,7 @@
     "gross_return": 0.012292525096041085,
     "transaction_cost": 0.0,
     "net_return": 0.012292525096041085,
-    "cumulative_nav": 1.1976846720751773,
+    "cumulative_nav": 1.1553782082832438,
     "drawdown": 0.0
   },
   {
@@ -156,7 +156,7 @@
     "gross_return": 0.025395734396600745,
     "transaction_cost": 0.0,
     "net_return": 0.025395734396600745,
-    "cumulative_nav": 1.2281007538980784,
+    "cumulative_nav": 1.1847198863884254,
     "drawdown": 0.0
   },
   {
@@ -166,7 +166,7 @@
     "gross_return": 0.03398202376682837,
     "transaction_cost": 0.0,
     "net_return": 0.03398202376682837,
-    "cumulative_nav": 1.2698341029051028,
+    "cumulative_nav": 1.2249790657247113,
     "drawdown": 0.0
   },
   {
@@ -176,7 +176,7 @@
     "gross_return": 0.05245797108581409,
     "transaction_cost": 0.0,
     "net_return": 0.05245797108581409,
-    "cumulative_nav": 1.3364470235590795,
+    "cumulative_nav": 1.289238982135226,
     "drawdown": 0.0
   },
   {
@@ -186,7 +186,7 @@
     "gross_return": 0.05925771780408349,
     "transaction_cost": 0.00019999999999999996,
     "net_return": 0.05905771780408349,
-    "cumulative_nav": 1.415374534736539,
+    "cumulative_nav": 1.3653784941241918,
     "drawdown": 0.0
   },
   {
@@ -196,7 +196,7 @@
     "gross_return": 0.025339269929967,
     "transaction_cost": 0.0,
     "net_return": 0.025339269929967,
-    "cumulative_nav": 1.4512390921242297,
+    "cumulative_nav": 1.3999761883433766,
     "drawdown": 0.0
   },
   {
@@ -206,7 +206,7 @@
     "gross_return": 0.03320920288290685,
     "transaction_cost": 0.0,
     "net_return": 0.03320920288290685,
-    "cumulative_nav": 1.4994335855661887,
+    "cumulative_nav": 1.4464682816133103,
     "drawdown": 0.0
   },
   {
@@ -216,7 +216,7 @@
     "gross_return": 0.05305674252056771,
     "transaction_cost": 0.0,
     "net_return": 0.05305674252056771,
-    "cumulative_nav": 1.5789886472422656,
+    "cumulative_nav": 1.5232131767950357,
     "drawdown": 0.0
   },
   {
@@ -226,7 +226,7 @@
     "gross_return": 0.014897281499009818,
     "transaction_cost": 0.0,
     "net_return": 0.014897281499009818,
-    "cumulative_nav": 1.6025112856039743,
+    "cumulative_nav": 1.5459049122727524,
     "drawdown": 0.0
   },
   {
@@ -236,7 +236,7 @@
     "gross_return": 0.059119754944462685,
     "transaction_cost": 0.0,
     "net_return": 0.059119754944462685,
-    "cumulative_nav": 1.697251360104617,
+    "cumulative_nav": 1.6372984318537585,
     "drawdown": 0.0
   },
   {
@@ -246,7 +246,7 @@
     "gross_return": 0.04796058136680685,
     "transaction_cost": 0.0,
     "net_return": 0.04796058136680685,
-    "cumulative_nav": 1.7786525220608382,
+    "cumulative_nav": 1.715824216516426,
     "drawdown": 0.0
   },
   {
@@ -256,7 +256,7 @@
     "gross_return": 0.027471932660002762,
     "transaction_cost": 0.0,
     "net_return": 0.027471932660002762,
-    "cumulative_nav": 1.8275155443724378,
+    "cumulative_nav": 1.7629612238489671,
     "drawdown": 0.0
   },
   {
@@ -266,7 +266,7 @@
     "gross_return": 0.012574722364945857,
     "transaction_cost": 0.0,
     "net_return": 0.012574722364945857,
-    "cumulative_nav": 1.8504960449605443,
+    "cumulative_nav": 1.7851299717790332,
     "drawdown": 0.0
   },
   {
@@ -276,7 +276,7 @@
     "gross_return": 0.001584113329029102,
     "transaction_cost": 0.0,
     "net_return": 0.001584113329029102,
-    "cumulative_nav": 1.8534274404106819,
+    "cumulative_nav": 1.7879578199613777,
     "drawdown": 0.0
   },
   {
@@ -286,7 +286,7 @@
     "gross_return": -0.04144511511220763,
     "transaction_cost": 0.0,
     "net_return": -0.04144511511220763,
-    "cumulative_nav": 1.7766119267907368,
+    "cumulative_nav": 1.7138557022973067,
     "drawdown": -0.04144511511220761
   },
   {
@@ -296,7 +296,7 @@
     "gross_return": -0.03227489873940141,
     "transaction_cost": 0.0,
     "net_return": -0.03227489873940141,
-    "cumulative_nav": 1.719271956754353,
+    "cumulative_nav": 1.6585411830517154,
     "drawdown": -0.07238237695811967
   },
   {
@@ -306,8 +306,8 @@
     "gross_return": -0.03474279471138035,
     "transaction_cost": 0.0,
     "net_return": -0.03474279471138035,
-    "cumulative_nav": 1.6595396441078034,
-    "drawdown": -0.10461040560612223
+    "cumulative_nav": 1.6009188272085797,
+    "drawdown": -0.10461040560612234
   },
   {
     "trade_date": "2022-12-08",
@@ -316,8 +316,8 @@
     "gross_return": -0.0329945491103788,
     "transaction_cost": 0.0,
     "net_return": -0.0329945491103788,
-    "cumulative_nav": 1.604783881819668,
-    "drawdown": -0.1341533815512732
+    "cumulative_nav": 1.5480972323425162,
+    "drawdown": -0.13415338155127332
   },
   {
     "trade_date": "2022-12-09",
@@ -326,8 +326,8 @@
     "gross_return": -0.006508496979594947,
     "transaction_cost": 0.0,
     "net_return": -0.006508496979594947,
-    "cumulative_nav": 1.594339150771942,
-    "drawdown": -0.1397887416522392
+    "cumulative_nav": 1.5380214461816955,
+    "drawdown": -0.13978874165223942
   },
   {
     "trade_date": "2022-12-12",
@@ -336,8 +336,8 @@
     "gross_return": -0.025846953000112437,
     "transaction_cost": 0.0,
     "net_return": -0.025846953000112437,
-    "cumulative_nav": 1.5531303416757005,
-    "drawdown": -0.1620225816169214
+    "cumulative_nav": 1.4982682781490722,
+    "drawdown": -0.16202258161692162
   },
   {
     "trade_date": "2022-12-13",
@@ -346,28 +346,28 @@
     "gross_return": -0.033591831687590744,
     "transaction_cost": 0.0,
     "net_return": -0.033591831687590744,
-    "cumulative_nav": 1.50095784864924,
-    "drawdown": -0.19017177801324758
+    "cumulative_nav": 1.4479387023266321,
+    "drawdown": -0.1901717780132478
   },
   {
     "trade_date": "2022-12-14",
     "model": "tucker",
     "top_n": 5,
-    "gross_return": -0.02410708110690194,
-    "transaction_cost": 0.0,
-    "net_return": -0.02410708110690194,
-    "cumulative_nav": 1.4647741360538118,
-    "drawdown": -0.20969437264334034
+    "gross_return": -0.016817151629993622,
+    "transaction_cost": 0.00019999999999999996,
+    "net_return": -0.01701715162999362,
+    "cumulative_nav": 1.4232989098782036,
+    "drawdown": -0.20395274766104454
   },
   {
     "trade_date": "2022-12-15",
     "model": "tucker",
     "top_n": 5,
     "gross_return": -0.02498263051599823,
-    "transaction_cost": 0.0,
-    "net_return": -0.02498263051599823,
-    "cumulative_nav": 1.4281802250233888,
-    "drawdown": -0.229438286126306
+    "transaction_cost": 0.00019999999999999996,
+    "net_return": -0.025182630515998228,
+    "cumulative_nav": 1.3874564993169178,
+    "drawdown": -0.223999311489972
   },
   {
     "trade_date": "2022-12-16",
@@ -376,8 +376,8 @@
     "gross_return": -0.028446212790295623,
     "transaction_cost": 0.0,
     "net_return": -0.028446212790295623,
-    "cumulative_nav": 1.3875539064394813,
-    "drawdown": -0.251357848607212
+    "cumulative_nav": 1.3479886165000703,
+    "drawdown": -0.2460735922007441
   },
   {
     "trade_date": "2022-12-19",
@@ -386,8 +386,8 @@
     "gross_return": 0.00047020021587049763,
     "transaction_cost": 0.0,
     "net_return": 0.00047020021587049763,
-    "cumulative_nav": 1.388206334585821,
-    "drawdown": -0.2510058369060173
+    "cumulative_nav": 1.3486224410385397,
+    "drawdown": -0.24571909584104634
   },
   {
     "trade_date": "2022-12-20",
@@ -396,8 +396,8 @@
     "gross_return": 0.019667775792800546,
     "transaction_cost": 0.0,
     "net_return": 0.019667775792800546,
-    "cumulative_nav": 1.4155092655286006,
-    "drawdown": -0.2362747876361685
+    "cumulative_nav": 1.375146844838025,
+    "drawdown": -0.23088406813325713
   },
   {
     "trade_date": "2022-12-21",
@@ -406,8 +406,8 @@
     "gross_return": 0.02892775537197858,
     "transaction_cost": 0.0,
     "net_return": 0.02892775537197858,
-    "cumulative_nav": 1.4564567712885812,
-    "drawdown": -0.21418193152149512
+    "cumulative_nav": 1.4149267563660477,
+    "drawdown": -0.2086352706035246
   },
   {
     "trade_date": "2022-12-22",
@@ -416,8 +416,8 @@
     "gross_return": 0.023821588964861796,
     "transaction_cost": 0.0,
     "net_return": 0.023821588964861796,
-    "cumulative_nav": 1.4911518858393076,
-    "drawdown": -0.19546249649303848
+    "cumulative_nav": 1.448632559971585,
+    "drawdown": -0.1897837052985526
   },
   {
     "trade_date": "2022-12-23",
@@ -426,57 +426,57 @@
     "gross_return": 0.019602022864498258,
     "transaction_cost": 0.0,
     "net_return": 0.019602022864498258,
-    "cumulative_nav": 1.5203814791999692,
-    "drawdown": -0.17969193395394878
+    "cumulative_nav": 1.4770286885344046,
+    "drawdown": -0.17390182696462586
   },
   {
     "trade_date": "2022-12-26",
     "model": "tucker",
     "top_n": 5,
-    "gross_return": 0.0,
+    "gross_return": 0.04409329702237565,
     "transaction_cost": 0.0,
-    "net_return": 0.0,
-    "cumulative_nav": 1.5203814791999692,
-    "drawdown": -0.17969193395394878
+    "net_return": 0.04409329702237565,
+    "cumulative_nav": 1.5421557532085222,
+    "drawdown": -0.1374764348513351
   },
   {
     "trade_date": "2022-12-27",
     "model": "tucker",
     "top_n": 5,
-    "gross_return": 0.0,
+    "gross_return": 0.03236112256690236,
     "transaction_cost": 0.00019999999999999996,
-    "net_return": -0.00019999999999999996,
-    "cumulative_nav": 1.5200774029041293,
-    "drawdown": -0.17985599556715803
+    "net_return": 0.03216112256690236,
+    "cumulative_nav": 1.591753213404715,
+    "drawdown": -0.10973670875574737
   },
   {
     "trade_date": "2022-12-28",
     "model": "tucker",
     "top_n": 5,
-    "gross_return": 0.0,
+    "gross_return": 0.0185526774839196,
     "transaction_cost": 0.0,
-    "net_return": 0.0,
-    "cumulative_nav": 1.5200774029041293,
-    "drawdown": -0.17985599556715803
+    "net_return": 0.0185526774839196,
+    "cumulative_nav": 1.6212844974070053,
+    "drawdown": -0.09321994103751996
   },
   {
     "trade_date": "2022-12-29",
     "model": "tucker",
     "top_n": 5,
-    "gross_return": 0.0,
+    "gross_return": 0.02757196718747381,
     "transaction_cost": 0.0,
-    "net_return": 0.0,
-    "cumulative_nav": 1.5200774029041293,
-    "drawdown": -0.17985599556715803
+    "net_return": 0.02757196718747381,
+    "cumulative_nav": 1.6659865003710714,
+    "drawdown": -0.0682182310055508
   },
   {
     "trade_date": "2022-12-30",
     "model": "tucker",
     "top_n": 5,
-    "gross_return": 0.0,
+    "gross_return": 0.010725200507584031,
     "transaction_cost": 0.0,
-    "net_return": 0.0,
-    "cumulative_nav": 1.5200774029041293,
-    "drawdown": -0.17985599556715803
+    "net_return": 0.010725200507584031,
+    "cumulative_nav": 1.6838545396304794,
+    "drawdown": -0.058224684703773955
   }
 ]

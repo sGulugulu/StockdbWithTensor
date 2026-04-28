@@ -3,33 +3,33 @@
     "model": "cp",
     "top_n": 5,
     "observation_count": 49,
-    "mean_daily_return": 0.000949166706874514,
-    "cumulative_return": 0.037229585666297416,
-    "annualized_volatility": 0.31948542044173134,
-    "sharpe_ratio": 0.748672693112773,
-    "max_drawdown": -0.22269370700608748,
-    "average_turnover": 0.15918367346938772
+    "mean_daily_return": 0.0073968241382661665,
+    "cumulative_return": 0.41320081152044263,
+    "annualized_volatility": 0.4007437709435876,
+    "sharpe_ratio": 4.651350358994022,
+    "max_drawdown": -0.16673547746318174,
+    "average_turnover": 0.22857142857142856
   },
   {
     "model": "pca",
     "top_n": 5,
     "observation_count": 49,
-    "mean_daily_return": 0.004243222762111913,
-    "cumulative_return": 0.2192750131656258,
-    "annualized_volatility": 0.30974032629398546,
-    "sharpe_ratio": 3.452221248831834,
-    "max_drawdown": -0.16078030146768063,
-    "average_turnover": 0.06122448979591836
+    "mean_daily_return": 0.007016002719231526,
+    "cumulative_return": 0.39030897421713595,
+    "annualized_volatility": 0.37086915386063596,
+    "sharpe_ratio": 4.767268096690324,
+    "max_drawdown": -0.16078030146768052,
+    "average_turnover": 0.07755102040816324
   },
   {
     "model": "tucker",
     "top_n": 5,
     "observation_count": 49,
-    "mean_daily_return": 0.005632234498825276,
-    "cumulative_return": 0.2993559151728975,
-    "annualized_volatility": 0.37391308616675367,
-    "sharpe_ratio": 3.7958636544509585,
+    "mean_daily_return": 0.009981507193723935,
+    "cumulative_return": 0.5973183676065494,
+    "annualized_volatility": 0.44076686099204376,
+    "sharpe_ratio": 5.706735318433651,
     "max_drawdown": -0.1880255706717221,
-    "average_turnover": 0.02040816326530612
+    "average_turnover": 0.024489795918367346
   }
 ]
