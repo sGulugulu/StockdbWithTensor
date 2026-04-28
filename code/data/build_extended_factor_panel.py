@@ -377,6 +377,13 @@ def _window_snapshots(snapshots: list, trade_date: str, *, window_days: int) -> 
     return result
 
 
+def _latest_window_snapshot(snapshots: list, trade_date: str, *, window_days: int):
+    window = _window_snapshots(snapshots, trade_date, window_days=window_days)
+    if not window:
+        return None
+    return max(window, key=lambda item: (item.available_date or "", item.pub_date))
+
+
 def _days_since(pub_date: str | None, trade_date: str) -> int:
     if not pub_date:
         return 0
@@ -526,6 +533,8 @@ def build_extended_factor_panel(
         )
         forecast_midpoint = _forecast_midpoint(forecast_snapshot)
         forecast_width = _forecast_width(forecast_snapshot)
+        stock_major_events = major_event_snapshots.get(stock_code, [])
+        recent_major_event = _latest_window_snapshot(stock_major_events, trade_date, window_days=30)
 
         extended_rows.append(
             {
@@ -575,10 +584,10 @@ def build_extended_factor_panel(
                 "event_age_decay_score": _event_age_decay_score(performance_snapshot, forecast_snapshot, trade_date),
                 "event_intensity_score": abs(forecast_midpoint)
                 + (0.0 if performance_snapshot is None else abs(performance_snapshot.eps_chg_pct)),
-                "major_event_count_30d": _notice_count(major_event_snapshots.get(stock_code, []), trade_date, window_days=30),
-                "major_event_severity_score_30d": _major_event_severity_score(major_event_snapshots.get(stock_code, []), trade_date, window_days=30),
-                "major_event_age_days": 0 if not major_event_snapshots.get(stock_code) else _days_since((_latest_snapshot(major_event_snapshots.get(stock_code, []), trade_date) or NoticeSnapshot("", None, 0.0, 0.0, 0.0)).pub_date or None, trade_date),
-                "major_event_flag": 1 if _notice_count(major_event_snapshots.get(stock_code, []), trade_date, window_days=30) > 0 else 0,
+                "major_event_count_30d": _notice_count(stock_major_events, trade_date, window_days=30),
+                "major_event_severity_score_30d": _major_event_severity_score(stock_major_events, trade_date, window_days=30),
+                "major_event_age_days": 0 if recent_major_event is None else _days_since(recent_major_event.pub_date, trade_date),
+                "major_event_flag": 1 if _notice_count(stock_major_events, trade_date, window_days=30) > 0 else 0,
                 "announcement_count_30d": _notice_count(announcement_snapshots.get(stock_code, []), trade_date, window_days=30),
                 "announcement_keyword_score_30d": _notice_keyword_score(announcement_snapshots.get(stock_code, []), trade_date, window_days=30),
                 "announcement_title_length_mean_30d": _notice_title_length_mean(announcement_snapshots.get(stock_code, []), trade_date, window_days=30),

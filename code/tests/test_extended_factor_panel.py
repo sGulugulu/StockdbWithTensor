@@ -218,6 +218,7 @@ class ExtendedFactorPanelTests(unittest.TestCase):
             self.assertGreater(float(row2["event_intensity_score"]), 15.0)
             self.assertEqual(float(row2["major_event_count_30d"]), 1.0)
             self.assertGreater(float(row2["major_event_severity_score_30d"]), 0.0)
+            self.assertEqual(float(row2["major_event_age_days"]), 6.0)
             self.assertEqual(float(row2["announcement_count_30d"]), 1.0)
             self.assertGreater(float(row2["announcement_keyword_score_30d"]), 0.0)
             self.assertGreater(float(row2["market_momentum_5d"]), 0.0)
@@ -300,7 +301,7 @@ class ExtendedFactorPanelTests(unittest.TestCase):
             )
             major_event_notice.write_text(
                 "stock_code,notice_type,pub_date,available_date,title_text,title_length,keyword_score,severity_score,url,source_api\n"
-                "600000.SH,重大事项,2026-03-24,2026-03-25,关于重大事项停牌公告,10,1.5,2.5,https://example.com/a,akshare\n",
+                "600000.SH,重大事项,2025-09-01,2025-09-02,关于重大事项停牌公告,10,1.5,2.5,https://example.com/a,akshare\n",
                 encoding="utf-8",
             )
             announcement_text.write_text(
@@ -338,6 +339,10 @@ class ExtendedFactorPanelTests(unittest.TestCase):
             content = output_path.read_text(encoding="utf-8")
             self.assertIn("2026-03-25", content)
             self.assertNotIn("2026-03-30", content)
+            rows = content.strip().splitlines()
+            row = dict(zip(rows[0].split(","), rows[1].split(",")))
+            self.assertEqual(float(row["major_event_count_30d"]), 0.0)
+            self.assertEqual(float(row["major_event_age_days"]), 0.0)
 
 
 if __name__ == "__main__":

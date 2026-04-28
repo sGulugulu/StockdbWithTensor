@@ -118,6 +118,41 @@ def _write_rows(path: Path, fieldnames: list[str], rows: list[dict[str, object]]
         writer.writerows(rows)
 
 
+MAJOR_NOTICE_TYPE_MARKERS = (
+    "重大",
+    "风险",
+    "重组",
+    "再融资",
+    "增持",
+    "减持",
+    "权益变动",
+    "股份质押",
+    "冻结",
+    "诉讼",
+    "处罚",
+    "停牌",
+    "复牌",
+    "担保",
+)
+
+
+def _is_major_notice_type(notice_type: str) -> bool:
+    if not notice_type:
+        return False
+    # 重大事件只按公告分类识别，标题关键词只用于强度打分，避免普通公告污染重大事件特征。
+    return any(marker in notice_type for marker in MAJOR_NOTICE_TYPE_MARKERS)
+
+
+def _notice_identity(row: dict[str, object]) -> tuple[str, str, str, str, str]:
+    return (
+        str(row.get("stock_code", "")),
+        str(row.get("notice_type", "")),
+        str(row.get("pub_date", "")),
+        str(row.get("title_text", "")),
+        str(row.get("url", "")),
+    )
+
+
 def _macro_rows_from_common_table(*, source_api: str, metric_id: str, metric_name: str, rows: list[dict[str, object]], trade_dates: list[str]) -> list[dict[str, object]]:
     result: list[dict[str, object]] = []
     for row in rows:
@@ -254,9 +289,9 @@ def build_notice_rows(
     allowed_codes = {symbol.split(".")[0] for symbol in symbols}
     all_rows: list[dict[str, object]] = []
     major_rows: list[dict[str, object]] = []
+    seen_notice_keys: set[tuple[str, str, str, str, str]] = set()
     current_date = date.fromisoformat(start_date)
     end = date.fromisoformat(end_date)
-    major_types = {"重大事项", "资产重组", "风险提示", "融资公告", "持股变动", "信息变更"}
     keyword_scores = {
         "回购": 1.0,
         "增持": 1.0,
@@ -299,8 +334,12 @@ def build_notice_rows(
                 "url": _safe_text(row.get("网址")),
                 "source_api": "akshare.stock_notice_report",
             }
+            notice_key = _notice_identity(normalized)
+            if notice_key in seen_notice_keys:
+                continue
+            seen_notice_keys.add(notice_key)
             all_rows.append(normalized)
-            if notice_type in major_types or keyword_score != 0.0:
+            if _is_major_notice_type(notice_type):
                 major_rows.append(
                     {
                         **normalized,
@@ -326,7 +365,7 @@ def build_formal_extended_sources(
     *,
     formal_root: Path,
     max_trade_date: str,
-    notice_lookback_days: int = 180,
+    notice_lookback_days: int = 3650,
 ) -> ExtendedSourceBuildResult:
     normalized_root = formal_root.resolve()
     history_paths = [
@@ -408,7 +447,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Build normalized macro and event source tables for formal extended inputs.")
     parser.add_argument("--formal-root", type=Path, default=Path(__file__).resolve().parent / "formal")
     parser.add_argument("--max-trade-date", type=str, default="2026-03-30")
-    parser.add_argument("--notice-lookback-days", type=int, default=180)
+    parser.add_argument("--notice-lookback-days", type=int, default=3650)
     args = parser.parse_args()
 
     result = build_formal_extended_sources(

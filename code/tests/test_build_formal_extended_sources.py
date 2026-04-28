@@ -64,7 +64,23 @@ class FakeAkshare:
                     "公告类型": "重大事项",
                     "公告日期": pub_date,
                     "网址": "https://example.com/a",
-                }
+                },
+                {
+                    "代码": "600000",
+                    "名称": "浦发银行",
+                    "公告标题": "关于重大事项停牌与分红安排的公告",
+                    "公告类型": "重大事项",
+                    "公告日期": pub_date,
+                    "网址": "https://example.com/a",
+                },
+                {
+                    "代码": "600000",
+                    "名称": "浦发银行",
+                    "公告标题": "关于减持事项的法律意见书",
+                    "公告类型": "法律意见书",
+                    "公告日期": pub_date,
+                    "网址": "https://example.com/legal",
+                },
             ]
         )
 
@@ -115,7 +131,9 @@ class BuildFormalExtendedSourcesTests(unittest.TestCase):
             self.assertIn("10派2.5元", dividend_content)
             notice_content = result.major_event_notice_path.read_text(encoding="utf-8")
             self.assertIn("重大事项", notice_content)
+            self.assertNotIn("法律意见书", notice_content)
             fake_akshare = _mock_akshare.return_value
+            self.assertEqual(notice_content.count("https://example.com/a"), len(fake_akshare.notice_dates))
             self.assertIn("20260321", fake_akshare.notice_dates)
             self.assertIn("20260322", fake_akshare.notice_dates)
             self.assertIn("2026-03-21,2026-03-21", notice_content)
