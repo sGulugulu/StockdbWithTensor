@@ -79,7 +79,7 @@ def _long_window_factor_panel_path(source_config: Path, current_value: str) -> s
         return None
     if target.parent.name != "factors":
         return None
-    if not (target.stem.endswith("_factor_panel") or target.stem.endswith("_factor_panel_extended")):
+    if not target.stem.endswith(("_factor_panel", "_factor_panel_extended")):
         return None
     long_window_target = target.parent / "long_window" / f"{target.stem}_long_window.csv"
     # 计划文件必须只引用已生成的数据，避免把缺失面板延迟到实验运行阶段才失败。
@@ -145,15 +145,17 @@ def build_long_window_run_plan(
                 start_date=window_start,
                 end_date=window_end,
             )
+            config_display_path = _display_cli_path(config_path, cwd=display_root)
+            variant_display_path = _display_cli_path(output_config, cwd=display_root)
             rows.append(
                 {
-                    "config": _display_cli_path(config_path, cwd=display_root),
-                    "config_variant": _display_cli_path(output_config, cwd=display_root),
+                    "config": config_display_path,
+                    "config_variant": variant_display_path,
                     "year": year,
                     "start_date": window_start,
                     "end_date": window_end,
                     "output_name": output_name,
-                    "command": _build_command(Path(_display_cli_path(output_config, cwd=display_root))),
+                    "command": _build_command(Path(variant_display_path)),
                 }
             )
 

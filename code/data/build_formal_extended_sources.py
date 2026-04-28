@@ -136,6 +136,16 @@ MAJOR_NOTICE_TYPE_MARKERS = (
     "担保",
 )
 
+NOTICE_KEYWORD_SCORES = {
+    "回购": 1.0,
+    "增持": 1.0,
+    "减持": -1.0,
+    "重组": 1.5,
+    "诉讼": -1.2,
+    "处罚": -1.5,
+    "分红": 0.6,
+}
+
 
 def _is_major_notice_type(notice_type: str) -> bool:
     if not notice_type:
@@ -292,15 +302,6 @@ def build_notice_rows(
     seen_notice_keys: set[tuple[str, str, str, str, str]] = set()
     current_date = date.fromisoformat(start_date)
     end = date.fromisoformat(end_date)
-    keyword_scores = {
-        "回购": 1.0,
-        "增持": 1.0,
-        "减持": -1.0,
-        "重组": 1.5,
-        "诉讼": -1.2,
-        "处罚": -1.5,
-        "分红": 0.6,
-    }
     while current_date <= end:
         try:
             notice_df = ak.stock_notice_report(symbol="全部", date=current_date.strftime("%Y%m%d"))
@@ -318,7 +319,7 @@ def build_notice_rows(
             notice_type = _safe_text(row.get("公告类型"))
             keyword_score = 0.0
             lowered_title = title.lower()
-            for keyword, score in keyword_scores.items():
+            for keyword, score in NOTICE_KEYWORD_SCORES.items():
                 if keyword.lower() in lowered_title:
                     keyword_score += score
             normalized = {

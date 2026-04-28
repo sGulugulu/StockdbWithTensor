@@ -74,16 +74,16 @@ def _read_required_csv_rows(path: Path, *, allow_empty: bool = False) -> list[di
 
 
 def _earliest_trade_date(panel_paths: list[Path]) -> str:
-    trade_dates: list[str] = []
+    earliest: str | None = None
     for path in panel_paths:
         with path.open("r", encoding="utf-8-sig", newline="") as handle:
             for row in csv.DictReader(handle):
                 trade_date = row.get("trade_date")
-                if trade_date:
-                    trade_dates.append(trade_date)
-    if not trade_dates:
+                if trade_date and (earliest is None or trade_date < earliest):
+                    earliest = trade_date
+    if earliest is None:
         raise ValueError("No trade dates found in baseline factor panels.")
-    return min(trade_dates)
+    return earliest
 
 
 def _required_notice_start_date(earliest_trade_date: str) -> str:
@@ -97,11 +97,14 @@ def _validate_cached_source_snapshots(
     earliest_trade_date: str,
 ) -> None:
     # CSV 只证明有数据；覆盖水位由显式 metadata 记录，避免 cutoff 当天无公告时误判过期。
-    _read_required_csv_rows(source_paths.macro_interest_rate_path)
-    _read_required_csv_rows(source_paths.macro_monthly_path)
-    _read_required_csv_rows(source_paths.dividend_events_path, allow_empty=True)
-    _read_required_csv_rows(source_paths.major_event_notice_path, allow_empty=True)
-    _read_required_csv_rows(source_paths.announcement_text_path, allow_empty=True)
+    for csv_path, allow_empty in (
+        (source_paths.macro_interest_rate_path, False),
+        (source_paths.macro_monthly_path, False),
+        (source_paths.dividend_events_path, True),
+        (source_paths.major_event_notice_path, True),
+        (source_paths.announcement_text_path, True),
+    ):
+        _read_required_csv_rows(csv_path, allow_empty=allow_empty)
     if not source_paths.snapshot_metadata_path.exists():
         raise FileNotFoundError(
             f"Missing cached extended source snapshot metadata: {source_paths.snapshot_metadata_path}"

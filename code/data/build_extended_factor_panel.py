@@ -377,8 +377,7 @@ def _window_snapshots(snapshots: list, trade_date: str, *, window_days: int) -> 
     return result
 
 
-def _latest_window_snapshot(snapshots: list, trade_date: str, *, window_days: int):
-    window = _window_snapshots(snapshots, trade_date, window_days=window_days)
+def _latest_from_window(window: list):
     if not window:
         return None
     return max(window, key=lambda item: (item.available_date or "", item.pub_date))
@@ -465,25 +464,6 @@ def _dividend_flag(snapshot: DividendSnapshot | None) -> int:
     return 1 if snapshot.cash_ratio > 0 or snapshot.bonus_ratio > 0 or snapshot.transfer_ratio > 0 else 0
 
 
-def _notice_count(snapshots: list[NoticeSnapshot], trade_date: str, *, window_days: int) -> int:
-    return len(_window_snapshots(snapshots, trade_date, window_days=window_days))
-
-
-def _notice_keyword_score(snapshots: list[NoticeSnapshot], trade_date: str, *, window_days: int) -> float:
-    return sum(snapshot.keyword_score for snapshot in _window_snapshots(snapshots, trade_date, window_days=window_days))
-
-
-def _notice_title_length_mean(snapshots: list[NoticeSnapshot], trade_date: str, *, window_days: int) -> float:
-    window = _window_snapshots(snapshots, trade_date, window_days=window_days)
-    if not window:
-        return 0.0
-    return sum(snapshot.title_length for snapshot in window) / len(window)
-
-
-def _major_event_severity_score(snapshots: list[NoticeSnapshot], trade_date: str, *, window_days: int) -> float:
-    return sum(snapshot.severity_score for snapshot in _window_snapshots(snapshots, trade_date, window_days=window_days))
-
-
 def build_extended_factor_panel(
     *,
     base_panel_path: Path,
@@ -540,7 +520,10 @@ def build_extended_factor_panel(
         forecast_midpoint = _forecast_midpoint(forecast_snapshot)
         forecast_width = _forecast_width(forecast_snapshot)
         stock_major_events = major_event_snapshots.get(stock_code, [])
-        recent_major_event = _latest_window_snapshot(stock_major_events, trade_date, window_days=30)
+        major_event_window = _window_snapshots(stock_major_events, trade_date, window_days=30)
+        recent_major_event = _latest_from_window(major_event_window)
+        stock_announcements = announcement_snapshots.get(stock_code, [])
+        announcement_window = _window_snapshots(stock_announcements, trade_date, window_days=30)
 
         extended_rows.append(
             {
@@ -590,14 +573,16 @@ def build_extended_factor_panel(
                 "event_age_decay_score": _event_age_decay_score(performance_snapshot, forecast_snapshot, trade_date),
                 "event_intensity_score": abs(forecast_midpoint)
                 + (0.0 if performance_snapshot is None else abs(performance_snapshot.eps_chg_pct)),
-                "major_event_count_30d": _notice_count(stock_major_events, trade_date, window_days=30),
-                "major_event_severity_score_30d": _major_event_severity_score(stock_major_events, trade_date, window_days=30),
+                "major_event_count_30d": len(major_event_window),
+                "major_event_severity_score_30d": sum(snapshot.severity_score for snapshot in major_event_window),
                 "major_event_age_days": _snapshot_age_days(recent_major_event, trade_date),
-                "major_event_flag": 1 if _notice_count(stock_major_events, trade_date, window_days=30) > 0 else 0,
-                "announcement_count_30d": _notice_count(announcement_snapshots.get(stock_code, []), trade_date, window_days=30),
-                "announcement_keyword_score_30d": _notice_keyword_score(announcement_snapshots.get(stock_code, []), trade_date, window_days=30),
-                "announcement_title_length_mean_30d": _notice_title_length_mean(announcement_snapshots.get(stock_code, []), trade_date, window_days=30),
-                "announcement_flag": 1 if _notice_count(announcement_snapshots.get(stock_code, []), trade_date, window_days=30) > 0 else 0,
+                "major_event_flag": 1 if major_event_window else 0,
+                "announcement_count_30d": len(announcement_window),
+                "announcement_keyword_score_30d": sum(snapshot.keyword_score for snapshot in announcement_window),
+                "announcement_title_length_mean_30d": 0.0
+                if not announcement_window
+                else sum(snapshot.title_length for snapshot in announcement_window) / len(announcement_window),
+                "announcement_flag": 1 if announcement_window else 0,
                 "forecast_flag": 0 if forecast_snapshot is None else 1,
             }
         )
