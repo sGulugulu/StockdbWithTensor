@@ -1,12 +1,35 @@
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+
+# Virtual environments
 .venv/
+
+# Local temp and agent runtime
 .tmp/
+.tmp_review/
 .worktrees/
 .codex
 tmp_external_refs/
+
+# Frontend dependencies and build output
 node_modules/
 web/frontend/dist/
+
+# Local editor / OS noise
+.DS_Store
+Thumbs.db
+
+# Local generated build artifacts at repo root
+/template.aux
+/template.log
+/template.out
+/template.toc
+/template.synctex.gz
+/template.pdf
+/template_bak.pdf
+
+# Formal transient data caches that can be rebuilt
 code/data/formal/baostock_fg*/
 code/data/formal/baostock_*_fg/
 code/data/formal/baostock_smoke/
@@ -16,7 +39,16 @@ code/data/formal/index_daily/
 code/data/formal/tdx_daily_raw.csv
 code/data/formal/*_kline_panel_batch.csv
 code/data/formal/*_kline_panel_batch.progress.json
-code/outputs/
-*.csv
 code/data/formal/parquet/**/*.parquet
-*.pdf
+code/data/formal/baostock/financial/**/*.csv
+code/data/formal/baostock/reports/**/*.csv
+code/data/formal/master/**/*.csv
+code/data/formal/factors/*_extended.csv
+code/data/formal/factors/long_window/yearly/**/*.csv
+code/data/formal/factors/long_window_probe_*.csv
+
+# Generated experiment outputs
+code/outputs/
+
+# Local reference PDFs
+参考文献/**/*.pdf
