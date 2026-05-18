@@ -63,14 +63,16 @@ def _rolling_return(prices: list[float], window: int) -> list[float]:
     return result
 
 
-def _future_return(prices: list[float], horizon: int) -> list[float]:
+def _future_return(prices: list[float], holding_horizon: int, *, entry_lag: int = 1) -> list[float]:
     result: list[float] = []
     for index, price in enumerate(prices):
-        target_index = index + horizon
-        if target_index >= len(prices) or price == 0:
+        entry_index = index + entry_lag
+        exit_index = entry_index + holding_horizon
+        # A 股回测按 T+1 执行：t 日信号不能在当日成交，需以 t+1 建仓并持有既定交易日。
+        if entry_index >= len(prices) or exit_index >= len(prices) or prices[entry_index] == 0:
             result.append(0.0)
             continue
-        result.append(prices[target_index] / price - 1.0)
+        result.append(prices[exit_index] / prices[entry_index] - 1.0)
     return result
 
 
@@ -103,7 +105,7 @@ def build_formal_factor_panel(
         turn = [_to_float(row.get("turn")) or 0.0 for row in rows]
         momentum_5 = _rolling_return(closes, 5)
         momentum_20 = _rolling_return(closes, 20)
-        future_5 = _future_return(closes, 5)
+        future_5 = _future_return(closes, 5, entry_lag=1)
 
         for index, row in enumerate(rows):
             trade_date = row[date_column]

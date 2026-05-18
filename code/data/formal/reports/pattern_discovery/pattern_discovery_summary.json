@@ -430,246 +430,246 @@
       "run": "formal_hs300_run",
       "universe_id": "formal_hs300_run",
       "model": "cp",
-      "rank_ic_mean": 0.11563444594507685,
-      "rolling_stability": 0.7725320444885819,
-      "final_nav": 1.0147364173686648
+      "rank_ic_mean": -0.02778313717923981,
+      "rolling_stability": 0.6974238273022431,
+      "final_nav": 1.0052856451033234
     },
     {
       "run": "formal_hs300_run",
       "universe_id": "formal_hs300_run",
       "model": "tucker",
-      "rank_ic_mean": 0.0731156344459451,
-      "rolling_stability": 0.9897922830922263,
-      "final_nav": 1.0211063873358706
+      "rank_ic_mean": -0.04684384847900187,
+      "rolling_stability": 0.989792280963489,
+      "final_nav": 1.0129100621432008
     },
     {
       "run": "formal_hs300_run",
       "universe_id": "formal_hs300_run",
       "model": "pca",
-      "rank_ic_mean": 0.017380538941411026,
-      "rolling_stability": 0.9945791973954157,
-      "final_nav": 1.0073836476339204
+      "rank_ic_mean": -0.05295356614573285,
+      "rolling_stability": 0.9945791931379409,
+      "final_nav": 1.0092281617417793
     },
     {
       "run": "formal_sz50_run",
       "universe_id": "formal_sz50_run",
       "model": "cp",
-      "rank_ic_mean": 0.14096038415366147,
-      "rolling_stability": 0.639100929855236,
-      "final_nav": 1.006242650959939
+      "rank_ic_mean": 0.019759903961584627,
+      "rolling_stability": 0.5320297021950994,
+      "final_nav": 0.9772747860946276
     },
     {
       "run": "formal_sz50_run",
       "universe_id": "formal_sz50_run",
       "model": "tucker",
-      "rank_ic_mean": 0.15226890756302522,
-      "rolling_stability": 0.9922751890761512,
-      "final_nav": 0.9967433033912163
+      "rank_ic_mean": 0.04681872749099638,
+      "rolling_stability": 0.9922751805612019,
+      "final_nav": 1.0004205006314784
     },
     {
       "run": "formal_sz50_run",
       "universe_id": "formal_sz50_run",
       "model": "pca",
-      "rank_ic_mean": 0.01294117647058824,
-      "rolling_stability": 0.9955745864482152,
-      "final_nav": 0.9918065914808358
+      "rank_ic_mean": -0.022424969987995202,
+      "rolling_stability": 0.9955746304421199,
+      "final_nav": 0.9943946577727197
     },
     {
       "run": "formal_zz500_run",
       "universe_id": "formal_zz500_run",
       "model": "cp",
-      "rank_ic_mean": -0.09265172260689042,
-      "rolling_stability": 0.7176939584314823,
-      "final_nav": 1.001785608922996
+      "rank_ic_mean": -0.10819694478777916,
+      "rolling_stability": 0.8384445983739128,
+      "final_nav": 0.9224056181156293
     },
     {
       "run": "formal_zz500_run",
       "universe_id": "formal_zz500_run",
       "model": "tucker",
-      "rank_ic_mean": 0.057341053364213454,
-      "rolling_stability": 0.9683321416378021,
-      "final_nav": 0.9857169559543344
+      "rank_ic_mean": 0.0208561794247177,
+      "rolling_stability": 0.968328303524426,
+      "final_nav": 0.9836725307111863
     },
     {
       "run": "formal_zz500_run",
       "universe_id": "formal_zz500_run",
       "model": "pca",
-      "rank_ic_mean": -0.017773295093180375,
-      "rolling_stability": 0.9786052930922734,
-      "final_nav": 0.9850689564204144
+      "rank_ic_mean": -0.044160848643394576,
+      "rolling_stability": 0.9574789121037437,
+      "final_nav": 0.981788995717951
     },
     {
       "run": "formal_all_a_run",
       "universe_id": "formal_all_a_run",
       "model": "cp",
-      "rank_ic_mean": -0.0997488212011473,
+      "rank_ic_mean": -0.09781602022071666,
       "rolling_stability": 0.7373374306729862,
-      "final_nav": 0.9193882323816733
+      "final_nav": 0.944789919615242
     },
     {
       "run": "formal_all_a_run",
       "universe_id": "formal_all_a_run",
       "model": "tucker",
-      "rank_ic_mean": 0.05977963929786369,
+      "rank_ic_mean": 0.027903850465697905,
       "rolling_stability": 0.9731060287782124,
-      "final_nav": 0.98401015061237
+      "final_nav": 0.9789322083820893
     },
     {
       "run": "formal_all_a_run",
       "universe_id": "formal_all_a_run",
       "model": "pca",
-      "rank_ic_mean": -0.0215625380485731,
+      "rank_ic_mean": -0.04904317194861255,
       "rolling_stability": 0.9608758546057202,
-      "final_nav": 0.9850689564204144
+      "final_nav": 0.981788995717951
     },
     {
       "run": "formal_industry_c27_run",
       "universe_id": "formal_industry_c27_run",
       "model": "cp",
-      "rank_ic_mean": -0.2626126126126126,
+      "rank_ic_mean": -0.2745817245817246,
       "rolling_stability": 0.6880081413047654,
-      "final_nav": 1.1629793082617716
+      "final_nav": 1.0940912799944158
     },
     {
       "run": "formal_industry_c27_run",
       "universe_id": "formal_industry_c27_run",
       "model": "tucker",
-      "rank_ic_mean": 0.23635778635778637,
+      "rank_ic_mean": 0.14755469755469755,
       "rolling_stability": 0.957114924277578,
-      "final_nav": 1.278137984479662
+      "final_nav": 1.1646342795407543
     },
     {
       "run": "formal_industry_c27_run",
       "universe_id": "formal_industry_c27_run",
       "model": "pca",
-      "rank_ic_mean": 0.0250965250965251,
+      "rank_ic_mean": 0.03030888030888031,
       "rolling_stability": 0.9300957336312248,
-      "final_nav": 1.217794548145904
+      "final_nav": 1.1208788451632887
     },
     {
       "run": "formal_industry_c35_run",
       "universe_id": "formal_industry_c35_run",
       "model": "cp",
-      "rank_ic_mean": -0.10076394194041254,
+      "rank_ic_mean": 0.0520244461420932,
       "rolling_stability": 0.5742790805441993,
-      "final_nav": 0.9484123807641133
+      "final_nav": 0.9642103366768712
     },
     {
       "run": "formal_industry_c35_run",
       "universe_id": "formal_industry_c35_run",
       "model": "tucker",
-      "rank_ic_mean": 0.04339190221543164,
+      "rank_ic_mean": -0.04957983193277311,
       "rolling_stability": 0.8738124301390988,
-      "final_nav": 1.008556557011381
+      "final_nav": 1.0016802850800421
     },
     {
       "run": "formal_industry_c35_run",
       "universe_id": "formal_industry_c35_run",
       "model": "pca",
-      "rank_ic_mean": 0.1391902215431627,
+      "rank_ic_mean": 0.045760122230710465,
       "rolling_stability": 0.9179081945192247,
-      "final_nav": 1.0061781876647173
+      "final_nav": 0.9951645842195928
     },
     {
       "run": "formal_industry_c39_run",
       "universe_id": "formal_industry_c39_run",
       "model": "cp",
-      "rank_ic_mean": 0.05707780047667687,
+      "rank_ic_mean": -0.01640704800817161,
       "rolling_stability": 0.7432657139641898,
-      "final_nav": 0.9462848655739869
+      "final_nav": 0.963795242532082
     },
     {
       "run": "formal_industry_c39_run",
       "universe_id": "formal_industry_c39_run",
       "model": "tucker",
-      "rank_ic_mean": -0.05787368062648961,
+      "rank_ic_mean": -0.11964589717398705,
       "rolling_stability": 0.879186230013147,
-      "final_nav": 0.9698844017124755
+      "final_nav": 0.9635082568406701
     },
     {
       "run": "formal_industry_c39_run",
       "universe_id": "formal_industry_c39_run",
       "model": "pca",
-      "rank_ic_mean": -0.12607677902621722,
+      "rank_ic_mean": -0.1292177391896493,
       "rolling_stability": 0.9295099022842589,
-      "final_nav": 0.9292453428613334
+      "final_nav": 0.9425445280758699
     },
     {
       "run": "formal_size_small_run",
       "universe_id": "formal_size_small_run",
       "model": "cp",
-      "rank_ic_mean": 0.24125874125874125,
+      "rank_ic_mean": 0.13986013986013987,
       "rolling_stability": 0.7635081570063319,
-      "final_nav": 0.9941759681948638
+      "final_nav": 0.9894370909922445
     },
     {
       "run": "formal_size_small_run",
       "universe_id": "formal_size_small_run",
       "model": "tucker",
-      "rank_ic_mean": -0.2325174825174825,
+      "rank_ic_mean": -0.09965034965034965,
       "rolling_stability": 0.9125270013298307,
-      "final_nav": 0.9084561859412786
+      "final_nav": 0.9273660402228774
     },
     {
       "run": "formal_size_small_run",
       "universe_id": "formal_size_small_run",
       "model": "pca",
-      "rank_ic_mean": -0.1818181818181818,
+      "rank_ic_mean": -0.03496503496503495,
       "rolling_stability": 0.9327365727651687,
-      "final_nav": 0.9266781961586202
+      "final_nav": 0.928887336974885
     },
     {
       "run": "formal_size_mid_run",
       "universe_id": "formal_size_mid_run",
       "model": "cp",
-      "rank_ic_mean": 0.08216783216783216,
+      "rank_ic_mean": 0.017482517482517484,
       "rolling_stability": 0.637093201013548,
-      "final_nav": 1.0335377185859353
+      "final_nav": 1.0146028261963749
     },
     {
       "run": "formal_size_mid_run",
       "universe_id": "formal_size_mid_run",
       "model": "tucker",
-      "rank_ic_mean": 0.052447552447552455,
+      "rank_ic_mean": 0.10314685314685315,
       "rolling_stability": 0.9535800005708422,
-      "final_nav": 0.9939924061597963
+      "final_nav": 0.9956840784657629
     },
     {
       "run": "formal_size_mid_run",
       "universe_id": "formal_size_mid_run",
       "model": "pca",
-      "rank_ic_mean": 0.14160839160839164,
+      "rank_ic_mean": 0.12237762237762238,
       "rolling_stability": 0.9528749272936866,
-      "final_nav": 1.0489739475856783
+      "final_nav": 1.0057506704573043
     },
     {
       "run": "formal_size_large_run",
       "universe_id": "formal_size_large_run",
       "model": "cp",
-      "rank_ic_mean": 0.14505494505494507,
+      "rank_ic_mean": 0.19890109890109892,
       "rolling_stability": 0.6330940425395966,
-      "final_nav": 0.9829113349097663
+      "final_nav": 0.9916605177720884
     },
     {
       "run": "formal_size_large_run",
       "universe_id": "formal_size_large_run",
       "model": "tucker",
-      "rank_ic_mean": -0.22967032967032966,
+      "rank_ic_mean": -0.378021978021978,
       "rolling_stability": 0.9899914179529462,
-      "final_nav": 0.9801840601642308
+      "final_nav": 0.9972179209706333
     },
     {
       "run": "formal_size_large_run",
       "universe_id": "formal_size_large_run",
       "model": "pca",
-      "rank_ic_mean": -0.16483516483516483,
+      "rank_ic_mean": -0.2901098901098901,
       "rolling_stability": 0.9693446457386018,
-      "final_nav": 0.9932447175949888
+      "final_nav": 0.9942497994250864
     }
   ],
   "assets": {
-    "stock_structure_svg": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/pattern_discovery/stock_latent_structure_formal_all_a_run_tucker.svg",
-    "cluster_industry_svg": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/pattern_discovery/cluster_vs_industry_formal_all_a_run_tucker.svg",
-    "boundary_comparison_svg": "D:/Personal folders/Desktop/StockdbWithTensor/code/data/formal/reports/pattern_discovery/boundary_comparison_tucker.svg"
+    "stock_structure_svg": "D:/..gululu/Desktop/StockdbWithTensor/code/data/formal/reports/pattern_discovery/stock_latent_structure_formal_all_a_run_tucker.svg",
+    "cluster_industry_svg": "D:/..gululu/Desktop/StockdbWithTensor/code/data/formal/reports/pattern_discovery/cluster_vs_industry_formal_all_a_run_tucker.svg",
+    "boundary_comparison_svg": "D:/..gululu/Desktop/StockdbWithTensor/code/data/formal/reports/pattern_discovery/boundary_comparison_tucker.svg"
   }
 }
