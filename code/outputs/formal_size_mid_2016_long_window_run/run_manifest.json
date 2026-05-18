@@ -31,7 +31,7 @@
   },
   "evaluation": {
     "quantile_count": 5,
-    "transaction_cost_bps": 10.0,
+    "transaction_cost_bps": 1.0,
     "benchmark_path": "code/data/formal/index_daily/csi_a500_index_daily.csv"
   },
   "split": {

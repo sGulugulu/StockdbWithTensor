@@ -27,6 +27,19 @@ _RUN_STATUS_LOCKS: dict[str, threading.Lock] = {}
 _RUN_STATUS_LOCKS_GUARD = threading.Lock()
 _RUN_ID_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$")
 _CONFIG_FILE_SUFFIXES = {".yaml", ".yml"}
+_REPORT_ASSET_SUFFIXES = {".svg"}
+_RUN_VISUAL_ASSETS: list[tuple[str, str]] = [
+    ("model_explained_variance.svg", "模型解释方差"),
+    ("model_rank_ic.svg", "模型 Rank IC"),
+    ("model_metrics_overview.svg", "模型综合指标"),
+    ("time_regime_timeline.svg", "时间状态切换"),
+    ("factor_importance_heatmap.svg", "因子重要性热力图"),
+    ("group_returns_overview.svg", "组合累计净值"),
+    ("drawdown_overview.svg", "组合回撤曲线"),
+    ("long_short_overview.svg", "多空组合累计净值"),
+    ("excess_returns_overview.svg", "超额收益累计净值"),
+    ("cost_adjusted_overview.svg", "成本后累计净值"),
+]
 _PROFILE_CONFIGS: dict[str, Path] = {
     "formal_hs300": ROOT / "code" / "configs" / "formal_hs300.yaml",
     "formal_sz50": ROOT / "code" / "configs" / "formal_sz50.yaml",
@@ -206,6 +219,176 @@ def _resolve_requested_config_path(
     return resolved_path
 
 
+def _reports_root(formal_root: Path) -> Path:
+    return formal_root / "reports"
+
+
+def _report_relative_path(path: Path, reports_root: Path) -> str:
+    return path.resolve().relative_to(reports_root.resolve()).as_posix()
+
+
+def _resolve_report_reference(raw_path: Any, reports_root: Path) -> Path | None:
+    if raw_path in (None, ""):
+        return None
+    candidate_text = str(raw_path)
+    candidate = Path(candidate_text)
+    if candidate.is_absolute():
+        resolved = candidate.resolve()
+    else:
+        repo_candidate = (ROOT / candidate).resolve()
+        report_candidate = (reports_root / candidate).resolve()
+        resolved = next((path for path in (repo_candidate, report_candidate) if path.exists()), repo_candidate)
+    if not _is_path_within_root(resolved, reports_root):
+        return None
+    return resolved
+
+
+def _resolve_report_asset_path(asset_path: str, reports_root: Path) -> Path:
+    candidate = (reports_root / Path(asset_path)).resolve()
+    if not _is_path_within_root(candidate, reports_root):
+        raise ValueError("报告资源路径超出 reports 目录边界。")
+    if candidate.suffix.lower() not in _REPORT_ASSET_SUFFIXES:
+        raise ValueError("当前只允许读取 SVG 报告资源。")
+    return candidate
+
+
+def _asset_url_for_path(path: str) -> str:
+    return f"/api/reports/assets/{path}"
+
+
+def _run_asset_url(run_id: str, asset_name: str) -> str:
+    return f"/api/runs/{run_id}/assets/{asset_name}"
+
+
+def _resolve_run_asset_path(run_dir: Path, asset_name: str) -> Path:
+    candidate_name = str(asset_name).strip()
+    if not candidate_name:
+        raise ValueError("asset_name 不能为空。")
+    candidate_path = Path(candidate_name)
+    if candidate_path.name != candidate_name or candidate_path.suffix.lower() != ".svg":
+        raise ValueError("当前只允许读取运行目录根下的 SVG 资源。")
+    resolved_path = (run_dir / candidate_name).resolve()
+    if not _is_path_within_root(resolved_path, run_dir):
+        raise ValueError("运行资源路径超出输出目录边界。")
+    return resolved_path
+
+
+def _collect_run_visual_assets(run_dir: Path, run_id: str) -> list[dict[str, str]]:
+    assets: list[dict[str, str]] = []
+    seen_names: set[str] = set()
+    for filename, label in _RUN_VISUAL_ASSETS:
+        path = run_dir / filename
+        if not path.exists():
+            continue
+        seen_names.add(filename)
+        assets.append(
+            {
+                "name": filename,
+                "label": label,
+                "url": _run_asset_url(run_id, filename),
+            }
+        )
+
+    for path in sorted(run_dir.glob("*.svg")):
+        if path.name in seen_names:
+            continue
+        assets.append(
+            {
+                "name": path.name,
+                "label": path.stem,
+                "url": _run_asset_url(run_id, path.name),
+            }
+        )
+    return assets
+
+
+def _decorate_pattern_summary(summary: dict[str, Any], reports_root: Path) -> dict[str, Any]:
+    assets: dict[str, dict[str, str]] = {}
+    for asset_name, raw_path in summary.get("assets", {}).items():
+        resolved = _resolve_report_reference(raw_path, reports_root)
+        if resolved is None or not resolved.is_file():
+            continue
+        relative_path = _report_relative_path(resolved, reports_root)
+        assets[asset_name] = {
+            "path": relative_path,
+            "url": _asset_url_for_path(relative_path),
+        }
+    decorated = dict(summary)
+    decorated["assets"] = assets
+    return decorated
+
+
+def _collect_long_window_years(reports_root: Path) -> list[dict[str, Any]]:
+    rows: dict[str, dict[str, Any]] = {}
+    assets_dir = reports_root / "defense_materials" / "long_window_assets"
+    timeline_pattern = re.compile(r"^formal_all_a_(\d{4})_time_regime_timeline\.svg$")
+    heatmap_pattern = re.compile(r"^formal_all_a_(\d{4})_factor_importance_heatmap\.svg$")
+
+    if assets_dir.exists():
+        for path in assets_dir.glob("formal_all_a_*_time_regime_timeline.svg"):
+            match = timeline_pattern.fullmatch(path.name)
+            if match is None:
+                continue
+            year = match.group(1)
+            rows.setdefault(year, {"year": year})
+            relative_path = _report_relative_path(path, reports_root)
+            rows[year]["time_regime_asset"] = {
+                "path": relative_path,
+                "url": _asset_url_for_path(relative_path),
+            }
+        for path in assets_dir.glob("formal_all_a_*_factor_importance_heatmap.svg"):
+            match = heatmap_pattern.fullmatch(path.name)
+            if match is None:
+                continue
+            year = match.group(1)
+            rows.setdefault(year, {"year": year})
+            relative_path = _report_relative_path(path, reports_root)
+            rows[year]["factor_heatmap_asset"] = {
+                "path": relative_path,
+                "url": _asset_url_for_path(relative_path),
+            }
+
+    for summary_path in reports_root.glob("pattern_discovery_long_window_*/pattern_discovery_summary.json"):
+        match = re.fullmatch(r"pattern_discovery_long_window_(\d{4})", summary_path.parent.name)
+        if match is None:
+            continue
+        year = match.group(1)
+        rows.setdefault(year, {"year": year})
+        rows[year]["pattern_discovery_available"] = True
+
+    return [rows[year] for year in sorted(rows)]
+
+
+def get_report_dashboard(formal_root: Path) -> dict[str, Any]:
+    reports_root = _reports_root(formal_root)
+    boundary_path = reports_root / "boundary_portfolio" / "boundary_portfolio_summary.json"
+    pattern_path = reports_root / "pattern_discovery" / "pattern_discovery_summary.json"
+    boundary_summary = _read_json(boundary_path) if boundary_path.exists() else []
+    pattern_summary = (
+        _decorate_pattern_summary(_read_json(pattern_path), reports_root)
+        if pattern_path.exists()
+        else None
+    )
+    return {
+        "boundary_portfolio": boundary_summary,
+        "pattern_discovery": pattern_summary,
+        "long_window_years": _collect_long_window_years(reports_root),
+    }
+
+
+def get_pattern_discovery_summary(formal_root: Path, year: str | None = None) -> dict[str, Any]:
+    reports_root = _reports_root(formal_root)
+    if year is None:
+        summary_path = reports_root / "pattern_discovery" / "pattern_discovery_summary.json"
+    else:
+        if not re.fullmatch(r"\d{4}", year):
+            raise ValueError("year 必须是四位数字。")
+        summary_path = reports_root / f"pattern_discovery_long_window_{year}" / "pattern_discovery_summary.json"
+    if not summary_path.exists():
+        raise FileNotFoundError("pattern discovery summary not found")
+    return _decorate_pattern_summary(_read_json(summary_path), reports_root)
+
+
 def _load_status(run_dir: Path) -> dict[str, Any]:
     path = _status_path(run_dir)
     if path.exists():
@@ -276,6 +459,7 @@ def get_run_detail(output_root: Path, run_id: str) -> dict[str, Any]:
         "factor_summaries": factor_summaries,
         "factor_associations": factor_associations,
         "time_regimes": time_regimes,
+        "visual_assets": _collect_run_visual_assets(run_dir, run_dir.name),
     }
 
 
@@ -406,6 +590,7 @@ def create_app(
 ):
     try:
         from fastapi import FastAPI, HTTPException
+        from fastapi.responses import FileResponse
     except ImportError as exc:
         raise RuntimeError("FastAPI is required to run the web backend.") from exc
 
@@ -449,6 +634,37 @@ def create_app(
         except ModuleNotFoundError as exc:
             raise HTTPException(status_code=503, detail=str(exc)) from exc
         return rows
+
+    @app.get("/api/reports/dashboard")
+    async def api_report_dashboard() -> dict[str, Any]:
+        return get_report_dashboard(resolved_formal_root)
+
+    @app.get("/api/reports/pattern-discovery")
+    async def api_pattern_discovery_default() -> dict[str, Any]:
+        try:
+            return get_pattern_discovery_summary(resolved_formal_root)
+        except FileNotFoundError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    @app.get("/api/reports/pattern-discovery/{year}")
+    async def api_pattern_discovery_by_year(year: str) -> dict[str, Any]:
+        try:
+            return get_pattern_discovery_summary(resolved_formal_root, year)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+        except FileNotFoundError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    @app.get("/api/reports/assets/{asset_path:path}")
+    async def api_report_asset(asset_path: str):
+        try:
+            resolved_path = _resolve_report_asset_path(asset_path, _reports_root(resolved_formal_root))
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+        if not resolved_path.exists():
+            raise HTTPException(status_code=404, detail="Report asset not found")
+        media_type = "image/svg+xml" if resolved_path.suffix.lower() == ".svg" else None
+        return FileResponse(resolved_path, media_type=media_type)
 
     @app.get("/api/runs")
     async def api_runs() -> list[dict[str, Any]]:
@@ -510,6 +726,22 @@ def create_app(
         if not run_dir.exists():
             raise HTTPException(status_code=404, detail="Run not found")
         return get_run_detail(resolved_output_root, run_id)
+
+    @app.get("/api/runs/{run_id}/assets/{asset_name}")
+    async def api_run_asset(run_id: str, asset_name: str):
+        try:
+            run_dir = _resolve_run_dir(resolved_output_root, run_id, validate_pattern=False)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+        if not run_dir.exists():
+            raise HTTPException(status_code=404, detail="Run not found")
+        try:
+            resolved_path = _resolve_run_asset_path(run_dir, asset_name)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+        if not resolved_path.exists():
+            raise HTTPException(status_code=404, detail="Run asset not found")
+        return FileResponse(resolved_path, media_type="image/svg+xml")
 
     @app.get("/api/runs/{run_id}/metrics")
     async def api_run_metrics(run_id: str) -> list[dict[str, Any]]:

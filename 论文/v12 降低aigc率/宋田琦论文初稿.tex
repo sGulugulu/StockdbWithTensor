@@ -1,0 +1,397 @@
+% !TeX program = xelatex
+% !TeX encoding = UTF-8
+\documentclass[12pt,UTF8,openany,oneside]{ctexbook}
+
+% 说明：
+% 1. 本模板依据 WPS 样式集文件“毕设论文模板.dotx”重建样式层。
+% 2. dotx 仅包含样式定义，论文页面顺序骨架保留为毕业论文常见结构。
+% 3. 正文默认采用：中文宋体、小四、1.25 倍行距；英文字体统一使用 Times New Roman。
+% 4. 推荐使用 XeLaTeX 编译。
+
+\usepackage[a4paper,top=2.54cm,bottom=2.54cm,left=3.18cm,right=3.18cm]{geometry}
+\usepackage{fontspec}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{amsmath,amssymb}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{tocloft}
+\usepackage{fancyhdr}
+\usepackage{indentfirst}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{pdfpages}
+\usepackage{etoolbox}
+\usepackage{listings}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,matrix,fit,backgrounds}
+\pgfplotsset{compat=1.18}
+
+\setmainfont{Times New Roman}
+\setsansfont{Times New Roman}
+\setmonofont{Consolas}
+\setCJKmainfont[BoldFont=SimHei]{SimSun}
+\setCJKsansfont[BoldFont=SimHei]{SimHei}
+\setCJKmonofont{FangSong}
+\newCJKfontfamily\thesissongbold[AutoFakeBold=2]{SimSun}
+\newfontfamily\thesisroman{Times New Roman}
+\newfontfamily\thesiscalibri{Times New Roman}
+
+\ctexset{
+  today = old,
+  chapter = {
+    format = \heiti\fontsize{16pt}{20pt}\selectfont,
+    name = {},
+    number = \arabic{chapter}.,
+    aftername = {},
+    beforeskip = 12pt,
+    afterskip = 6pt
+  },
+  section = {
+    format = \heiti\fontsize{14pt}{18pt}\selectfont,
+    number = \arabic{chapter}.\arabic{section},
+    beforeskip = 6pt,
+    afterskip = 4pt
+  },
+  subsection = {
+    format = \heiti\fontsize{12pt}{16pt}\selectfont,
+    number = \arabic{chapter}.\arabic{section}.\arabic{subsection},
+    beforeskip = 4pt,
+    afterskip = 2pt
+  },
+  subsubsection = {
+    format = \songti\bfseries\fontsize{12pt}{18pt}\selectfont,
+    number = \arabic{chapter}.\arabic{section}.\arabic{subsection}.\arabic{subsubsection},
+    beforeskip = 8pt,
+    afterskip = 8pt
+  }
+}
+
+\setlength{\parindent}{2em}
+\setlength{\headheight}{15pt}
+\setstretch{1.25}
+\emergencystretch=2em
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{\songti\fontsize{9pt}{12pt}\selectfont 中国计量大学本科毕业设计（论文）}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancypagestyle{plain}{
+  \fancyhf{}
+  \fancyhead[C]{\songti\fontsize{9pt}{12pt}\selectfont 中国计量大学本科毕业设计（论文）}
+  \fancyfoot[C]{\thepage}
+  \renewcommand{\headrulewidth}{0.4pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+\captionsetup{font={small},labelsep=space}
+\setlist[itemize]{itemsep=0pt,topsep=4pt,parsep=0pt}
+\setlist[enumerate]{itemsep=0pt,topsep=4pt,parsep=0pt}
+\hypersetup{
+  colorlinks = false,
+  pdfborder = {0 0 0}
+}
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  commentstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  breakatwhitespace=false,
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false,
+  frame=single
+}
+
+% 目录格式尽量贴近范文
+\renewcommand{\contentsname}{目\hspace{1em}录}
+\renewcommand{\cfttoctitlefont}{\hfill\thesissongbold\fontsize{14pt}{16pt}\selectfont\color{black}}
+\renewcommand{\cftaftertoctitle}{\hfill}
+\setlength{\cftbeforetoctitleskip}{-1em}
+\setlength{\cftaftertoctitleskip}{0.5em}
+\setlength{\cftbeforechapskip}{2pt}
+\renewcommand{\cftchapfont}{\songti}
+\renewcommand{\cftsecfont}{\songti}
+\renewcommand{\cftsubsecfont}{\songti}
+\renewcommand{\cftchappagefont}{\songti}
+\renewcommand{\cftsecpagefont}{\songti}
+\renewcommand{\cftsubsecpagefont}{\songti}
+\setlength{\cftchapindent}{0pt}
+\setlength{\cftsecindent}{1.5em}
+\setlength{\cftsubsecindent}{3em}
+\setlength{\cftchapnumwidth}{1em}
+\setlength{\cftsecnumwidth}{1em}
+\setlength{\cftsubsecnumwidth}{1em}
+
+% 正文页码：阿拉伯数字，页脚居中
+\newcommand{\mainmatterformat}{
+  \clearpage
+  \pagenumbering{arabic}
+  \pagestyle{fancy}
+}
+
+% 前置部分页码：大写罗马数字，页脚居中
+\newcommand{\frontmatterformat}{
+  \clearpage
+  \pagenumbering{Roman}
+  \pagestyle{fancy}
+}
+
+% 无页码页
+\newcommand{\emptypageformat}{
+  \clearpage
+  \thispagestyle{empty}
+}
+
+% 元数据区
+\newcommand{\SchoolName}{中国计量大学}
+\newcommand{\CollegeName}{理学院}
+\newcommand{\ThesisType}{本科毕业设计（论文）}
+\newcommand{\ChineseTitle}{基于张量分解的股票因子降维与模式发现}
+\newcommand{\EnglishTitle}{Stock Factor Dimensionality Reduction and Pattern Discovery Based on Tensor Decomposition}
+\newcommand{\StudentName}{宋田琦}
+\newcommand{\StudentID}{2200805127}
+\newcommand{\MajorName}{数据科学与大数据技术}
+\newcommand{\ClassName}{22大数据1班}
+\newcommand{\SupervisorName}{王洁}
+\newcommand{\DegreeName}{理学学士}
+\newcommand{\CommitteeChair}{***}
+\newcommand{\Confidentiality}{公开}
+\newcommand{\UDCNumber}{000}
+\newcommand{\CLCNumber}{F830.91}
+\newcommand{\SchoolCode}{10356}
+\newcommand{\SubmitYear}{2026}
+\newcommand{\SubmitMonth}{5}
+\newcommand{\StatementDate}{2026.5.18}
+% \newcommand{\AuthorProfile}{%
+% 宋田琦，中国计量大学理学院数据科学与大数据技术专业 2022 级本科生。研究兴趣包括金融数据分析、张量分解、量化投资与数据工程实现。毕业设计围绕股票因子降维、结构化实验链路与模式发现展开。%
+% }
+\newcommand{\DataSetStatement}{%
+本文数据主要来自 Baostock 接口抓取与项目自建 formal 数据链，包括日频 K 线、财务指标、业绩快报、指数成分历史与衍生因子面板。数据经过预处理后以 CSV 与 Parquet 形式存储，并通过 DuckDB 视图统一注册管理。%
+}
+
+\newcommand{\coverline}[2]{%
+  \noindent #1\hfill\underline{\makebox[0.56\textwidth][c]{#2}}\par
+}
+
+\newcommand{\coverpairline}[4]{%
+  \par\begin{center}
+    \begin{tabular}{@{}l@{\hspace{1.5em}}c@{\hspace{2.8em}}l@{\hspace{0.5em}}c@{}}
+      #1 & \underline{\makebox[0.32\textwidth][c]{#2}} & #3 & \underline{\makebox[0.23\textwidth][c]{#4}} \\
+    \end{tabular}
+  \end{center}
+  \vspace{0.25cm}
+}
+
+\newcommand{\CoverHeaderStyle}{\centering\songti\fontsize{36pt}{42pt}\selectfont}
+\newcommand{\CoverSchoolDownStyle}{\centering\songti\fontsize{14pt}{14}\selectfont}
+\newcommand{\CoverTitleStyle}{\centering\heiti\fontsize{24pt}{30pt}\selectfont}
+\newcommand{\CoverSubTitleStyle}{\centering\thesisroman\fontsize{24pt}{30pt}\selectfont}
+\newcommand{\CoverInfoStyle}{\songti\fontsize{14pt}{22pt}\selectfont}
+\newcommand{\FrontTitleStyle}{\centering\heiti\fontsize{16pt}{20pt}\selectfont}
+\newcommand{\FrontEnglishTitleStyle}{\centering\thesisroman\bfseries\fontsize{16pt}{20pt}\selectfont}
+\newcommand{\BodyStyle}{\songti\fontsize{12pt}{15pt}\selectfont}
+
+\newcommand{\makefronttitle}[1]{%
+  \par\begin{center}
+    {\FrontTitleStyle #1\par}
+  \end{center}
+  \vspace{0.8em}
+}
+
+\newcommand{\makefirstcover}{
+  \begin{titlepage}
+    \thispagestyle{empty}
+    \centering
+    \vspace*{0cm}
+    {\CoverHeaderStyle \SchoolName\par}
+    \vspace{0.5cm}
+    {\CoverHeaderStyle \ThesisType\par}
+    \vspace{1cm}
+    {\CoverTitleStyle \ChineseTitle\par}
+    \vspace{0.5cm}
+    {\CoverSubTitleStyle \EnglishTitle\par}
+    \vspace{1cm}
+    \coverpairline{学生姓名}{\StudentName}{学号}{\StudentID}
+    \coverpairline{学生专业}{\MajorName}{班级}{\ClassName}
+    \coverpairline{二级学院}{\CollegeName}{指导教师}{\SupervisorName}
+    \vfill
+    {\CoverSchoolDownStyle \SchoolName\par}
+    \vspace{0.8cm}
+    {\CoverInfoStyle \SubmitYear 年 \SubmitMonth 月\par}
+  \end{titlepage}
+}
+
+\newcommand{\makestatementpage}{
+  \clearpage
+  \thispagestyle{empty}
+  \makefronttitle{郑\hspace{1em}重\hspace{1em}声\hspace{1em}明}
+  \vspace{1.5cm}
+  {\BodyStyle
+  本人呈交的毕业设计（论文），是在导师指导下独立进行研究工作所取得的成果。除文中已经注明引用的内容外，本论文不包含他人已经发表或撰写过的研究成果。对本文的研究工作做出重要贡献的个人和集体，均已在文中以明确方式标明。本论文的知识产权归属于培养单位。\par}
+  \vspace{3cm}
+  \noindent 学生签名：\underline{\makebox[5cm][c]{}}\hfill 日期：\underline{\makebox[4cm][c]{\StatementDate}}\par
+}
+
+\newcommand{\makesecondcover}{
+  \clearpage
+  \thispagestyle{empty}
+  \noindent 分类号：\underline{\makebox[3cm][c]{\CLCNumber}}
+  \hfill 密\hspace{0.5em}级：\underline{\makebox[3cm][c]{\Confidentiality}}\par
+  \vspace{0.4cm}
+  \noindent UDC：\underline{\makebox[3cm][c]{\UDCNumber}}
+  \hfill 学校代码：\underline{\makebox[3cm][c]{\SchoolCode}}\par
+  \vspace{1cm}
+  \begin{center}
+    {\CoverHeaderStyle \SchoolName\par}
+    \vspace{1cm}
+    {\CoverHeaderStyle \ThesisType\par}
+    \vspace{1cm}
+    {\CoverTitleStyle \ChineseTitle\par}
+    \vspace{1cm}
+    {\CoverSubTitleStyle \EnglishTitle\par}
+  \end{center}
+  \vspace{1cm}
+  \coverpairline{作\hspace{1em}者}{\StudentName}{学\hspace{1em}号}{\StudentID}
+  \coverpairline{申请学位}{\DegreeName}{指导教师}{\SupervisorName}
+  \coverpairline{学科专业}{\MajorName}{培养单位}{\SchoolName}
+  \coverpairline{答辩委员会主席}{\CommitteeChair}{评阅人}{}
+  \vfill
+  \begin{center}
+    {\CoverInfoStyle \SubmitYear 年 \SubmitMonth 月\par}
+  \end{center}
+}
+
+\newcommand{\makethanks}{
+  \clearpage
+  \thispagestyle{empty}
+  \makefronttitle{致谢}
+  {\BodyStyle
+  本文从选题确定、数据整理、实验实现到论文写作，历时较长，过程中得到了许多老师、同学与家人的帮助。首先，衷心感谢指导教师王洁老师在选题方向、研究框架和论文修改上的耐心指导。老师在开题阶段帮助我明确了“股票因子—张量分解—模式发现”这一主线，在论文写作阶段又多次提醒我同时关注研究叙事、实验规范与结果解释，使我逐步认识到毕业论文不仅是一次技术实现，更是一次完整的研究训练。
+
+  同时，感谢学院和专业在毕业设计过程中提供的组织保障和规范要求。无论是任务书、开题报告、文献综述还是中期检查，这些阶段性的要求都促使我持续推进工作，也让我在资料整理、学术写作和项目收口方面获得了系统锻炼。
+
+  还要感谢在项目开发与实验推进过程中给予帮助的同学和朋友。数据链路梳理、实验排错、图表整理和论文格式调整都不是单一动作可以完成的工作，许多交流和讨论帮助我更快定位问题、修正表达并完善论文结构。
+
+  最后，感谢家人在整个毕业阶段给予的理解和支持。正是因为有了稳定的支持环境，我才能够较为专注地完成从开题、实验到论文定稿的全过程。谨以此文，向所有帮助和支持过我的老师、同学、朋友及家人致以诚挚谢意。}
+}
+
+\newcommand{\makecnabstract}{
+  \clearpage
+  \makefronttitle{基于张量分解的股票因子降维与模式发现}
+  \addcontentsline{toc}{chapter}{摘要}
+  {\textbf{摘要:}\BodyStyle
+  随着量化投资研究向高维、多源和长时间窗口方向发展，股票因子数据逐渐呈现出“股票—因子—时间”三维耦合特征。传统 PCA、回归筛选等二维方法虽然易于实现，但在建模初期就需要将多维结构展平，容易损失股票截面关系、因子关联关系和时间演化关系中的关键信息。为此，本文以中国 A 股正式样本为研究对象，围绕股票因子降维与模式发现问题，引入张量分解方法，在保持多维结构的前提下研究高维因子压缩、潜在模式提取及其排序有效性。
+
+  本文先依托标准化的完整数据，搭建出一套统一的实验研究样本；研究补齐了前复权K线、企业财务与研究报告、指数历史成分以及因子面板等各类数据，最终整理形成三组完整的研究样本池，样本池分别对应HS300、SZ500、ZZ500三类指数，整体的研究时间区间为2015年1月5日至2026年4月1日。本次研究将所有实验样本整理为“股票—因子—时间”的三阶张量形式，搭建出CP分解、Tucker分解、PCA三种降维模型；研究按照明确的训练、验证、测试数据划分方式，完成模型的rank参数筛选与held-out检验工作。在实验结果分析的环节中，研究除了对比不同模型的重构误差与解释方差之外，还结合Rank IC、IR、滚动稳定性、因子重要性、时间状态变化等多项评判指标，从数值拟合效果、金融实际解释性、模型结构稳定性多个层面，综合判断各类模型的实际运行表现。
+  
+  本次实验的结果可以看出，PCA方法在三个研究样本池中，都展现出了最优的数值重构效果；Tucker分解方法能够在解释方差、排序关联度以及滚动稳定性之间维持相对平衡的表现，能够作为本文研究的核心方法；低秩CP分解的整体表现在长期观测窗口中并不理想，这也能说明，只依靠简单的秩一成分叠加方式，无法精准且稳定地刻画股票市场中复杂的因子结构。对实验模式展开进一步分析可以发现，质量因子、价值因子、动量因子和波动率因子，在整体潜在结构中占据着较高的权重；市场的潜在结构状态，也会在不同时间段出现十分明显的转变。综合整体实验情况而言，张量分解技术除了可以完成股票因子的降维处理，还可以搭建一套统一的分析框架，用于分析股票联动规律、因子共振结构以及市场动态状态的变化特征。
+
+  本次研究整合了标准化的数据处理流程、张量建模相关方法以及论文研究的全部佐证内容，将所有研究内容汇总至同一个研究仓库中；这样的处理方式，有效提升了整个研究过程的可复现程度，也让实验得出的研究结论更加统一。从本次研究得到的结果能够看出，在处理高维股票因子的相关研究问题时，张量分解方法有着不错的结构留存效果与研究解释意义，其中Tucker分解的综合表现更为突出；该方法也能为后续的股票因子探究、量化模型搭建工作，提供可以拓展使用的方法参考。}
+
+  \vspace{1em}
+  \noindent\textbf{关键词：}张量分解；股票因子；降维；模式发现；量化投资；多维数据建模
+
+  \vspace{0.5em}
+  \noindent\textbf{中图分类号：}\CLCNumber
+}
+
+\newcommand{\makeenabstract}{
+  \clearpage
+  \begin{center}
+    {\FrontEnglishTitleStyle AbstractStock Factor Dimensionality Reduction and Pattern Discovery Based on Tensor Decomposition\par}
+  \end{center}
+  %\vspace{0.8em}
+  \addcontentsline{toc}{chapter}{Abstract}
+  {\thesisroman\fontsize{12pt}{15pt}\textbf{Abstract :}\selectfont
+  As quantitative investment research moves toward more
+  high-dimensional, multi-source and long-horizon settings, stock factor data naturally
+  exhibit a coupled stock-factor-time structure. Conventional
+  two-dimensional methods such as PCA and regression-based screening are
+  easy to implement, but they flatten the original structure at the
+  beginning of modeling and may lose key information embedded in stock
+  cross-sections, factor interactions and temporal evolution. This thesis
+  studies stock factor dimensionality reduction and pattern discovery with
+  tensor decomposition under a formal A-share data pipeline.
+
+  The thesis first constructs a unified formal dataset by completing the
+  adjusted K-line series, financial and report datasets, historical index
+  constituents and factor panels for HS300, SZ50 and ZZ500 over the window
+  from January 5, 2015 to April 1, 2026. Then the data are represented as a
+  three-way stock-factor-time tensor, and CP decomposition, Tucker
+  decomposition and PCA are compared under an explicit train-validation-test
+  protocol. Evaluation is conducted from multiple perspectives, including
+  reconstruction quality, explained variance, Rank IC, IR, rolling
+  stability, factor importance and regime shifts.
+
+  The empirical results show that PCA provides the strongest numerical
+  reconstruction ability, while Tucker decomposition achieves a better
+  balance among structural interpretability, ranking usefulness and
+  long-horizon stability, making it the most suitable main method for this
+  thesis. In contrast, low-rank CP decomposition performs relatively weakly
+  on the full-window formal samples, indicating that simple rank-one
+  superposition is insufficient to capture the complexity of stock factor
+  structures. Further pattern analysis suggests that quality, value,
+  momentum and volatility factors play major roles in the latent structure,
+  and that meaningful temporal regime changes can also be identified.
+
+  Overall, this thesis integrates the formal data foundation, tensor
+  modeling workflow and thesis evidence outputs into one reproducible
+  repository. The results indicate that tensor decomposition, especially
+  Tucker decomposition, is a promising approach for stock factor
+  dimensionality reduction and pattern discovery in high-dimensional
+  financial data.}
+
+  \vspace{1em}
+  \noindent\textbf{Keywords:} tensor decomposition; stock factors; dimensionality reduction; pattern discovery; quantitative investment
+
+  \vspace{0.5em}
+  \noindent\textbf{Classification:} \CLCNumber
+}
+
+\newcommand{\makeauthorprofile}{
+  \clearpage
+  \makefronttitle{作者简介}
+  \addcontentsline{toc}{chapter}{作者简介}
+  {\BodyStyle \AuthorProfile}
+}
+
+\newcommand{\makedatasetpage}{
+  \clearpage
+  \makefronttitle{学位论文数据集}
+  \addcontentsline{toc}{chapter}{学位论文数据集}
+  {\BodyStyle \DataSetStatement}
+}
+
+\begin{document}
+
+% 封面与声明页
+\makefirstcover
+\makestatementpage
+\makesecondcover
+
+% 范文中致谢位于摘要之前，且通常不参与罗马页码统计。
+% \makethanks
+
+% 从摘要开始按范文使用罗马页码
+\frontmatterformat
+\makecnabstract
+\makeenabstract
+\tableofcontents
+
+% 正文
+\mainmatterformat
+\input{宋田琦论文初稿_正文.tex}
+
+% \makeauthorprofile
+\makedatasetpage
+
+\end{document}

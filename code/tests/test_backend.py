@@ -236,6 +236,7 @@ class BackendTests(unittest.TestCase):
                     response = await client.get("/api/runs/legacy.run", timeout=10.0)
                     self.assertEqual(response.status_code, 200)
                     self.assertEqual(response.json()["run_id"], "legacy.run")
+                    self.assertEqual(response.json()["visual_assets"], [])
                     response = await client.get("/api/runs/%20legacy.run%20", timeout=10.0)
                     self.assertEqual(response.status_code, 200)
                     self.assertEqual(response.json()["run_id"], "legacy.run")
@@ -365,6 +366,89 @@ class BackendTests(unittest.TestCase):
                                 f"factors/{universe_id.lower()}_factor_panel.csv"
                             )
                         )
+
+            anyio.run(run_case)
+
+    @unittest.skipUnless(__import__("importlib").util.find_spec("fastapi") is not None, "fastapi not installed")
+    def test_report_dashboard_and_asset_routes(self) -> None:
+        import httpx
+        import anyio
+
+        async def run_case() -> None:
+            app = create_app()
+            transport = httpx.ASGITransport(app=app)
+            async with httpx.AsyncClient(transport=transport, base_url="http://testserver") as client:
+                response = await client.get("/api/reports/dashboard", timeout=10.0)
+                self.assertEqual(response.status_code, 200)
+                payload = response.json()
+                self.assertIn("boundary_portfolio", payload)
+                self.assertIn("pattern_discovery", payload)
+                self.assertIn("long_window_years", payload)
+                self.assertTrue(isinstance(payload["boundary_portfolio"], list))
+
+                pattern_response = await client.get("/api/reports/pattern-discovery", timeout=10.0)
+                self.assertEqual(pattern_response.status_code, 200)
+                pattern_payload = pattern_response.json()
+                self.assertIn("assets", pattern_payload)
+                self.assertIn("stock_structure_svg", pattern_payload["assets"])
+
+                asset_url = pattern_payload["assets"]["stock_structure_svg"]["url"]
+                asset_response = await client.get(asset_url, timeout=10.0)
+                self.assertEqual(asset_response.status_code, 200)
+                self.assertEqual(asset_response.headers["content-type"], "image/svg+xml")
+                self.assertIn("<svg", asset_response.text)
+
+                invalid_year_response = await client.get("/api/reports/pattern-discovery/not-a-year", timeout=10.0)
+                self.assertEqual(invalid_year_response.status_code, 422)
+
+                blocked_asset_response = await client.get(
+                    "/api/reports/assets/../pattern_discovery/boundary_comparison_tucker.svg",
+                    timeout=10.0,
+                )
+                self.assertEqual(blocked_asset_response.status_code, 422)
+
+        anyio.run(run_case)
+
+    @unittest.skipUnless(__import__("importlib").util.find_spec("fastapi") is not None, "fastapi not installed")
+    def test_run_detail_exposes_visual_assets(self) -> None:
+        import httpx
+        import anyio
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            run_dir = Path(temp_dir) / "visual_run"
+            run_dir.mkdir(parents=True, exist_ok=True)
+            (run_dir / "run_status.json").write_text(
+                '{"run_id":"visual_run","status":"completed","created_at":"x","updated_at":"x"}',
+                encoding="utf-8",
+            )
+            (run_dir / "run_manifest.json").write_text(
+                '{"market_id":"cn_a","universe_id":"HS300","selection_top_n":20}',
+                encoding="utf-8",
+            )
+            (run_dir / "metrics.json").write_text(
+                '[{"model":"cp","rank":"2","mse":0.1,"explained_variance":0.9,"rank_ic_mean":0.1}]',
+                encoding="utf-8",
+            )
+            (run_dir / "model_rank_ic.svg").write_text("<svg></svg>", encoding="utf-8")
+            (run_dir / "factor_importance_heatmap.svg").write_text("<svg></svg>", encoding="utf-8")
+
+            async def run_case() -> None:
+                app = create_app(output_root=Path(temp_dir))
+                transport = httpx.ASGITransport(app=app)
+                async with httpx.AsyncClient(transport=transport, base_url="http://testserver") as client:
+                    detail_response = await client.get("/api/runs/visual_run", timeout=10.0)
+                    self.assertEqual(detail_response.status_code, 200)
+                    payload = detail_response.json()
+                    asset_names = [row["name"] for row in payload["visual_assets"]]
+                    self.assertIn("model_rank_ic.svg", asset_names)
+                    self.assertIn("factor_importance_heatmap.svg", asset_names)
+
+                    asset_response = await client.get("/api/runs/visual_run/assets/model_rank_ic.svg", timeout=10.0)
+                    self.assertEqual(asset_response.status_code, 200)
+                    self.assertEqual(asset_response.headers["content-type"], "image/svg+xml")
+
+                    blocked_response = await client.get("/api/runs/visual_run/assets/../model_rank_ic.svg", timeout=10.0)
+                    self.assertEqual(blocked_response.status_code, 422)
 
             anyio.run(run_case)
 

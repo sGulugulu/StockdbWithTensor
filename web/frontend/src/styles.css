@@ -152,6 +152,11 @@ select {
   gap: 24px;
 }
 
+.research-panel {
+  display: grid;
+  gap: 24px;
+}
+
 .formal-header {
   display: flex;
   justify-content: space-between;
@@ -227,6 +232,94 @@ select {
   gap: 16px;
 }
 
+.research-section {
+  display: grid;
+  gap: 16px;
+}
+
+.compact-field {
+  min-width: 180px;
+  margin-bottom: 0;
+}
+
+.research-kpis {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.asset-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.asset-card {
+  border: 1px solid rgba(15, 118, 110, 0.14);
+  border-radius: 18px;
+  padding: 16px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(243, 249, 247, 0.95)),
+    radial-gradient(circle at top right, rgba(15, 118, 110, 0.08), transparent 40%);
+}
+
+.asset-card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.asset-card-header h3,
+.model-card-header h4 {
+  margin: 0;
+}
+
+.asset-card-header a {
+  color: #0f766e;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.asset-image {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid rgba(31, 41, 55, 0.08);
+  background: #fff;
+}
+
+.model-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.model-card {
+  border: 1px solid rgba(31, 41, 55, 0.08);
+  border-radius: 18px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.model-card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.model-card-header span {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(15, 118, 110, 0.1);
+  color: #0f766e;
+  font-size: 12px;
+}
+
+.model-card p {
+  margin: 8px 0 0;
+}
+
 .formal-query-bar {
   display: grid;
   grid-template-columns: repeat(2, minmax(180px, 260px));
@@ -269,7 +362,10 @@ td {
   }
 
   .coverage-grid,
-  .formal-query-bar {
+  .formal-query-bar,
+  .asset-grid,
+  .model-grid,
+  .research-kpis {
     grid-template-columns: 1fr;
   }
 }

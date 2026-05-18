@@ -1,7 +1,19 @@
 import React, { useEffect, useState } from "react";
 import FormalDataPanel from "./components/FormalDataPanel.jsx";
+import ResearchDashboard from "./components/ResearchDashboard.jsx";
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? "http://127.0.0.1:8080";
+
+
+function resolveApiAssetUrl(assetUrl) {
+  if (!assetUrl) {
+    return "";
+  }
+  if (/^https?:\/\//.test(assetUrl)) {
+    return assetUrl;
+  }
+  return `${API_BASE}${assetUrl}`;
+}
 
 export default function App() {
   const [view, setView] = useState("config");
@@ -152,6 +164,7 @@ export default function App() {
         <button className={view === "detail" ? "tab active" : "tab"} onClick={() => setView("detail")}>实验详情页</button>
         <button className={view === "selection" ? "tab active" : "tab"} onClick={() => setView("selection")}>选股结果页</button>
         <button className={view === "formal" ? "tab active" : "tab"} onClick={() => setView("formal")}>Formal 数据页</button>
+        <button className={view === "research" ? "tab active" : "tab"} onClick={() => setView("research")}>研究结果页</button>
       </section>
 
       <section className="grid">
@@ -394,6 +407,34 @@ export default function App() {
               ))}
             </div>
           ) : null}
+          {detail?.visual_assets?.length ? (
+            <div className="detail-sections">
+              <div className="toolbar">
+                <div>
+                  <h3>运行图表</h3>
+                  <p className="muted-text">直接浏览本次实验已生成的 SVG 结果图。</p>
+                </div>
+              </div>
+              <div className="asset-grid">
+                {detail.visual_assets.map((asset) => (
+                  <article className="asset-card" key={asset.name}>
+                    <div className="asset-card-header">
+                      <h3>{asset.label}</h3>
+                      <a href={resolveApiAssetUrl(asset.url)} target="_blank" rel="noreferrer">
+                        查看原图
+                      </a>
+                    </div>
+                    <img
+                      className="asset-image"
+                      src={resolveApiAssetUrl(asset.url)}
+                      alt={asset.label}
+                    />
+                    <p className="muted-text">{asset.name}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
+          ) : null}
         </div>}
 
         {view === "selection" && <div className="panel wide">
@@ -428,6 +469,7 @@ export default function App() {
         </div>}
 
         {view === "formal" && <FormalDataPanel apiBase={API_BASE} />}
+        {view === "research" && <ResearchDashboard apiBase={API_BASE} />}
       </section>
     </div>
   );

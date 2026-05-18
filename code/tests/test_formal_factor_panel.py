@@ -81,6 +81,7 @@ class FormalFactorPanelTests(unittest.TestCase):
                         "2024-01-11,sh.600000,1,1,1,17,16,100,1000,3,0.1,1,0.07,10,2,3,4,0",
                         "2024-01-12,sh.600000,1,1,1,18,17,100,1000,3,0.1,1,0.07,10,2,3,4,0",
                         "2024-01-15,sh.600000,1,1,1,19,18,100,1000,3,0.1,1,0.07,10,2,3,4,0",
+                        "2024-01-16,sh.600000,1,1,1,20,19,100,1000,3,0.1,1,0.07,10,2,3,4,0",
                     ]
                 ),
                 encoding="utf-8",
@@ -116,7 +117,7 @@ class FormalFactorPanelTests(unittest.TestCase):
             header = rows[0].split(",")
             data = dict(zip(header, rows[1].split(",")))
             self.assertEqual(data["trade_date"], "2024-01-08")
-            self.assertGreater(float(data["future_return"]), 0.0)
+            self.assertAlmostEqual(float(data["future_return"]), (20.0 / 15.0) - 1.0, places=6)
 
 
 if __name__ == "__main__":

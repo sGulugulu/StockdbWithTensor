@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import App from "./App.jsx";
 
@@ -7,6 +7,7 @@ import App from "./App.jsx";
 describe("App", () => {
   afterEach(() => {
     vi.restoreAllMocks();
+    cleanup();
   });
 
   it("shows formal coverage cards and universe members on the formal data page", async () => {
@@ -30,6 +31,39 @@ describe("App", () => {
         );
       }
       if (url.endsWith("/api/runs")) {
+        return Promise.resolve(new Response(JSON.stringify([]), { status: 200 }));
+      }
+      if (url.endsWith("/api/runs/demo_run")) {
+        return Promise.resolve(
+          new Response(
+            JSON.stringify({
+              run_id: "demo_run",
+              status: { status: "completed" },
+              manifest: {
+                market_id: "cn_a",
+                universe_id: "HS300",
+                candidate_pool_size: 80,
+                selection_top_n: 20
+              },
+              metrics: [
+                { model: "cp", rank: "2", mse: 0.1, explained_variance: 0.9 }
+              ],
+              factor_summaries: {},
+              factor_associations: {},
+              time_regimes: {},
+              visual_assets: [
+                {
+                  name: "model_rank_ic.svg",
+                  label: "模型 Rank IC",
+                  url: "/api/runs/demo_run/assets/model_rank_ic.svg"
+                }
+              ]
+            }),
+            { status: 200, headers: { "Content-Type": "application/json" } }
+          )
+        );
+      }
+      if (url.includes("/api/runs/demo_run/selection?trade_date=2026-01-09&top_n=20")) {
         return Promise.resolve(new Response(JSON.stringify([]), { status: 200 }));
       }
       if (url.endsWith("/api/formal/coverage")) {
@@ -116,5 +150,94 @@ describe("App", () => {
     await waitFor(() => {
       expect(screen.getByText("600000.SH")).toBeInTheDocument();
     });
+  });
+
+  it("shows visual assets on the run detail page", async () => {
+    const fetchMock = vi.fn((input) => {
+      const url = String(input);
+      if (url.endsWith("/api/markets")) {
+        return Promise.resolve(
+          new Response(
+            JSON.stringify([
+              {
+                option_id: "formal_hs300",
+                config_profile: "formal_hs300",
+                market_id: "cn_a",
+                market_name: "A股 / 沪深300",
+                universe_id: "HS300",
+                is_formal: true
+              }
+            ]),
+            { status: 200, headers: { "Content-Type": "application/json" } }
+          )
+        );
+      }
+      if (url.endsWith("/api/runs")) {
+        return Promise.resolve(
+          new Response(
+            JSON.stringify([
+              {
+                run_id: "demo_run",
+                status: { status: "completed" },
+                manifest: null,
+                metrics_exists: true
+              }
+            ]),
+            { status: 200, headers: { "Content-Type": "application/json" } }
+          )
+        );
+      }
+      if (url.endsWith("/api/runs/demo_run")) {
+        return Promise.resolve(
+          new Response(
+            JSON.stringify({
+              run_id: "demo_run",
+              status: { status: "completed" },
+              manifest: {
+                market_id: "cn_a",
+                universe_id: "HS300",
+                candidate_pool_size: 80,
+                selection_top_n: 20
+              },
+              metrics: [
+                { model: "cp", rank: "2", mse: 0.1, explained_variance: 0.9 }
+              ],
+              factor_summaries: {},
+              factor_associations: {},
+              time_regimes: {},
+              visual_assets: [
+                {
+                  name: "model_rank_ic.svg",
+                  label: "模型 Rank IC",
+                  url: "/api/runs/demo_run/assets/model_rank_ic.svg"
+                }
+              ]
+            }),
+            { status: 200, headers: { "Content-Type": "application/json" } }
+          )
+        );
+      }
+      if (url.includes("/api/runs/demo_run/selection?trade_date=2026-01-09&top_n=20")) {
+        return Promise.resolve(new Response(JSON.stringify([]), { status: 200 }));
+      }
+      return Promise.reject(new Error(`Unhandled fetch: ${url}`));
+    });
+
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: "实验列表页" }));
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: "demo_run / completed" })).toBeInTheDocument();
+    });
+    fireEvent.click(screen.getByRole("button", { name: "demo_run / completed" }));
+
+    await waitFor(() => {
+      expect(screen.getByText("运行图表")).toBeInTheDocument();
+    });
+
+    expect(screen.getByAltText("模型 Rank IC")).toBeInTheDocument();
+    expect(screen.getByText("model_rank_ic.svg")).toBeInTheDocument();
   });
 });
